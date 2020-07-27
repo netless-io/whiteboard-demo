@@ -3,7 +3,7 @@
     "version": "2.9.0",
     "main": "index.js",
     "scripts": {
-        "start": "webpack-dev-server --mode development --open --hot --host 0.0.0.0 --useLocalIp",
+        "start": "webpack-dev-server --mode development --port 3000 --open --hot --host 0.0.0.0 --useLocalIp",
         "build": "tsc && webpack --mode production"
     },
     "dependencies": {
