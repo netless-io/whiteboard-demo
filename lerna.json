@@ -5,7 +5,7 @@
   "npmClient": "yarn",
   "useWorkspaces": true,
   "workspaces": [
-    "packages/*", "demo"
+    "packages/*", "whiteboard"
   ],
   "version": "0.0.1"
 }
