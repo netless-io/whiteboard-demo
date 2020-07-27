@@ -8,6 +8,7 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CracoLessPlugin = require('craco-less');
 
 config = {
   entry: './src/index',
@@ -51,6 +52,17 @@ config = {
       chunkFilename: '[name].[contenthash:8].css',
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     }),
+    {
+      plugin: CracoLessPlugin,
+      options: {
+        lessLoaderOptions: {
+          lessOptions: {
+            modifyVars: { '@primary-color': '#1DA57A' },
+            javascriptEnabled: true,
+          },
+        },
+      },
+    },
   ],
   module: {
     rules: [
