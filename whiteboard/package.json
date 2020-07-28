@@ -7,6 +7,7 @@
         "build": "tsc && webpack --mode production"
     },
     "dependencies": {
+        "@netless/fetch-middleware": "^1.0.5",
         "antd": "^4.4.3",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",

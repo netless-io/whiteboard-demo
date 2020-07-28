@@ -36,7 +36,7 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
                                     type="primary"
                                     size="large"
                                     className="name-button">
-                                    创建白板房间
+                                    creatRoom
                                 </Button>
                             </div>
                         </div>

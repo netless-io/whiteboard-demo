@@ -28,4 +28,13 @@
 		"forceConsistentCasingInFileNames": true,
 		"importHelpers": true
 	},
+	"exclude": [
+		"node_modules",
+		"dist",
+		"build",
+		"scripts"
+	],
+	"include": [
+		"./src/**/*"
+	]
 }
