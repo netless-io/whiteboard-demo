@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Input, Button, Tabs} from "antd";
+import {Button} from "antd";
 import {Link} from "react-router-dom";
 import "./IndexPage.less";
 export enum IdentityType {
@@ -7,8 +7,6 @@ export enum IdentityType {
     guest = "guest",
     listener = "listener",
 }
-
-const { TabPane } = Tabs;
 
 export type IndexPageStates = {
     name: string;
@@ -30,14 +28,14 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
                     <div className="page-input-left-box">
                         <div className="page-input-left-mid-box">
                             <div className="page-input-left-inner-box">
-                                <Input className="page-input" onChange={e => this.setState({name: e.target.value})}
-                                       size={"large"} placeholder={"输入房间名称"}/>
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    className="name-button">
-                                    creatRoom
-                                </Button>
+                                <Link to={"/test/"}>
+                                    <Button
+                                        type="primary"
+                                        size="large"
+                                        className="name-button">
+                                        creatRoom
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>
