@@ -1,6 +1,7 @@
 import  * as React from "react";
 import {BrowserRouter} from "react-router-dom";
 import {Route, Switch} from "react-router";
+import IndexPage from "./IndexPage";
 export class AppRoutes extends React.Component<{}, {}> {
 
     public constructor(props: {}) {

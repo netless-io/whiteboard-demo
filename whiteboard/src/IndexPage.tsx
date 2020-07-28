@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Input, Button, Tabs} from "antd";
 import "./IndexPage.less";
-import {Link} from "react-router";
 export enum IdentityType {
     host = "host",
     guest = "guest",
@@ -27,9 +26,6 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
     public render(): React.ReactNode {
             return (
                 <div className="page-input-box">
-                    <Link to="/">
-                        {/*<img src={netless_black}/>*/}
-                    </Link>
                     <div className="page-input-left-box">
                         <div className="page-input-left-mid-box">
                             <Tabs className="page-input-left-mid-box-tab" defaultActiveKey="1">
