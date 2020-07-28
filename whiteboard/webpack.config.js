@@ -68,7 +68,15 @@ config = {
         }, {
           loader: 'css-loader' // translates CSS into CommonJS
         }, {
-          loader: 'less-loader' // compiles Less to CSS
+          loader: 'less-loader', // compiles Less to CSS
+          options: {
+            lessLoaderOptions: {
+              lessOptions: {
+                modifyVars: { '@primary-color': '#1DA57A' },
+                javascriptEnabled: true,
+              },
+            },
+          },
         }]
       },
       {
