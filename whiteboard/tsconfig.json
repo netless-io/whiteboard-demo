@@ -15,7 +15,7 @@
 			"es2017.object",
 			"dom"
 		],
-        "module": "es6",
+        "module": "esnext",
 		"removeComments": true,
 		"alwaysStrict": true,
 		"allowUnreachableCode": false,
