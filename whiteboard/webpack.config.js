@@ -70,12 +70,14 @@ config = {
         }, {
           loader: 'less-loader', // compiles Less to CSS
           options: {
-            lessLoaderOptions: {
               lessOptions: {
-                modifyVars: { '@primary-color': '#1DA57A' },
-                javascriptEnabled: true,
-              },
-            },
+                  modifyVars: {
+                      'primary-color': '#1DA57A',
+                      'link-color': '#1DA57A',
+                      'border-radius-base': '2px',
+                  },
+                  javascriptEnabled: true
+              }
           },
         }]
       },
@@ -84,7 +86,7 @@ config = {
         use: [{loader: MiniCssExtractPlugin.loader}, 'css-loader']
       },
       {
-        test: /\.(svg|png)/,
+        test: /\.(svg|png|jpg)/,
         use: ['file-loader']
       }
     ]
