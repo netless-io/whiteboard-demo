@@ -13,7 +13,8 @@ config = {
   entry: './src/index',
   output: {
     path: path.join(__dirname, '/build'),
-    filename: '[name].[contenthash:8].js'
+    filename: '[name].[contenthash:8].js',
+    publicPath: "/"
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
