@@ -7,6 +7,7 @@ import {
 } from "white-web-sdk";
 import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
+import ZoomController from "@netless/zoom-controller";
 import "./WhiteboardPage.less";
 import {message} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
@@ -95,6 +96,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 <div>
                     <ToolBox room={room}/>
                     <RedoUndo room={room}/>
+                    <ZoomController room={room}/>
                     <div ref={this.handleBindRoom} style={{width: "100%", height: "100vh"}}/>
                 </div>
             );
