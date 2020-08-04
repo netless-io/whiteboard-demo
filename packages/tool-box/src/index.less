@@ -1,7 +1,78 @@
-.tool-box {
-  width: 400px;
-  height: 400px;
-  background-color: red;
+
+
+.tool-mid-box {
+  height: 32px;
+  display: flex;
+  border-radius: 4px;
+  justify-content: space-between;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: white;
+}
+
+.tool-mid-box-left {
+  width: 32px;
+  display: flex;
+  border-radius: 4px;
+  background-color: white;
+  justify-content: space-between;
+  flex-direction: column;
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
+.tool-box-cell {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.tool-box-cell-box {
+  width: 32px;
+  height: 32px;
+  margin-left: 4px;
+  margin-right: 4px;
+  user-select: none;
+  cursor: pointer;
+  background-color: white;
+}
+
+.tool-box-cell-box-left {
+  width: 32px;
+  height: 32px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  user-select: none;
+  cursor: pointer;
+  background-color: white;
+}
+
+.whiteboard-tool-box-left {
+  height: 100%;
+  width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: absolute;
-  z-index: 100;
+  z-index: 2;
+  left: 8px;
+}
+
+.tool-box-cell-step-two {
+  height: 2px;
+  border-radius: 1px;
+  margin-top: -4px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tool-box-cell-step-two {
+  height: 2px;
+  border-radius: 1px;
+  margin-top: -4px;
+  margin-left: auto;
+  margin-right: auto;
 }

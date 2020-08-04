@@ -5,6 +5,7 @@ import {
     RoomPhase,
     WhiteWebSdk,
 } from "white-web-sdk";
+import ToolBox from "@netless/tool-box";
 import "./WhiteboardPage.less";
 import {message} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
@@ -87,9 +88,13 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     }
 
     public render(): React.ReactNode {
-        if (this.state.room) {
+        const {room} = this.state;
+        if (room) {
             return (
-                <div ref={this.handleBindRoom} style={{width: "100%", height: "100vh"}}/>
+                <div>
+                    <ToolBox room={room}/>
+                    <div ref={this.handleBindRoom} style={{width: "100%", height: "100vh"}}/>
+                </div>
             );
         } else {
             return null;
