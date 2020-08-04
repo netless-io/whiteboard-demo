@@ -1,6 +1,6 @@
 {
-    "name": "whiteboard-demo",
-    "version": "2.9.0",
+    "name": "whiteboard",
+    "version": "0.0.1",
     "main": "index.js",
     "scripts": {
         "start": "webpack-dev-server --historyApiFallback --mode development --port 3000 --open --hot --host 0.0.0.0 --useLocalIp",
