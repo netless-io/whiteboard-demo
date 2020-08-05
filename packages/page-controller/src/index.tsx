@@ -1,6 +1,5 @@
 import * as React from "react";
 import {Room, RoomState} from "white-web-sdk";
-import MenuBox from "@netless/menu-box";
 import "./index.less";
 
 export type PageControllerProps = {
@@ -55,10 +54,7 @@ export default class PageController extends React.Component<PageControllerProps,
 
     public render(): React.ReactNode {
         return (
-            <div>
-                <MenuBox isVisible={this.state.isVisible}>
-                    <div>sdasdasdasdasda</div>
-                </MenuBox>
+            <div className="whiteboard-annex-outbox">
                 <div className="whiteboard-annex-box">
                     <div onClick={() => this.handlePptPreviousStep()}
                          className="whiteboard-annex-arrow-left">

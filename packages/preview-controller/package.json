@@ -1,5 +1,5 @@
 {
-  "name": "@netless/menu-box",
+  "name": "@netless/preview-controller",
   "version": "0.0.1",
   "description": "",
   "private": false,
@@ -16,7 +16,6 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "react-burger-menu": "^2.7.1"
   },
   "peerDependencies": {
     "react": "^16.8.0",

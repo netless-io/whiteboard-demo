@@ -1,4 +1,5 @@
 import * as React from "react";
+import "./index.less";
 const Menu = require("react-burger-menu/lib/menus/slide");
 
 const timeout = (ms: any) => new Promise(res => setTimeout(res, ms));
@@ -33,7 +34,6 @@ const styles2: any = {
 export type MenuBoxProps = {
     isVisible: boolean;
     pagePreviewPosition?: PagePreviewPositionEnum;
-    onRef?: (ref: React.Component) => void;
 };
 
 export default class MenuBox extends React.Component<MenuBoxProps, MenuBoxStyleState> {
@@ -46,11 +46,6 @@ export default class MenuBox extends React.Component<MenuBoxProps, MenuBoxStyleS
         };
     }
 
-    public componentDidMount(): void {
-        if (this.props.onRef) {
-            this.props.onRef(this);
-        }
-    }
     private async getMenuStyle(isOpen: boolean): Promise<void> {
         if (isOpen) {
             this.setState({
@@ -79,7 +74,6 @@ export default class MenuBox extends React.Component<MenuBoxProps, MenuBoxStyleS
                     }
                     else {
                         await this.getMenuStyle(true);
-                        this.setState({isMenuOpen: true});
                     }
                 }}>
                 {this.props.children}

@@ -12,6 +12,8 @@ import ZoomController from "@netless/zoom-controller";
 import "./WhiteboardPage.less";
 import {message} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
+import PreviewController from "@netless/preview-controller";
+import OssUploadController from "@netless/docs-center";
 
 
 export type WhiteboardPageStates = {
@@ -99,7 +101,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     <RedoUndo room={room}/>
                     <ZoomController room={room}/>
                     <PageController room={room}/>
-                    <div ref={this.handleBindRoom} style={{width: "100%", height: "100vh"}}/>
+                    <PreviewController room={room}/>
+                    <OssUploadController room={room}/>
+                    <div ref={this.handleBindRoom} style={{width: "100%", height: "100vh", backgroundColor: "red"}}/>
                 </div>
             );
         } else {
