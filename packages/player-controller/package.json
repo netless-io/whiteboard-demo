@@ -1,5 +1,5 @@
 {
-  "name": "@netless/oss-upload-controller",
+  "name": "@netless/player-controller",
   "version": "0.0.1",
   "description": "",
   "private": false,
@@ -20,6 +20,7 @@
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
+    "@ant-design/icons": "^4.2.2",
     "white-web-sdk": "^2.9.12"
   },
   "devDependencies": {

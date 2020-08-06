@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Popover, Upload} from "antd";
 import * as OSS from "ali-oss";
-import {PPTDataType, UploadManager} from "./UploadManager";
+import {UploadManager} from "./UploadManager";
 import "./index.less";
 import {PPTKind, Room, WhiteWebSdk} from "white-web-sdk";
 import * as image_icon from "./image/image_icon.svg";
@@ -27,8 +27,6 @@ export type UploadBtnProps = {
         prefix: string,
     },
     room: Room,
-    uuid: string,
-    roomToken: string | null,
     whiteboardRef?: HTMLDivElement,
 };
 
@@ -48,10 +46,10 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
     }
 
     private uploadStatic = async (event: any): Promise<void> => {
-        const {uuid} = this.props;
+        const {uuid, roomToken} = this.props.room;
         const uploadManager = new UploadManager(this.client, this.props.room);
         const whiteWebSdk = new WhiteWebSdk({appIdentifier: "283/VGiScM9Wiw2HJg"});
-        const pptConverter = whiteWebSdk.pptConverter(this.props.roomToken!);
+        const pptConverter = whiteWebSdk.pptConverter(roomToken);
         await uploadManager.convertFile(
             event.file,
             pptConverter,
@@ -62,10 +60,10 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
     }
 
     private uploadDynamic = async (event: any): Promise<void> => {
-        const {uuid} = this.props;
+        const {uuid, roomToken} = this.props.room;
         const uploadManager = new UploadManager(this.client, this.props.room);
         const whiteWebSdk = new WhiteWebSdk({appIdentifier: "283/VGiScM9Wiw2HJg"});
-        const pptConverter = whiteWebSdk.pptConverter(this.props.roomToken!);
+        const pptConverter = whiteWebSdk.pptConverter(roomToken);
         await uploadManager.convertFile(
             event.file,
             pptConverter,
@@ -90,6 +88,7 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
     }
 
     private renderUploadButton = (): React.ReactNode => {
+        const {roomToken} = this.props.room;
         return [
             <Upload
                 key={`image`}
@@ -110,7 +109,6 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
             </Upload>,
             <Upload
                 key={`dynamic`}
-                disabled={!this.props.roomToken}
                 accept={"application/vnd.openxmlformats-officedocument.presentationml.presentation"}
                 showUploadList={false}
                 customRequest={this.uploadDynamic}>
@@ -128,7 +126,6 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
             </Upload>,
             <Upload
                 key={`static`}
-                disabled={!this.props.roomToken}
                 accept={FileUploadStatic}
                 showUploadList={false}
                 customRequest={this.uploadStatic}>

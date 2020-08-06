@@ -37,6 +37,16 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
                                     </Button>
                                 </Link>
                             </div>
+                            <div className="page-input-left-inner-box">
+                                <Link to={"/test2/"}>
+                                    <Button
+                                        type="primary"
+                                        size="large"
+                                        className="name-button">
+                                        creatReplay
+                                    </Button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                     <div className="page-input-right-box"/>

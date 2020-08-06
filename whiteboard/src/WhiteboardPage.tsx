@@ -14,6 +14,7 @@ import {message} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PreviewController from "@netless/preview-controller";
 import OssUploadController from "@netless/docs-center";
+import DocsCenter from "@netless/oss-upload-controller";
 
 
 export type WhiteboardPageStates = {
@@ -102,7 +103,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     <ZoomController room={room}/>
                     <PageController room={room}/>
                     <PreviewController room={room}/>
-                    <OssUploadController room={room}/>
+                    {/*<OssUploadController room={room}/>*/}
+                    <DocsCenter room={room}/>
                     <div ref={this.handleBindRoom} style={{width: "100%", height: "100vh", backgroundColor: "red"}}/>
                 </div>
             );
