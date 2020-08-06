@@ -2,8 +2,8 @@ import * as React from "react";
 import {Room} from "white-web-sdk";
 import * as redo from "./image/redo.svg";
 import * as undo from "./image/undo.svg";
-import * as redo_black from "./image/redo_black.svg";
-import * as undo_black from "./image/undo_black.svg";
+import * as redoDisabled from "./image/redo-disabled.svg";
+import * as undoDisabled from "./image/undo-disabled.svg";
 import "./index.less";
 export type RedoUndoProps = {
     room: Room;
@@ -49,11 +49,11 @@ export default class RedoUndo extends React.Component<RedoUndoProps, RedoUndoSta
         const {redoSteps, undoSteps} = this.state;
         return (
             <div className="redo-undo">
-                <div className="scale-controller-btn" onClick={this.handleUndo}>
-                    <img style={{width: 16}} src={undoSteps === 0 ? undo : undo_black}/>
+                <div className="redo-undo-controller-btn " onClick={this.handleUndo}>
+                    <img src={undoSteps === 0 ? undoDisabled : undo}/>
                 </div>
-                <div className="scale-controller-btn" onClick={this.handleRedo}>
-                    <img style={{width: 16}} src={redoSteps === 0 ? redo : redo_black}/>
+                <div className="redo-undo-controller-btn" onClick={this.handleRedo}>
+                    <img src={redoSteps === 0 ? redoDisabled : redo}/>
                 </div>
             </div>
         );

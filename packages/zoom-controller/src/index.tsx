@@ -1,6 +1,8 @@
 import * as React from "react";
 import {Room, RoomState} from "white-web-sdk";
-import TweenOne from "rc-tween-one";
+import * as reset from "./image/reset.svg";
+import * as plus from "./image/plus.svg";
+import * as less from "./image/less.svg";
 import "./index.less";
 export type ScaleControllerState = {
     scaleAnimation: boolean;
@@ -146,63 +148,24 @@ export default class ScaleController extends React.Component<ScaleControllerProp
 
     public render(): React.ReactNode {
         return (
-            <TweenOne
-                animation={{
-                    duration: 300,
-                    height: 32,
-                    width: 104,
-                }}
-                onMouseEnter={() => {
-                    this.setState({
-                        scaleAnimation: false,
-                        reverseState: false,
-                        isMouseOn: true,
-                    });
-                }}
-                onMouseLeave={() => {
-                    this.setState({
-                        scaleAnimation: false,
-                        reverseState: true,
-                        isMouseOn: false,
-                    });
-                }}
-                style={{
-                    height: 32,
-                    width: 62,
-                }}
-                reverse={this.state.reverseState}
-                paused={this.state.scaleAnimation}
-                className="scale-controller-box">
-                <div className="scale-controller-num"
+            <div className="scale-controller-box">
+                <div className="scale-controller-btn"
                      onClick={() => this.moveTo100()}>
-                    {Math.ceil(this.state.roomState.zoomScale * 100)} %
+                    <img src={reset}/>
                 </div>
-                <TweenOne animation={{
-                    delay: 150,
-                    display: "flex",
-                    duration: 150,
-                    opacity: 1,
-                    width: 40,
-                    marginLeft: 4,
-                }}
-                          reverse={this.state.reverseState}
-                          paused={this.state.scaleAnimation}
-                          style={{
-                              display: "none",
-                              opacity: 0,
-                              width: 0,
-                              marginLeft: 0,
-                          }}>
-                    <div className="scale-controller-icon"
-                         onClick={() => this.moveRuleIndex(-1)}>
-                        -
-                    </div>
-                    <div className="scale-controller-icon"
-                         onClick={() => this.moveRuleIndex(+1)}>
-                        +
-                    </div>
-                </TweenOne>
-            </TweenOne>
+                <div className="scale-controller-cut-line"/>
+                <div className="scale-controller-btn"
+                     onClick={() => this.moveRuleIndex(-1)}>
+                    <img src={plus}/>
+                </div>
+                <div>
+                    {Math.ceil(this.state.roomState.zoomScale * 100)} <span style={{opacity: 0.6}}>%</span>
+                </div>
+                <div className="scale-controller-btn"
+                     onClick={() => this.moveRuleIndex(+1)}>
+                    <img src={less}/>
+                </div>
+            </div>
         );
     }
 }

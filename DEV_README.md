@@ -13,7 +13,12 @@ lerna bootstrap
 ## Run all
 
 ```
-lerna run --parallel start
+lerna run --parallel dev
+```
+
+## Run scope
+```
+lerna run --scope `lib-name` dev
 ```
 
 ## Build all

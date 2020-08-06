@@ -1,41 +1,32 @@
 
 .scale-controller-box {
-  height: 32px;
-  min-width: 60px;
+  height: 40px;
   background-color: white;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  box-sizing: border-box;
+  justify-content: center;
   border-radius: 4px;
   user-select: none;
   font-size: 12px;
-  cursor: pointer;
-}
-
-.scale-controller-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.scale-controller-num {
-  min-width: 40px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 11px;
+  box-shadow:0 8px 24px 0 rgba(0,0,0,0.08);
 }
 
 .scale-controller-btn {
-  min-width: 28px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 11px;
+  margin-left: 4px;
+  margin-right: 4px;
+  cursor: pointer;
+  &:hover {
+    background: rgba(33,35,36,0.1);
+  }
+}
+
+.scale-controller-cut-line {
+  background-color: #E7E7E7;
+  height: 20px;
+  width: 0.5px;
 }

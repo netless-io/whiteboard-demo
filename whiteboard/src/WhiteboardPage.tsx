@@ -15,11 +15,16 @@ import {netlessWhiteboardApi} from "./apiMiddleware";
 import PreviewController from "@netless/preview-controller";
 import OssUploadController from "@netless/docs-center";
 import DocsCenter from "@netless/oss-upload-controller";
+import PageError from "./PageError";
+import LoadingPage from "./LoadingPage";
+import pages from "./assets/image/pages.svg";
 
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
     room?: Room;
+    isMenuVisible: boolean;
+    isFileOpen: boolean;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     uuid: string;
@@ -29,6 +34,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         super(props);
         this.state = {
             phase: RoomPhase.Connecting,
+            isMenuVisible: false,
+            isFileOpen: false,
         };
     }
 
@@ -93,23 +100,60 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         }
     }
 
+    private handlePreviewState = (state: boolean): void => {
+        this.setState({isMenuVisible: state});
+    }
+
     public render(): React.ReactNode {
-        const {room} = this.state;
-        if (room) {
-            return (
-                <div>
-                    <ToolBox room={room}/>
-                    <RedoUndo room={room}/>
-                    <ZoomController room={room}/>
-                    <PageController room={room}/>
-                    <PreviewController room={room}/>
-                    {/*<OssUploadController room={room}/>*/}
-                    <DocsCenter room={room}/>
-                    <div ref={this.handleBindRoom} style={{width: "100%", height: "100vh", backgroundColor: "red"}}/>
-                </div>
-            );
-        } else {
+        const {room, isMenuVisible, isFileOpen, phase} = this.state;
+        if (room === undefined) {
             return null;
+        }
+        switch (phase) {
+            case RoomPhase.Disconnected: {
+                return <PageError/>;
+            }
+            case RoomPhase.Connecting: {
+                return <LoadingPage
+                    phase={phase}/>;
+            }
+            case RoomPhase.Disconnecting: {
+                return <LoadingPage
+                    phase={phase}/>;
+            }
+            case RoomPhase.Reconnecting: {
+                return <LoadingPage
+                    phase={phase}/>;
+            }
+            default: {
+                return (
+                    <div className="realtime-box">
+                        {/*<ToolBox room={room}/>*/}
+                        <div className="redo-undo-box">
+                            <RedoUndo room={room}/>
+                        </div>
+                        <div className="zoom-controller-box">
+                            <ZoomController room={room}/>
+                        </div>
+                        <div className="page-controller-box">
+                            <div className="page-controller-mid-box">
+                                <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
+                                    <img src={pages}/>
+                                </div>
+                                <PageController room={room}/>
+                            </div>
+                        </div>
+                        <PreviewController handlePreviewState={this.handlePreviewState} isVisible={isMenuVisible} room={room}/>
+                        {/*<OssUploadController room={room}/>*/}
+                        {/*<DocsCenter isFileOpen={isFileOpen} room={room}/>*/}
+                        {/*<div onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>*/}
+                        {/*    预览2*/}
+                        {/*</div>*/}
+                        <div ref={this.handleBindRoom}
+                             style={{width: "100%", height: "100vh", backgroundColor: "#F4F4F4"}}/>
+                    </div>
+                );
+            }
         }
     }
 }
