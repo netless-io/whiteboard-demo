@@ -26,7 +26,6 @@ export type PlayerPageStates = {
 };
 
 export default class NetlessPlayer extends React.Component<PlayerPageProps, PlayerPageStates> {
-    private scheduleTime: number = 0;
     public constructor(props: PlayerPageProps) {
         super(props);
         this.state = {
@@ -37,27 +36,6 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
             isVisible: false,
             replayFail: false,
         };
-    }
-
-    private static parseInt(value?: string): number | undefined {
-        let intValue: number | undefined;
-
-        if (typeof value === "string") {
-            intValue = parseInt(value);
-            if (Number.isNaN(intValue)) {
-                intValue = undefined;
-            }
-        }
-        return intValue;
-    }
-
-    private getRoomToken = async (uuid: string): Promise<string | null> => {
-        const res = await netlessWhiteboardApi.room.joinRoomApi(uuid);
-        if (res.code === 200) {
-            return res.msg.roomToken;
-        } else {
-            return null;
-        }
     }
 
     public async componentDidMount(): Promise<void> {
@@ -116,23 +94,6 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         }
     }
 
-    private operationButton = (phase: PlayerPhase): React.ReactNode => {
-        switch (phase) {
-            case PlayerPhase.Playing: {
-                return <img src={player_begin}/>;
-            }
-            case PlayerPhase.Buffering: {
-                return <LoadingOutlined style={{fontSize: 18, color: "white"}} />;
-            }
-            case PlayerPhase.Ended: {
-                return <img style={{marginLeft: 2}} src={player_stop}/>;
-            }
-            default: {
-                return <img style={{marginLeft: 2}} src={player_stop}/>;
-            }
-        }
-    }
-
     private operationButtonBig = (phase: PlayerPhase): React.ReactNode => {
         switch (phase) {
             case PlayerPhase.Playing: {
@@ -146,20 +107,6 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
             }
             default: {
                 return <img style={{marginLeft: 6, width: 28}} src={player_stop}/>;
-            }
-        }
-    }
-
-    private getCurrentTime = (scheduleTime: number): number => {
-        if (this.state.isPlayerSeeking) {
-            this.scheduleTime = scheduleTime;
-            return this.state.currentTime;
-        } else {
-            const isChange = this.scheduleTime !== scheduleTime;
-            if (isChange) {
-                return scheduleTime;
-            } else {
-                return this.state.currentTime;
             }
         }
     }
