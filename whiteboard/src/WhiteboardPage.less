@@ -27,6 +27,17 @@
   right: 24px;
 }
 
+.tool-box-out {
+  height: 100%;
+  width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  z-index: 2;
+  left: 24px;
+}
+
 .page-controller-mid-box {
   display: flex;
   align-items: center;
@@ -49,6 +60,7 @@
   align-items: center;
   cursor: pointer;
   background-color: white;
+  border-radius: 2px;
   &:hover {
     background: rgba(33,35,36,0.1);
   }

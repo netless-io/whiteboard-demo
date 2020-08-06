@@ -128,7 +128,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             default: {
                 return (
                     <div className="realtime-box">
-                        {/*<ToolBox room={room}/>*/}
+                        <div className="tool-box-out">
+                            <ToolBox room={room}/>
+                        </div>
                         <div className="redo-undo-box">
                             <RedoUndo room={room}/>
                         </div>

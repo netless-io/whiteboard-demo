@@ -68,7 +68,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
         const nodes: React.ReactNode = scenes.map((scene, index) => {
             const isActive = index === activeIndex;
             return (
-                <div className="page-out-box">
+                <div key={`key-${index}`} className="page-out-box">
                     <div
                         onClick={() => {
                             this.setScenePath(index);

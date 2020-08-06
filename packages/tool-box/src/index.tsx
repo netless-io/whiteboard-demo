@@ -1,13 +1,17 @@
 import * as React from "react";
-import {ApplianceNames, Room} from "white-web-sdk";
-import TweenOne from "rc-tween-one";
+import {ApplianceNames, Room, RoomState} from "white-web-sdk";
 import "./index.less";
 import {
-    IconProps, ToolBoxArrow,
+    IconProps,
+    ToolBoxArrow,
     ToolBoxEllipse,
-    ToolBoxEraser, ToolBoxHand, ToolBoxLaserPointer,
-    ToolBoxPencil, ToolBoxRectangle,
-    ToolBoxSelector, ToolBoxStraight,
+    ToolBoxEraser,
+    ToolBoxHand,
+    ToolBoxLaserPointer,
+    ToolBoxPencil,
+    ToolBoxRectangle,
+    ToolBoxSelector,
+    ToolBoxStraight,
     ToolBoxText
 } from "./ToolIconComponent";
 
@@ -19,6 +23,7 @@ export type ToolBoxStates = {
     strokeEnable: boolean;
     isToolBoxSwitched: boolean;
     extendsPanel: boolean;
+    roomState: RoomState;
 };
 type ApplianceDescription = {
     readonly iconView: React.ComponentClass<IconProps>;
@@ -26,7 +31,7 @@ type ApplianceDescription = {
     readonly hasStroke: boolean;
 };
 export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates> {
-    private static readonly descriptions: {readonly [applianceName: string]: ApplianceDescription} = Object.freeze({
+    private static readonly descriptions: { readonly [applianceName: string]: ApplianceDescription } = Object.freeze({
         selector: Object.freeze({
             iconView: ToolBoxSelector,
             hasColor: false,
@@ -78,6 +83,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             hasStroke: false,
         }),
     });
+
     public constructor(props: ToolBoxProps) {
         super(props);
         this.state = {
@@ -85,12 +91,21 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             strokeEnable: false,
             isToolBoxSwitched: false,
             extendsPanel: false,
+            roomState: props.room.state,
         };
+    }
+
+    public componentDidMount(): void {
+        const {room} = this.props;
+        room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
+            this.setState({roomState: {...room.state, ...modifyState}});
+        });
     }
     public clickAppliance = (event: Event | undefined, applianceName: ApplianceNames): void => {
         const {room} = this.props;
+        const {roomState} = this.state;
         event!.preventDefault();
-        const isSelected = room.state.memberState.currentApplianceName === applianceName;
+        const isSelected = roomState.memberState.currentApplianceName === applianceName;
         if (isSelected) {
             this.setState({isToolBoxSwitched: false, extendsPanel: !this.state.extendsPanel});
         } else {
@@ -106,47 +121,30 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     }
 
     private buttonColor(isSelected: boolean): string {
-        const {room} = this.props;
+        const {roomState} = this.state;
         if (isSelected) {
-            const [r, g, b] = room.state.memberState.strokeColor;
+            const [r, g, b] = roomState.memberState.strokeColor;
             return `rgb(${r},${g},${b})`;
         } else {
-            return "rgb(162,167,173)";
+            return `rgb(162,167,173)`;
         }
     }
 
     private renderApplianceButton(applianceName: ApplianceNames, description: ApplianceDescription): React.ReactNode {
-        const {room} = this.props;
+        const {roomState} = this.state;
         const ToolIcon = description.iconView;
-        const isExtendable = description.hasStroke || description.hasColor;
-        const isSelected = room.state.memberState.currentApplianceName === applianceName;
+        const isSelected = roomState.memberState.currentApplianceName === applianceName;
         const buttonColor = this.buttonColor(isSelected);
-
-        const cellBox: React.ReactNode = (
-            <div className={"tool-box-cell-box-left"} key={applianceName}>
+        return (
+            <div className="tool-box-cell-box-left" key={applianceName}>
                 <div className="tool-box-cell"
                      onClick={() => this.clickAppliance(event, applianceName)}>
                     <ToolIcon color={buttonColor}/>
                 </div>
-                {isExtendable && isSelected && (
-                    <TweenOne className="tool-box-cell-step-two"
-                              animation={{
-                                  duration: 150,
-                                  delay: 100,
-                                  width: 8,
-                                  backgroundColor: buttonColor,
-                                  display: isSelected ? "flex" : "none",
-                              }}
-                              style={{
-                                  backgroundColor: buttonColor,
-                                  width: 0,
-                                  display: "none",
-                              }}/>
-                )}
             </div>
         );
-        return cellBox;
     }
+
     public render(): React.ReactNode {
         const nodes: React.ReactNode[] = [];
         for (const applianceName in ToolBox.descriptions) {
@@ -155,10 +153,8 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             nodes.push(node);
         }
         return (
-            <div className="whiteboard-tool-box-left">
-                <div className="tool-mid-box-left">
-                    {nodes}
-                </div>
+            <div className="tool-mid-box-left">
+                {nodes}
             </div>
         );
     }
