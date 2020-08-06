@@ -15,3 +15,9 @@ lerna bootstrap
 ```
 lerna run --parallel start
 ```
+
+## Build all
+
+```
+lerna run --parallel build:lib
+```
