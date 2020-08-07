@@ -28,9 +28,7 @@ export type ToolBoxProps = {
     room: Room;
 };
 export type ToolBoxStates = {
-    isPaletteBoxAppear: boolean;
     strokeEnable: boolean;
-    isToolBoxSwitched: boolean;
     extendsPanel: boolean;
     roomState: RoomState;
 };
@@ -107,9 +105,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     public constructor(props: ToolBoxProps) {
         super(props);
         this.state = {
-            isPaletteBoxAppear: false,
             strokeEnable: false,
-            isToolBoxSwitched: false,
             extendsPanel: false,
             roomState: props.room.state,
         };
@@ -123,16 +119,9 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     }
     public clickAppliance = (eventTarget: any, applianceName: ApplianceNames): void => {
         const {room} = this.props;
-        const {roomState} = this.state;
         eventTarget.preventDefault();
-        const isSelected = roomState.memberState.currentApplianceName === applianceName;
-        if (isSelected) {
-            this.setState({isToolBoxSwitched: false, extendsPanel: !this.state.extendsPanel});
-        } else {
-            this.setState({isToolBoxSwitched: true, isPaletteBoxAppear: false});
-            room.setMemberState({currentApplianceName: applianceName});
-            this.setState({extendsPanel: false});
-        }
+        room.setMemberState({currentApplianceName: applianceName});
+        this.setState({extendsPanel: true});
     }
     private onVisibleChange = (visible: boolean): void => {
         if (!visible) {
@@ -146,7 +135,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         const isExtendable = description.hasStroke || description.hasColor;
         const iconUrl = isSelected ? description.iconActive : description.icon;
         const cell = (
-            <div className="tool-box-cell-box-left">
+            <div key={`${applianceName}`} className="tool-box-cell-box-left">
                 <div className="tool-box-cell"
                      onClick={(event) => this.clickAppliance(event, applianceName)}>
                     <img src={iconUrl}/>
@@ -160,7 +149,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                          placement={"right"}
                          trigger="click"
                          onVisibleChange={this.onVisibleChange}
-                         content={this.renderToolBoxPaletteBox(isSelected, description)}>
+                         content={this.renderToolBoxPaletteBox(description)}>
                     {cell}
                 </Popover>
             );
@@ -169,7 +158,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         }
     }
 
-    private renderToolBoxPaletteBox(isSelected: boolean, description: ApplianceDescription): React.ReactNode {
+    private renderToolBoxPaletteBox(description: ApplianceDescription): React.ReactNode {
         const {room} = this.props;
         const {roomState} = this.state;
         return (
