@@ -83,7 +83,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
                         <div className="page-box-under-left">
                             {index + 1}
                         </div>
-                        <div className="page-box-under-right">
+                        <div onClick={this.removeScene} className="page-box-under-right">
                             <img src={deleteIcon}/>
                         </div>
                     </div>

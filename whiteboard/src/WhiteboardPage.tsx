@@ -18,6 +18,9 @@ import DocsCenter from "@netless/oss-upload-controller";
 import PageError from "./PageError";
 import LoadingPage from "./LoadingPage";
 import pages from "./assets/image/pages.svg";
+import folder from "./assets/image/folder.svg";
+import invite from "./assets/image/invite.svg";
+import exit from "./assets/image/exit.svg";
 
 
 export type WhiteboardPageStates = {
@@ -71,6 +74,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     userPayload: {
                         userId: 1024,
                     },
+                    floatBar: true,
                 },
                 {
                     onPhaseChanged: phase => {
@@ -136,6 +140,26 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         </div>
                         <div className="zoom-controller-box">
                             <ZoomController room={room}/>
+                        </div>
+                        <div className="title-controller-box">
+                            <div className="title-controller-mid-box">
+                                <div className="title-text">伍双创建会议</div>
+                                <div className="title-cut-line"/>
+                                <div className="title-time">8月8日 21:23</div>
+                            </div>
+                        </div>
+                        <div className="room-controller-box">
+                            <div className="page-controller-mid-box">
+                                <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
+                                    <img src={folder}/>
+                                </div>
+                                <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
+                                    <img src={invite}/>
+                                </div>
+                                <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
+                                    <img src={exit}/>
+                                </div>
+                            </div>
                         </div>
                         <div className="page-controller-box">
                             <div className="page-controller-mid-box">

@@ -16,6 +16,7 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
+    "antd": "^4.4.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",

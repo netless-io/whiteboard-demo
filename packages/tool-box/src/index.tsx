@@ -1,19 +1,28 @@
 import * as React from "react";
 import {ApplianceNames, Room, RoomState} from "white-web-sdk";
+import {Popover} from "antd";
 import "./index.less";
-import {
-    IconProps,
-    ToolBoxArrow,
-    ToolBoxEllipse,
-    ToolBoxEraser,
-    ToolBoxHand,
-    ToolBoxLaserPointer,
-    ToolBoxPencil,
-    ToolBoxRectangle,
-    ToolBoxSelector,
-    ToolBoxStraight,
-    ToolBoxText
-} from "./ToolIconComponent";
+import * as selector from "./image/selector.svg";
+import * as selectorActive from "./image/selector-active.svg";
+import * as pen from "./image/pencil.svg";
+import * as penActive from "./image/pencil-active.svg";
+import * as text from "./image/text.svg";
+import * as textActive from "./image/text-active.svg";
+import * as eraser from "./image/eraser.svg";
+import * as eraserActive from "./image/eraser-active.svg";
+import * as ellipse from "./image/ellipse.svg";
+import * as ellipseActive from "./image/ellipse-active.svg";
+import * as rectangle from "./image/rectangle.svg";
+import * as rectangleActive from "./image/rectangle-active.svg";
+import * as straight from "./image/straight.svg";
+import * as straightActive from "./image/straight-active.svg";
+import * as arrow from "./image/arrow.svg";
+import * as arrowActive from "./image/arrow-active.svg";
+import * as laserPointer from "./image/laserPointer.svg";
+import * as laserPointerActive from "./image/laserPointer-active.svg";
+import * as hand from "./image/hand.svg";
+import * as handActive from "./image/hand-active.svg";
+import ToolBoxPaletteBox from "./ToolBoxPaletteBox";
 
 export type ToolBoxProps = {
     room: Room;
@@ -26,59 +35,70 @@ export type ToolBoxStates = {
     roomState: RoomState;
 };
 type ApplianceDescription = {
-    readonly iconView: React.ComponentClass<IconProps>;
+    readonly icon: string;
+    readonly iconActive: string;
     readonly hasColor: boolean;
     readonly hasStroke: boolean;
 };
 export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates> {
     private static readonly descriptions: { readonly [applianceName: string]: ApplianceDescription } = Object.freeze({
         selector: Object.freeze({
-            iconView: ToolBoxSelector,
+            icon: selector,
+            iconActive: selectorActive,
             hasColor: false,
             hasStroke: false,
         }),
         pencil: Object.freeze({
-            iconView: ToolBoxPencil,
+            icon: pen,
+            iconActive: penActive,
             hasColor: true,
             hasStroke: true,
         }),
         text: Object.freeze({
-            iconView: ToolBoxText,
+            icon: text,
+            iconActive: textActive,
             hasColor: true,
             hasStroke: false,
         }),
         eraser: Object.freeze({
-            iconView: ToolBoxEraser,
+            icon: eraser,
+            iconActive: eraserActive,
             hasColor: false,
             hasStroke: false,
         }),
         ellipse: Object.freeze({
-            iconView: ToolBoxEllipse,
+            icon: ellipse,
+            iconActive: ellipseActive,
             hasColor: true,
             hasStroke: true,
         }),
         rectangle: Object.freeze({
-            iconView: ToolBoxRectangle,
+            icon: rectangle,
+            iconActive: rectangleActive,
             hasColor: true,
             hasStroke: true,
         }),
         straight: Object.freeze({
-            iconView: ToolBoxStraight,
+            icon: straight,
+            iconActive: straightActive,
             hasColor: true,
             hasStroke: true,
         }),
         arrow: Object.freeze({
-            iconView: ToolBoxArrow,
+            icon: arrow,
+            iconActive: arrowActive,
             hasColor: true,
             hasStroke: true,
         }),
         laserPointer: Object.freeze({
-            iconView: ToolBoxLaserPointer,
+            icon: laserPointer,
+            iconActive: laserPointerActive,
             hasColor: false,
             hasStroke: false,
         }),
         hand: Object.freeze({
-            iconView: ToolBoxHand,
+            icon: hand,
+            iconActive: handActive,
             hasColor: false,
             hasStroke: false,
         }),
@@ -101,10 +121,10 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             this.setState({roomState: {...room.state, ...modifyState}});
         });
     }
-    public clickAppliance = (event: Event | undefined, applianceName: ApplianceNames): void => {
+    public clickAppliance = (eventTarget: any, applianceName: ApplianceNames): void => {
         const {room} = this.props;
         const {roomState} = this.state;
-        event!.preventDefault();
+        eventTarget.preventDefault();
         const isSelected = roomState.memberState.currentApplianceName === applianceName;
         if (isSelected) {
             this.setState({isToolBoxSwitched: false, extendsPanel: !this.state.extendsPanel});
@@ -120,28 +140,42 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         }
     }
 
-    private buttonColor(isSelected: boolean): string {
+    private renderApplianceButton(applianceName: ApplianceNames, description: ApplianceDescription): React.ReactNode {
         const {roomState} = this.state;
-        if (isSelected) {
-            const [r, g, b] = roomState.memberState.strokeColor;
-            return `rgb(${r},${g},${b})`;
+        const isSelected = roomState.memberState.currentApplianceName === applianceName;
+        const isExtendable = description.hasStroke || description.hasColor;
+        const iconUrl = isSelected ? description.iconActive : description.icon;
+        const cell = (
+            <div className="tool-box-cell-box-left">
+                <div className="tool-box-cell"
+                     onClick={(event) => this.clickAppliance(event, applianceName)}>
+                    <img src={iconUrl}/>
+                </div>
+            </div>
+        );
+        if (isExtendable && isSelected) {
+            return (
+                <Popover key={applianceName}
+                         visible={this.state.extendsPanel}
+                         placement={"right"}
+                         trigger="click"
+                         onVisibleChange={this.onVisibleChange}
+                         content={this.renderToolBoxPaletteBox(isSelected, description)}>
+                    {cell}
+                </Popover>
+            );
         } else {
-            return `rgb(162,167,173)`;
+            return cell;
         }
     }
 
-    private renderApplianceButton(applianceName: ApplianceNames, description: ApplianceDescription): React.ReactNode {
+    private renderToolBoxPaletteBox(isSelected: boolean, description: ApplianceDescription): React.ReactNode {
+        const {room} = this.props;
         const {roomState} = this.state;
-        const ToolIcon = description.iconView;
-        const isSelected = roomState.memberState.currentApplianceName === applianceName;
-        const buttonColor = this.buttonColor(isSelected);
         return (
-            <div className="tool-box-cell-box-left" key={applianceName}>
-                <div className="tool-box-cell"
-                     onClick={() => this.clickAppliance(event, applianceName)}>
-                    <ToolIcon color={buttonColor}/>
-                </div>
-            </div>
+            <ToolBoxPaletteBox room={room}
+                               roomState={roomState}
+                               displayStroke={description.hasStroke}/>
         );
     }
 
