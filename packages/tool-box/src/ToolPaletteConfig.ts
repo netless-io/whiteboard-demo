@@ -7,6 +7,7 @@ const toolPaletteConfig: string[] = [
     "#57B2FC",
     "#4486F6",
     "#9D27B0",
+    "#DC74FC",
     "#939AA8",
     "#1D2129",
     "#FFFFFF",

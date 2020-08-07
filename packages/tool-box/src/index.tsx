@@ -86,7 +86,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             icon: arrow,
             iconActive: arrowActive,
             hasColor: true,
-            hasStroke: true,
+            hasStroke: false,
         }),
         laserPointer: Object.freeze({
             icon: laserPointer,

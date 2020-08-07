@@ -1,7 +1,6 @@
 import * as React from "react";
 import  "./ToolBoxPaletteBox.less";
 import { Room, RoomState} from "white-web-sdk";
-import {StrokeWidth} from "./ToolIconComponent";
 import toolPaletteConfig from "./ToolPaletteConfig";
 import mask from "./image/mask.svg";
 export type ToolBoxPaletteBoxProps = {
@@ -79,7 +78,10 @@ export default class ToolBoxPaletteBox extends React.Component<ToolBoxPaletteBox
     }
 
     private renderStrokeWidth = (): React.ReactNode => {
-        const {room, roomState} = this.props;
+        const {room, roomState, displayStroke} = this.props;
+        if (!displayStroke) {
+            return null;
+        }
         return [
             <div key={"key-color"} className="tool-box-stroke-box">
                 <div className="tool-box-input-box">
@@ -96,15 +98,14 @@ export default class ToolBoxPaletteBox extends React.Component<ToolBoxPaletteBox
                 <div className="tool-box-mask-box">
                     <img src={mask}/>
                 </div>
-                <div className="tool-box-under-box-2" style={{width: 156 * this.state.percentage}}>
-                </div>
-                <div className="tool-box-under-box">
-                </div>
+                <div className="tool-box-under-box-2" style={{width: 156 * this.state.percentage}}/>
+                <div className="tool-box-under-box"/>
             </div>,
             <div key="key-script" className="stroke-script">
                 <div className="stroke-script-text">细</div>
                 <div className="stroke-script-text">粗</div>
-            </div>
+            </div>,
+            <div key="key-cut-line" style={{width: 156, height: 1, backgroundColor: "#E7E7E7"}}/>
         ];
     }
 
@@ -112,7 +113,6 @@ export default class ToolBoxPaletteBox extends React.Component<ToolBoxPaletteBox
         return (
             <div className="palette-box">
                 {this.renderStrokeWidth()}
-                <div style={{width: 156, height: 1, backgroundColor: "#E7E7E7"}}/>
                 {this.renderColor()}
             </div>
         );
