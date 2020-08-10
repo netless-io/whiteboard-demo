@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import "./index.less";
 import {Room} from "white-web-sdk";
 import * as more from "./image/more.svg";
+import * as Video from "./image/video.svg";
+import * as Audio from "./image/audio.svg";
 import * as moreActive from "./image/more-active.svg";
 import * as OSS from "ali-oss";
 import {ossConfigObj} from "./ossConfig";
@@ -90,40 +92,47 @@ export default class PluginCenter extends React.Component<PluginCenterProps, Plu
     }
 
     private renderUploadButton = (): React.ReactNode => {
-        return [
-            <Upload
-                key={`video`}
-                accept={"video/mp4"}
-                showUploadList={false}
-                customRequest={this.uploadVideo}>
-                <div className="popover-section">
-                    <div className="popover-section-inner">
-                        <div className="popover-section-image">
-                        </div>
-                        <div className="popover-section-script">
-                            <div className="popover-section-title">upload image</div>
-                            <div className="popover-section-text">Support for common formats.</div>
-                        </div>
-                    </div>
-                </div>
-            </Upload>,
-            <Upload
-                key={`audio`}
-                accept={"audio/mp3"}
-                showUploadList={false}
-                customRequest={this.uploadAudio}>
-                <div className="popover-section">
-                    <div className="popover-section-inner">
-                        <div className="popover-section-image">
-                        </div>
-                        <div className="popover-section-script">
-                            <div className="popover-section-title">PPTX transfer web</div>
-                            <div className="popover-section-text">Turn pptx into a web page for syncing.</div>
+        return (
+            <div className="oss-upload-box">
+                <Upload
+                    accept={"video/mp4"}
+                    showUploadList={false}
+                    customRequest={this.uploadVideo}>
+                    <div className="oss-upload-section">
+                        <div className="oss-upload-section-inner">
+                            <div className="oss-upload-title-section">
+                                <div className="oss-upload-title">上传视频</div>
+                                <div className="oss-upload-icon">
+                                    <img src={Video}/>
+                                </div>
+                            </div>
+                            <div className="oss-upload-section-script">
+                                <div className="oss-upload-section-text">支持 MP4 格式</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Upload>
-        ];
+                </Upload>
+                <div style={{width: 208, height: 0.5, backgroundColor: "#E7E7E7"}}/>
+                <Upload
+                    accept={"audio/mp3"}
+                    showUploadList={false}
+                    customRequest={this.uploadAudio}>
+                    <div className="oss-upload-section">
+                        <div className="oss-upload-section-inner">
+                            <div className="oss-upload-title-section">
+                                <div className="oss-upload-title">上传音频</div>
+                                <div className="oss-upload-icon">
+                                    <img src={Audio}/>
+                                </div>
+                            </div>
+                            <div className="oss-upload-section-script">
+                                <div className="oss-upload-section-text">支持 MP3 格式</div>
+                            </div>
+                        </div>
+                    </div>
+                </Upload>
+            </div>
+        );
     }
     public render(): React.ReactNode {
         const {isActive} = this.state;
@@ -131,12 +140,7 @@ export default class PluginCenter extends React.Component<PluginCenterProps, Plu
             <Popover trigger="click"
                      onVisibleChange={this.handleVisibleChange}
                      placement={"leftBottom"}
-                     content={
-                         <div style={{height: 118 * 3}}
-                              className="popover-box">
-                             {this.renderUploadButton()}
-                         </div>
-                     }>
+                     content={this.renderUploadButton()}>
                 <div className="tool-box-cell-box-left">
                     <div className="tool-box-cell">
                         <img src={isActive ? moreActive: more}/>
