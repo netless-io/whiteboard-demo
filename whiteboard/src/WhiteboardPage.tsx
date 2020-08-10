@@ -9,18 +9,19 @@ import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
 import PageController from "@netless/page-controller";
 import ZoomController from "@netless/zoom-controller";
+import OssUploadButton from "@netless/oss-upload-button";
 import "./WhiteboardPage.less";
 import {message} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
-import OssUploadController from "@netless/oss-upload-controller";
 import PageError from "./PageError";
 import LoadingPage from "./LoadingPage";
 import pages from "./assets/image/pages.svg";
 import folder from "./assets/image/folder.svg";
 import invite from "./assets/image/invite.svg";
 import exit from "./assets/image/exit.svg";
+import PluginCenter from "@netless/plugin-center";
 
 
 export type WhiteboardPageStates = {
@@ -140,7 +141,10 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     <div className="realtime-box">
                         <div className="tool-box-out">
                             <ToolBox room={room} customerComponent={
-                                [<OssUploadController room={room} whiteboardRef={whiteboardLayerDownRef}/>]
+                                [
+                                    <OssUploadButton room={room} whiteboardRef={whiteboardLayerDownRef}/>,
+                                    <PluginCenter room={room}/>
+                                    ]
                             }/>
                         </div>
                         <div className="redo-undo-box">

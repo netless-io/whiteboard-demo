@@ -7,7 +7,7 @@ import {
     PPTKind,
     Room
 } from "white-web-sdk";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import {MultipartUploadResult} from "ali-oss";
 import * as default_cover from "./image/default_cover.svg";
 
@@ -145,8 +145,10 @@ export class UploadManager {
                 callbacks: {
                     onProgressUpdated: progress => {
                     },
-                    onTaskFail: () => {},
-                    onTaskSuccess: () => {},
+                    onTaskFail: () => {
+                    },
+                    onTaskSuccess: () => {
+                    },
                 },
             });
             const ppt = await resp.checkUtilGet();

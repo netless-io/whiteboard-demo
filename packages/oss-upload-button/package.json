@@ -1,5 +1,5 @@
 {
-  "name": "@netless/oss-upload-controller",
+  "name": "@netless/oss-upload-button",
   "version": "0.0.1",
   "description": "",
   "private": false,
@@ -16,8 +16,9 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
+    "@netless/oss-upload-manager": "^0.0.1",
     "ali-oss": "^6.10.0",
-    "uuid": "^8.3.0"
+    "antd": "^4.4.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
