@@ -13,8 +13,8 @@ import "./WhiteboardPage.less";
 import {message} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PreviewController from "@netless/preview-controller";
-import OssUploadController from "@netless/docs-center";
-import DocsCenter from "@netless/oss-upload-controller";
+import DocsCenter from "@netless/docs-center";
+import OssUploadController from "@netless/oss-upload-controller";
 import PageError from "./PageError";
 import LoadingPage from "./LoadingPage";
 import pages from "./assets/image/pages.svg";
@@ -28,6 +28,7 @@ export type WhiteboardPageStates = {
     room?: Room;
     isMenuVisible: boolean;
     isFileOpen: boolean;
+    whiteboardLayerDownRef?: HTMLDivElement;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     uuid: string;
@@ -56,6 +57,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     }
     private handleBindRoom = (ref: HTMLDivElement): void => {
         const {room} = this.state;
+        this.setState({whiteboardLayerDownRef: ref});
         if (room) {
             room.bindHtmlElement(ref);
         }
@@ -108,8 +110,12 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         this.setState({isMenuVisible: state});
     }
 
+    private handleDocCenterState = (state: boolean): void => {
+        this.setState({isFileOpen: state});
+    }
+
     public render(): React.ReactNode {
-        const {room, isMenuVisible, isFileOpen, phase} = this.state;
+        const {room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         if (room === undefined) {
             return null;
         }
@@ -133,7 +139,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 return (
                     <div className="realtime-box">
                         <div className="tool-box-out">
-                            <ToolBox room={room}/>
+                            <ToolBox room={room} customerComponent={
+                                [<OssUploadController room={room} whiteboardRef={whiteboardLayerDownRef}/>]
+                            }/>
                         </div>
                         <div className="redo-undo-box">
                             <RedoUndo room={room}/>
@@ -150,7 +158,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
-                                <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
+                                <div className="page-controller-cell" onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
                                     <img src={folder}/>
                                 </div>
                                 <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
@@ -170,11 +178,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             </div>
                         </div>
                         <PreviewController handlePreviewState={this.handlePreviewState} isVisible={isMenuVisible} room={room}/>
-                        {/*<OssUploadController room={room}/>*/}
-                        {/*<DocsCenter isFileOpen={isFileOpen} room={room}/>*/}
-                        {/*<div onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>*/}
-                        {/*    预览2*/}
-                        {/*</div>*/}
+                        <DocsCenter handleDocCenterState={this.handleDocCenterState} isFileOpen={isFileOpen} room={room}/>
                         <div ref={this.handleBindRoom}
                              style={{width: "100%", height: "100vh", backgroundColor: "#F4F4F4"}}/>
                     </div>

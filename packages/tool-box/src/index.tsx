@@ -26,6 +26,7 @@ import ToolBoxPaletteBox from "./ToolBoxPaletteBox";
 
 export type ToolBoxProps = {
     room: Room;
+    customerComponent?: React.ReactNode[];
 };
 export type ToolBoxStates = {
     strokeEnable: boolean;
@@ -168,6 +169,18 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         );
     }
 
+    private addCustomerComponent = (nodes: React.ReactNode[]): React.ReactNode[] => {
+        if (this.props.customerComponent) {
+            const customerNodes = this.props.customerComponent.map((data: React.ReactNode, index: number) => {
+                return <div key={`tool-customer-${index}`}>{data}</div>;
+            });
+            nodes.splice(nodes.length, 0, [...customerNodes]);
+            return nodes;
+        } else {
+            return nodes;
+        }
+    }
+
     public render(): React.ReactNode {
         const nodes: React.ReactNode[] = [];
         for (const applianceName in ToolBox.descriptions) {
@@ -177,7 +190,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         }
         return (
             <div className="tool-mid-box-left">
-                {nodes}
+                {this.addCustomerComponent(nodes)}
             </div>
         );
     }

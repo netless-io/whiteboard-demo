@@ -7,8 +7,11 @@ import {PPTKind, Room, WhiteWebSdk} from "white-web-sdk";
 import * as image_icon from "./image/image_icon.svg";
 import * as image_transform from "./image/image_transform.svg";
 import * as web_transform from "./image/web_transform.svg";
-export type ToolBoxUploadBoxState = {
-    toolBoxColor: string,
+import * as upload from "./image/upload.svg";
+import * as uploadActive from "./image/upload-active.svg";
+import {ossConfigObj} from "./ossConfig";
+export type OssUploadControllerState = {
+    isActive: boolean,
 };
 
 export const FileUploadStatic: string = "application/pdf, " +
@@ -17,31 +20,23 @@ export const FileUploadStatic: string = "application/pdf, " +
     "application/msword, " +
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-export type UploadBtnProps = {
-    oss: {
-        accessKeyId: string,
-        accessKeySecret: string,
-        region: string,
-        bucket: string,
-        folder: string,
-        prefix: string,
-    },
+export type OssUploadControllerProps = {
     room: Room,
     whiteboardRef?: HTMLDivElement,
 };
 
-export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUploadBoxState> {
+export default class OssUploadController extends React.Component<OssUploadControllerProps, OssUploadControllerState> {
     private readonly client: any;
-    public constructor(props: UploadBtnProps) {
+    public constructor(props: OssUploadControllerProps) {
         super(props);
         this.state = {
-            toolBoxColor: "#A2A7AD",
+            isActive: false,
         };
         this.client = new OSS({
-            accessKeyId: this.props.oss.accessKeyId,
-            accessKeySecret: this.props.oss.accessKeySecret,
-            region: this.props.oss.region,
-            bucket: this.props.oss.bucket,
+            accessKeyId: ossConfigObj.accessKeyId,
+            accessKeySecret: ossConfigObj.accessKeySecret,
+            region: ossConfigObj.region,
+            bucket: ossConfigObj.bucket,
         });
     }
 
@@ -54,7 +49,7 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
             event.file,
             pptConverter,
             PPTKind.Static,
-            this.props.oss.folder,
+            ossConfigObj.folder,
             uuid,
           );
     }
@@ -68,7 +63,7 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
             event.file,
             pptConverter,
             PPTKind.Dynamic,
-            this.props.oss.folder,
+            ossConfigObj.folder,
             uuid,
         );
     }
@@ -88,7 +83,6 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
     }
 
     private renderUploadButton = (): React.ReactNode => {
-        const {roomToken} = this.props.room;
         return [
             <Upload
                 key={`image`}
@@ -145,30 +139,25 @@ export default class UploadBtn extends React.Component<UploadBtnProps, ToolBoxUp
     }
 
 
-    private handleVisibleChange = (e: any): void => {
-        if (e) {
-            this.setState({toolBoxColor: "#141414"});
-        } else {
-            this.setState({toolBoxColor: "#A2A7AD"});
-        }
+    private handleVisibleChange = (event: boolean): void => {
+        this.setState({isActive: event})
     }
 
     public render(): React.ReactNode {
+        const {isActive} = this.state;
         return (
             <Popover trigger="click"
                      onVisibleChange={this.handleVisibleChange}
+                     placement={"leftBottom"}
                      content={
                          <div style={{height: 118 * 3}}
                               className="popover-box">
                             {this.renderUploadButton()}
                          </div>
                      }>
-                <div
-                    onMouseEnter={() => this.setState({toolBoxColor: "#141414"})}
-                    onMouseLeave={() => this.setState({toolBoxColor: "#A2A7AD"})}
-                    className="tool-box-cell-box-left">
+                <div className="tool-box-cell-box-left">
                     <div className="tool-box-cell">
-                       upload
+                       <img src={isActive ? uploadActive: upload}/>
                     </div>
                 </div>
             </Popover>

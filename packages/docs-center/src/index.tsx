@@ -2,7 +2,7 @@ import * as React from "react";
 import {Room, RoomState} from "white-web-sdk";
 import * as default_cover_home from "./image/default_cover_home.svg";
 import * as close from "./image/close.svg";
-import MenuBox, {PagePreviewPositionEnum} from "@netless/menu-box";
+import MenuBox from "@netless/menu-box";
 import "./index.less";
 
 export type PPTDataType = {
@@ -21,12 +21,12 @@ export enum PPTType {
 
 export type WhiteboardFileProps = {
     room: Room;
+    handleDocCenterState: (state: boolean) => void;
     isFileOpen: boolean;
 };
 
 export type WhiteboardFileStates = {
     roomState: RoomState;
-    isFileOpen: boolean;
 };
 
 export default class Index extends React.Component<WhiteboardFileProps, WhiteboardFileStates> {
@@ -35,14 +35,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
         super(props);
         this.state = {
             roomState: props.room.state,
-            isFileOpen: props.isFileOpen,
         };
-    }
-
-    public UNSAFE_componentWillReceiveProps(nextProps: Readonly<WhiteboardFileProps>, nextContext: any) {
-        if (nextProps.isFileOpen !== this.state.isFileOpen) {
-            this.setState({isFileOpen: nextProps.isFileOpen});
-        }
     }
 
     private selectDoc = (id: string) => {
@@ -134,16 +127,10 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
         }
     }
 
-    private handleClose = (): void => {
-        this.setState({isFileOpen: !this.state.isFileOpen})
-    }
-
     public render(): React.ReactNode {
-        const {isFileOpen} = this.state;
-
+        const {handleDocCenterState, isFileOpen} = this.props;
         return (
             <MenuBox
-                pagePreviewPosition={PagePreviewPositionEnum.left}
                 isVisible={isFileOpen}
             >
                 <div className="file-box">
@@ -152,7 +139,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div className="chat-box-name">
                                 <span>Document</span>
                             </div>
-                            <div className="chat-box-close" onClick={this.handleClose}>
+                            <div className="chat-box-close" onClick={() => handleDocCenterState(false)}>
                                 <img src={close}/>
                             </div>
                         </div>
