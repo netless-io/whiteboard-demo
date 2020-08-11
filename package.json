@@ -2,16 +2,8 @@
   "name": "react-whiteboard",
   "private": true,
   "devDependencies": {
-    "css-loader": "^4.1.1",
-    "file-loader": "^6.0.0",
-    "json-loader": "^0.5.7",
     "lerna": "^3.22.1",
-    "less-loader": "^6.2.0",
-    "style-loader": "^1.2.1",
-    "ts-loader": "^8.0.1",
-    "url-loader": "^4.1.0",
-    "yaml-lint-loader": "^1.0.0",
-    "yaml-loader": "^0.6.0"
+    "typescript": "^3.9.7"
   },
   "workspaces": [
     "packages/*",
