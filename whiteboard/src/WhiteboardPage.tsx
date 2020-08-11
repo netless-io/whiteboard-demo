@@ -267,10 +267,10 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
-                                <div className="page-controller-cell"
-                                     onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
-                                    <img src={folder}/>
-                                </div>
+                                {/*<div className="page-controller-cell"*/}
+                                {/*     onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>*/}
+                                {/*    <img src={folder}/>*/}
+                                {/*</div>*/}
                                 {this.renderInvite()}
                                 {this.renderExitView()}
                             </div>
