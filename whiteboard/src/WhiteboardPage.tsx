@@ -11,7 +11,7 @@ import PageController from "@netless/page-controller";
 import ZoomController from "@netless/zoom-controller";
 import OssUploadButton from "@netless/oss-upload-button";
 import "./WhiteboardPage.less";
-import {message} from "antd";
+import {message, Popover} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
@@ -20,6 +20,8 @@ import LoadingPage from "./LoadingPage";
 import pages from "./assets/image/pages.svg";
 import folder from "./assets/image/folder.svg";
 import invite from "./assets/image/invite.svg";
+import inviteActive from "./assets/image/invite-active.svg";
+import logo from "./assets/image/logo.svg";
 import exit from "./assets/image/exit.svg";
 import PluginCenter from "@netless/plugin-center";
 
@@ -30,9 +32,11 @@ export type WhiteboardPageStates = {
     isMenuVisible: boolean;
     isFileOpen: boolean;
     whiteboardLayerDownRef?: HTMLDivElement;
+    inviteDisable: boolean;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     uuid: string;
+    userId: string;
 }>;
 export default class WhiteboardPage extends React.Component<WhiteboardPageProps, WhiteboardPageStates> {
     public constructor(props: WhiteboardPageProps) {
@@ -41,6 +45,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             phase: RoomPhase.Connecting,
             isMenuVisible: false,
             isFileOpen: false,
+            inviteDisable: false,
         };
     }
 
@@ -63,44 +68,91 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             room.bindHtmlElement(ref);
         }
     }
+
+    private onVisibleChange = (event: boolean): void => {
+        if (event) {
+            this.setState({inviteDisable: true});
+        } else {
+            this.setState({inviteDisable: false});
+        }
+    }
+
+    private handleInvite = (): void => {
+        this.setState({inviteDisable: !this.state.inviteDisable})
+    }
+
+    private renderInvite = (): React.ReactNode => {
+        return (
+            <Popover visible={this.state.inviteDisable}
+                     trigger="click"
+                     onVisibleChange={this.onVisibleChange}
+                     content={
+                         <div className="invite-box">
+                             <div className="invite-text-box">
+                                 <div style={{marginBottom: 12}}>房间号：<span
+                                     className="invite-room-box">a0e4f100db7011eab93ae1da9406727f</span></div>
+                                 <div>加入链接：<span
+                                     className="invite-url-box">https://demo.herewhite.com/whiteboard/host/a0e4f100db7011eab93ae1da9406727f</span>
+                                 </div>
+                             </div>
+                             <div className="invite-button-box">
+                                 <div onClick={this.handleInvite} className="invite-button-left">
+                                     关闭
+                                 </div>
+                                 <div className="invite-button-right">
+                                     复制
+                                 </div>
+                             </div>
+                         </div>
+                     }
+                     placement={"bottomRight"}>
+                <div className="page-controller-cell" onClick={this.handleInvite}>
+                    <img src={this.state.inviteDisable ? inviteActive : invite}/>
+                </div>
+            </Popover>
+        );
+    }
+
+    private
+
     private startJoinRoom = async (): Promise<void> => {
-        // const {uuid} = this.props.match.params;
+        const {uuid, userId} = this.props.match.params;
         try {
-            // const roomToken = await this.getRoomToken(uuid);
-            // if (uuid && roomToken) {
-            const whiteWebSdk = new WhiteWebSdk({
-                appIdentifier: "283/VGiScM9Wiw2HJg",
-            });
-            const room = await whiteWebSdk.joinRoom({
-                    uuid: "250024f0d2ed11ea9322f7b90d6b361a",
-                    roomToken: "WHITEcGFydG5lcl9pZD14NGFfY1JDV09hbzItNEYtJnNpZz1kMGNiMTk5ZGRkYTMzN2I1MDRkNWUxMmNiM2U2MjZmODlhZjNjNTM3OmFrPXg0YV9jUkNXT2FvMi00Ri0mY3JlYXRlX3RpbWU9MTU5NjE3MjcxNzE3MyZleHBpcmVfdGltZT0xNjI3NzA4NzE3MTczJm5vbmNlPTE1OTYxNzI3MTcxNzMwMCZyb2xlPXJvb20mcm9vbUlkPTI1MDAyNGYwZDJlZDExZWE5MzIyZjdiOTBkNmIzNjFhJnRlYW1JZD0yODM",
-                    userPayload: {
-                        userId: 1024,
-                    },
-                    floatBar: true,
-                },
-                {
-                    onPhaseChanged: phase => {
-                        this.setState({phase: phase});
-                        console.log(`room ${"uuid"} changed: ${phase}`);
-                    },
-                    onDisconnectWithError: error => {
-                        console.error(error);
-                    },
-                    onKickedWithReason: reason => {
-                        console.error("kicked with reason: " + reason);
-                    },
+            const roomToken = await this.getRoomToken(uuid);
+            if (uuid && roomToken) {
+                const whiteWebSdk = new WhiteWebSdk({
+                    appIdentifier: "283/VGiScM9Wiw2HJg",
                 });
-            room.setMemberState({
-                pencilOptions: {
-                    disableBezier: false,
-                    sparseHump: 1.0,
-                    sparseWidth: 1.0,
-                    enableDrawPoint: false
-                }
-            });
-            this.setState({room: room});
-            // }
+                const room = await whiteWebSdk.joinRoom({
+                        uuid: uuid,
+                        roomToken: roomToken,
+                        userPayload: {
+                            userId: userId,
+                        },
+                        floatBar: true,
+                    },
+                    {
+                        onPhaseChanged: phase => {
+                            this.setState({phase: phase});
+                            console.log(`room ${"uuid"} changed: ${phase}`);
+                        },
+                        onDisconnectWithError: error => {
+                            console.error(error);
+                        },
+                        onKickedWithReason: reason => {
+                            console.error("kicked with reason: " + reason);
+                        },
+                    });
+                room.setMemberState({
+                    pencilOptions: {
+                        disableBezier: false,
+                        sparseHump: 1.0,
+                        sparseWidth: 1.0,
+                        enableDrawPoint: false
+                    }
+                });
+                this.setState({room: room});
+            }
         } catch (error) {
             message.error(error);
             console.log(error);
@@ -118,7 +170,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     public render(): React.ReactNode {
         const {room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         if (room === undefined) {
-            return null;
+            return <LoadingPage
+                phase={phase}/>;
         }
         switch (phase) {
             case RoomPhase.Disconnected: {
@@ -139,12 +192,15 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             default: {
                 return (
                     <div className="realtime-box">
+                        <div className="logo-box">
+                            <img src={logo}/>
+                        </div>
                         <div className="tool-box-out">
                             <ToolBox room={room} customerComponent={
                                 [
                                     <OssUploadButton room={room} whiteboardRef={whiteboardLayerDownRef}/>,
                                     <PluginCenter room={room}/>
-                                    ]
+                                ]
                             }/>
                         </div>
                         <div className="redo-undo-box">
@@ -153,21 +209,13 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         <div className="zoom-controller-box">
                             <ZoomController room={room}/>
                         </div>
-                        <div className="title-controller-box">
-                            <div className="title-controller-mid-box">
-                                <div className="title-text">伍双创建会议</div>
-                                <div className="title-cut-line"/>
-                                <div className="title-time">8月8日 21:23</div>
-                            </div>
-                        </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
-                                <div className="page-controller-cell" onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
+                                <div className="page-controller-cell"
+                                     onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
                                     <img src={folder}/>
                                 </div>
-                                <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
-                                    <img src={invite}/>
-                                </div>
+                                {this.renderInvite()}
                                 <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
                                     <img src={exit}/>
                                 </div>
@@ -181,8 +229,10 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                 <PageController room={room}/>
                             </div>
                         </div>
-                        <PreviewController handlePreviewState={this.handlePreviewState} isVisible={isMenuVisible} room={room}/>
-                        <DocsCenter handleDocCenterState={this.handleDocCenterState} isFileOpen={isFileOpen} room={room}/>
+                        <PreviewController handlePreviewState={this.handlePreviewState} isVisible={isMenuVisible}
+                                           room={room}/>
+                        <DocsCenter handleDocCenterState={this.handleDocCenterState} isFileOpen={isFileOpen}
+                                    room={room}/>
                         <div ref={this.handleBindRoom}
                              style={{width: "100%", height: "100vh", backgroundColor: "#F4F4F4"}}/>
                     </div>

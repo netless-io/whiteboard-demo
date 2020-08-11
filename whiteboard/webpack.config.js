@@ -45,7 +45,7 @@ config = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            template: './src/index.html'
+            template: './public/index.html'
         }),
         new MiniCssExtractPlugin({
             filename: '[name].css',
@@ -73,9 +73,9 @@ config = {
                     options: {
                         lessOptions: {
                             modifyVars: {
-                                'primary-color': '#1DA57A',
-                                'link-color': '#1DA57A',
-                                'border-radius-base': '2px',
+                                'primary-color': '#106BC5',
+                                'link-color': '#106BC5',
+                                'border-radius-base': '4px',
                             },
                             javascriptEnabled: true
                         }

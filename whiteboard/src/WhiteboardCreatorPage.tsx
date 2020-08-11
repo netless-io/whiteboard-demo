@@ -3,7 +3,6 @@ import {Redirect} from "react-router";
 import {message} from "antd";
 import {RouteComponentProps} from "react-router";
 import PageError from "./PageError";
-import {IdentityType} from "./IndexPage";
 import {netlessWhiteboardApi, RoomType} from "./apiMiddleware";
 
 export type WhiteboardCreatorPageState = {
@@ -13,7 +12,6 @@ export type WhiteboardCreatorPageState = {
 };
 
 export type WhiteboardCreatorPageProps = RouteComponentProps<{
-    identityType: IdentityType;
     uuid?: string;
 }>;
 
@@ -57,11 +55,10 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
     }
 
     public render(): React.ReactNode {
-        const identityType = this.props.match.params.identityType;
         if (this.state.foundError) {
             return <PageError/>;
         } else if (this.state.uuid && this.state.userId) {
-            return <Redirect to={`/whiteboard/${identityType}/${this.state.uuid}/${this.state.userId}/`}/>;
+            return <Redirect to={`/whiteboard/${this.state.uuid}/${this.state.userId}/`}/>;
         }
         return null;
     }

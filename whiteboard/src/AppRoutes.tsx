@@ -20,8 +20,8 @@ export class AppRoutes extends React.Component<{}, {}> {
             <BrowserRouter>
                 <Switch>
                     {/*<Route path="/replay/:uuid/:userId/:startTime?/:endTime?/:mediaUrl?/" component={ReplayPage}/>*/}
-                    <Route path="/whiteboard/:identityType/:uuid/:userId/" component={WhiteboardPage}/>
-                    <Route path="/whiteboard/:identityType/:uuid?/" component={WhiteboardCreatorPage}/>
+                    <Route path="/whiteboard/:uuid/:userId/" component={WhiteboardPage}/>
+                    <Route path="/whiteboard/:uuid?/" component={WhiteboardCreatorPage}/>
                     <Route path="/test2/" component={ReplayPage}/>
                     <Route path="/test/" component={WhiteboardPage}/>
                     <Route path="/" component={IndexPage}/>

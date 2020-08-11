@@ -1,6 +1,8 @@
 import * as React from "react";
-import {Button} from "antd";
-import {Link} from "react-router-dom";
+import {Link} from "react-router-dom"
+import logo from "./assets/image/logo.svg";
+import join from "./assets/image/join.svg";
+import create from "./assets/image/create.svg";
 import "./IndexPage.less";
 export enum IdentityType {
     host = "host",
@@ -9,47 +11,39 @@ export enum IdentityType {
 }
 
 export type IndexPageStates = {
-    name: string;
-    url: string;
 };
 
 export default class IndexPage extends React.Component<{}, IndexPageStates> {
     public constructor(props: {}) {
         super(props);
-        this.state = {
-            name: "",
-            url: "",
-        };
     }
-
     public render(): React.ReactNode {
             return (
-                <div className="page-input-box">
-                    <div className="page-input-left-box">
-                        <div className="page-input-left-mid-box">
-                            <div className="page-input-left-inner-box">
-                                <Link to={"/test/"}>
-                                    <Button
-                                        type="primary"
-                                        size="large"
-                                        className="name-button">
-                                        creatRoom
-                                    </Button>
-                                </Link>
+                <div className="page-index-box">
+                    <div className="page-index-mid-box">
+                        <div className="page-index-logo-box">
+                            <img src={logo}/>
+                            <span>
+                                0.0.1
+                            </span>
+                        </div>
+                        <div className="page-index-start-box">
+                            <div className="page-index-start-cell">
+                                <img src={join}/>
+                                <span>加入房间</span>
                             </div>
-                            <div className="page-input-left-inner-box">
-                                <Link to={"/test2/"}>
-                                    <Button
-                                        type="primary"
-                                        size="large"
-                                        className="name-button">
-                                        creatReplay
-                                    </Button>
+                            <div className="page-index-cutline-box"/>
+                            <div className="page-index-start-cell">
+                                <Link to={"/whiteboard"}>
+                                    <img src={create}/>
                                 </Link>
+                                <span>创建房间</span>
                             </div>
                         </div>
+                        <div className="page-index-start-term">
+                            使用产品即代表同意<span>《软件许可以及服务协议》</span>和<span>《隐私协议》</span>
+                        </div>
                     </div>
-                    <div className="page-input-right-box"/>
                 </div>
             );
     }
