@@ -91,7 +91,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
             );
         });
         return (
-            <div style={{height: "calc(100vh - 62px)"}}>
+            <div className="preview-cells-box">
                 {nodes}
             </div>
         );

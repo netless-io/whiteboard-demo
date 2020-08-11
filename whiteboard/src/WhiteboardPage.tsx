@@ -1,5 +1,6 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
+import {Link} from "react-router-dom";
 import {
     Room,
     RoomPhase,
@@ -11,7 +12,7 @@ import PageController from "@netless/page-controller";
 import ZoomController from "@netless/zoom-controller";
 import OssUploadButton from "@netless/oss-upload-button";
 import "./WhiteboardPage.less";
-import {message, Popover} from "antd";
+import {Button, message, Modal, Popover} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
@@ -20,6 +21,7 @@ import LoadingPage from "./LoadingPage";
 import pages from "./assets/image/pages.svg";
 import folder from "./assets/image/folder.svg";
 import invite from "./assets/image/invite.svg";
+import replayScreen from "./assets/image/replay-screen.png";
 import inviteActive from "./assets/image/invite-active.svg";
 import logo from "./assets/image/logo.svg";
 import exit from "./assets/image/exit.svg";
@@ -34,6 +36,7 @@ export type WhiteboardPageStates = {
     isFileOpen: boolean;
     whiteboardLayerDownRef?: HTMLDivElement;
     inviteDisable: boolean;
+    exitViewDisable: boolean;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     uuid: string;
@@ -47,6 +50,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             isMenuVisible: false,
             isFileOpen: false,
             inviteDisable: false,
+            exitViewDisable: false,
         };
     }
 
@@ -83,7 +87,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     }
 
     private renderInvite = (): React.ReactNode => {
-        const {uuid, userId} = this.props.match.params;
+        const {uuid} = this.props.match.params;
         return (
             <Popover visible={this.state.inviteDisable}
                      trigger="click"
@@ -176,6 +180,37 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         this.setState({isFileOpen: state});
     }
 
+    private renderExitView = (): React.ReactNode => {
+        const {uuid, userId} = this.props.match.params;
+        return (
+            <div>
+                <div className="page-controller-cell" onClick={() => this.setState({exitViewDisable: true})}>
+                    <img src={exit}/>
+                </div>
+                <Modal
+                    visible={this.state.exitViewDisable}
+                    footer={null}
+                    title={"退出教室"}
+                    onCancel={() => this.setState({exitViewDisable: false})}
+                >
+                    <div className="modal-box">
+                        <Link to={`/replay/${uuid}/${userId}/`}>
+                            <img className="modal-box-img" src={replayScreen}/>
+                        </Link>
+                        <div className="modal-box-name">观看回放</div>
+                        <Link to={`/`}>
+                            <Button
+                                style={{width: 176}}
+                                size="large">
+                                确认退出
+                            </Button>
+                        </Link>
+                    </div>
+                </Modal>
+            </div>
+        )
+    }
+
     public render(): React.ReactNode {
         const {room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         if (room === undefined) {
@@ -225,9 +260,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                     <img src={folder}/>
                                 </div>
                                 {this.renderInvite()}
-                                <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
-                                    <img src={exit}/>
-                                </div>
+                                {this.renderExitView()}
                             </div>
                         </div>
                         <div className="page-controller-box">

@@ -8,10 +8,11 @@ import "video.js/dist/video-js.css";
 import "./ReplayPage.less";
 import {LoadingOutlined} from "@ant-design/icons";
 import PageError from "./PageError";
-import {netlessWhiteboardApi} from "./apiMiddleware";
 import PlayerController from "@netless/player-controller";
+import {netlessWhiteboardApi} from "./apiMiddleware";
 export type PlayerPageProps = RouteComponentProps<{
-    // uuid: string;
+    uuid: string;
+    userId: string;
 }>;
 
 
@@ -38,17 +39,27 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         };
     }
 
+    private getRoomToken = async (uuid: string): Promise<string | null> => {
+        const res = await netlessWhiteboardApi.room.joinRoomApi(uuid);
+        if (res.code === 200) {
+            return res.msg.roomToken;
+        } else {
+            return null;
+        }
+    }
+
     public async componentDidMount(): Promise<void> {
         window.addEventListener("resize", this.onWindowResize);
         window.addEventListener("keydown", this.handleSpaceKey);
-        // const {uuid} = this.props.match.params;
-        // const roomToken = await this.getRoomToken(uuid);
-        // if (uuid && roomToken) {
+        const {uuid} = this.props.match.params;
+        const roomToken = await this.getRoomToken(uuid);
+
+        if (uuid && roomToken) {
             const whiteWebSdk = new WhiteWebSdk({appIdentifier: "283/VGiScM9Wiw2HJg", renderEngine: RenderEngine.Canvas});
             const player = await whiteWebSdk.replayRoom(
                 {
-                    room: "250024f0d2ed11ea9322f7b90d6b361a",
-                    roomToken: "WHITEcGFydG5lcl9pZD14NGFfY1JDV09hbzItNEYtJnNpZz1kMGNiMTk5ZGRkYTMzN2I1MDRkNWUxMmNiM2U2MjZmODlhZjNjNTM3OmFrPXg0YV9jUkNXT2FvMi00Ri0mY3JlYXRlX3RpbWU9MTU5NjE3MjcxNzE3MyZleHBpcmVfdGltZT0xNjI3NzA4NzE3MTczJm5vbmNlPTE1OTYxNzI3MTcxNzMwMCZyb2xlPXJvb20mcm9vbUlkPTI1MDAyNGYwZDJlZDExZWE5MzIyZjdiOTBkNmIzNjFhJnRlYW1JZD0yODM",
+                    room: uuid,
+                    roomToken: roomToken,
                 }, {
                     onPhaseChanged: phase => {
                         this.setState({phase: phase});
@@ -71,7 +82,7 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
             this.setState({
                 player: player,
             });
-        // }
+        }
     }
     private onWindowResize = (): void => {
         if (this.state.player) {
