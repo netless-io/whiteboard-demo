@@ -8,6 +8,7 @@ module.exports = {
 
     output: {
         filename: 'index.js',
+        library: "videoPlugin",
         libraryTarget: "umd",
         path: path.resolve(__dirname, 'dist'),
     },
