@@ -12,7 +12,7 @@ import PageController from "@netless/page-controller";
 import ZoomController from "@netless/zoom-controller";
 import OssUploadButton from "@netless/oss-upload-button";
 import "./WhiteboardPage.less";
-import {Button, message, Modal, Popover} from "antd";
+import {Button, Input, message, Modal, Popover} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
@@ -94,17 +94,19 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                      onVisibleChange={this.onVisibleChange}
                      content={
                          <div className="invite-box">
+                             <div className="invite-box-title">
+                                 邀请加入
+                             </div>
+                             <div style={{width: 400, height: 0.5, backgroundColor: "#E7E7E7"}}/>
                              <div className="invite-text-box">
-                                 <div style={{marginBottom: 12}}>房间号：<span
+                                 <div style={{marginBottom: 12}}>
+                                     <span style={{width: 96}}>房间号：</span><span
                                      className="invite-room-box">{uuid}</span></div>
-                                 <div>加入链接：<span
-                                     className="invite-url-box">{`${location.host}/whiteboard/${uuid}/`}</span>
+                                 <div className="invite-url-box">
+                                     <span style={{width: 96}}>加入链接：</span><Input size={"middle"} value={`${location.host}/whiteboard/${uuid}/`}/>
                                  </div>
                              </div>
                              <div className="invite-button-box">
-                                 <div onClick={this.handleInvite} className="invite-button-left">
-                                     关闭
-                                 </div>
                                  <Clipboard
                                      data-clipboard-text={`房间号：${uuid}\n加入链接：${location.host}/whiteboard/${uuid}/`}
                                      component="div"
@@ -113,9 +115,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                          message.success("已经将链接复制到剪贴板");
                                      }}
                                  >
-                                     <div className="invite-button-right">
+                                     <Button style={{width: 164, height: 40}} type={"primary"} size={"middle"}>
                                          复制
-                                     </div>
+                                     </Button>
                                  </Clipboard>
                              </div>
                          </div>
@@ -182,6 +184,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
 
     private renderExitView = (): React.ReactNode => {
         const {uuid, userId} = this.props.match.params;
+        const {room} = this.state;
         return (
             <div>
                 <div className="page-controller-cell" onClick={() => this.setState({exitViewDisable: true})}>
@@ -194,17 +197,26 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     onCancel={() => this.setState({exitViewDisable: false})}
                 >
                     <div className="modal-box">
-                        <Link to={`/replay/${uuid}/${userId}/`}>
+                        <div onClick={async () => {
+                            if (room) {
+                                await room.disconnect();
+                                this.props.history.push(`/replay/${uuid}/${userId}/`);
+                            }
+                        }}>
                             <img className="modal-box-img" src={replayScreen}/>
-                        </Link>
+                        </div>
                         <div className="modal-box-name">观看回放</div>
-                        <Link to={`/`}>
-                            <Button
-                                style={{width: 176}}
-                                size="large">
-                                确认退出
-                            </Button>
-                        </Link>
+                        <Button
+                            onClick={async () => {
+                                if (room) {
+                                    await room.disconnect();
+                                    this.props.history.push("/");
+                                }
+                            }}
+                            style={{width: 176}}
+                            size="large">
+                            确认退出
+                        </Button>
                     </div>
                 </Modal>
             </div>
