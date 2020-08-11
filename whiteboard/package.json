@@ -7,8 +7,8 @@
         "build": "tsc && webpack --mode production"
     },
     "dependencies": {
-        "@netless/fetch-middleware": "^1.0.5",
         "@ant-design/icons": "^4.2.2",
+        "@netless/fetch-middleware": "^1.0.5",
         "antd": "^4.4.3",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
@@ -21,7 +21,6 @@
         "@types/react-dom": "^16.9.8",
         "clean-webpack-plugin": "^3.0.0",
         "css-loader": "^4.0.0",
-        "url-loader": "^4.1.0",
         "html-webpack-plugin": "^4.3.0",
         "less-loader": "^6.2.0",
         "mini-css-extract-plugin": "^0.9.0",
@@ -29,6 +28,7 @@
         "terser-webpack-plugin": "^3.0.7",
         "ts-loader": "^8.0.1",
         "typescript": "^3.9.7",
+        "url-loader": "^4.1.0",
         "webpack": "^4.44.0",
         "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.11.0"
