@@ -16,7 +16,7 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "rc-tween-one": "^2.7.3"
+    "antd": "^4.4.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",

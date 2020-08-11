@@ -8,6 +8,9 @@ yarn global add lerna
 npm install lerna -g
 
 # 单独 yarn
+yarn
+
+# lerna 准备工作
 lerna bootstrap
 
 # 启动所有脚本的热更新
@@ -17,8 +20,12 @@ lerna run --parallel start
 lerna run build
 
 # 只运行 toolbox 的 yarn dev 脚本
-lerna run --scope @netless/tool-box dev
+lerna run --scope `lib-name` dev
 
 # 运行除 tool-box 外的 run dev 脚本
 lerna run --ignore @netless/tool-box dev
+
+# build 所有库
+lerna run --parallel build:lib
+
 ```

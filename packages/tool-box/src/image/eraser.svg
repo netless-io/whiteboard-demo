@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>eraser</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Whiteboard-Guidelines" transform="translate(-456.000000, -216.000000)">
+            <g id="eraser" transform="translate(456.000000, 216.000000)">
+                <rect id="矩形备份-41" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="40" height="40" rx="2"></rect>
+                <path d="M14.41425,26.31425 L12.29325,24.19225 C11.90225,23.80125 11.90225,23.16825 12.29325,22.77825 L20.77825,14.29325 C21.16925,13.90225 21.80225,13.90225 22.19225,14.29325 L26.43525,18.53625 C26.82625,18.92625 26.82625,19.55925 26.43525,19.95025 L20.07125,26.31425 L14.41425,26.31425 Z" id="Stroke-1" stroke="#212324" stroke-linecap="round" stroke-linejoin="round"></path>
+                <line x1="20.07155" y1="26.31425" x2="27.14255" y2="26.31425" id="Stroke-5" stroke="#212324" stroke-linecap="round" stroke-linejoin="round"></line>
+            </g>
+        </g>
+    </g>
+</svg>

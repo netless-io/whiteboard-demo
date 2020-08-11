@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="58px" height="22px" viewBox="0 0 58 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>fileTransWeb</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Whiteboard-Guidelines" transform="translate(-70.000000, -795.000000)">
+            <g id="fileTransWeb" transform="translate(70.000000, 795.000000)">
+                <g id="编组-8备份" transform="translate(36.000000, 0.000000)">
+                    <g id="undo备份-5">
+                        <rect id="矩形备份-19" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="22" height="22"></rect>
+                        <rect id="矩形" stroke="#B9C0C5" stroke-linecap="round" stroke-linejoin="round" x="5" y="5" width="12" height="12" rx="2"></rect>
+                        <line x1="5" y1="10" x2="17" y2="10" id="路径-24" stroke="#B9C0C5"></line>
+                        <circle id="椭圆形" fill="#B9C0C5" cx="12.5" cy="7.5" r="1"></circle>
+                        <circle id="椭圆形备份-2" fill="#B9C0C5" cx="10.5" cy="7.5" r="1"></circle>
+                        <circle id="椭圆形备份-3" fill="#B9C0C5" cx="14.5" cy="7.5" r="1"></circle>
+                    </g>
+                </g>
+                <g id="编组-9">
+                    <rect id="矩形备份-19" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="22" height="22"></rect>
+                    <path d="M8,5 L12,5 L12,5 L16,9 L16,15 C16,16.1045695 15.1045695,17 14,17 L8,17 C6.8954305,17 6,16.1045695 6,15 L6,7 C6,5.8954305 6.8954305,5 8,5 Z" id="矩形" stroke="#B9C0C5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M12,5 L16,9 L14,9 C12.8954305,9 12,8.1045695 12,7 L12,5 L12,5 Z" id="矩形" stroke="#B9C0C5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <line x1="9" y1="12" x2="13" y2="12" id="路径-3" stroke="#B9C0C5" stroke-linecap="round" stroke-linejoin="round"></line>
+                    <line x1="9" y1="14" x2="11" y2="14" id="路径-3备份" stroke="#B9C0C5" stroke-linecap="round" stroke-linejoin="round"></line>
+                </g>
+                <line x1="24" y1="9.5" x2="32" y2="9.5" id="路径-22" stroke="#71C3FC" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line x1="24" y1="12.5" x2="32" y2="12.5" id="路径-22备份" stroke="#71C3FC" stroke-linecap="round" stroke-linejoin="round"></line>
+                <polyline id="路径-23" stroke="#71C3FC" stroke-linecap="round" points="31 14 34 11 31 8"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>

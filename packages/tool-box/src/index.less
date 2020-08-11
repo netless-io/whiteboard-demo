@@ -11,14 +11,16 @@
 }
 
 .tool-mid-box-left {
-  width: 32px;
+  width: 48px;
   display: flex;
   border-radius: 4px;
   background-color: white;
   justify-content: space-between;
+  align-items: center;
   flex-direction: column;
-  padding-bottom: 6px;
-  padding-top: 6px;
+  padding-bottom: 4px;
+  padding-top: 4px;
+  box-shadow:0 8px 24px 0 rgba(0,0,0,0.08);
 }
 
 .tool-box-cell {
@@ -41,24 +43,17 @@
 }
 
 .tool-box-cell-box-left {
-  width: 32px;
-  height: 32px;
-  margin-top: 4px;
-  margin-bottom: 4px;
+  width: 40px;
+  height: 40px;
   user-select: none;
   cursor: pointer;
-  background-color: white;
-}
-
-.whiteboard-tool-box-left {
-  height: 100%;
-  width: 0;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  position: absolute;
-  z-index: 2;
-  left: 8px;
+  align-items: center;
+  border-radius: 2px;
+  &:hover {
+    background: rgba(33,35,36,0.1);
+  }
 }
 
 .tool-box-cell-step-two {

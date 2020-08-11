@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>reset</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Whiteboard-Guidelines" transform="translate(-200.000000, -374.000000)">
+            <g id="reset" transform="translate(200.000000, 374.000000)">
+                <rect id="矩形备份-55" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="32" height="32"></rect>
+                <circle id="椭圆形备份-2" fill="#212324" cx="16" cy="16" r="1"></circle>
+                <circle id="椭圆形" stroke="#212324" stroke-linecap="round" stroke-linejoin="round" cx="16" cy="16" r="4"></circle>
+                <line x1="16" y1="10" x2="16" y2="12" id="路径-2备份-2" stroke="#212324" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line x1="16" y1="20" x2="16" y2="22" id="路径-2备份-2" stroke="#212324" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line x1="22" y1="16" x2="20" y2="16" id="路径-2备份-2" stroke="#212324" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line x1="12" y1="16" x2="10" y2="16" id="路径-2备份-2" stroke="#212324" stroke-linecap="round" stroke-linejoin="round"></line>
+            </g>
+        </g>
+    </g>
+</svg>

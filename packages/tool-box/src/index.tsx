@@ -1,103 +1,128 @@
 import * as React from "react";
-import {ApplianceNames, Room} from "white-web-sdk";
-import TweenOne from "rc-tween-one";
+import {ApplianceNames, Room, RoomState} from "white-web-sdk";
+import {Popover} from "antd";
 import "./index.less";
-import {
-    IconProps, ToolBoxArrow,
-    ToolBoxEllipse,
-    ToolBoxEraser, ToolBoxHand, ToolBoxLaserPointer,
-    ToolBoxPencil, ToolBoxRectangle,
-    ToolBoxSelector, ToolBoxStraight,
-    ToolBoxText
-} from "./ToolIconComponent";
+import * as selector from "./image/selector.svg";
+import * as selectorActive from "./image/selector-active.svg";
+import * as pen from "./image/pencil.svg";
+import * as penActive from "./image/pencil-active.svg";
+import * as text from "./image/text.svg";
+import * as textActive from "./image/text-active.svg";
+import * as eraser from "./image/eraser.svg";
+import * as eraserActive from "./image/eraser-active.svg";
+import * as ellipse from "./image/ellipse.svg";
+import * as ellipseActive from "./image/ellipse-active.svg";
+import * as rectangle from "./image/rectangle.svg";
+import * as rectangleActive from "./image/rectangle-active.svg";
+import * as straight from "./image/straight.svg";
+import * as straightActive from "./image/straight-active.svg";
+import * as arrow from "./image/arrow.svg";
+import * as arrowActive from "./image/arrow-active.svg";
+import * as laserPointer from "./image/laserPointer.svg";
+import * as laserPointerActive from "./image/laserPointer-active.svg";
+import * as hand from "./image/hand.svg";
+import * as handActive from "./image/hand-active.svg";
+import ToolBoxPaletteBox from "./ToolBoxPaletteBox";
 
 export type ToolBoxProps = {
     room: Room;
+    customerComponent?: React.ReactNode[];
 };
 export type ToolBoxStates = {
-    isPaletteBoxAppear: boolean;
     strokeEnable: boolean;
-    isToolBoxSwitched: boolean;
     extendsPanel: boolean;
+    roomState: RoomState;
 };
 type ApplianceDescription = {
-    readonly iconView: React.ComponentClass<IconProps>;
+    readonly icon: string;
+    readonly iconActive: string;
     readonly hasColor: boolean;
     readonly hasStroke: boolean;
 };
 export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates> {
-    private static readonly descriptions: {readonly [applianceName: string]: ApplianceDescription} = Object.freeze({
+    private static readonly descriptions: { readonly [applianceName: string]: ApplianceDescription } = Object.freeze({
         selector: Object.freeze({
-            iconView: ToolBoxSelector,
+            icon: selector,
+            iconActive: selectorActive,
             hasColor: false,
             hasStroke: false,
         }),
         pencil: Object.freeze({
-            iconView: ToolBoxPencil,
+            icon: pen,
+            iconActive: penActive,
             hasColor: true,
             hasStroke: true,
         }),
         text: Object.freeze({
-            iconView: ToolBoxText,
+            icon: text,
+            iconActive: textActive,
             hasColor: true,
             hasStroke: false,
         }),
         eraser: Object.freeze({
-            iconView: ToolBoxEraser,
+            icon: eraser,
+            iconActive: eraserActive,
             hasColor: false,
             hasStroke: false,
         }),
         ellipse: Object.freeze({
-            iconView: ToolBoxEllipse,
+            icon: ellipse,
+            iconActive: ellipseActive,
             hasColor: true,
             hasStroke: true,
         }),
         rectangle: Object.freeze({
-            iconView: ToolBoxRectangle,
+            icon: rectangle,
+            iconActive: rectangleActive,
             hasColor: true,
             hasStroke: true,
         }),
         straight: Object.freeze({
-            iconView: ToolBoxStraight,
+            icon: straight,
+            iconActive: straightActive,
             hasColor: true,
             hasStroke: true,
         }),
         arrow: Object.freeze({
-            iconView: ToolBoxArrow,
+            icon: arrow,
+            iconActive: arrowActive,
             hasColor: true,
-            hasStroke: true,
+            hasStroke: false,
         }),
         laserPointer: Object.freeze({
-            iconView: ToolBoxLaserPointer,
+            icon: laserPointer,
+            iconActive: laserPointerActive,
             hasColor: false,
             hasStroke: false,
         }),
         hand: Object.freeze({
-            iconView: ToolBoxHand,
+            icon: hand,
+            iconActive: handActive,
             hasColor: false,
             hasStroke: false,
         }),
     });
+
     public constructor(props: ToolBoxProps) {
         super(props);
         this.state = {
-            isPaletteBoxAppear: false,
             strokeEnable: false,
-            isToolBoxSwitched: false,
             extendsPanel: false,
+            roomState: props.room.state,
         };
     }
-    public clickAppliance = (event: Event | undefined, applianceName: ApplianceNames): void => {
+
+    public componentDidMount(): void {
         const {room} = this.props;
-        event!.preventDefault();
-        const isSelected = room.state.memberState.currentApplianceName === applianceName;
-        if (isSelected) {
-            this.setState({isToolBoxSwitched: false, extendsPanel: !this.state.extendsPanel});
-        } else {
-            this.setState({isToolBoxSwitched: true, isPaletteBoxAppear: false});
-            room.setMemberState({currentApplianceName: applianceName});
-            this.setState({extendsPanel: false});
-        }
+        room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
+            this.setState({roomState: {...room.state, ...modifyState}});
+        });
+    }
+    public clickAppliance = (eventTarget: any, applianceName: ApplianceNames): void => {
+        const {room} = this.props;
+        eventTarget.preventDefault();
+        room.setMemberState({currentApplianceName: applianceName});
+        this.setState({extendsPanel: true});
     }
     private onVisibleChange = (visible: boolean): void => {
         if (!visible) {
@@ -105,48 +130,57 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         }
     }
 
-    private buttonColor(isSelected: boolean): string {
-        const {room} = this.props;
-        if (isSelected) {
-            const [r, g, b] = room.state.memberState.strokeColor;
-            return `rgb(${r},${g},${b})`;
+    private renderApplianceButton(applianceName: ApplianceNames, description: ApplianceDescription): React.ReactNode {
+        const {roomState} = this.state;
+        const isSelected = roomState.memberState.currentApplianceName === applianceName;
+        const isExtendable = description.hasStroke || description.hasColor;
+        const iconUrl = isSelected ? description.iconActive : description.icon;
+        const cell = (
+            <div key={`${applianceName}`} className="tool-box-cell-box-left">
+                <div className="tool-box-cell"
+                     onClick={(event) => this.clickAppliance(event, applianceName)}>
+                    <img src={iconUrl}/>
+                </div>
+            </div>
+        );
+        if (isExtendable && isSelected) {
+            return (
+                <Popover key={applianceName}
+                         visible={this.state.extendsPanel}
+                         placement={"right"}
+                         trigger="click"
+                         onVisibleChange={this.onVisibleChange}
+                         content={this.renderToolBoxPaletteBox(description)}>
+                    {cell}
+                </Popover>
+            );
         } else {
-            return "rgb(162,167,173)";
+            return cell;
         }
     }
 
-    private renderApplianceButton(applianceName: ApplianceNames, description: ApplianceDescription): React.ReactNode {
+    private renderToolBoxPaletteBox(description: ApplianceDescription): React.ReactNode {
         const {room} = this.props;
-        const ToolIcon = description.iconView;
-        const isExtendable = description.hasStroke || description.hasColor;
-        const isSelected = room.state.memberState.currentApplianceName === applianceName;
-        const buttonColor = this.buttonColor(isSelected);
-
-        const cellBox: React.ReactNode = (
-            <div className={"tool-box-cell-box-left"} key={applianceName}>
-                <div className="tool-box-cell"
-                     onClick={() => this.clickAppliance(event, applianceName)}>
-                    <ToolIcon color={buttonColor}/>
-                </div>
-                {isExtendable && isSelected && (
-                    <TweenOne className="tool-box-cell-step-two"
-                              animation={{
-                                  duration: 150,
-                                  delay: 100,
-                                  width: 8,
-                                  backgroundColor: buttonColor,
-                                  display: isSelected ? "flex" : "none",
-                              }}
-                              style={{
-                                  backgroundColor: buttonColor,
-                                  width: 0,
-                                  display: "none",
-                              }}/>
-                )}
-            </div>
+        const {roomState} = this.state;
+        return (
+            <ToolBoxPaletteBox room={room}
+                               roomState={roomState}
+                               displayStroke={description.hasStroke}/>
         );
-        return cellBox;
     }
+
+    private addCustomerComponent = (nodes: React.ReactNode[]): React.ReactNode[] => {
+        if (this.props.customerComponent) {
+            const customerNodes = this.props.customerComponent.map((data: React.ReactNode, index: number) => {
+                return <div key={`tool-customer-${index}`}>{data}</div>;
+            });
+            nodes.splice(nodes.length, 0, [...customerNodes]);
+            return nodes;
+        } else {
+            return nodes;
+        }
+    }
+
     public render(): React.ReactNode {
         const nodes: React.ReactNode[] = [];
         for (const applianceName in ToolBox.descriptions) {
@@ -155,10 +189,8 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             nodes.push(node);
         }
         return (
-            <div className="whiteboard-tool-box-left">
-                <div className="tool-mid-box-left">
-                    {nodes}
-                </div>
+            <div className="tool-mid-box-left">
+                {this.addCustomerComponent(nodes)}
             </div>
         );
     }
