@@ -6,6 +6,7 @@ import WhiteboardCreatorPage from "./WhiteboardCreatorPage";
 import IndexPage from "./IndexPage";
 import WhiteboardPage from "./WhiteboardPage";
 import ReplayPage from "./ReplayPage";
+import JoinPage from "./JoinPage";
 export class AppRoutes extends React.Component<{}, {}> {
 
     public constructor(props: {}) {
@@ -22,8 +23,8 @@ export class AppRoutes extends React.Component<{}, {}> {
                     {/*<Route path="/replay/:uuid/:userId/:startTime?/:endTime?/:mediaUrl?/" component={ReplayPage}/>*/}
                     <Route path="/whiteboard/:uuid/:userId/" component={WhiteboardPage}/>
                     <Route path="/whiteboard/:uuid?/" component={WhiteboardCreatorPage}/>
-                    <Route path="/test2/" component={ReplayPage}/>
-                    <Route path="/test/" component={WhiteboardPage}/>
+                    <Route path="/join/" component={JoinPage}/>
+                    {/*<Route path="/test2/" component={ReplayPage}/>*/}
                     <Route path="/" component={IndexPage}/>
                 </Switch>
             </BrowserRouter>

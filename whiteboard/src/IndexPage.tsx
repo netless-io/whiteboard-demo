@@ -29,12 +29,14 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
                         </div>
                         <div className="page-index-start-box">
                             <div className="page-index-start-cell">
-                                <img src={join}/>
+                                <Link to={"/join/"}>
+                                    <img src={join}/>
+                                </Link>
                                 <span>加入房间</span>
                             </div>
                             <div className="page-index-cutline-box"/>
                             <div className="page-index-start-cell">
-                                <Link to={"/whiteboard"}>
+                                <Link to={"/whiteboard/"}>
                                     <img src={create}/>
                                 </Link>
                                 <span>创建房间</span>

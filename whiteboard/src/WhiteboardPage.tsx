@@ -24,6 +24,7 @@ import inviteActive from "./assets/image/invite-active.svg";
 import logo from "./assets/image/logo.svg";
 import exit from "./assets/image/exit.svg";
 import PluginCenter from "@netless/plugin-center";
+import Clipboard from "react-clipboard.js";
 
 
 export type WhiteboardPageStates = {
@@ -82,6 +83,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     }
 
     private renderInvite = (): React.ReactNode => {
+        const {uuid, userId} = this.props.match.params;
         return (
             <Popover visible={this.state.inviteDisable}
                      trigger="click"
@@ -90,18 +92,27 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                          <div className="invite-box">
                              <div className="invite-text-box">
                                  <div style={{marginBottom: 12}}>房间号：<span
-                                     className="invite-room-box">a0e4f100db7011eab93ae1da9406727f</span></div>
+                                     className="invite-room-box">{uuid}</span></div>
                                  <div>加入链接：<span
-                                     className="invite-url-box">https://demo.herewhite.com/whiteboard/host/a0e4f100db7011eab93ae1da9406727f</span>
+                                     className="invite-url-box">{`${location.host}/whiteboard/${uuid}/`}</span>
                                  </div>
                              </div>
                              <div className="invite-button-box">
                                  <div onClick={this.handleInvite} className="invite-button-left">
                                      关闭
                                  </div>
-                                 <div className="invite-button-right">
-                                     复制
-                                 </div>
+                                 <Clipboard
+                                     data-clipboard-text={`房间号：${uuid}\n加入链接：${location.host}/whiteboard/${uuid}/`}
+                                     component="div"
+                                     onSuccess={() => {
+                                         this.handleInvite();
+                                         message.success("已经将链接复制到剪贴板");
+                                     }}
+                                 >
+                                     <div className="invite-button-right">
+                                         复制
+                                     </div>
+                                 </Clipboard>
                              </div>
                          </div>
                      }
@@ -112,8 +123,6 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             </Popover>
         );
     }
-
-    private
 
     private startJoinRoom = async (): Promise<void> => {
         const {uuid, userId} = this.props.match.params;
