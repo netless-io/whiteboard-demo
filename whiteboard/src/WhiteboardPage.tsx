@@ -27,8 +27,8 @@ import logo from "./assets/image/logo.svg";
 import exit from "./assets/image/exit.svg";
 import PluginCenter from "@netless/plugin-center";
 import Clipboard from "react-clipboard.js";
-import videoPlugin from "@netless/white-video-plugin";
-import audioPlugin from "@netless/white-audio-plugin";
+import {videoPlugin} from "@netless/white-video-plugin";
+import {audioPlugin} from "@netless/white-audio-plugin";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
