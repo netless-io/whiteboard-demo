@@ -97,9 +97,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div onClick={() => this.selectDoc(data.id)}
                                  style={{borderColor: data.active ? "#71C3FC" : "#F4F4F4"}}
                                  className="menu-ppt-image-box">
-                                <Preview
-                                    room={this.props.room}
-                                    path={`/${room.uuid}/${data.id}/1`}/>
+                                <img src={data.cover}/>
                             </div>
                             <div className="menu-ppt-name">
                                 未命名
@@ -117,9 +115,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div onClick={() => this.selectDoc(data.id)}
                                  style={{borderColor: data.active ? "#71C3FC" : "#F4F4F4"}}
                                  className="menu-ppt-image-box">
-                                <Preview
-                                    room={this.props.room}
-                                    path={`/${room.uuid}/${data.id}/1`}/>
+                                <img src={data.cover}/>
                             </div>
                             <div className="menu-ppt-name">
                                 未命名

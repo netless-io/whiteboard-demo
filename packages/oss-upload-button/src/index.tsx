@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Popover, Upload, Tooltip} from "antd";
+import {message, Popover, Tooltip, Upload} from "antd";
 import * as OSS from "ali-oss";
 import {PPTProgressPhase, UploadManager} from "@netless/oss-upload-manager";
 import "./index.less";
@@ -11,10 +11,12 @@ import * as fileTransWeb from "./image/file-trans-web.svg";
 import * as fileTransImg from "./image/file-trans-img.svg";
 import {ossConfigObj} from "./ossConfig";
 import TopLoadingBar from "@netless/react-loading-bar";
+
 export type OssUploadButtonStates = {
     isActive: boolean,
     ossPercent: number,
     converterPercent: number,
+    uploadState: PPTProgressPhase,
 };
 
 export const FileUploadStatic: string = "application/pdf, " +
@@ -30,12 +32,14 @@ export type OssUploadButtonProps = {
 
 export default class OssUploadButton extends React.Component<OssUploadButtonProps, OssUploadButtonStates> {
     private readonly client: any;
+
     public constructor(props: OssUploadButtonProps) {
         super(props);
         this.state = {
             isActive: false,
             ossPercent: 0,
             converterPercent: 0,
+            uploadState: PPTProgressPhase.Stop,
         };
         this.client = new OSS({
             accessKeyId: ossConfigObj.accessKeyId,
@@ -57,7 +61,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             ossConfigObj.folder,
             uuid,
             this.progress,
-          );
+        );
     }
 
     private uploadDynamic = async (event: any): Promise<void> => {
@@ -76,6 +80,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private progress = (phase: PPTProgressPhase, percent: number): void => {
+        this.setState({uploadState: phase});
         switch (phase) {
             case PPTProgressPhase.Uploading: {
                 this.setState({ossPercent: percent * 100});
@@ -84,6 +89,20 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             case PPTProgressPhase.Converting: {
                 this.setState({converterPercent: percent * 100});
                 break;
+            }
+        }
+    }
+
+    public componentDidUpdate(prevProps: Readonly<OssUploadButtonProps>, prevState: Readonly<OssUploadButtonStates>, snapshot?: any) {
+        if (this.state.uploadState !== prevState.uploadState) {
+            if (this.state.uploadState === PPTProgressPhase.Uploading) {
+                message.destroy();
+                message.loading("正在上传", 0);
+            } else if (this.state.uploadState === PPTProgressPhase.Converting) {
+                message.destroy();
+                message.loading("正在转码", 0);
+            } else {
+                message.destroy();
             }
         }
     }
@@ -175,8 +194,9 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     public render(): React.ReactNode {
         const {isActive} = this.state;
         return [
-            <TopLoadingBar key={"top-loading-bar-oss"} loadingPercent={this.state.ossPercent}/>,
-            <TopLoadingBar key={"top-loading-bar-converter"}  style={{backgroundColor: "red"}} loadingPercent={this.state.converterPercent}/>,
+            <TopLoadingBar key={"top-loading-bar-oss"} style={{backgroundColor: "#71C3FC", height: 4}} loadingPercent={this.state.ossPercent}/>,
+            <TopLoadingBar key={"top-loading-bar-converter"} style={{backgroundColor: "#71C3FC", height: 4}}
+                           loadingPercent={this.state.converterPercent}/>,
             <Popover trigger="click"
                      key={"oss-upload-popper"}
                      onVisibleChange={this.handleVisibleChange}
@@ -185,7 +205,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                 <Tooltip placement={"right"} title={"upload"}>
                     <div className="oss-upload-cell-box-left">
                         <div className="oss-upload-cell">
-                            <img src={isActive ? uploadActive: upload}/>
+                            <img src={isActive ? uploadActive : upload}/>
                         </div>
                     </div>
                 </Tooltip>

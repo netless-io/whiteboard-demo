@@ -46,6 +46,7 @@ export type PPTProgressListener = (phase: PPTProgressPhase, percent: number) => 
 export enum PPTProgressPhase {
     Uploading,
     Converting,
+    Stop,
 }
 
 export class UploadManager {
@@ -173,7 +174,7 @@ export class UploadManager {
             await this.setUpScenes(ppt.scenes, uuid, PPTType.dynamic);
         }
         if (onProgress) {
-            onProgress(PPTProgressPhase.Converting, 1);
+            onProgress(PPTProgressPhase.Stop, 1);
         }
     }
 
