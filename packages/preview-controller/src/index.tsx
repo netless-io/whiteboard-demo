@@ -135,8 +135,10 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
                             </div>
                         </div>
                     </div>
-                    <div style={{height: 62}}/>
-                    {this.renderPreviewCells(scenes, activeIndex, sceneDir)}
+                    <div style={{height: 64}}/>
+                    <div className="menu-annex-body">
+                        {this.renderPreviewCells(scenes, activeIndex, sceneDir)}
+                    </div>
                 </div>
             </MenuBox>
         );

@@ -1,7 +1,7 @@
 import * as React from "react";
-import {Popover, Upload} from "antd";
+import {Popover, Upload, Tooltip} from "antd";
 import * as OSS from "ali-oss";
-import {UploadManager} from "@netless/oss-upload-manager";
+import {PPTProgressPhase, UploadManager} from "@netless/oss-upload-manager";
 import "./index.less";
 import {PPTKind, Room, WhiteWebSdk} from "white-web-sdk";
 import * as upload from "./image/upload.svg";
@@ -10,8 +10,11 @@ import * as uploadActive from "./image/upload-active.svg";
 import * as fileTransWeb from "./image/file-trans-web.svg";
 import * as fileTransImg from "./image/file-trans-img.svg";
 import {ossConfigObj} from "./ossConfig";
+import TopLoadingBar from "@netless/react-loading-bar";
 export type OssUploadButtonStates = {
     isActive: boolean,
+    ossPercent: number,
+    converterPercent: number,
 };
 
 export const FileUploadStatic: string = "application/pdf, " +
@@ -31,6 +34,8 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         super(props);
         this.state = {
             isActive: false,
+            ossPercent: 0,
+            converterPercent: 0,
         };
         this.client = new OSS({
             accessKeyId: ossConfigObj.accessKeyId,
@@ -51,6 +56,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             PPTKind.Static,
             ossConfigObj.folder,
             uuid,
+            this.progress,
           );
     }
 
@@ -65,7 +71,21 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             PPTKind.Dynamic,
             ossConfigObj.folder,
             uuid,
+            this.progress,
         );
+    }
+
+    private progress = (phase: PPTProgressPhase, percent: number): void => {
+        switch (phase) {
+            case PPTProgressPhase.Uploading: {
+                this.setState({ossPercent: percent * 100});
+                break;
+            }
+            case PPTProgressPhase.Converting: {
+                this.setState({converterPercent: percent * 100});
+                break;
+            }
+        }
     }
 
     private uploadImage = async (event: any): Promise<void> => {
@@ -74,11 +94,11 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         const uploadManager = new UploadManager(this.client, this.props.room);
         if (this.props.whiteboardRef) {
             const {clientWidth, clientHeight} = this.props.whiteboardRef;
-            await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2);
+            await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
         } else {
             const clientWidth = window.innerWidth;
             const clientHeight = window.innerHeight;
-            await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2);
+            await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
         }
     }
 
@@ -154,17 +174,22 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
 
     public render(): React.ReactNode {
         const {isActive} = this.state;
-        return (
+        return [
+            <TopLoadingBar key={"top-loading-bar-oss"} loadingPercent={this.state.ossPercent}/>,
+            <TopLoadingBar key={"top-loading-bar-converter"}  style={{backgroundColor: "red"}} loadingPercent={this.state.converterPercent}/>,
             <Popover trigger="click"
+                     key={"oss-upload-popper"}
                      onVisibleChange={this.handleVisibleChange}
                      placement={"leftBottom"}
                      content={this.renderUploadButton()}>
-                <div className="oss-upload-cell-box-left">
-                    <div className="oss-upload-cell">
-                       <img src={isActive ? uploadActive: upload}/>
+                <Tooltip placement={"right"} title={"upload"}>
+                    <div className="oss-upload-cell-box-left">
+                        <div className="oss-upload-cell">
+                            <img src={isActive ? uploadActive: upload}/>
+                        </div>
                     </div>
-                </div>
+                </Tooltip>
             </Popover>
-        );
+        ];
     }
 }

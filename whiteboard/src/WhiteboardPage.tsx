@@ -12,7 +12,7 @@ import PageController from "@netless/page-controller";
 import ZoomController from "@netless/zoom-controller";
 import OssUploadButton from "@netless/oss-upload-button";
 import "./WhiteboardPage.less";
-import {Button, Input, message, Modal, Popover} from "antd";
+import {Button, Input, message, Modal, Popover, Tooltip} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
@@ -27,7 +27,6 @@ import logo from "./assets/image/logo.svg";
 import exit from "./assets/image/exit.svg";
 import PluginCenter from "@netless/plugin-center";
 import Clipboard from "react-clipboard.js";
-
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ApplianceNames, Room, RoomState} from "white-web-sdk";
-import {Popover} from "antd";
+import {Popover, Tooltip} from "antd";
 import "./index.less";
 import * as selector from "./image/selector.svg";
 import * as selectorActive from "./image/selector-active.svg";
@@ -118,6 +118,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             this.setState({roomState: {...room.state, ...modifyState}});
         });
     }
+
     public clickAppliance = (eventTarget: any, applianceName: ApplianceNames): void => {
         const {room} = this.props;
         eventTarget.preventDefault();
@@ -151,11 +152,17 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                          trigger="click"
                          onVisibleChange={this.onVisibleChange}
                          content={this.renderToolBoxPaletteBox(description)}>
-                    {cell}
+                    <Tooltip placement={"right"} title={applianceName}>
+                        {cell}
+                    </Tooltip>
                 </Popover>
             );
         } else {
-            return cell;
+            return (
+                <Tooltip placement={"right"} key={applianceName} title={applianceName}>
+                    {cell}
+                </Tooltip>
+            );
         }
     }
 
@@ -174,7 +181,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             const customerNodes = this.props.customerComponent.map((data: React.ReactNode, index: number) => {
                 return <div key={`tool-customer-${index}`}>{data}</div>;
             });
-            nodes.splice(nodes.length, 0, [...customerNodes]);
+            nodes.push(customerNodes);
             return nodes;
         } else {
             return nodes;

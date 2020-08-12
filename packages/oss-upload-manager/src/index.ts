@@ -113,16 +113,20 @@ export class UploadManager {
         kind: PPTKind,
         folder: string,
         uuid: string,
+        onProgress?: PPTProgressListener,
     ): Promise<void> {
         const fileType = this.getFileType(rawFile.name);
         const path = `/${folder}/${uuid}${fileType}`;
-        const pptURL = await this.addFile(path, rawFile);
+        const pptURL = await this.addFile(path, rawFile, onProgress);
         let res: PPT;
         if (kind === PPTKind.Static) {
             res = await pptConverter.convert({
                 url: pptURL,
                 kind: kind,
                 onProgressUpdated: progress => {
+                    if (onProgress) {
+                        onProgress(PPTProgressPhase.Converting, progress);
+                    }
                 },
             });
             const documentFile: PPTDataType = {
@@ -144,6 +148,9 @@ export class UploadManager {
                 taskToken: taskToken,
                 callbacks: {
                     onProgressUpdated: progress => {
+                        if (onProgress) {
+                            onProgress(PPTProgressPhase.Converting, progress.convertedPercentage);
+                        }
                     },
                     onTaskFail: () => {
                     },
@@ -162,6 +169,9 @@ export class UploadManager {
             this.room.putScenes(`/${uuid}/${documentFile.id}`, ppt.scenes);
             this.room.setScenePath(`/${uuid}/${documentFile.id}/${ppt.scenes[0].name}`);
             this.pptAutoFullScreen(this.room);
+        }
+        if (onProgress) {
+            onProgress(PPTProgressPhase.Converting, 1);
         }
     }
 

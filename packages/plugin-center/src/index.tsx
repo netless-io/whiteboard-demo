@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Popover, Upload} from "antd";
+import {Popover, Upload, Tooltip} from "antd";
 import {UploadManager} from "@netless/oss-upload-manager";
 import { v4 as uuidv4 } from "uuid";
 import "./index.less";
@@ -141,11 +141,13 @@ export default class PluginCenter extends React.Component<PluginCenterProps, Plu
                      onVisibleChange={this.handleVisibleChange}
                      placement={"leftBottom"}
                      content={this.renderUploadButton()}>
-                <div className="tool-box-cell-box-left">
-                    <div className="tool-box-cell">
-                        <img src={isActive ? moreActive: more}/>
+                <Tooltip title={"plugin"} placement={"right"}>
+                    <div className="tool-box-cell-box-left">
+                        <div className="tool-box-cell">
+                            <img src={isActive ? moreActive: more}/>
+                        </div>
                     </div>
-                </div>
+                </Tooltip>
             </Popover>
         );
     }
