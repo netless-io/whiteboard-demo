@@ -1,0 +1,7 @@
+FROM openresty/openresty:centos
+
+RUN yum install bind bind-utils -y
+COPY ./build /usr/local/openresty/nginx/whiteboard
+COPY ./docker-config/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+
+CMD ["openresty"]
