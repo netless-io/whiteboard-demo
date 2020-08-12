@@ -2,6 +2,7 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import {Link} from "react-router-dom";
 import {
+    createPlugins,
     Room,
     RoomPhase,
     WhiteWebSdk,
@@ -18,8 +19,7 @@ import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
 import PageError from "./PageError";
 import LoadingPage from "./LoadingPage";
-import pages from "./assets/image/pages.svg";
-import folder from "./assets/image/folder.svg";
+import pages from "./assets/image/pages.svg"
 import invite from "./assets/image/invite.svg";
 import replayScreen from "./assets/image/replay-screen.png";
 import inviteActive from "./assets/image/invite-active.svg";
@@ -27,6 +27,8 @@ import logo from "./assets/image/logo.svg";
 import exit from "./assets/image/exit.svg";
 import PluginCenter from "@netless/plugin-center";
 import Clipboard from "react-clipboard.js";
+import {videoPlugin} from "@netless/white-video-plugin";
+import {audioPlugin} from "@netless/white-audio-plugin";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -134,8 +136,12 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         try {
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
+                const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
+                plugins.setPluginContext("video", {identity: "host"});
+                plugins.setPluginContext("audio", {identity: "host"});
                 const whiteWebSdk = new WhiteWebSdk({
                     appIdentifier: "283/VGiScM9Wiw2HJg",
+                    plugins: plugins,
                 });
                 const room = await whiteWebSdk.joinRoom({
                         uuid: uuid,
