@@ -5,11 +5,10 @@ import {
     LegacyPPTConverter,
     PPT,
     PPTKind,
-    Room
+    Room, SceneDefinition
 } from "white-web-sdk";
 import {v4 as uuidv4} from "uuid";
 import {MultipartUploadResult} from "ali-oss";
-import * as default_cover from "./image/default_cover.svg";
 
 export type PPTDataType = {
     active: boolean,
@@ -87,6 +86,27 @@ export class UploadManager {
         return uuid;
     }
 
+    private async getCover(uuid: string, path: string): Promise<any> {
+        const url = `https://shunt-api.netless.link/v5/rooms/${uuid}/screenshots`;
+        const response = await fetch(url, {
+            method: "post",
+            headers: {
+                "content-type": "application/json",
+                "Accept": "application/json",
+                "token": "WHITEcGFydG5lcl9pZD0zZHlaZ1BwWUtwWVN2VDVmNGQ4UGI2M2djVGhncENIOXBBeTcmc2lnPTc1MTBkOWEwNzM1ZjA2MDYwMTMzODBkYjVlNTQ2NDA0OTAzOWU2NjE6YWRtaW5JZD0xNTgmcm9sZT1taW5pJmV4cGlyZV90aW1lPTE1OTAwNzM1NjEmYWs9M2R5WmdQcFlLcFlTdlQ1ZjRkOFBiNjNnY1RoZ3BDSDlwQXk3JmNyZWF0ZV90aW1lPTE1NTg1MTY2MDkmbm9uY2U9MTU1ODUxNjYwODYxNzAw",
+            },
+            body: JSON.stringify({
+                "path": path,
+                "width": 192,
+                "height": 144
+            }),
+        });
+        if (response.status >= 300) {
+            throw new Error(`failed to convert with status ${response.status}`);
+        }
+        return await response.json();
+    }
+
     private async createTaskToken(uuid: string): Promise<string> {
         const url = `https://shunt-api.netless.link/v5/tokens/tasks/${uuid}`;
         const response = await fetch(url, {
@@ -129,21 +149,12 @@ export class UploadManager {
                     }
                 },
             });
-            const documentFile: PPTDataType = {
-                active: true,
-                id: `${uuidv4()}`,
-                pptType: PPTType.static,
-                data: res.scenes,
-                cover: default_cover,
-            };
-            this.room.putScenes(`/${uuid}/${documentFile.id}`, res.scenes);
-            this.room.setScenePath(`/${uuid}/${documentFile.id}/${res.scenes[0].name}`);
-            this.pptAutoFullScreen(this.room);
+            await this.setUpScenes(res.scenes, uuid, PPTType.static);
         } else {
-            const uuid = await this.createPPTTask(pptURL);
-            const taskToken = await this.createTaskToken(uuid);
+            const taskUuid = await this.createPPTTask(pptURL);
+            const taskToken = await this.createTaskToken(taskUuid);
             const resp = createPPTTask({
-                uuid: uuid,
+                uuid: taskUuid,
                 kind: PPTKind.Dynamic,
                 taskToken: taskToken,
                 callbacks: {
@@ -159,20 +170,35 @@ export class UploadManager {
                 },
             });
             const ppt = await resp.checkUtilGet();
-            const documentFile: PPTDataType = {
-                active: true,
-                id: `${uuidv4()}`,
-                pptType: PPTType.dynamic,
-                data: ppt.scenes,
-                cover: default_cover,
-            };
-            this.room.putScenes(`/${uuid}/${documentFile.id}`, ppt.scenes);
-            this.room.setScenePath(`/${uuid}/${documentFile.id}/${ppt.scenes[0].name}`);
-            this.pptAutoFullScreen(this.room);
+            await this.setUpScenes(ppt.scenes, uuid, PPTType.dynamic);
         }
         if (onProgress) {
             onProgress(PPTProgressPhase.Converting, 1);
         }
+    }
+
+    private setUpScenes = async (scenes: ReadonlyArray<SceneDefinition>, uuid: string, type: PPTType): Promise<void> => {
+        const sceneId = `${uuidv4()}`;
+        this.room.putScenes(`/${uuid}/${sceneId}`, scenes);
+        this.room.setScenePath(`/${uuid}/${sceneId}/${scenes[0].name}`);
+        const res = await this.getCover(uuid, `/${uuid}/${sceneId}/${scenes[0].name}`);
+        const documentFile: PPTDataType = {
+            active: true,
+            id: sceneId,
+            pptType: type,
+            data: scenes,
+            cover: res.url,
+        };
+        const docs: PPTDataType[] = (this.room.state.globalState as any).docs;
+        if (docs && docs.length > 0) {
+            const oldDocs = docs.map(data => {
+                data.active = false;
+                return data;
+            });
+            const newDocs = [...oldDocs, documentFile];
+            this.room.setGlobalState({docs: newDocs});
+        }
+        this.pptAutoFullScreen(this.room);
     }
 
     private pptAutoFullScreen = (room: Room): void => {

@@ -1,6 +1,5 @@
 import * as React from "react";
-import {Room, RoomState} from "white-web-sdk";
-import * as default_cover_home from "./image/default_cover_home.svg";
+import {Room, RoomState, WhiteScene} from "white-web-sdk";
 import * as close from "./image/close.svg";
 import MenuBox from "@netless/menu-box";
 import "./index.less";
@@ -39,87 +38,117 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
     }
 
     private selectDoc = (id: string) => {
-        // if (documentArray) {
-        //     this.handleUpdateDocsState(id, documentArray);
-        // }
-    }
-
-    private handleUpdateDocsState = (id: string, documentArray: PPTDataType[]): void => {
         const {room} = this.props;
         const {roomState} = this.state;
         const {uuid} = room;
-
-        const activeData = documentArray.find(data => data.id === id)!;
-        if ((roomState.globalState as any).documentArrayState) {
-            const documentArrayState: { id: string, isHaveScenes: boolean }[] = (roomState.globalState as any).documentArrayState;
-            const activeDoc = documentArrayState.find(doc => doc.id === id);
-            if (activeDoc) {
-                if (activeDoc.isHaveScenes) {
-                    if (activeDoc.id === "init") {
-                        room.setScenePath(`/init`);
-                    } else {
-                        room.setScenePath(`/${uuid}/${activeData.id}/1`);
-                    }
+        const docs: PPTDataType[] = (roomState.globalState as any).docs;
+        if (docs && docs.length > 0) {
+            const newDocs = docs.map(doc => {
+                if (id === doc.id) {
+                    return {
+                        ...doc,
+                        active: true,
+                    };
                 } else {
-                    room.putScenes(`/${uuid}/${activeData.id}`, activeData.data);
-                    room.setScenePath(`/${uuid}/${activeData.id}/1`);
+                    return {
+                        ...doc,
+                        active: false,
+                    }
                 }
+            });
+            if (id === "init") {
+                room.setScenePath(`/init`);
+            } else {
+                room.setScenePath(`/${uuid}/${id}/1`);
             }
+            room.setGlobalState({docs: newDocs});
+        }
+    }
+    public componentDidMount(): void {
+        const {room} = this.props;
+        room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
+            this.setState({roomState: {...room.state, ...modifyState}});
+        });
+        this.initHomeDoc(room);
+    }
+
+    private initHomeDoc = (room: Room): void => {
+        const {roomState} = this.state;
+        if ((roomState.globalState as any).docs === undefined) {
+            room.setGlobalState({docs: [{
+                    active: true,
+                    pptType: PPTType.init,
+                    id: "init",
+                }]})
         }
     }
 
-    private renderDocCells = (documentArray: PPTDataType[]): React.ReactNode => {
-        if (documentArray && documentArray.length > 0) {
-            return documentArray.map(data => {
+    private renderDocCells = (): React.ReactNode => {
+        const {room} = this.props;
+        const {roomState} = this.state;
+        const docs: PPTDataType[] = (roomState.globalState as any).docs;
+        if (docs && docs.length > 0) {
+            return docs.map(data => {
                 if (data.pptType === PPTType.static) {
-                    return <div
-                        key={`${data.id}`}
-                        onClick={() => this.selectDoc(data.id)}
-                        className="menu-ppt-inner-cell">
+                    return (
                         <div
-                            style={{backgroundColor: data.active ? "#f2f2f2" : "#ffffff"}}
-                            className="menu-ppt-image-box">
-                            <svg key="" width={144} height={104}>
-                                <image
-                                    width="100%"
-                                    height="100%"
-                                    xlinkHref={data.cover}
-                                />
-                            </svg>
+                            key={`${data.id}`}
+                            className="menu-ppt-inner-cell">
+                            <div onClick={() => this.selectDoc(data.id)}
+                                 style={{borderColor: data.active ? "#71C3FC" : "#F4F4F4"}}
+                                 className="menu-ppt-image-box">
+                                <Preview
+                                    room={this.props.room}
+                                    path={`/${room.uuid}/${data.id}/1`}/>
+                            </div>
+                            <div className="menu-ppt-name">
+                                未命名
+                            </div>
+                            <div className="menu-ppt-type">
+                                静态
+                            </div>
                         </div>
-                    </div>;
+                    );
                 } else if (data.pptType === PPTType.dynamic) {
-                    return <div
-                        key={`${data.id}`}
-                        onClick={() => this.selectDoc(data.id)}
-                        className="menu-ppt-inner-cell">
+                    return (
                         <div
-                            style={{backgroundColor: data.active ? "#f2f2f2" : "#ffffff"}}
-                            className="menu-ppt-image-box">
-                            <div className="menu-ppt-image-box-inner">
-                                <img src={data.cover}/>
-                                <div>
-                                    Dynamic PPT
-                                </div>
+                            key={`${data.id}`}
+                            className="menu-ppt-inner-cell">
+                            <div onClick={() => this.selectDoc(data.id)}
+                                 style={{borderColor: data.active ? "#71C3FC" : "#F4F4F4"}}
+                                 className="menu-ppt-image-box">
+                                <Preview
+                                    room={this.props.room}
+                                    path={`/${room.uuid}/${data.id}/1`}/>
+                            </div>
+                            <div className="menu-ppt-name">
+                                未命名
+                            </div>
+                            <div className="menu-ppt-type">
+                                动态
                             </div>
                         </div>
-                    </div>;
+                    );
                 } else {
-                    return <div
-                        key={`${data.id}`}
-                        onClick={() => this.selectDoc(data.id)}
-                        className="menu-ppt-inner-cell">
+                    return (
                         <div
-                            style={{backgroundColor: data.active ? "#f2f2f2" : "#ffffff"}}
-                            className="menu-ppt-image-box">
-                            <div className="menu-ppt-image-box-inner">
-                                <img src={default_cover_home}/>
-                                <div>
-                                    Home Docs
-                                </div>
+                            key={`${data.id}`}
+                            className="menu-ppt-inner-cell">
+                            <div onClick={() => this.selectDoc(data.id)}
+                                 style={{borderColor: data.active ? "#71C3FC" : "#F4F4F4"}}
+                                 className="menu-ppt-image-box">
+                                <Preview
+                                    room={this.props.room}
+                                    path={"/init"}/>
+                            </div>
+                            <div className="menu-ppt-name">
+                                首页
+                            </div>
+                            <div className="menu-ppt-type">
+                                白板页
                             </div>
                         </div>
-                    </div>;
+                    );
                 }
             });
         } else {
@@ -131,24 +160,52 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
         const {handleDocCenterState, isFileOpen} = this.props;
         return (
             <MenuBox
+                width={240}
                 isVisible={isFileOpen}
             >
-                <div className="file-box">
-                    <div className="chat-inner-box">
-                        <div className="chat-box-title">
-                            <div className="chat-box-name">
-                                <span>Document</span>
+                <div
+                    className="menu-annex-box">
+                    <div className="menu-title-line-box">
+                        <div className="menu-title-line">
+                            <div className="menu-title-text-box">
+                                Document
                             </div>
-                            <div className="chat-box-close" onClick={() => handleDocCenterState(false)}>
-                                <img src={close}/>
+                            <div className="menu-title-left">
+                                <div className="menu-head-btn" style={{marginLeft: 8}}
+                                     onClick={() => handleDocCenterState(false)}>
+                                    <img src={close}/>
+                                </div>
                             </div>
                         </div>
-                        <div className="file-inner-box">
-                            {/*{this.renderDocCells()}*/}
-                        </div>
+                    </div>
+                    <div style={{height: 64}}/>
+                    <div className="menu-docs-body">
+                        {this.renderDocCells()}
                     </div>
                 </div>
             </MenuBox>
         );
+    }
+}
+
+export type PreviewProps = { path: string, room: Room };
+
+class Preview extends React.Component<PreviewProps, {}> {
+
+    private ref?: HTMLDivElement | null;
+
+    public constructor(props: any) {
+        super(props);
+    }
+
+    private setupDivRef = (ref: HTMLDivElement | null) => {
+        if (ref) {
+            this.ref = ref;
+            this.props.room.scenePreview(this.props.path, ref, 96, 72);
+        }
+    }
+
+    public render(): React.ReactNode {
+        return <div className="ppt-cover" ref={this.setupDivRef.bind(this)}/>;
     }
 }

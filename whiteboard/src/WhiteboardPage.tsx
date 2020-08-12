@@ -23,6 +23,7 @@ import pages from "./assets/image/pages.svg"
 import invite from "./assets/image/invite.svg";
 import replayScreen from "./assets/image/replay-screen.png";
 import inviteActive from "./assets/image/invite-active.svg";
+import folder from "./assets/image/folder.svg";
 import logo from "./assets/image/logo.svg";
 import exit from "./assets/image/exit.svg";
 import PluginCenter from "@netless/plugin-center";
@@ -171,6 +172,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         enableDrawPoint: false
                     }
                 });
+                (window as any).room = room;
                 this.setState({room: room});
             }
         } catch (error) {
@@ -272,10 +274,10 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
-                                {/*<div className="page-controller-cell"*/}
-                                {/*     onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>*/}
-                                {/*    <img src={folder}/>*/}
-                                {/*</div>*/}
+                                <div className="page-controller-cell"
+                                     onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
+                                    <img src={folder}/>
+                                </div>
                                 {this.renderInvite()}
                                 {this.renderExitView()}
                             </div>
@@ -290,7 +292,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         </div>
                         <PreviewController handlePreviewState={this.handlePreviewState} isVisible={isMenuVisible}
                                            room={room}/>
-                        <DocsCenter handleDocCenterState={this.handleDocCenterState} isFileOpen={isFileOpen}
+                        <DocsCenter handleDocCenterState={this.handleDocCenterState}
+                                    isFileOpen={isFileOpen}
                                     room={room}/>
                         <div ref={this.handleBindRoom}
                              style={{width: "100%", height: "100vh", backgroundColor: "#F4F4F4"}}/>

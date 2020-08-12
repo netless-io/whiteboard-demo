@@ -75,7 +75,6 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
                         }}
                         className="page-box" style={{borderColor: isActive ? "#71C3FC" : "#F4F4F4"}}>
                         <PageImage
-                            scene={scene}
                             room={this.props.room}
                             path={sceneDir.concat(scene.name).join("/")}/>
                     </div>
@@ -145,7 +144,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
     }
 }
 
-export type PageImageProps = { scene: WhiteScene, path: string, room: Room };
+export type PageImageProps = { path: string, room: Room };
 
 class PageImage extends React.Component<PageImageProps, {}> {
 
