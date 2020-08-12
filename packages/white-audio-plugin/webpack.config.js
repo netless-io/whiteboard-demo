@@ -10,7 +10,6 @@ module.exports = {
     output: {
         filename: 'index.js',
         library: "audioPlugin",
-        libraryExport: "audioPlugin",
         libraryTarget: "umd",
         path: path.resolve(__dirname, 'dist'),
     },
