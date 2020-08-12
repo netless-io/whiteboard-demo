@@ -19,7 +19,7 @@ const patch = JSON.stringify({
 });
 
 (async () => {
-    const build = `docker build --rm -f Dockerfile -t ${registry}/${imageName}:latest .`;
+    const build = `docker build --rm -f dockerfile -t ${registry}/${imageName}:latest .`;
     await execInDir(whiteboardDir, build);
     const push = `docker push ${registry}/${imageName}:latest`;
     await exec(push);
