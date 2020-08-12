@@ -18,11 +18,13 @@ const patch = JSON.stringify({
     },
 });
 
+
+const deployment = "react-demo";
 (async () => {
     const build = `docker build --rm -f dockerfile -t ${registry}/${imageName}:latest .`;
     await execInDir(whiteboardDir, build);
     const push = `docker push ${registry}/${imageName}:latest`;
     await exec(push);
     await exec("sleep 120");
-    await remoteCommand("k8s-site", [`kubectl patch deployment ${imageName} -n site --patch '` + patch + `'`]);
+    await remoteCommand("k8s-site", [`kubectl patch deployment ${deployment} -n site --patch '` + patch + `'`]);
 })();
