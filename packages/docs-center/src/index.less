@@ -23,19 +23,42 @@
 .menu-ppt-name {
   height: 22px;
   line-height: 22px;
-  font-size: 14px;
   color: #212324;
   margin-top: 8px;
   font-family: PingFangSC-Regular, PingFang SC;
+  input {
+    font-size: 14px;
+    border-style: none;
+    outline: none;
+    padding: 0;
+  }
 }
 
 .menu-ppt-type {
   height: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-ppt-type-text {
   font-size: 12px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #7A7B7C;
   line-height: 18px;
+}
+
+.menu-ppt-type-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  img {
+    cursor: pointer;
+  }
 }
 
 .ppt-cover {

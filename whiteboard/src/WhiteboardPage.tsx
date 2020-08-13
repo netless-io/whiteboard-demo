@@ -105,12 +105,12 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                      <span style={{width: 96}}>房间号：</span><span
                                      className="invite-room-box">{uuid}</span></div>
                                  <div className="invite-url-box">
-                                     <span style={{width: 96}}>加入链接：</span><Input size={"middle"} value={`${location.host}/whiteboard/${uuid}/`}/>
+                                     <span style={{width: 96}}>加入链接：</span><Input size={"middle"} value={`https://${location.host}/whiteboard/${uuid}/`}/>
                                  </div>
                              </div>
                              <div className="invite-button-box">
                                  <Clipboard
-                                     data-clipboard-text={`房间号：${uuid}\n加入链接：${location.host}/whiteboard/${uuid}/`}
+                                     data-clipboard-text={`房间号：${uuid}\n加入链接：https://${location.host}/whiteboard/${uuid}/`}
                                      component="div"
                                      onSuccess={() => {
                                          this.handleInvite();
@@ -295,8 +295,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         <DocsCenter handleDocCenterState={this.handleDocCenterState}
                                     isFileOpen={isFileOpen}
                                     room={room}/>
-                        <div ref={this.handleBindRoom}
-                             style={{width: "100%", height: "100vh", backgroundColor: "#F4F4F4"}}/>
+                        <div ref={this.handleBindRoom} className="whiteboard-box"/>
                     </div>
                 );
             }

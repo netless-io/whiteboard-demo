@@ -1,6 +1,7 @@
 import * as React from "react";
-import {Room, RoomState, WhiteScene} from "white-web-sdk";
+import {Room, RoomState} from "white-web-sdk";
 import * as close from "./image/close.svg";
+import * as deleteIcon from "./image/delete.svg";
 import MenuBox from "@netless/menu-box";
 import "./index.less";
 
@@ -9,6 +10,7 @@ export type PPTDataType = {
     pptType: PPTType,
     id: string,
     data: any,
+    name?: string,
     cover?: string,
 };
 
@@ -83,8 +85,37 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
         }
     }
 
-    private renderDocCells = (): React.ReactNode => {
+    private removeScene = (pptData: PPTDataType): void => {
         const {room} = this.props;
+        const {roomState} = this.state;
+        const docs: PPTDataType[] = (roomState.globalState as any).docs;
+        if (docs && docs.length > 0) {
+            const newDocs = docs.filter(doc => doc.id !== pptData.id);
+            room.setGlobalState({docs: newDocs});
+            room.removeScenes(`/${room.uuid}/${pptData.id}`);
+        }
+    }
+
+    private updateDocName = (id: string, name: string): void => {
+        const {room} = this.props;
+        const {roomState} = this.state;
+        const docs: PPTDataType[] = (roomState.globalState as any).docs;
+        if (docs && docs.length > 0) {
+            const newDocs = docs.map(doc => {
+                if (id === doc.id) {
+                    return {
+                        ...doc,
+                        name: name,
+                    };
+                } else {
+                    return doc;
+                }
+            });
+            room.setGlobalState({docs: newDocs});
+        }
+    }
+
+    private renderDocCells = (): React.ReactNode => {
         const {roomState} = this.state;
         const docs: PPTDataType[] = (roomState.globalState as any).docs;
         if (docs && docs.length > 0) {
@@ -100,10 +131,17 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                                 <img src={data.cover}/>
                             </div>
                             <div className="menu-ppt-name">
-                                未命名
+                                <input onBlur={ evt => {
+                                    this.updateDocName(data.id, evt.target.value);
+                                }} defaultValue={data.name ? data.name : "首页"}/>
                             </div>
                             <div className="menu-ppt-type">
-                                静态
+                                <div>
+                                    静态
+                                </div>
+                                <div onClick={() => this.removeScene(data)}>
+                                    <img src={deleteIcon}/>
+                                </div>
                             </div>
                         </div>
                     );
@@ -118,10 +156,17 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                                 <img src={data.cover}/>
                             </div>
                             <div className="menu-ppt-name">
-                                未命名
+                                <input onChange={ evt => {
+                                    this.updateDocName(data.id, evt.target.value);
+                                }} defaultValue={data.name ? data.name : "未命名"}/>
                             </div>
                             <div className="menu-ppt-type">
-                                动态
+                                <div className="menu-ppt-type-text">
+                                    动态
+                                </div>
+                                <div className="menu-ppt-type-icon" onClick={() => this.removeScene(data)}>
+                                    <img src={deleteIcon}/>
+                                </div>
                             </div>
                         </div>
                     );
@@ -138,10 +183,14 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                                     path={"/init"}/>
                             </div>
                             <div className="menu-ppt-name">
-                                首页
+                                <input onChange={ evt => {
+                                    this.updateDocName(data.id, evt.target.value);
+                                }} defaultValue={data.name ? data.name : "首页"}/>
                             </div>
                             <div className="menu-ppt-type">
-                                白板页
+                                <div className="menu-ppt-type-text">
+                                    白板页
+                                </div>
                             </div>
                         </div>
                     );

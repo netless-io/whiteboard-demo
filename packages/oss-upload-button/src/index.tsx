@@ -97,10 +97,10 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         if (this.state.uploadState !== prevState.uploadState) {
             if (this.state.uploadState === PPTProgressPhase.Uploading) {
                 message.destroy();
-                message.loading("正在上传", 0);
+                message.loading(`正在上传`, 0);
             } else if (this.state.uploadState === PPTProgressPhase.Converting) {
                 message.destroy();
-                message.loading("正在转码", 0);
+                message.loading(`正在转码`, 0);
             } else {
                 message.destroy();
             }
