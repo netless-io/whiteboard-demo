@@ -1,0 +1,39 @@
+{
+    "name": "whiteboard",
+    "version": "0.0.7",
+    "main": "index.js",
+    "scripts": {
+        "start": "webpack-dev-server --historyApiFallback --mode development --port 3000 --open --hot --host 0.0.0.0 --useLocalIp",
+        "build": "webpack --mode production"
+    },
+    "dependencies": {
+        "@ant-design/icons": "^4.2.2",
+        "@netless/fetch-middleware": "^1.0.5",
+        "@netless/white-audio-plugin": "^1.2.15",
+        "@netless/white-video-plugin": "^1.2.15",
+        "antd": "^4.4.3",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-router": "^5.2.0",
+        "react-clipboard.js": "^2.0.7",
+        "react-router-dom": "^5.2.0",
+        "white-web-sdk": "^2.9.13"
+    },
+    "devDependencies": {
+        "@types/react": "^16.9.43",
+        "@types/react-dom": "^16.9.8",
+        "clean-webpack-plugin": "^3.0.0",
+        "css-loader": "^4.0.0",
+        "html-webpack-plugin": "^4.3.0",
+        "less-loader": "^6.2.0",
+        "mini-css-extract-plugin": "^0.9.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
+        "terser-webpack-plugin": "^3.0.7",
+        "ts-loader": "^8.0.1",
+        "typescript": "^3.9.7",
+        "url-loader": "^4.1.0",
+        "webpack": "^4.44.0",
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.0"
+    }
+}

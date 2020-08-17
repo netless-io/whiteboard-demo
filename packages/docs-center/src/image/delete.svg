@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>delete备份</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Whiteboard-Document" transform="translate(-1406.000000, -164.000000)">
+            <g id="delete备份" transform="translate(1406.000000, 164.000000)">
+                <rect id="矩形备份-21" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="18" height="18"></rect>
+                <path d="M13,7 L13,13 C13,14.1045695 12.1045695,15 11,15 L7,15 C5.8954305,15 5,14.1045695 5,13 L5,7 L5,7" id="矩形" stroke="#7A7B7C" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M6,5 C6,3.8954305 6.8954305,3 8,3 L10,3 C11.1045695,3 12,3.8954305 12,5 L12,5 L12,5" id="路径-28" stroke="#7A7B7C" stroke-linecap="round" stroke-linejoin="round"></path>
+                <line x1="4" y1="5" x2="14" y2="5" id="路径-27" stroke="#7A7B7C" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line x1="10.5" y1="8" x2="10.5" y2="12" id="路径-29备份" stroke="#7A7B7C" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line x1="7.5" y1="8" x2="7.5" y2="12" id="路径-29" stroke="#7A7B7C" stroke-linecap="round" stroke-linejoin="round"></line>
+            </g>
+        </g>
+    </g>
+</svg>
