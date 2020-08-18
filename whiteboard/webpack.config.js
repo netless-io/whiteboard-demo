@@ -55,7 +55,8 @@ config = {
             'process.env.OSSREGION': JSON.stringify(process.env.OSSREGION),
             'process.env.BUCKET': JSON.stringify(process.env.BUCKET),
             'process.env.FOLDER': JSON.stringify(process.env.FOLDER),
-            'process.env.PREFIX': JSON.stringify(process.env.PREFIX)
+            'process.env.PREFIX': JSON.stringify(process.env.PREFIX),
+            'process.env.APPIDENTIFIER': JSON.stringify(process.env.APPIDENTIFIER)
         }),
         new MiniCssExtractPlugin({
             filename: '[name].css',
