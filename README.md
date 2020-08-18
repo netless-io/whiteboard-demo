@@ -41,10 +41,9 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
    ```typescript
    export const netlessToken = {
        sdkToken: "NETLESSSDK_YWs9eDRxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxRkNTIyYjMwMmIyZGRj",
+       appIdentifier: "283/VGixxxxxx2HJg",
    };
    ```
-
-   
 
 5. 安全事项
 
@@ -111,6 +110,24 @@ yarn build
 
 - yarn or npm
 - lerna（下面有简单的运行起来的方法，详细用法请自行搜索学习）
+
+### 5.1 启动项目构建
+
+```bash
+# STEP 1
+yarn
+# STEP 2
+lerna bootstrap
+# STEP 3
+# 以下两个依赖，依赖于 package 中其他库，优先构建完其他库，再构建这两个库
+lerna run --ignore @netless/docs-center --ignore @netless/preview-controller build:lib
+lerna run --scope @netless/docs-center --scope @netless/preview-controller build:lib
+lerna run --scope whiteboard build
+```
+
+
+
+### 5.2 常用命令介绍
 
 ```bash
 # 安装全局 lerna

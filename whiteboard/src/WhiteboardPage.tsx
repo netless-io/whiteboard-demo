@@ -23,7 +23,7 @@ import LoadingPage from "./LoadingPage";
 import pages from "./assets/image/pages.svg"
 import folder from "./assets/image/folder.svg";
 import logo from "./assets/image/logo.svg";
-import {ossConfigObj} from "./appToken";
+import {netlessToken, ossConfigObj} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButton from "./components/ExitButton";
@@ -79,7 +79,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 plugins.setPluginContext("video", {identity: "host"});
                 plugins.setPluginContext("audio", {identity: "host"});
                 const whiteWebSdk = new WhiteWebSdk({
-                    appIdentifier: "283/VGiScM9Wiw2HJg",
+                    appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
                 });
                 const room = await whiteWebSdk.joinRoom({

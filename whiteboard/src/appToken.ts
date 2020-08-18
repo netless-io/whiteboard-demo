@@ -1,5 +1,6 @@
 export const netlessToken = {
-    sdkToken: process.env.SDKTOKEN,
+    sdkToken: process.env.SDKTOKEN!,
+    appIdentifier: process.env.APPIDENTIFIER!,
 };
 
 export type OSSConfigObjType = {
