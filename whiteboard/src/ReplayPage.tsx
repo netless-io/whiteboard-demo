@@ -10,6 +10,7 @@ import {LoadingOutlined} from "@ant-design/icons";
 import PageError from "./PageError";
 import PlayerController from "@netless/player-controller";
 import {netlessWhiteboardApi} from "./apiMiddleware";
+import {netlessToken} from "./appToken";
 export type PlayerPageProps = RouteComponentProps<{
     uuid: string;
     userId: string;
@@ -55,7 +56,7 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         const roomToken = await this.getRoomToken(uuid);
 
         if (uuid && roomToken) {
-            const whiteWebSdk = new WhiteWebSdk({appIdentifier: "283/VGiScM9Wiw2HJg", renderEngine: RenderEngine.Canvas});
+            const whiteWebSdk = new WhiteWebSdk({appIdentifier: netlessToken.appIdentifier, renderEngine: RenderEngine.Canvas});
             const player = await whiteWebSdk.replayRoom(
                 {
                     room: uuid,

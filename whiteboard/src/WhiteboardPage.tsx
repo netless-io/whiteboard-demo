@@ -160,6 +160,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             <ToolBox room={room} customerComponent={
                                 [
                                     <OssUploadButton oss={ossConfigObj}
+                                                     appIdentifier={netlessToken.appIdentifier}
                                                      room={room}
                                                      whiteboardRef={whiteboardLayerDownRef}/>,
                                     <PluginCenter oss={ossConfigObj}

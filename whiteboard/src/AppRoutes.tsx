@@ -30,15 +30,4 @@ export class AppRoutes extends React.Component<{}, {}> {
             </BrowserRouter>
       );
     }
-    // 国际化
-    // public render(): React.ReactNode {
-    //     return (
-    //         <AppRouter historyType={HistoryType.BrowserRouter} language={language} routes={[
-    //             {path: "/", component: IndexPage},
-    //             {path: "/whiteboard/:identityType/:uuid?/", component: WhiteboardCreatorPage},
-    //             {path: "/whiteboard/:identityType/:uuid/:userId/", component: WhiteboardPage},
-    //             {path: "/replay/:uuid/:userId/:startTime?/:endTime?/:mediaUrl?/", component: ReplayPage},
-    //         ]}/>
-    //     );
-    // }
 }

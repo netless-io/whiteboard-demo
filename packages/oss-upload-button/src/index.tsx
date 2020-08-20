@@ -35,6 +35,7 @@ export const FileUploadStatic: string = "application/pdf, " +
 export type OssUploadButtonProps = {
     room: Room,
     oss: OSSConfigObjType,
+    appIdentifier: string;
     whiteboardRef?: HTMLDivElement,
 };
 
@@ -60,7 +61,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     private uploadStatic = async (event: any): Promise<void> => {
         const {uuid, roomToken} = this.props.room;
         const uploadManager = new UploadManager(this.client, this.props.room);
-        const whiteWebSdk = new WhiteWebSdk({appIdentifier: "283/VGiScM9Wiw2HJg"});
+        const whiteWebSdk = new WhiteWebSdk({appIdentifier: this.props.appIdentifier});
         const pptConverter = whiteWebSdk.pptConverter(roomToken);
         await uploadManager.convertFile(
             event.file,
@@ -75,7 +76,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     private uploadDynamic = async (event: any): Promise<void> => {
         const {uuid, roomToken} = this.props.room;
         const uploadManager = new UploadManager(this.client, this.props.room);
-        const whiteWebSdk = new WhiteWebSdk({appIdentifier: "283/VGiScM9Wiw2HJg"});
+        const whiteWebSdk = new WhiteWebSdk({appIdentifier: this.props.appIdentifier});
         const pptConverter = whiteWebSdk.pptConverter(roomToken);
         await uploadManager.convertFile(
             event.file,
