@@ -45,7 +45,7 @@
     "js-yaml": "^3.13.1",
     "json-loader": "^0.5.7",
     "less": "^3.10.3",
-    "less-loader": "^5.0.0",
+    "less-loader": "^6.2.0",
     "lodash-webpack-plugin": "^0.11.5",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "peer-deps-externals-webpack-plugin": "^1.0.4",
