@@ -9,6 +9,7 @@ const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 config = {
     entry: './src/index',
@@ -44,19 +45,14 @@ config = {
         }
     },
     plugins: [
+        new Dotenv({
+            path: "./.env.local",
+            safe: true,
+            systemvars: true,
+        }),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: './public/index.html'
-        }),
-        new webpack.DefinePlugin({
-            'process.env.SDKTOKEN': JSON.stringify(process.env.SDKTOKEN),
-            'process.env.AK': JSON.stringify(process.env.AK),
-            'process.env.SK': JSON.stringify(process.env.SK),
-            'process.env.OSSREGION': JSON.stringify(process.env.OSSREGION),
-            'process.env.BUCKET': JSON.stringify(process.env.BUCKET),
-            'process.env.FOLDER': JSON.stringify(process.env.FOLDER),
-            'process.env.PREFIX': JSON.stringify(process.env.PREFIX),
-            'process.env.APPIDENTIFIER': JSON.stringify(process.env.APPIDENTIFIER)
         }),
         new MiniCssExtractPlugin({
             filename: '[name].css',
