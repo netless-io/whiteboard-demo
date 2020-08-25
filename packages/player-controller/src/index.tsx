@@ -1,16 +1,18 @@
 import * as React from "react";
 import {Player, PlayerPhase} from "white-web-sdk";
+import {Dropdown, Menu} from "antd";
 import {LoadingOutlined} from "@ant-design/icons";
 import "./index.less";
 import SeekSlider from "./SeekSlider";
 import {displayWatch} from "./WatchDisplayer";
-import * as player_stop from "./image/player_stop.svg";
-import * as player_begin from "./image/player_begin.svg";
+import * as video_pause from "./image/video_pause.svg";
+import * as video_play from "./image/video_play.svg";
 
 export type PlayerControllerStates = {
     phase: PlayerPhase;
     isPlayerSeeking: boolean;
     currentTime: number;
+    multiple: number;
 };
 
 export type PlayerControllerProps = {
@@ -26,6 +28,7 @@ export default class PlayerController extends React.Component<PlayerControllerPr
             phase: PlayerPhase.Pause,
             isPlayerSeeking: false,
             currentTime: 0,
+            multiple: 1.0,
         };
     }
 
@@ -69,18 +72,73 @@ export default class PlayerController extends React.Component<PlayerControllerPr
     }
 
     private operationButton = (phase: PlayerPhase): React.ReactNode => {
-        // return null;
         switch (phase) {
             case PlayerPhase.Playing: {
-                return <img src={player_begin}/>;
+                return <img src={video_pause}/>;
             }
             case PlayerPhase.Buffering: {
-                return <LoadingOutlined style={{fontSize: 18, color: "white"}} />;
+                return <LoadingOutlined style={{fontSize: 14, color: "#7A7B7C"}}/>;
             }
             default: {
-                return <img style={{marginLeft: 2}} src={player_stop}/>;
+                return <img style={{marginLeft: 2}} src={video_play}/>;
             }
         }
+    }
+
+    private handleMultiplePlay = (multiple: number) => {
+        const {player} = this.props;
+        player.playbackSpeed = multiple;
+    }
+
+    private handleActiveMultiple = (multiple: number): void => {
+        this.handleMultiplePlay(multiple);
+        this.setState({multiple: multiple});
+    }
+
+    private renderMultipleNode = (multipleInner: number): React.ReactNode => {
+        const {multiple} = this.state;
+        if (multipleInner === multiple) {
+            return <div style={{color: "#106BC5"}}>{multipleInner}x</div>
+        } else {
+            return <div>{multipleInner}x</div>
+        }
+    }
+
+    private renderMultipleSelector = (): React.ReactElement => {
+        return (
+            <Menu defaultValue={"1.0"} className="player-menu-box">
+                <Menu.Item key="2.0"
+                           onClick={() => this.handleActiveMultiple(2.0)}
+                           className="player-menu-cell">
+                    {this.renderMultipleNode(2.0)}
+                </Menu.Item>
+                <Menu.Item key="1.5"
+                           onClick={() => this.handleActiveMultiple(1.5)}
+                           className="player-menu-cell">
+                    {this.renderMultipleNode(1.5)}
+                </Menu.Item>
+                <Menu.Item key="1.25"
+                           onClick={() => this.handleActiveMultiple(1.25)}
+                           className="player-menu-cell">
+                    {this.renderMultipleNode(1.25)}
+                </Menu.Item>
+                <Menu.Item key="1.0"
+                           onClick={() => this.handleActiveMultiple(1.0)}
+                           className="player-menu-cell">
+                    {this.renderMultipleNode(1.0)}
+                </Menu.Item>
+                <Menu.Item key="0.75"
+                           onClick={() => this.handleActiveMultiple(0.75)}
+                           className="player-menu-cell">
+                    {this.renderMultipleNode(0.75)}
+                </Menu.Item>
+                <Menu.Item key="0.5"
+                           onClick={() => this.handleActiveMultiple(0.5)}
+                           className="player-menu-cell">
+                    {this.renderMultipleNode(0.5)}
+                </Menu.Item>
+            </Menu>
+        );
     }
 
     public render(): React.ReactNode {
@@ -101,7 +159,7 @@ export default class PlayerController extends React.Component<PlayerControllerPr
                         limitTimeTooltipBySides={true}/>
                 </div>
                 <div className="player-controller-box">
-                    <div className="player-controller-left">
+                    <div className="player-controller-mid">
                         <div className="player-left-box">
                             <div
                                 onClick={() => {
@@ -112,10 +170,15 @@ export default class PlayerController extends React.Component<PlayerControllerPr
                                 className="player-controller">
                                 {this.operationButton(this.state.phase)}
                             </div>
+                            <div className="player-mid-box-time">
+                                {displayWatch(Math.floor(player.scheduleTime / 1000))} / {displayWatch(Math.floor(player.timeDuration / 1000))}
+                            </div>
                         </div>
-                        <div className="player-mid-box-time">
-                            {displayWatch(Math.floor(player.scheduleTime / 1000))} / {displayWatch(Math.floor(player.timeDuration / 1000))}
-                        </div>
+                        <Dropdown overlay={this.renderMultipleSelector} placement="topCenter">
+                            <div className="player-right-box">
+                                倍数
+                            </div>
+                        </Dropdown>
                     </div>
                 </div>
             </div>

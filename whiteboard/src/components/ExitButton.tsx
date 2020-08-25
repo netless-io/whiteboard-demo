@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Button, Modal} from "antd";
 import {RouteComponentProps} from "react-router";
+import { withRouter } from "react-router-dom";
 import {Room} from "white-web-sdk";
 import "./ExitButton.less";
 import exit from "../assets/image/exit.svg";
@@ -15,7 +16,7 @@ export type ExitButtonProps = {
     userId: string;
 } & RouteComponentProps<{}>;
 
-export default class ExitButton extends React.Component<ExitButtonProps, ExitButtonStates> {
+class ExitButton extends React.Component<ExitButtonProps, ExitButtonStates> {
     public constructor(props: ExitButtonProps) {
         super(props);
         this.state = {
@@ -66,4 +67,6 @@ export default class ExitButton extends React.Component<ExitButtonProps, ExitBut
         );
     }
 }
+
+export default withRouter(ExitButton)
 

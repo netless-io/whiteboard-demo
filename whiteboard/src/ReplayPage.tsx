@@ -4,6 +4,7 @@ import {message} from "antd";
 import {WhiteWebSdk, PlayerPhase, Player, RenderEngine} from "white-web-sdk";
 import player_stop from "./assets/image/player_stop.svg";
 import player_begin from "./assets/image/player_begin.svg";
+import loading from "./assets/image/loading.svg";
 import "video.js/dist/video-js.css";
 import "./ReplayPage.less";
 import {LoadingOutlined} from "@ant-design/icons";
@@ -57,32 +58,35 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
 
         if (uuid && roomToken) {
             const whiteWebSdk = new WhiteWebSdk({appIdentifier: netlessToken.appIdentifier, renderEngine: RenderEngine.Canvas});
-            const player = await whiteWebSdk.replayRoom(
-                {
-                    room: uuid,
-                    roomToken: roomToken,
-                }, {
-                    onPhaseChanged: phase => {
-                        this.setState({phase: phase});
-                    },
-                    onLoadFirstFrame: () => {
-                    },
-                    onSliceChanged: (slice: string) => {
-                    },
-                    onPlayerStateChanged: modifyState => {
-                    },
-                    onStoppedWithError: (error: Error) => {
-                        message.error(`Playback error: ${error}`);
-                        this.setState({replayFail: true});
-                    },
-                    onProgressTimeChanged: (scheduleTime: number) => {
-                        this.setState({currentTime: scheduleTime});
-                    },
+            const replayState = await whiteWebSdk.isPlayable({room: uuid});
+            if (replayState) {
+                const player = await whiteWebSdk.replayRoom(
+                    {
+                        room: uuid,
+                        roomToken: roomToken,
+                    }, {
+                        onPhaseChanged: phase => {
+                            this.setState({phase: phase});
+                        },
+                        onLoadFirstFrame: () => {
+                        },
+                        onPlayerStateChanged: modifyState => {
+                        },
+                        onStoppedWithError: (error: Error) => {
+                            message.error(`Playback error: ${error}`);
+                            this.setState({replayFail: true});
+                        },
+                        onProgressTimeChanged: (scheduleTime: number) => {
+                            this.setState({currentTime: scheduleTime});
+                        },
+                    });
+                (window as any).player = player;
+                this.setState({
+                    player: player,
                 });
-            (window as any).player = player;
-            this.setState({
-                player: player,
-            });
+            } else {
+
+            }
         }
     }
     private onWindowResize = (): void => {
@@ -161,7 +165,7 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
             return null;
         } else {
             return <div className="white-board-loading">
-                <img src="https://white-sdk.oss-cn-beijing.aliyuncs.com/fast-sdk/icons/loading.svg"/>
+                <img src={loading}/>
             </div>;
         }
     }
@@ -194,10 +198,9 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                             </div>}
                         </div>
                         {player &&
-                        <div
-                            style={{backgroundColor: "#F2F2F2"}}
-                            className="player-box"
-                            ref={this.handleBindRoom}/>}
+                        <div style={{backgroundColor: "#F2F2F2"}}
+                             className="player-box"
+                             ref={this.handleBindRoom}/>}
                     </div>
                 </div>
             </div>
