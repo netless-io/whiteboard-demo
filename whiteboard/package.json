@@ -11,7 +11,7 @@
         "@netless/docs-center": "^0.0.1",
         "@netless/fetch-middleware": "^1.0.5",
         "@netless/oss-upload-button": "^0.0.2",
-        "@netless/page-controller": "^0.0.1",
+        "@netless/page-controller": "^0.0.2",
         "@netless/player-controller": "^0.0.1",
         "@netless/plugin-center": "^0.0.1",
         "@netless/preview-controller": "^0.0.1",

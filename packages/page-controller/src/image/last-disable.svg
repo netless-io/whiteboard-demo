@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>last-disable</title>
+    <desc>Created with Sketch.</desc>
+    <g id="白板音视频" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Flat-规范" transform="translate(-144.000000, -423.000000)">
+            <g id="last-disable" transform="translate(144.000000, 423.000000)">
+                <rect id="矩形备份-23" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="32" height="32"></rect>
+                <polyline id="路径-11备份-5" stroke="#BCBDBD" stroke-linecap="round" stroke-linejoin="round" transform="translate(15.000000, 16.000000) scale(-1, 1) rotate(-360.000000) translate(-15.000000, -16.000000) " points="17 20 15 18 13 16 15 14 17 12"></polyline>
+                <line x1="19" y1="12" x2="19" y2="20" id="路径-4" stroke="#BCBDBD" stroke-linecap="round" stroke-linejoin="round"></line>
+            </g>
+        </g>
+    </g>
+</svg>
