@@ -37,12 +37,12 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
    控制台 -> 应该管理 -> 配置 -> 点击生成
 
 4. 完善配置，填入配置文件
+    
+   `.env.example`  文件名字改为 `.env`
 
    ```typescript
-   export const netlessToken = {
-       sdkToken: "NETLESSSDK_YWs9eDRxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxRkNTIyYjMwMmIyZGRj",
-       appIdentifier: "283/VGixxxxxx2HJg",
-   };
+   APPIDENTIFIER=283/VGixxxxxx2HJg // 白板 APPIDENTIFIER
+   SDKTOKEN=NETLESSSDK_YWs9eDRxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxRkNTIyYjMwMmIyZGRj // 白板 SDKTOKEN
    ```
 
 5. 安全事项
@@ -63,15 +63,15 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
 
 5. 完善配置，填入配置文件
 
+   `.env.example`  文件名字改为 `.env`
+
    ```typescript
-   export const ossConfigObj: OSSConfigObjType = {
-       accessKeyId: "LTAI4xxxxxxxxxxuDmu",
-       accessKeySecret: "ycdfrOxxxxxxxxxxxxxxxxxxWqsy",
-       region: "oss-cn-hangzhou",
-       bucket: "bxxxxxxxgs",
-       folder: "testxxxxx",
-       prefix: "https://bxxxxxxxgs.oss-cn-hangzhou.aliyuncs.com/",
-   };
+   AK=LTAI4xxxxxxxxxxuDmu
+   SK=ycdfrOxxxxxxxxxxxxxxxxxxWqsy
+   OSSREGION=oss-cn-hangzhou
+   BUCKET=bxxxxxxxgs
+   FOLDER=testxxxxx
+   PREFIX=https://bxxxxxxxgs.oss-cn-hangzhou.aliyuncs.com/
    ```
 
 6. 如果不想配置云存储，请注释掉以下代码直接运行。但是不能使用上传图片、音视频、PPT 等核心功能
