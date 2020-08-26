@@ -100,14 +100,11 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
     private changeCurrentTimePosition(pageX: number): void {
         if (this.track) {
             let position: number = pageX - this.track.getBoundingClientRect().left;
-
             position = position < 0 ? 0 : position;
             position = position > this.state.trackWidth ? this.state.trackWidth : position;
-
             this.setState({
                 seekHoverPosition: position,
             });
-
             const percent: number = position * 100 / this.state.trackWidth;
             const time: number = +(percent * (this.props.fullTime / 100)).toFixed(0);
             this.props.onChange(time, (time + this.offset));
@@ -144,7 +141,6 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
     private getThumbHandlerPosition(): TransformType {
         const position: number = this.state.trackWidth / (this.props.fullTime / this.props.currentTime);
-
         return {
             transform: `translateX(${position}px)`,
         };
@@ -152,7 +148,6 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
     private getSeekHoverPosition(): TransformType {
         const position: number = this.state.seekHoverPosition * 100 / this.state.trackWidth;
-
         return {
             transform: `scaleX(${position / 100})`,
         };
@@ -160,10 +155,8 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
     private getHoverTimePosition(): TransformType {
         let position: number = 0;
-
         if (this.hoverTime) {
             position = this.state.seekHoverPosition - this.hoverTime.offsetWidth / 2;
-
             if (this.props.limitTimeTooltipBySides) {
                 if (position < 0) {
                     position = 0;
@@ -172,7 +165,6 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
                 }
             }
         }
-
         return {
             transform: `translateX(${position}px)`,
         };
@@ -180,12 +172,10 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
     private secondsToTime(seconds: number): Time {
         seconds = Math.round(seconds + this.offset);
-
         const hours: number = Math.floor(seconds / 3600);
         const divirsForMinutes: number = seconds % 3600;
         const minutes: number = Math.floor(divirsForMinutes / 60);
         const sec: number = Math.ceil(divirsForMinutes % 60);
-
         return {
             hh: hours.toString(),
             mm: minutes < 10 ? "0" + minutes : minutes.toString(),
@@ -197,7 +187,6 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
         const percent: number = this.state.seekHoverPosition * 100 / this.state.trackWidth;
         const time: number = Math.floor(+(percent * (this.props.fullTime / 100)));
         const times: Time = this.secondsToTime(time);
-
         if ((this.props.fullTime + this.offset) < 60) {
             return this.secondsPrefix + (times.ss);
         } else if ((this.props.fullTime + this.offset) < 3600) {
@@ -213,10 +202,8 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
     private setSeeking = (state: boolean, evt: React.MouseEvent): void => {
         evt.preventDefault();
-
         this.handleSeeking(evt);
         this.seeking = state;
-
         this.setState({
             seekHoverPosition: !state ? 0 : this.state.seekHoverPosition,
         });
@@ -228,7 +215,6 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
 
     private setMobileSeeking = (state: boolean): void => {
         this.mobileSeeking = state;
-
         this.setState({
             seekHoverPosition: !state ? 0 : this.state.seekHoverPosition,
         });
@@ -330,9 +316,7 @@ export default class SeekSlider extends React.Component<VideoSeekSliderProps, Vi
                         {this.renderProgress()}
                     </div>
                 </div>
-
                 {this.drawHoverTime()}
-
                 {this.renderThumb()}
             </div>
         );

@@ -20,15 +20,15 @@ export type PlayerControllerProps = {
 };
 
 export default class PlayerController extends React.Component<PlayerControllerProps, PlayerControllerStates> {
-    private scheduleTime: number = 0;
+    private progressTime: number = 0;
 
     public constructor(props: PlayerControllerProps) {
         super(props);
         this.state = {
-            phase: PlayerPhase.Pause,
+            phase: props.player.phase,
             isPlayerSeeking: false,
             currentTime: 0,
-            multiple: 1.0,
+            multiple: props.player.playbackSpeed,
         };
     }
 
@@ -36,6 +36,9 @@ export default class PlayerController extends React.Component<PlayerControllerPr
         const {player} = this.props;
         player.callbacks.on("onPhaseChanged", (phase: PlayerPhase): void => {
             this.setState({phase: phase});
+        });
+        player.callbacks.on("onProgressTimeChanged", (currentTime: number): void => {
+            this.setState({currentTime: currentTime});
         });
     }
 
@@ -51,20 +54,20 @@ export default class PlayerController extends React.Component<PlayerControllerPr
                 break;
             }
             case PlayerPhase.Ended: {
-                player.seekToScheduleTime(0);
+                player.seekToProgressTime(0);
                 break;
             }
         }
     }
 
-    private getCurrentTime = (scheduleTime: number): number => {
+    private getCurrentTime = (progressTime: number): number => {
         if (this.state.isPlayerSeeking) {
-            this.scheduleTime = scheduleTime;
+            this.progressTime = progressTime;
             return this.state.currentTime;
         } else {
-            const isChange = this.scheduleTime !== scheduleTime;
+            const isChange = this.progressTime !== progressTime;
             if (isChange) {
-                return scheduleTime;
+                return progressTime;
             } else {
                 return this.state.currentTime;
             }
@@ -152,7 +155,7 @@ export default class PlayerController extends React.Component<PlayerControllerPr
                         onChange={(time: number, offsetTime: number) => {
                             if (player) {
                                 this.setState({currentTime: time});
-                                player.seekToScheduleTime(time);
+                                player.seekToProgressTime(time);
                             }
                         }}
                         hideHoverTime={true}
@@ -171,12 +174,12 @@ export default class PlayerController extends React.Component<PlayerControllerPr
                                 {this.operationButton(this.state.phase)}
                             </div>
                             <div className="player-mid-box-time">
-                                {displayWatch(Math.floor(player.scheduleTime / 1000))} / {displayWatch(Math.floor(player.timeDuration / 1000))}
+                                {displayWatch(Math.floor(player.progressTime / 1000))} / {displayWatch(Math.floor(player.timeDuration / 1000))}
                             </div>
                         </div>
                         <Dropdown overlay={this.renderMultipleSelector} placement="topCenter">
                             <div className="player-right-box">
-                                倍数
+                                {this.state.multiple === 1.0 ? `倍数` : `${this.state.multiple}x`}
                             </div>
                         </Dropdown>
                     </div>
