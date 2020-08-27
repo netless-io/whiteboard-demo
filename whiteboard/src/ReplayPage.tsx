@@ -1,5 +1,6 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
+import {CursorTool} from "@netless/cursor-tool";
 import {message} from "antd";
 import {WhiteWebSdk, PlayerPhase, Player, RenderEngine} from "white-web-sdk";
 import player_stop from "./assets/image/player_stop.svg";
@@ -22,7 +23,6 @@ export type PlayerPageStates = {
     player?: Player;
     phase: PlayerPhase;
     currentTime: number;
-    isFirstScreenReady: boolean;
     isPlayerSeeking: boolean;
     isVisible: boolean;
     replayFail: boolean;
@@ -34,7 +34,6 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         this.state = {
             currentTime: 0,
             phase: PlayerPhase.Pause,
-            isFirstScreenReady: false,
             isPlayerSeeking: false,
             isVisible: false,
             replayFail: false,
@@ -60,17 +59,15 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
             const whiteWebSdk = new WhiteWebSdk({appIdentifier: netlessToken.appIdentifier, renderEngine: RenderEngine.Canvas});
             const replayState = await whiteWebSdk.isPlayable({room: uuid});
             if (replayState) {
+                const cursorAdapter = new CursorTool();
                 const player = await whiteWebSdk.replayRoom(
                     {
                         room: uuid,
                         roomToken: roomToken,
+                        cursorAdapter: cursorAdapter,
                     }, {
                         onPhaseChanged: phase => {
                             this.setState({phase: phase});
-                        },
-                        onLoadFirstFrame: () => {
-                        },
-                        onPlayerStateChanged: modifyState => {
                         },
                         onStoppedWithError: (error: Error) => {
                             message.error(`Playback error: ${error}`);
@@ -80,6 +77,7 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                             this.setState({currentTime: scheduleTime});
                         },
                     });
+                cursorAdapter.setPlayer(player);
                 (window as any).player = player;
                 this.setState({
                     player: player,

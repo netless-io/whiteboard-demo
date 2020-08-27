@@ -1,5 +1,12 @@
 import * as React from "react";
-import {CursorAdapter, CursorDescription, Cursor, RoomMember} from "white-web-sdk";
+import {
+    CursorAdapter,
+    CursorDescription,
+    Cursor,
+    RoomMember,
+    RoomState,
+    Room, Player
+} from "white-web-sdk";
 import {BackgroundColorProperty} from "csstype";
 import selector from "./image/selector.svg";
 import pencil from "./image/pencil.svg";
@@ -143,7 +150,28 @@ export class CursorTool implements CursorAdapter {
     }
     public onMovingCursor(): void {
     }
-    public setColorAndAppliance(roomMembers: ReadonlyArray<RoomMember>): void {
+
+    public setRoom(room: Room): void {
+        this.setColorAndAppliance(room.state.roomMembers);
+        room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
+            if (modifyState.roomMembers) {
+                this.setColorAndAppliance(modifyState.roomMembers);
+            }
+        });
+    }
+
+    public setPlayer(player: Player): void {
+        this.setColorAndAppliance(player.state.roomMembers);
+        player.callbacks.on("onPlayerStateChanged", (modifyState: Partial<RoomState>): void => {
+            if (modifyState.roomMembers) {
+                this.setColorAndAppliance(modifyState.roomMembers);
+            }
+        });
+        player.callbacks.on("onLoadFirstFrame", (): void => {
+            this.setColorAndAppliance(player.state.roomMembers);
+        })
+    }
+    private setColorAndAppliance(roomMembers: ReadonlyArray<RoomMember>): void {
         this.roomMembers = roomMembers;
         for (const roomMember of roomMembers) {
             const cursor = this.cursors[roomMember.memberId];

@@ -34,7 +34,7 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
                                 </Link>
                                 <span>加入房间</span>
                             </div>
-                            <div className="page-index-cutline-box"/>
+                            <div className="page-cutline-box"/>
                             <div className="page-index-start-cell">
                                 <Link to={"/whiteboard/"}>
                                     <img src={create}/>
@@ -42,8 +42,17 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
                                 <span>创建房间</span>
                             </div>
                         </div>
+                        <div className="page-index-link-box">
+                            <div className="page-index-cell-left">
+                                <a href={"https://netless.link/"} target={"_blank"}>官网</a>
+                            </div>
+                            <div className="page-cutline-link-box"/>
+                            <div className="page-index-cell-right">
+                                <a href={"https://github.com/netless-io/react-whiteboard"} target={"_blank"}>Github</a>
+                            </div>
+                        </div>
                         <div className="page-index-start-term">
-                            使用产品即代表同意<span>《软件许可以及服务协议》</span>和<span>《隐私协议》</span>
+                            本开源项目遵循<a href={"https://opensource.org/licenses/MIT"} target={"_blank"}>《 MIT 开源协议》</a>
                         </div>
                     </div>
                 </div>

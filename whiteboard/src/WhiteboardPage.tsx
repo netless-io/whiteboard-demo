@@ -98,11 +98,6 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             this.setState({phase: phase});
                             console.log(`room ${"uuid"} changed: ${phase}`);
                         },
-                        onRoomStateChanged: modifyState => {
-                            if (modifyState.roomMembers) {
-                                cursorAdapter.setColorAndAppliance(modifyState.roomMembers);
-                            }
-                        },
                         onDisconnectWithError: error => {
                             console.error(error);
                         },
@@ -110,7 +105,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             console.error("kicked with reason: " + reason);
                         },
                     });
-                cursorAdapter.setColorAndAppliance(room.state.roomMembers);
+                cursorAdapter.setRoom(room);
                 room.setMemberState({
                     pencilOptions: {
                         disableBezier: false,
