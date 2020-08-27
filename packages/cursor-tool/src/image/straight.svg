@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
+    <title>laserPointer</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="laserPointer" fill="#FFFFFF" fill-rule="nonzero">
+            <rect id="Rectangle-path" opacity="0.01" x="0" y="0" width="24" height="24"></rect>
+            <path d="M4.33473511,5.95097918 L17.2646877,18.8809317 C17.7110012,19.3272452 18.4346183,19.3272452 18.8809317,18.8809317 C19.3272452,18.4346183 19.3272452,17.7110012 18.8809317,17.2646877 L5.95097918,4.33473511 C5.5046657,3.88842163 4.78104858,3.88842163 4.33473511,4.33473511 C3.88842163,4.78104858 3.88842163,5.5046657 4.33473511,5.95097918 Z" id="路径-2"></path>
+        </g>
+    </g>
+</svg>

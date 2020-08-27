@@ -16,6 +16,7 @@ import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
+import {CursorTool} from "@netless/cursor-tool";
 import { message} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PageError from "./PageError";
@@ -72,6 +73,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
 
     private startJoinRoom = async (): Promise<void> => {
         const {uuid, userId} = this.props.match.params;
+        const cursorAdapter = new CursorTool();
         try {
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
@@ -85,6 +87,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 const room = await whiteWebSdk.joinRoom({
                         uuid: uuid,
                         roomToken: roomToken,
+                        cursorAdapter: cursorAdapter,
                         userPayload: {
                             userId: userId,
                         },
@@ -95,6 +98,11 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             this.setState({phase: phase});
                             console.log(`room ${"uuid"} changed: ${phase}`);
                         },
+                        onRoomStateChanged: modifyState => {
+                            if (modifyState.roomMembers) {
+                                cursorAdapter.setColorAndAppliance(modifyState.roomMembers);
+                            }
+                        },
                         onDisconnectWithError: error => {
                             console.error(error);
                         },
@@ -102,6 +110,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             console.error("kicked with reason: " + reason);
                         },
                     });
+                cursorAdapter.setColorAndAppliance(room.state.roomMembers);
                 room.setMemberState({
                     pencilOptions: {
                         disableBezier: false,
