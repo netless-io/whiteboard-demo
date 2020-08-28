@@ -1,130 +1,97 @@
 import * as React from "react";
 import {
+    ApplianceNames,
+    Cursor,
     CursorAdapter,
     CursorDescription,
-    Cursor,
+    Player,
+    Room,
     RoomMember,
-    RoomState,
-    Room, Player
+    RoomState
 } from "white-web-sdk";
-import {BackgroundColorProperty} from "csstype";
-import selector from "./image/selector.svg";
-import pencil from "./image/pencil.svg";
-import text from "./image/text.svg";
-import eraser from "./image/eraser.svg";
-import ellipse from "./image/ellipse.svg";
-import rectangle from "./image/rectangle.svg";
-import straight from "./image/straight.svg";
-import arrow from "./image/arrow.svg";
-import hand from "./image/hand.svg";
+import pencilCursor from "./image/pencil-cursor.png";
+import selectorCursor from "./image/selector-cursor.png";
+import eraserCursor from "./image/eraser-cursor.png";
+import shapeCursor from "./image/shape-cursor.svg";
+import textCursor from "./image/text-cursor.svg";
 import "./index.less";
+
 export type CursorComponentProps = {
     roomMember: RoomMember;
-};
-type ApplianceDescription = {
-    readonly iconUrl: string;
-    readonly hasColor: boolean;
-    readonly hasStroke: boolean;
 };
 
 class CursorComponent extends React.Component<CursorComponentProps, {}> {
     public constructor(props: CursorComponentProps) {
         super(props);
     }
-    private static readonly descriptions: {readonly [applianceName: string]: ApplianceDescription} = Object.freeze({
-        selector: Object.freeze({
-            iconUrl: selector,
-            hasColor: false,
-            hasStroke: false,
-        }),
-        pencil: Object.freeze({
-            iconUrl: pencil,
-            hasColor: true,
-            hasStroke: true,
-        }),
-        text: Object.freeze({
-            iconUrl: text,
-            hasColor: true,
-            hasStroke: false,
-        }),
-        eraser: Object.freeze({
-            iconUrl: eraser,
-            hasColor: false,
-            hasStroke: false,
-        }),
-        ellipse: Object.freeze({
-            iconUrl: ellipse,
-            hasColor: true,
-            hasStroke: true,
-        }),
-        rectangle: Object.freeze({
-            iconUrl: rectangle,
-            hasColor: true,
-            hasStroke: true,
-        }),
-        straight: Object.freeze({
-            iconUrl: straight,
-            hasColor: true,
-            hasStroke: true,
-        }),
-        arrow: Object.freeze({
-            iconUrl: arrow,
-            hasColor: true,
-            hasStroke: true,
-        }),
-        hand: Object.freeze({
-            iconUrl: hand,
-            hasColor: true,
-            hasStroke: true,
-        }),
-    });
-
-    private iconUrl = (name: string): string | undefined => {
-        if (CursorComponent.descriptions[name]) {
-            return CursorComponent.descriptions[name].iconUrl;
-        } else {
-            return  undefined;
-        }
-    }
-
-    private renderAvatar = (roomMember: RoomMember): React.ReactNode => {
-        if (roomMember.payload) {
-            if (roomMember.payload.avatar) {
-                return <img style={{width: 28}} src={roomMember.payload.avatar}/>;
-            } else if (roomMember.payload.id) {
-                return (
-                    <div style={{width: 28, height: 28, backgroundColor: "green"}}/>
-                );
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    private renderToolImage = (name: string, color: BackgroundColorProperty): React.ReactNode => {
-        if (CursorComponent.descriptions[name]) {
-            return (
-                <div style={{backgroundColor: color}} className="cursor-box-tool">
-                    <img src={this.iconUrl(name)}/>
-                </div>
-            )
-        } else {
-            return null;
-        }
-    }
 
     public render(): React.ReactNode {
         const {roomMember} = this.props;
+        const cursorName = roomMember.payload.cursorName;
         const color = `rgb(${roomMember.memberState.strokeColor[0]}, ${roomMember.memberState.strokeColor[1]}, ${roomMember.memberState.strokeColor[2]})`;
-        return <div>
-            <div style={{borderColor: color}} className="cursor-box">
-                {this.renderAvatar(roomMember)}
-            </div>
-            {this.renderToolImage(roomMember.memberState.currentApplianceName, color)}
-        </div>;
-
+        const appliance = roomMember.memberState.currentApplianceName;
+        switch (appliance) {
+            case ApplianceNames.pencil: {
+                return (
+                    <div className="cursor-box">
+                        <div className="cursor-pencil-mid">
+                            <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-pencil-inner">
+                                <span style={{backgroundColor: color}}>{cursorName}</span>
+                            </div>
+                            <img className="cursor-pencil-image" src={pencilCursor}/>
+                        </div>
+                    </div>
+                );
+            }
+            case ApplianceNames.selector: {
+                return (
+                    <div className="cursor-box">
+                        <div className="cursor-selector-mid">
+                            <img className="cursor-selector-image" src={selectorCursor}/>
+                            <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-selector-inner">
+                                <span style={{backgroundColor: color}}>{cursorName}</span>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+            case ApplianceNames.eraser: {
+                return (
+                    <div className="cursor-box">
+                        <div className="cursor-pencil-mid">
+                            <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-pencil-inner">
+                                <span style={{backgroundColor: color}}>{cursorName}</span>
+                            </div>
+                            <img className="cursor-pencil-image" src={eraserCursor}/>
+                        </div>
+                    </div>
+                );
+            }
+            case ApplianceNames.text: {
+                return (
+                    <div className="cursor-box">
+                        <div className="cursor-text-mid">
+                            <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-shape-inner">
+                                <span style={{backgroundColor: color}}>{cursorName}</span>
+                            </div>
+                            <img src={textCursor}/>
+                        </div>
+                    </div>
+                );
+            }
+            default: {
+                return (
+                    <div className="cursor-box">
+                        <div className="cursor-shape-mid">
+                            <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-shape-inner">
+                                <span style={{backgroundColor: color}}>{cursorName}</span>
+                            </div>
+                            <img src={shapeCursor}/>
+                        </div>
+                    </div>
+                );
+            }
+        }
     }
 }
 
@@ -132,7 +99,7 @@ export class CursorTool implements CursorAdapter {
     private readonly cursors: {[memberId: number]: Cursor} = {};
     private roomMembers: ReadonlyArray<RoomMember> = [];
     public createCursor(): CursorDescription {
-        return {x: 16, y: 16, width: 32, height: 32};
+        return {x: 64, y: 64, width: 128, height: 128};
     }
     public onAddedCursor(cursor: Cursor): void {
         for (const roomMember of this.roomMembers) {
@@ -150,7 +117,6 @@ export class CursorTool implements CursorAdapter {
     }
     public onMovingCursor(): void {
     }
-
     public setRoom(room: Room): void {
         this.setColorAndAppliance(room.state.roomMembers);
         room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
@@ -159,7 +125,6 @@ export class CursorTool implements CursorAdapter {
             }
         });
     }
-
     public setPlayer(player: Player): void {
         this.setColorAndAppliance(player.state.roomMembers);
         player.callbacks.on("onPlayerStateChanged", (modifyState: Partial<RoomState>): void => {

@@ -40,6 +40,7 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
 
     private renderInviteContent = (): React.ReactNode => {
         const {uuid} = this.props;
+        const isLocal = location.hostname === "localhost";
         return (
             <div className="invite-box">
                 <div className="invite-box-title">
@@ -54,12 +55,12 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
                     <div className="invite-url-box">
                         <span style={{width: 96}}>加入链接：</span>
                         <Input size={"middle"}
-                               value={`https://${location.host}/whiteboard/${uuid}/`}/>
+                               value={`${isLocal ? "http" : "https"}://${location.host}/whiteboard/${uuid}/`}/>
                     </div>
                 </div>
                 <div className="invite-button-box">
                     <Clipboard
-                        data-clipboard-text={`房间号：${uuid}\n加入链接：https://${location.host}/whiteboard/${uuid}/`}
+                        data-clipboard-text={`房间号：${uuid}\n加入链接：${isLocal ? "http" : "https"}://${location.host}/whiteboard/${uuid}/`}
                         component="div"
                         onSuccess={() => this.handleCopy()}
                     >
