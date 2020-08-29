@@ -84,12 +84,14 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
                 });
+                const cursorName = localStorage.getItem("userName");
                 const room = await whiteWebSdk.joinRoom({
                         uuid: uuid,
                         roomToken: roomToken,
                         cursorAdapter: cursorAdapter,
                         userPayload: {
                             userId: userId,
+                            cursorName: cursorName,
                         },
                         floatBar: true,
                     },

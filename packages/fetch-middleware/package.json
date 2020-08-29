@@ -1,6 +1,6 @@
 {
-  "name": "@netless/oss-upload-button",
-  "version": "0.0.2",
+  "name": "@netless/fetch-middleware",
+  "version": "1.0.6",
   "description": "",
   "private": false,
   "main": "dist/index.js",
@@ -16,10 +16,7 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "@netless/oss-upload-manager": "^1.0.7",
-    "@netless/loading-bar": "^1.0.6",
-    "ali-oss": "^6.10.0",
-    "antd": "^4.4.3"
+    "query-string": "^6.13.1"
   },
   "peerDependencies": {
     "react": "^16.8.0",
@@ -36,9 +33,7 @@
     "@babel/preset-typescript": "^7.6.0",
     "@babel/runtime": "^7.6.0",
     "@types/node": "^11.12.2",
-    "@types/ali-oss": "^6.0.5",
     "@types/react": "^16.4.12",
-    "@types/uuid": "^8.0.1",
     "@types/react-dom": "^16.0.5",
     "babel-loader": "8.0.6",
     "babel-plugin-import": "^1.12.2",

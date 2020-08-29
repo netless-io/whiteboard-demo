@@ -1,21 +1,38 @@
 import * as React from "react";
-import {Link} from "react-router-dom"
+import {Link, withRouter} from "react-router-dom"
+import {RouteComponentProps} from "react-router";
 import logo from "./assets/image/logo.svg";
 import join from "./assets/image/join.svg";
 import create from "./assets/image/create.svg";
 import "./IndexPage.less";
-export enum IdentityType {
-    host = "host",
-    guest = "guest",
-    listener = "listener",
-}
+import {Button, Input, Popover} from "antd";
 
 export type IndexPageStates = {
+    name: string;
+    visible: boolean;
 };
 
-export default class IndexPage extends React.Component<{}, IndexPageStates> {
-    public constructor(props: {}) {
+class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates> {
+    public constructor(props: RouteComponentProps<{}>) {
         super(props);
+        const name = localStorage.getItem("userName");
+        this.state = {
+            name: name ? name : "",
+            visible: false,
+        }
+    }
+
+    private handleCreate = (): void => {
+        if (this.state.name) {
+            this.props.history.push("/whiteboard/");
+        } else {
+            this.props.history.push("/name/");
+        }
+    }
+
+    private updateName = (): void => {
+        localStorage.setItem("userName", this.state.name);
+        this.setState({visible: false});
     }
     public render(): React.ReactNode {
             return (
@@ -23,9 +40,19 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
                     <div className="page-index-mid-box">
                         <div className="page-index-logo-box">
                             <img src={logo}/>
-                            <span>
-                                0.0.1
-                            </span>
+                            <Popover visible={this.state.visible} placement={"bottom"} trigger="click" content={
+                                <div className="page-index-name-box" >
+                                    <Input maxLength={8} onChange={e => this.setState({name: e.target.value})} value={this.state.name} style={{width: 120}} size={"small"}/>
+                                    <Button onClick={this.updateName} style={{width: 120, marginTop: 12}} type={"primary"} size={"small"}>
+                                        更新
+                                    </Button>
+                                </div>
+                            } title={"编辑昵称"}>
+                                <span onClick={() => this.setState({visible: true})}>
+                                    <span style={{color: "#106BC5"}}>{this.state.name}</span>
+                                    <span>欢迎使用 👋 </span>
+                                </span>
+                            </Popover>
                         </div>
                         <div className="page-index-start-box">
                             <div className="page-index-start-cell">
@@ -36,9 +63,9 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
                             </div>
                             <div className="page-cutline-box"/>
                             <div className="page-index-start-cell">
-                                <Link to={"/whiteboard/"}>
+                                <div onClick={this.handleCreate}>
                                     <img src={create}/>
-                                </Link>
+                                </div>
                                 <span>创建房间</span>
                             </div>
                         </div>
@@ -60,3 +87,4 @@ export default class IndexPage extends React.Component<{}, IndexPageStates> {
     }
 }
 
+export default withRouter(IndexPage);

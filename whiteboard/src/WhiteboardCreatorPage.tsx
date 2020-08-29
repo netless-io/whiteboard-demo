@@ -57,6 +57,8 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
     public render(): React.ReactNode {
         if (this.state.foundError) {
             return <PageError/>;
+        } else if (localStorage.getItem("userName") === null) {
+            return <Redirect to={`/name/`}/>;
         } else if (this.state.uuid && this.state.userId) {
             return <Redirect to={`/whiteboard/${this.state.uuid}/${this.state.userId}/`}/>;
         }
