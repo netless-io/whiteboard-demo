@@ -157,7 +157,7 @@ yarn build
 
   - 文档中心预览
 
-    ![docs-center`](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/docs-center.jpg)
+    ![docs-center](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/docs-center.jpg)
 
 - `@netless/oss-upload-button`
 
