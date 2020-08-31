@@ -18,7 +18,7 @@
   "dependencies": {
     "ali-oss": "^6.10.0",
     "@netless/oss-upload-manager": "1.0.7",
-    "@netless/loading-bar": "^1.0.6",
+    "@netless/loading-bar": "^0.0.1",
     "antd": "^4.4.3",
     "uuid": "^8.3.0"
   },
