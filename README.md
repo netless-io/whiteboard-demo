@@ -69,7 +69,7 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
 
 5. 完善配置，填入配置文件
 
-   `.env.example`  文件名字改为 `.env`
+   `.env.example`  文件名字改为 `.env.local`
 
    ```typescript
    AK=LTAI4xxxxxxxxxxuDmu
