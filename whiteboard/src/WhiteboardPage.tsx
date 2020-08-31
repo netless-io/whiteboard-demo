@@ -1,11 +1,6 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
-import {
-    createPlugins,
-    Room,
-    RoomPhase,
-    WhiteWebSdk,
-} from "white-web-sdk";
+import {createPlugins, Room, RoomPhase, RoomState, ViewMode, WhiteWebSdk,} from "white-web-sdk";
 import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
 import PageController from "@netless/page-controller";
@@ -17,12 +12,14 @@ import {audioPlugin} from "@netless/white-audio-plugin";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
 import {CursorTool} from "@netless/cursor-tool";
-import { message} from "antd";
+import {message} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PageError from "./PageError";
 import LoadingPage from "./LoadingPage";
 import pages from "./assets/image/pages.svg"
 import folder from "./assets/image/folder.svg";
+import follow from "./assets/image/follow.svg"
+import followActive from "./assets/image/follow-active.svg";
 import logo from "./assets/image/logo.svg";
 import {netlessToken, ossConfigObj} from "./appToken";
 import "./WhiteboardPage.less";
@@ -34,7 +31,9 @@ export type WhiteboardPageStates = {
     room?: Room;
     isMenuVisible: boolean;
     isFileOpen: boolean;
+    mode?: ViewMode;
     whiteboardLayerDownRef?: HTMLDivElement;
+    roomController?: ViewMode;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     uuid: string;
@@ -100,6 +99,11 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             this.setState({phase: phase});
                             console.log(`room ${"uuid"} changed: ${phase}`);
                         },
+                        onRoomStateChanged: (modifyState: Partial<RoomState>): void => {
+                            if (modifyState.broadcastState) {
+                                this.setState({mode: modifyState.broadcastState.mode});
+                            }
+                        },
                         onDisconnectWithError: error => {
                             console.error(error);
                         },
@@ -116,8 +120,11 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         enableDrawPoint: false
                     }
                 });
-                (window as any).room = room;
+                if (room.state.broadcastState) {
+                    this.setState({mode: room.state.broadcastState.mode})
+                }
                 this.setState({room: room});
+                (window as any).room = room;
             }
         } catch (error) {
             message.error(error);
@@ -131,6 +138,16 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
 
     private handleDocCenterState = (state: boolean): void => {
         this.setState({isFileOpen: state});
+    }
+
+    private handleRoomController = (room: Room): void => {
+        if (room.state.broadcastState.mode !== ViewMode.Broadcaster) {
+            room.setViewMode(ViewMode.Broadcaster);
+            message.success("其他用户将跟随您的视角");
+        } else {
+            room.setViewMode(ViewMode.Freedom);
+            message.success("其他用户将停止跟随您的视角");
+        }
     }
 
     public render(): React.ReactNode {
@@ -182,6 +199,10 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
+                                <div className="page-controller-cell"
+                                     onClick={()=> this.handleRoomController(room)}>
+                                    <img src={this.state.mode === ViewMode.Broadcaster ? followActive : follow}/>
+                                </div>
                                 <div className="page-controller-cell"
                                      onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
                                     <img src={folder}/>
