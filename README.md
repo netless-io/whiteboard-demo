@@ -1,4 +1,8 @@
+
+
 # react-whiteboard
+
+![](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/react-whiteoard-home.png)
 
 ![whiteboard](https://white-sdk.oss-cn-beijing.aliyuncs.com/icons/whiteboard.png)
 
@@ -37,7 +41,7 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
    控制台 -> 应该管理 -> 配置 -> 点击生成
 
 4. 完善配置，填入配置文件
-    
+   
    `.env.example`  文件名字改为 `.env`
 
    ```typescript
@@ -111,7 +115,15 @@ yarn build
 - yarn or npm
 - lerna（下面有简单的运行起来的方法，详细用法请自行搜索学习）
 
-### 5.1 启动项目构建
+### 5.1 组件介绍
+
+采用 lerna 管理的优势在于：组件化白板的常用功能，方便使用和维护管理。下面简单罗列一下核心组件，并介绍其作用和样式。
+
+#### 5.1.1 白板专有控件
+
+![全部控件位置](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/react-whiteboard.jpg)
+
+### 5.2 启动项目构建
 
 ```bash
 # STEP 1
@@ -127,7 +139,7 @@ lerna run --scope whiteboard build
 
 
 
-### 5.2 常用命令介绍
+### 5.3 常用命令介绍
 
 ```bash
 # 安装全局 lerna
