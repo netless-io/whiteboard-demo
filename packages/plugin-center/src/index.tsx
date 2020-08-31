@@ -4,7 +4,7 @@ import {PPTProgressPhase, UploadManager} from "@netless/oss-upload-manager";
 import { v4 as uuidv4 } from "uuid";
 import * as OSS from "ali-oss";
 import {Room} from "white-web-sdk";
-import TopLoadingBar from "@netless/react-loading-bar";
+import TopLoadingBar from "@netless/loading-bar";
 import "./index.less";
 import * as more from "./image/more.svg";
 import * as Video from "./image/video.svg";

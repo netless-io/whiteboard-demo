@@ -2,7 +2,7 @@ import * as React from "react";
 import {message, Popover, Tooltip, Upload} from "antd";
 import * as OSS from "ali-oss";
 import {PPTProgressPhase, UploadManager} from "@netless/oss-upload-manager";
-import TopLoadingBar from "@netless/react-loading-bar";
+import TopLoadingBar from "@netless/loading-bar";
 import "./index.less";
 import {PPTKind, Room, WhiteWebSdk} from "white-web-sdk";
 import * as upload from "./image/upload.svg";
