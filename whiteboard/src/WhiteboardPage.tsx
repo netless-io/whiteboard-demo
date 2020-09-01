@@ -11,7 +11,7 @@ import {audioPlugin} from "@netless/white-audio-plugin";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
 import {CursorTool} from "@netless/cursor-tool";
-import {message} from "antd";
+import {message, Tooltip} from "antd";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import PageError from "./PageError";
 import LoadingPage from "./LoadingPage";
@@ -197,23 +197,29 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
-                                <div className="page-controller-cell"
-                                     onClick={()=> this.handleRoomController(room)}>
-                                    <img src={this.state.mode === ViewMode.Broadcaster ? followActive : follow}/>
-                                </div>
-                                <div className="page-controller-cell"
-                                     onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
-                                    <img src={folder}/>
-                                </div>
+                                <Tooltip placement="bottom" title={"Vision control"}>
+                                    <div className="page-controller-cell"
+                                         onClick={()=> this.handleRoomController(room)}>
+                                        <img src={this.state.mode === ViewMode.Broadcaster ? followActive : follow}/>
+                                    </div>
+                                </Tooltip>
+                                <Tooltip placement="bottom" title={"Docs center"}>
+                                    <div className="page-controller-cell"
+                                         onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
+                                        <img src={folder}/>
+                                    </div>
+                                </Tooltip>
                                 <InviteButton uuid={uuid}/>
                                 <ExitButton room={room} userId={userId}/>
                             </div>
                         </div>
                         <div className="page-controller-box">
                             <div className="page-controller-mid-box">
-                                <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
-                                    <img src={pages}/>
-                                </div>
+                                <Tooltip placement="top" title={"Page preview"}>
+                                    <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
+                                        <img src={pages}/>
+                                    </div>
+                                </Tooltip>
                                 <PageController room={room}/>
                             </div>
                         </div>

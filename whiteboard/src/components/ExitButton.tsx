@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, Modal} from "antd";
+import {Button, Modal, Tooltip} from "antd";
 import {RouteComponentProps} from "react-router";
 import { withRouter } from "react-router-dom";
 import {Room} from "white-web-sdk";
@@ -41,9 +41,11 @@ class ExitButton extends React.Component<ExitButtonProps, ExitButtonStates> {
     public render(): React.ReactNode {
         return (
             <div>
-                <div className="page-controller-cell" onClick={() => this.setState({exitViewDisable: true})}>
-                    <img src={exit}/>
-                </div>
+                <Tooltip placement="bottom" title={"Exit"}>
+                    <div className="page-controller-cell" onClick={() => this.setState({exitViewDisable: true})}>
+                        <img src={exit}/>
+                    </div>
+                </Tooltip>
                 <Modal
                     visible={this.state.exitViewDisable}
                     footer={null}
