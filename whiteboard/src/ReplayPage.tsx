@@ -82,8 +82,6 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                 this.setState({
                     player: player,
                 });
-            } else {
-
             }
         }
     }

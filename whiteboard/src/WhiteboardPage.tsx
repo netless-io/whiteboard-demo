@@ -1,6 +1,6 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
-import {createPlugins, Room, RoomPhase, RoomState, ViewMode, WhiteWebSdk,} from "white-web-sdk";
+import {createPlugins, Room, RoomPhase, RoomState, ViewMode, WhiteWebSdk} from "white-web-sdk";
 import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
 import PageController from "@netless/page-controller";

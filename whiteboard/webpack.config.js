@@ -80,8 +80,8 @@ config = {
                     options: {
                         lessOptions: {
                             modifyVars: {
-                                'primary-color': '#106BC5',
-                                'link-color': '#106BC5',
+                                'primary-color': '#176bc5',
+                                'link-color': '#176BC5',
                                 'border-radius-base': '4px',
                             },
                             javascriptEnabled: true
