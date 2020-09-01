@@ -21,7 +21,7 @@ export default class ToolBoxPaletteBox extends React.Component<ToolBoxPaletteBox
         super(props);
         this.state = {
             borderColor: "#FFFFF",
-            percentage: 0.125,
+            percentage: props.room.state.memberState.strokeWidth / 32,
         };
     }
 
