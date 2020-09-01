@@ -6,7 +6,6 @@ import RedoUndo from "@netless/redo-undo";
 import PageController from "@netless/page-controller";
 import ZoomController from "@netless/zoom-controller";
 import OssUploadButton from "@netless/oss-upload-button";
-import PluginCenter from "@netless/plugin-center";
 import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
 import PreviewController from "@netless/preview-controller";
@@ -184,10 +183,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                 [
                                     <OssUploadButton oss={ossConfigObj}
                                                      appIdentifier={netlessToken.appIdentifier}
+                                                     sdkToken={netlessToken.sdkToken}
                                                      room={room}
                                                      whiteboardRef={whiteboardLayerDownRef}/>,
-                                    <PluginCenter oss={ossConfigObj}
-                                                  room={room}/>
                                 ]
                             }/>
                         </div>

@@ -10,6 +10,9 @@ import * as image from "./image/image.svg";
 import * as uploadActive from "./image/upload-active.svg";
 import * as fileTransWeb from "./image/file-trans-web.svg";
 import * as fileTransImg from "./image/file-trans-img.svg";
+import * as Video from "./image/video.svg";
+import * as Audio from "./image/audio.svg";
+import {v4 as uuidv4} from "uuid";
 type OSSConfigObjType = {
     accessKeyId: string;
     accessKeySecret: string;
@@ -36,6 +39,7 @@ export type OssUploadButtonProps = {
     room: Room,
     oss: OSSConfigObjType,
     appIdentifier: string;
+    sdkToken: string;
     whiteboardRef?: HTMLDivElement,
 };
 
@@ -69,6 +73,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             PPTKind.Static,
             this.props.oss.folder,
             uuid,
+            this.props.sdkToken,
             this.progress,
         );
     }
@@ -84,6 +89,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             PPTKind.Dynamic,
             this.props.oss.folder,
             uuid,
+            this.props.sdkToken,
             this.progress,
         );
     }
@@ -130,6 +136,57 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         }
     }
 
+    private getUrl = async (event: any): Promise<string> => {
+        const uploadManager = new UploadManager(this.client, this.props.room);
+        const res = await uploadManager.addFile(`${uuidv4()}/${event.file.name}`, event.file, this.progress);
+        const isHttps = res.indexOf("https") !== -1;
+        let url;
+        if (isHttps) {
+            url = res;
+        } else {
+            url = res.replace("http", "https");
+        }
+        return url;
+    }
+
+    private uploadVideo = async (event: any): Promise<void> => {
+        try {
+            const url = await this.getUrl(event);
+            if (url) {
+                this.props.room.insertPlugin("video", {
+                    originX: 0,
+                    originY: 0,
+                    width: 480,
+                    height: 270,
+                    attributes: {
+                        pluginVideoUrl: url,
+                    },
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    private uploadAudio = async (event: any): Promise<void> => {
+        try {
+            const url = await this.getUrl(event);
+            if (url) {
+                this.props.room.insertPlugin("audio", {
+                    originX: 0,
+                    originY: 0,
+                    width: 480,
+                    height: 86,
+                    attributes: {
+                        pluginAudioUrl: url,
+                    },
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     private renderUploadButton = (): React.ReactNode => {
         return (
             <div className="oss-upload-box">
@@ -149,6 +206,44 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                                 <div className="oss-upload-section-text">
                                     支持常见格式，可以改变图片大小和位置。
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </Upload>
+                <div style={{width: 208, height: 0.5, backgroundColor: "#E7E7E7"}}/>
+                <Upload
+                    accept={"video/mp4"}
+                    showUploadList={false}
+                    customRequest={this.uploadVideo}>
+                    <div className="oss-upload-section">
+                        <div className="oss-upload-section-inner">
+                            <div className="oss-upload-title-section">
+                                <div className="oss-upload-title">上传视频</div>
+                                <div className="oss-upload-icon">
+                                    <img src={Video}/>
+                                </div>
+                            </div>
+                            <div className="oss-upload-section-script">
+                                <div className="oss-upload-section-text">支持 MP4 格式</div>
+                            </div>
+                        </div>
+                    </div>
+                </Upload>
+                <div style={{width: 208, height: 0.5, backgroundColor: "#E7E7E7"}}/>
+                <Upload
+                    accept={"audio/mp3"}
+                    showUploadList={false}
+                    customRequest={this.uploadAudio}>
+                    <div className="oss-upload-section">
+                        <div className="oss-upload-section-inner">
+                            <div className="oss-upload-title-section">
+                                <div className="oss-upload-title">上传音频</div>
+                                <div className="oss-upload-icon">
+                                    <img src={Audio}/>
+                                </div>
+                            </div>
+                            <div className="oss-upload-section-script">
+                                <div className="oss-upload-section-text">支持 MP3 格式</div>
                             </div>
                         </div>
                     </div>

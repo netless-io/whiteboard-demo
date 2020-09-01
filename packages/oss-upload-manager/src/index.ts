@@ -9,6 +9,7 @@ import {
 } from "white-web-sdk";
 import {v4 as uuidv4} from "uuid";
 import {MultipartUploadResult} from "ali-oss";
+import TaskOperator from "./fetch-middleware";
 
 export type PPTDataType = {
     active: boolean,
@@ -49,8 +50,10 @@ export enum PPTProgressPhase {
     Stop,
 }
 
-export class UploadManager {
+// const sdkToken = "WHITEcGFydG5lcl9pZD0zZHlaZ1BwWUtwWVN2VDVmNGQ4UGI2M2djVGhncENIOXBBeTcmc2lnPTc1MTBkOWEwNzM1ZjA2MDYwMTMzODBkYjVlNTQ2NDA0OTAzOWU2NjE6YWRtaW5JZD0xNTgmcm9sZT1taW5pJmV4cGlyZV90aW1lPTE1OTAwNzM1NjEmYWs9M2R5WmdQcFlLcFlTdlQ1ZjRkOFBiNjNnY1RoZ3BDSDlwQXk3JmNyZWF0ZV90aW1lPTE1NTg1MTY2MDkmbm9uY2U9MTU1ODUxNjYwODYxNzAw";
 
+export class UploadManager {
+    private readonly task: TaskOperator = new TaskOperator();
     private readonly ossClient: any;
     private readonly room: Room;
 
@@ -65,75 +68,13 @@ export class UploadManager {
         return fileName.substring(index1, index2);
     }
 
-    private async createPPTTask(pptURL: string): Promise<string> {
-        const url = "https://shunt-api.netless.link/v5/services/conversion/tasks";
-        const response = await fetch(url, {
-            method: "post",
-            headers: {
-                "content-type": "application/json",
-                "Accept": "application/json",
-                "token": "WHITEcGFydG5lcl9pZD0zZHlaZ1BwWUtwWVN2VDVmNGQ4UGI2M2djVGhncENIOXBBeTcmc2lnPTc1MTBkOWEwNzM1ZjA2MDYwMTMzODBkYjVlNTQ2NDA0OTAzOWU2NjE6YWRtaW5JZD0xNTgmcm9sZT1taW5pJmV4cGlyZV90aW1lPTE1OTAwNzM1NjEmYWs9M2R5WmdQcFlLcFlTdlQ1ZjRkOFBiNjNnY1RoZ3BDSDlwQXk3JmNyZWF0ZV90aW1lPTE1NTg1MTY2MDkmbm9uY2U9MTU1ODUxNjYwODYxNzAw",
-            },
-            body: JSON.stringify({
-                resource: pptURL,
-                type: "dynamic",
-                preview: true,
-            }),
-        });
-        if (response.status >= 300) {
-            throw new Error(`failed to convert ${JSON.stringify(pptURL)} with status ${response.status}`);
-        }
-        const {uuid, type, status} = await response.json();
-        return uuid;
-    }
-
-    private async getCover(uuid: string, path: string): Promise<any> {
-        const url = `https://shunt-api.netless.link/v5/rooms/${uuid}/screenshots`;
-        const response = await fetch(url, {
-            method: "post",
-            headers: {
-                "content-type": "application/json",
-                "Accept": "application/json",
-                "token": "WHITEcGFydG5lcl9pZD0zZHlaZ1BwWUtwWVN2VDVmNGQ4UGI2M2djVGhncENIOXBBeTcmc2lnPTc1MTBkOWEwNzM1ZjA2MDYwMTMzODBkYjVlNTQ2NDA0OTAzOWU2NjE6YWRtaW5JZD0xNTgmcm9sZT1taW5pJmV4cGlyZV90aW1lPTE1OTAwNzM1NjEmYWs9M2R5WmdQcFlLcFlTdlQ1ZjRkOFBiNjNnY1RoZ3BDSDlwQXk3JmNyZWF0ZV90aW1lPTE1NTg1MTY2MDkmbm9uY2U9MTU1ODUxNjYwODYxNzAw",
-            },
-            body: JSON.stringify({
-                "path": path,
-                "width": 192,
-                "height": 144
-            }),
-        });
-        if (response.status >= 300) {
-            throw new Error(`failed to convert with status ${response.status}`);
-        }
-        return await response.json();
-    }
-
-    private async createTaskToken(uuid: string): Promise<string> {
-        const url = `https://shunt-api.netless.link/v5/tokens/tasks/${uuid}`;
-        const response = await fetch(url, {
-            method: "post",
-            headers: {
-                "content-type": "application/json",
-                "Accept": "application/json",
-                "token": "WHITEcGFydG5lcl9pZD0zZHlaZ1BwWUtwWVN2VDVmNGQ4UGI2M2djVGhncENIOXBBeTcmc2lnPTc1MTBkOWEwNzM1ZjA2MDYwMTMzODBkYjVlNTQ2NDA0OTAzOWU2NjE6YWRtaW5JZD0xNTgmcm9sZT1taW5pJmV4cGlyZV90aW1lPTE1OTAwNzM1NjEmYWs9M2R5WmdQcFlLcFlTdlQ1ZjRkOFBiNjNnY1RoZ3BDSDlwQXk3JmNyZWF0ZV90aW1lPTE1NTg1MTY2MDkmbm9uY2U9MTU1ODUxNjYwODYxNzAw",
-            },
-            body: JSON.stringify({
-                lifespan: 0,
-                role: "admin",
-            }),
-        });
-        if (response.status >= 300) {
-            throw new Error(`failed to convert error`);
-        }
-        return await response.json();
-    }
-
     public async convertFile(
         rawFile: File,
         pptConverter: LegacyPPTConverter,
         kind: PPTKind,
         folder: string,
         uuid: string,
+        sdkToken: string,
         onProgress?: PPTProgressListener,
     ): Promise<void> {
         const fileType = this.getFileType(rawFile.name);
@@ -150,12 +91,12 @@ export class UploadManager {
                     }
                 },
             });
-            await this.setUpScenes(res.scenes, uuid, PPTType.static);
+            await this.setUpScenes(res.scenes, uuid, PPTType.static, sdkToken);
         } else {
-            const taskUuid = await this.createPPTTask(pptURL);
-            const taskToken = await this.createTaskToken(taskUuid);
+            const taskInf = await this.task.createPPTTaskInf(pptURL, "dynamic", true, sdkToken);
+            const taskToken = await this.task.createTaskToken(taskInf.uuid, 0, "admin", sdkToken);
             const resp = createPPTTask({
-                uuid: taskUuid,
+                uuid: taskInf.uuid,
                 kind: PPTKind.Dynamic,
                 taskToken: taskToken,
                 callbacks: {
@@ -171,18 +112,18 @@ export class UploadManager {
                 },
             });
             const ppt = await resp.checkUtilGet();
-            await this.setUpScenes(ppt.scenes, uuid, PPTType.dynamic);
+            await this.setUpScenes(ppt.scenes, uuid, PPTType.dynamic, sdkToken);
         }
         if (onProgress) {
             onProgress(PPTProgressPhase.Stop, 1);
         }
     }
 
-    private setUpScenes = async (scenes: ReadonlyArray<SceneDefinition>, uuid: string, type: PPTType): Promise<void> => {
+    private setUpScenes = async (scenes: ReadonlyArray<SceneDefinition>, uuid: string, type: PPTType, sdkToken: string): Promise<void> => {
         const sceneId = `${uuidv4()}`;
         this.room.putScenes(`/${uuid}/${sceneId}`, scenes);
         this.room.setScenePath(`/${uuid}/${sceneId}/${scenes[0].name}`);
-        const res = await this.getCover(uuid, `/${uuid}/${sceneId}/${scenes[0].name}`);
+        const res = await this.task.getCover(uuid, `/${uuid}/${sceneId}/${scenes[0].name}`, 192, 144, sdkToken);
         const documentFile: PPTDataType = {
             active: true,
             id: sceneId,
@@ -330,6 +271,9 @@ export class UploadManager {
                     }
                 },
             });
+        if (onProgress) {
+            onProgress(PPTProgressPhase.Stop, 1);
+        }
         if (res.res.status === 200) {
             return this.getFile(path);
         } else {
