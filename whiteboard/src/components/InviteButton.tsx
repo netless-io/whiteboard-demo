@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Button, Input, message, Popover} from "antd";
 import "./InviteButton.less";
-import Clipboard from "react-clipboard.js";
+import copy from "copy-to-clipboard";
 import inviteActive from "../assets/image/invite-active.svg";
 import invite from "../assets/image/invite.svg";
 
@@ -34,7 +34,9 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
     }
 
     private handleCopy = (): void => {
+        const { uuid } = this.props;
         this.handleInvite();
+        copy(`房间号：${uuid}\n加入链接：https://demo.netless.link/whiteboard/${uuid}/`);
         message.success("已经将链接复制到剪贴板");
     }
 
@@ -59,15 +61,9 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
                     </div>
                 </div>
                 <div className="invite-button-box">
-                    <Clipboard
-                        data-clipboard-text={`房间号：${uuid}\n加入链接：${isLocal ? "http" : "https"}://${location.host}/whiteboard/${uuid}/`}
-                        component="div"
-                        onSuccess={() => this.handleCopy()}
-                    >
-                        <Button style={{width: 164, height: 40}} type={"primary"} size={"middle"}>
-                            复制
-                        </Button>
-                    </Clipboard>
+                    <Button onClick={this.handleCopy} style={{width: 164, height: 40}} type={"primary"} size={"middle"}>
+                        复制
+                    </Button>
                 </div>
             </div>
         );
