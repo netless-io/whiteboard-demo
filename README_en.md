@@ -96,6 +96,9 @@ The process of synchronizing rich media such as videos and pictures on the white
    // changed to
    <ToolBox room={room}/>
    ```
+7. Safety Precautions
+
+   After going online, this Config **It is recommended to maintain it in the backend**
 
 ### 4.3 Startup project
 
