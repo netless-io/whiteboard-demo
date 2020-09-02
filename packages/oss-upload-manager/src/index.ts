@@ -82,16 +82,25 @@ export class UploadManager {
         const pptURL = await this.addFile(path, rawFile, onProgress);
         let res: PPT;
         if (kind === PPTKind.Static) {
-            res = await pptConverter.convert({
-                url: pptURL,
-                kind: kind,
-                onProgressUpdated: progress => {
-                    if (onProgress) {
-                        onProgress(PPTProgressPhase.Converting, progress);
-                    }
-                },
-            });
-            await this.setUpScenes(res.scenes, uuid, PPTType.static, sdkToken);
+            try {
+                res = await pptConverter.convert({
+                    url: pptURL,
+                    kind: kind,
+                    onProgressUpdated: progress => {
+                        if (onProgress) {
+                            onProgress(PPTProgressPhase.Converting, progress);
+                        }
+                    },
+                });
+                await this.setUpScenes(res.scenes, uuid, PPTType.static, sdkToken);
+                if (onProgress) {
+                    onProgress(PPTProgressPhase.Stop, 1);
+                }
+            } catch (error) {
+                if (onProgress) {
+                    onProgress(PPTProgressPhase.Stop, 1);
+                }
+            }
         } else {
             const taskInf = await this.task.createPPTTaskInf(pptURL, "dynamic", true, sdkToken);
             const taskToken = await this.task.createTaskToken(taskInf.uuid, 0, "admin", sdkToken);
@@ -106,16 +115,19 @@ export class UploadManager {
                         }
                     },
                     onTaskFail: () => {
+                        if (onProgress) {
+                            onProgress(PPTProgressPhase.Stop, 1);
+                        }
                     },
                     onTaskSuccess: () => {
+                        if (onProgress) {
+                            onProgress(PPTProgressPhase.Stop, 1);
+                        }
                     },
                 },
             });
             const ppt = await resp.checkUtilGet();
             await this.setUpScenes(ppt.scenes, uuid, PPTType.dynamic, sdkToken);
-        }
-        if (onProgress) {
-            onProgress(PPTProgressPhase.Stop, 1);
         }
     }
 

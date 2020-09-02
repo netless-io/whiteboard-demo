@@ -67,15 +67,19 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         const uploadManager = new UploadManager(this.client, this.props.room);
         const whiteWebSdk = new WhiteWebSdk({appIdentifier: this.props.appIdentifier});
         const pptConverter = whiteWebSdk.pptConverter(roomToken);
-        await uploadManager.convertFile(
-            event.file,
-            pptConverter,
-            PPTKind.Static,
-            this.props.oss.folder,
-            uuid,
-            this.props.sdkToken,
-            this.progress,
-        );
+        try {
+            await uploadManager.convertFile(
+                event.file,
+                pptConverter,
+                PPTKind.Static,
+                this.props.oss.folder,
+                uuid,
+                this.props.sdkToken,
+                this.progress,
+            );
+        } catch (error) {
+            message.error(error);
+        }
     }
 
     private uploadDynamic = async (event: any): Promise<void> => {
@@ -83,15 +87,19 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         const uploadManager = new UploadManager(this.client, this.props.room);
         const whiteWebSdk = new WhiteWebSdk({appIdentifier: this.props.appIdentifier});
         const pptConverter = whiteWebSdk.pptConverter(roomToken);
-        await uploadManager.convertFile(
-            event.file,
-            pptConverter,
-            PPTKind.Dynamic,
-            this.props.oss.folder,
-            uuid,
-            this.props.sdkToken,
-            this.progress,
-        );
+        try {
+            await uploadManager.convertFile(
+                event.file,
+                pptConverter,
+                PPTKind.Dynamic,
+                this.props.oss.folder,
+                uuid,
+                this.props.sdkToken,
+                this.progress,
+            );
+        } catch (error) {
+            message.error(error);
+        }
     }
 
     private progress = (phase: PPTProgressPhase, percent: number): void => {
@@ -126,13 +134,17 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         const uploadFileArray: File[] = [];
         uploadFileArray.push(event.file);
         const uploadManager = new UploadManager(this.client, this.props.room);
-        if (this.props.whiteboardRef) {
-            const {clientWidth, clientHeight} = this.props.whiteboardRef;
-            await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
-        } else {
-            const clientWidth = window.innerWidth;
-            const clientHeight = window.innerHeight;
-            await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
+        try {
+            if (this.props.whiteboardRef) {
+                const {clientWidth, clientHeight} = this.props.whiteboardRef;
+                await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
+            } else {
+                const clientWidth = window.innerWidth;
+                const clientHeight = window.innerHeight;
+                await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
+            }
+        } catch (error) {
+            message.error(error);
         }
     }
 
