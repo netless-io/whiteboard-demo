@@ -23,7 +23,7 @@ import logo from "./assets/image/logo.svg";
 import {netlessToken, ossConfigObj} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
-import ExitButton from "./components/ExitButton";
+import ExitButtonRoom from "./components/ExitButtonRoom";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -153,24 +153,14 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         const {room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         const {uuid, userId} = this.props.match.params;
         if (room === undefined) {
-            return <LoadingPage
-                phase={phase}/>;
+            return <LoadingPage/>;
         }
         switch (phase) {
+            case (RoomPhase.Connecting || RoomPhase.Disconnecting || RoomPhase.Reconnecting || RoomPhase.Reconnecting): {
+                return <LoadingPage/>;
+            }
             case RoomPhase.Disconnected: {
                 return <PageError/>;
-            }
-            case RoomPhase.Connecting: {
-                return <LoadingPage
-                    phase={phase}/>;
-            }
-            case RoomPhase.Disconnecting: {
-                return <LoadingPage
-                    phase={phase}/>;
-            }
-            case RoomPhase.Reconnecting: {
-                return <LoadingPage
-                    phase={phase}/>;
             }
             default: {
                 return (
@@ -210,7 +200,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                     </div>
                                 </Tooltip>
                                 <InviteButton uuid={uuid}/>
-                                <ExitButton room={room} userId={userId}/>
+                                <ExitButtonRoom room={room} userId={userId}/>
                             </div>
                         </div>
                         <div className="page-controller-box">
