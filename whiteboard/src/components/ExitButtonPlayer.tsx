@@ -2,8 +2,8 @@ import * as React from "react";
 import {Button, Modal, Tooltip} from "antd";
 import {RouteComponentProps} from "react-router";
 import {withRouter} from "react-router-dom";
-import {Player, PlayerPhase} from "white-web-sdk";
-import "./ExitButtonRoom.less";
+import {Player} from "white-web-sdk";
+import "./ExitButton.less";
 import exit from "../assets/image/exit.svg";
 import replayScreen from "../assets/image/replay-screen.png";
 
@@ -26,12 +26,11 @@ class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps, ExitButton
     }
 
     private handleReplay = async (): Promise<void> => {
-        const {uuid, userId, player} = this.props;
+        const {uuid, userId} = this.props;
         this.props.history.push(`/whiteboard/${uuid}/${userId}/`);
     }
 
     private handleGoBack = async (): Promise<void> => {
-        const {player} = this.props;
         this.props.history.push("/");
     }
 

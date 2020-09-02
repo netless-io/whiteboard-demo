@@ -3,7 +3,7 @@ import {Button, Modal, Tooltip} from "antd";
 import {RouteComponentProps} from "react-router";
 import { withRouter } from "react-router-dom";
 import {Room} from "white-web-sdk";
-import "./ExitButtonRoom.less";
+import "./ExitButton.less";
 import exit from "../assets/image/exit.svg";
 import replayScreen from "../assets/image/replay-screen.png";
 
