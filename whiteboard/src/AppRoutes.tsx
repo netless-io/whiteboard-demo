@@ -25,7 +25,7 @@ export class AppRoutes extends React.Component<{}, {}> {
                     <Route path="/whiteboard/:uuid/:userId/" component={WhiteboardPage}/>
                     <Route path="/whiteboard/:uuid?/" component={WhiteboardCreatorPage}/>
                     <Route path="/join/" component={JoinPage}/>
-                    <Route path="/name/" component={AddNamePage}/>
+                    <Route path="/name/:uuid?/" component={AddNamePage}/>
                     <Route path="/" component={IndexPage}/>
                 </Switch>
             </BrowserRouter>

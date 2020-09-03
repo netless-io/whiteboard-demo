@@ -7,24 +7,30 @@ import {Button, Input} from "antd";
 
 export type JoinPageStates = {
     name: string;
+    uuid: string;
 };
 
-export default class AddNamePage extends React.Component<RouteComponentProps<{}>, JoinPageStates> {
-    public constructor(props: RouteComponentProps<{}>) {
+export type AddNamePageProps = RouteComponentProps<{uuid?: string}>;
+
+export default class AddNamePage extends React.Component<AddNamePageProps, JoinPageStates> {
+    public constructor(props: AddNamePageProps) {
         super(props);
+        const {uuid} = this.props.match.params;
         this.state = {
             name: "",
+            uuid: uuid ? uuid : "",
         };
     }
 
     private handleJoin = (): void => {
         const {name} = this.state;
+        const {uuid} = this.props.match.params;
         localStorage.setItem("userName", name);
-        this.props.history.push(`/whiteboard/`);
+        this.props.history.push(`/whiteboard/${uuid}/`);
     }
 
     public render(): React.ReactNode {
-        const {name} = this.state;
+        const {name, uuid} = this.state;
         return (
             <div className="page-index-box">
                 <div className="page-index-mid-box">
@@ -41,6 +47,11 @@ export default class AddNamePage extends React.Component<RouteComponentProps<{}>
                                onChange={evt => this.setState({name: evt.target.value})}
                                className="page-index-input-box"
                                size={"large"}/>
+                        {uuid && <Input
+                            value={uuid}
+                            disabled={true}
+                            className="page-index-input-box"
+                            size={"large"}/>}
                         <div className="page-index-btn-box">
                             <Link to={"/"}>
                                 <Button className="page-index-btn"
@@ -53,7 +64,7 @@ export default class AddNamePage extends React.Component<RouteComponentProps<{}>
                                     size={"large"}
                                     onClick={this.handleJoin}
                                     type={"primary"}>
-                                创建房间
+                                {uuid ? "加入房间" : "创建房间"}
                             </Button>
                         </div>
                     </div>
