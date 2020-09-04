@@ -166,8 +166,8 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             const url = await this.getUrl(event);
             if (url) {
                 this.props.room.insertPlugin("video", {
-                    originX: 0,
-                    originY: 0,
+                    originX: -240,
+                    originY: -135,
                     width: 480,
                     height: 270,
                     attributes: {
@@ -185,8 +185,8 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             const url = await this.getUrl(event);
             if (url) {
                 this.props.room.insertPlugin("audio", {
-                    originX: 0,
-                    originY: 0,
+                    originX: -240,
+                    originY: -43,
                     width: 480,
                     height: 86,
                     attributes: {
