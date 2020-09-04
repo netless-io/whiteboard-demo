@@ -5,6 +5,7 @@ import {RouteComponentProps} from "react-router";
 import PageError from "./PageError";
 import {netlessWhiteboardApi, RoomType} from "./apiMiddleware";
 import LoadingPage from "./LoadingPage";
+import { Identity } from "./IndexPage";
 
 export type WhiteboardCreatorPageState = {
     uuid?: string;
@@ -66,7 +67,7 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
                 return <Redirect to={`/name/`}/>;
             }
         } else if (uuid && userId) {
-            return <Redirect to={`/whiteboard/${uuid}/${userId}/`}/>;
+            return <Redirect to={`/whiteboard/${Identity.teacher}/${uuid}/${userId}/`} />;
         }
         return <LoadingPage/>;
     }

@@ -6,6 +6,7 @@ import {Room} from "white-web-sdk";
 import "./ExitButton.less";
 import exit from "../assets/image/exit.svg";
 import replayScreen from "../assets/image/replay-screen.png";
+import { Identity } from "../IndexPage";
 
 export type ExitButtonRoomStates = {
     exitViewDisable: boolean;
@@ -14,6 +15,7 @@ export type ExitButtonRoomStates = {
 export type ExitButtonRoomProps = {
     room: Room;
     userId: string;
+    identity: Identity;
 } & RouteComponentProps<{}>;
 
 class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoomStates> {
@@ -25,10 +27,10 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
     }
 
     private handleReplay = async (): Promise<void> => {
-        const {room, userId} = this.props;
+        const { room, userId, identity } = this.props;
         if (room) {
             await room.disconnect();
-            this.props.history.push(`/replay/${room.uuid}/${userId}/`);
+            this.props.history.push(`/replay/${identity}/${room.uuid}/${userId}/`);
         }
     }
 

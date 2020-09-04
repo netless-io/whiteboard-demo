@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import "./AddNamePage.less";
 import logo from "./assets/image/logo.svg";
 import {Button, Input} from "antd";
+import { Identity } from "./IndexPage";
 
 export type JoinPageStates = {
     name: string;
@@ -27,9 +28,10 @@ export default class AddNamePage extends React.Component<AddNamePageProps, JoinP
         const {uuid} = this.props.match.params;
         localStorage.setItem("userName", name);
         if (uuid) {
-            this.props.history.push(`/whiteboard/${uuid}/`);
+            this.props.history.push(`/whiteboard/${Identity.teacher}/${uuid}/`);
+
         } else {
-            this.props.history.push(`/whiteboard/`);
+            this.props.history.push(`/whiteboard/${Identity.teacher}/`);
         }
     }
 

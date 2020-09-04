@@ -4,6 +4,8 @@ import "./InviteButton.less";
 import copy from "copy-to-clipboard";
 import inviteActive from "../assets/image/invite-active.svg";
 import invite from "../assets/image/invite.svg";
+import {CopyOutlined} from "@ant-design/icons/lib";
+import {Identity} from "../IndexPage";
 
 export type InviteButtonStates = {
     inviteDisable: boolean;
@@ -36,8 +38,9 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
     private handleCopy = (): void => {
         const { uuid } = this.props;
         this.handleInvite();
-        copy(`房间号：${uuid}\n加入链接：https://demo.netless.link/whiteboard/${uuid}/`);
-        message.success("已经将链接复制到剪贴板");
+        copy(`房间号：${uuid}\n加入链接：https://demo.netless.link/whiteboard/${Identity.student}/${uuid}/`);
+        message.success("已经将信息复制到剪贴板");
+
     }
 
     private renderInviteContent = (): React.ReactNode => {
@@ -50,14 +53,36 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
                 </div>
                 <div style={{width: 400, height: 0.5, backgroundColor: "#E7E7E7"}}/>
                 <div className="invite-text-box">
-                    <div style={{marginBottom: 12}}>
+                    <div className="invite-url-box" style={{marginBottom: 12}}>
                         <span style={{width: 96}}>房间号：</span>
-                        <span className="invite-room-box">{uuid}</span>
+                        <Input
+                            size={"middle"}
+                            value={uuid}
+                            addonAfter={
+                                <CopyOutlined
+                                    onClick={() => {
+                                        copy(uuid);
+                                        message.success("已经将 uuid 黏贴到剪贴板");
+                                    }}
+                                />
+                            }
+                        />
+
                     </div>
                     <div className="invite-url-box">
                         <span style={{width: 96}}>加入链接：</span>
                         <Input size={"middle"}
-                               value={`${isLocal ? "http" : "https"}://${location.host}/whiteboard/${uuid}/`}/>
+                               value={`${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.student}/${uuid}/`}
+                               addonAfter={
+                                   <CopyOutlined
+                                       onClick={() => {
+                                           copy(
+                                               `${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.student}/${uuid}/`,
+                                           );
+                                           message.success("已经将链接复制到剪贴板");
+                                       }}
+                                   />
+                               }/>
                     </div>
                 </div>
                 <div className="invite-button-box">

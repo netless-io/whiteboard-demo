@@ -11,7 +11,10 @@ export type IndexPageStates = {
     name: string;
     visible: boolean;
 };
-
+export enum Identity {
+    teacher = "teacher",
+    student = "student",
+}
 class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates> {
     public constructor(props: RouteComponentProps<{}>) {
         super(props);
@@ -24,16 +27,22 @@ class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates
 
     private handleCreate = (): void => {
         if (this.state.name) {
-            this.props.history.push("/whiteboard/");
+            this.props.history.push(`/whiteboard/${Identity.teacher}`);
         } else {
             this.props.history.push("/name/");
         }
     }
 
-    private updateName = (): void => {
-        localStorage.setItem("userName", this.state.name);
-        this.setState({visible: false});
-    }
+    private updateName = (isEmpty?: boolean): void => {
+        if (isEmpty) {
+            localStorage.removeItem("userName");
+            this.setState({ visible: false });
+        } else {
+            localStorage.setItem("userName", this.state.name);
+            this.setState({ visible: false });
+        }
+    };
+
     public render(): React.ReactNode {
             return (
                 <div className="page-index-box">
@@ -42,10 +51,24 @@ class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates
                             <img src={logo}/>
                             <Popover visible={this.state.visible} placement={"bottom"} trigger="click" content={
                                 <div className="page-index-name-box" >
-                                    <Input maxLength={8} onChange={e => this.setState({name: e.target.value})} value={this.state.name} style={{width: 120}} size={"small"}/>
-                                    <Button onClick={this.updateName} style={{width: 120, marginTop: 12}} type={"primary"} size={"small"}>
+                                    <Input maxLength={8}
+                                           onChange={e => this.setState({name: e.target.value})}
+                                           value={this.state.name} style={{width: 120}} size={"small"}/>
+                                    <Button
+                                        onClick={() => this.updateName()}
+                                        style={{width: 120, marginTop: 12}}
+                                        type={"primary"}
+                                        size={"small"}>
                                         更新
                                     </Button>
+                                    <Button
+                                        onClick={() => this.updateName(true)}
+                                        style={{ width: 120, marginTop: 12 }}
+                                        size={"small"}
+                                    >
+                                        清空
+                                    </Button>
+
                                 </div>
                             } title={"编辑昵称"}>
                                 <span onClick={() => this.setState({visible: true})}>
