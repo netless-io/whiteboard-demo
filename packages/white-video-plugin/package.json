@@ -15,7 +15,8 @@
   "types": "dist/index.d.ts",
   "author": "netless",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+  },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0",

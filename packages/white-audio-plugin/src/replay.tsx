@@ -134,7 +134,7 @@ export default class WhiteAudioPluginReplay extends React.Component<WhiteAudioPl
             return (
                 <div className="plugin-audio-box-nav">
                     <div>
-                        <img style={{ width: 20, marginLeft: 8 }} src={audio_plugin} />
+                        <img style={{ width: 20, marginLeft: 8 }} src={audio_plugin}  alt={"audio_plugin"}/>
                         <span>
                             Audio Player
                         </span>
@@ -151,7 +151,7 @@ export default class WhiteAudioPluginReplay extends React.Component<WhiteAudioPl
                 {this.renderNavigation()}
                 <div className="plugin-audio-box-body">
                     <div className="white-plugin-audio-box">
-                        <video
+                        <audio
                             webkit-playsinline="true"
                             playsInline
                             className="white-plugin-audio"

@@ -131,7 +131,7 @@ export default class WhiteVideoPluginReplay extends React.Component<WhiteVideoPl
             return (
                 <div className="plugin-video-box-nav">
                     <div>
-                        <img style={{ width: 20, marginLeft: 8 }} src={video_plugin} />
+                        <img style={{ width: 20, marginLeft: 8 }} src={video_plugin} alt={"video_plugin"}/>
                         <span>
                             Video Player
                         </span>

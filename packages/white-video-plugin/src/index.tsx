@@ -65,9 +65,7 @@ export const videoPlugin: Plugin<PluginContext, WhiteVideoPluginAttributes> = Ob
     },
     hitTest: (plugin: PluginInstance<PluginContext, WhiteVideoPluginAttributes>): boolean => {
         const memberState = (plugin as any).component.context.getMemberState();
-        if (memberState && memberState.currentApplianceName === "eraser") {
-            return false;
-        }
-        return true;
+        return !(memberState && memberState.currentApplianceName === "eraser");
+
     },
 });

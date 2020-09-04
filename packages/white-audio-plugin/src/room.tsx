@@ -64,28 +64,28 @@ export default class WhiteAudioPluginRoom extends React.Component<WhiteAudioPlug
         };
     }
 
-    public componentDidMount(): void {
+    public async componentDidMount(): Promise<void> {
         this.syncNode = new ProgressSyncNode(this.player.current!);
-        this.handleStartCondition()
+        await this.handleStartCondition()
     }
 
-    private handleStartCondition = (): void => {
+    private handleStartCondition = async (): Promise<void> => {
         const {plugin} = this.props;
         this.setMyIdentityRoom();
-        this.handleNativePlayerState(plugin.attributes.play);
+        await this.handleNativePlayerState(plugin.attributes.play);
         if (this.player.current) {
             this.handleFirstSeek();
             this.player.current.currentTime = plugin.attributes.currentTime;
-            this.player.current.addEventListener("play", (event: any) => {
+            this.player.current.addEventListener("play", () => {
                 this.handleRemotePlayState(true);
             });
-            this.player.current.addEventListener("pause", (event: any) => {
+            this.player.current.addEventListener("pause", () => {
                 this.handleRemotePlayState(false);
                 if (this.player.current) {
                     this.player.current.currentTime = plugin.attributes.currentTime;
                 }
             });
-            this.player.current.addEventListener("seeked", (event: any) => {
+            this.player.current.addEventListener("seeked", () => {
                 if (this.player.current) {
                     const currentTime = plugin.attributes.currentTime;
                     this.handleRemoteSeekData(currentTime);
@@ -186,7 +186,7 @@ export default class WhiteAudioPluginRoom extends React.Component<WhiteAudioPlug
             return plugin.attributes.play;
         }, async play => {
             if (!this.isHost()) {
-                this.handleNativePlayerState(play);
+                await this.handleNativePlayerState(play);
             }
         });
     }
@@ -287,7 +287,7 @@ export default class WhiteAudioPluginRoom extends React.Component<WhiteAudioPlug
                             }} onTouchStart={() => {
                                 this.setState({selfMute: false});
                             }} style={{pointerEvents: "auto"}} className="media-mute-box-inner">
-                                <img src={mute_icon}/>
+                                <img src={mute_icon} alt={"mute_icon"}/>
                                 <span>unmute</span>
                             </div>
                         </div>
@@ -313,7 +313,7 @@ export default class WhiteAudioPluginRoom extends React.Component<WhiteAudioPlug
                         className="plugin-audio-box-delete"
                         onClick={this.handleRemove}
                     >
-                        <img src={delete_icon}/>
+                        <img src={delete_icon} alt={"delete_icon"}/>
                     </div>
                 );
             } else {
@@ -332,7 +332,7 @@ export default class WhiteAudioPluginRoom extends React.Component<WhiteAudioPlug
             return (
                 <div className="plugin-audio-box-nav">
                     <div>
-                        <img style={{width: 20, marginLeft: 8}} src={audio_plugin}/>
+                        <img style={{width: 20, marginLeft: 8}} src={audio_plugin} alt={"audio_plugin"}/>
                         <span>
                             Audio Player
                         </span>

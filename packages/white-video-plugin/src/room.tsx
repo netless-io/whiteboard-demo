@@ -60,28 +60,28 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
         };
     }
 
-    public componentDidMount(): void {
+    public async componentDidMount(): Promise<void> {
         this.syncNode = new ProgressSyncNode(this.player.current!);
-        this.handleStartCondition();
+        await this.handleStartCondition();
     }
 
-    private handleStartCondition = (): void => {
+    private handleStartCondition = async (): Promise<void> => {
         const { plugin } = this.props;
         this.setMyIdentityRoom();
-        this.handleNativePlayerState(plugin.attributes.play);
+        await this.handleNativePlayerState(plugin.attributes.play);
         if (this.player.current) {
             this.handleFirstSeek();
-            this.player.current.addEventListener("play", (event: any) => {
+            this.player.current.addEventListener("play", () => {
                 this.handleRemotePlayState(true);
             });
-            this.player.current.addEventListener("pause", (event: any) => {
+            this.player.current.addEventListener("pause", () => {
                 this.handleRemotePlayState(false);
                 // TODO 暂停的时候 seek 对齐
                 if (this.player.current) {
                     this.player.current.currentTime = plugin.attributes.currentTime;
                 }
             });
-            this.player.current.addEventListener("seeked", (event: any) => {
+            this.player.current.addEventListener("seeked", () => {
                 if (this.player.current) {
                     const currentTime = plugin.attributes.currentTime;
                     this.handleRemoteSeekData(currentTime);
@@ -209,8 +209,8 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
         const { plugin } = this.props;
         return reaction(() => {
             return plugin.attributes.seek;
-        }, seek => {
-            this.handleSeekReaction(seek, plugin.attributes.seekTime);
+        }, async seek => {
+            await this.handleSeekReaction(seek, plugin.attributes.seekTime);
         });
     }
 
@@ -218,8 +218,8 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
         const { plugin } = this.props;
         return reaction(() => {
             return plugin.attributes.seekTime;
-        }, seekTime => {
-            this.handleSeekReaction(plugin.attributes.seek, seekTime);
+        }, async seekTime => {
+            await this.handleSeekReaction(plugin.attributes.seek, seekTime);
         });
     }
 
@@ -296,7 +296,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
                             }} onTouchStart={() => {
                                 this.setState({ selfMute: false });
                             }} style={{ pointerEvents: "auto" }} className="media-mute-box-inner">
-                                <img src={mute_icon} />
+                                <img src={mute_icon} alt={"mute_icon"} />
                                 <span>unmute</span>
                             </div>
                         </div>
@@ -329,7 +329,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
                         className="plugin-audio-box-delete"
                         onClick={this.handleRemove}
                     >
-                        <img src={delete_icon} />
+                        <img src={delete_icon}  alt={"delete"}/>
                     </div>
                 );
             } else {
@@ -348,7 +348,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
             return (
                 <div className="plugin-video-box-nav">
                     <div>
-                        <img style={{ width: 20, marginLeft: 8 }} src={video_plugin} />
+                        <img style={{ width: 20, marginLeft: 8 }} src={video_plugin}  alt={"video_plugin"}/>
                         <span>
                             Video Player
                         </span>
@@ -359,10 +359,43 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
         }
     }
 
+    private handleOnEnd = async (): Promise<void> => {
+        const { plugin } = this.props;
+        if (this.player.current) {
+            if (this.selfUserInf) {
+                if (this.selfUserInf.identity === IdentityType.host) {
+                    plugin.putAttributes({
+                        seek: 0,
+                        seekTime: undefined,
+                        currentTime: 0,
+                    });
+                    await timeout(500);
+                    this.player.current.load();
+                } else {
+                    await timeout(1000);
+                    this.player.current.load();
+                }
+            } else {
+                await timeout(1000);
+                this.player.current.load();
+            }
+        }
+        this.setState({isEnd: true});
+    }
+
+    private handleOnLoadedMetadataCapture = async (): Promise<void> => {
+        const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        const {isEnd} = this.state;
+        if (iOS) {
+            await timeout(300);
+            this.handleFirstSeek(isEnd);
+        }
+    }
+
 
     public render(): React.ReactNode {
         const { size, plugin, scale } = this.props;
-        const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        const {mute, selfMute} = this.state;
         const newScale = scale === 0 ? 1 : scale;
         return (
             <div className="plugin-video-box" style={{ width: (size.width / newScale), height: (size.height / newScale), transform: `scale(${newScale})`}}>
@@ -376,41 +409,15 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
                                className="white-plugin-video"
                                src={(plugin.attributes as any).pluginVideoUrl}
                                ref={this.player}
-                               muted={this.state.mute ? this.state.mute : this.state.selfMute}
+                               muted={mute ? mute : selfMute}
                                style={{
                                    width: "100%",
                                    height: "100%",
                                    pointerEvents: this.detectVideoClickEnable(),
                                    outline: "none",
                                }}
-                               onLoadedMetadataCapture={ async () => {
-                                   if (iOS) {
-                                       await timeout(300);
-                                       this.handleFirstSeek(this.state.isEnd);
-                                   }
-                               }}
-                               onEnded={ async () => {
-                                   if (this.player.current) {
-                                       if (this.selfUserInf) {
-                                           if (this.selfUserInf.identity === IdentityType.host) {
-                                               plugin.putAttributes({
-                                                   seek: 0,
-                                                   seekTime: undefined,
-                                                   currentTime: 0,
-                                               });
-                                               await timeout(500);
-                                               this.player.current.load();
-                                           } else {
-                                               await timeout(1000);
-                                               this.player.current.load();
-                                           }
-                                       } else {
-                                           await timeout(1000);
-                                           this.player.current.load();
-                                       }
-                                   }
-                                   this.setState({isEnd: true});
-                               }}
+                               onLoadedMetadataCapture={this.handleOnLoadedMetadataCapture}
+                               onEnded={this.handleOnEnd}
                                controls
                                controlsList={"nodownload nofullscreen"}
                                onTimeUpdate={this.timeUpdate}
