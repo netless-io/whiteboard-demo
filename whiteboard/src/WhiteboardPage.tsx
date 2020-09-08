@@ -73,7 +73,6 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
 
     private startJoinRoom = async (): Promise<void> => {
         const {uuid, userId, identity} = this.props.match.params;
-        const cursorAdapter = new CursorTool();
         try {
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
@@ -85,6 +84,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     plugins: plugins,
                 });
                 const cursorName = localStorage.getItem("userName");
+                const cursorAdapter = new CursorTool();
                 const room = await whiteWebSdk.joinRoom({
                         uuid: uuid,
                         roomToken: roomToken,

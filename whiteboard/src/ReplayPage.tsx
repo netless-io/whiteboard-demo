@@ -108,6 +108,7 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                 },
             });
         (window as any).player = player;
+        cursorAdapter.setPlayer(player);
         this.setState({
             player: player,
         });
