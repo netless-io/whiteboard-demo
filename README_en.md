@@ -108,7 +108,7 @@ cd whiteboard
 # Load dependencies
 yarn
 # Startup project
-yarn start
+yarn dev
 # Packaged project
 yarn build
 ```
@@ -220,13 +220,14 @@ yarn
 lerna bootstrap
 
 # Start hot update of all scripts
-lerna run --parallel start
+lerna run --parallel dev
 
 # Yarn build command to build all libraries
 lerna run build
 
 # Run only the yarn dev script of toolbox
 lerna run --scope `lib-name` dev
+# lerna run --parallel  --scope @netless/toolbox --scope whiteboard dev
 
 # Run run dev scripts except tool-box
 lerna run --ignore @netless/tool-box dev

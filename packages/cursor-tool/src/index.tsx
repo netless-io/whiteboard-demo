@@ -38,7 +38,7 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                             <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-pencil-inner">
                                 <span style={{backgroundColor: color}}>{cursorName}</span>
                             </div>
-                            <img className="cursor-pencil-image" src={pencilCursor}/>
+                            <img className="cursor-pencil-image" src={pencilCursor} alt={"pencilCursor"}/>
                         </div>
                     </div>
                 );
@@ -47,7 +47,7 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                 return (
                     <div className="cursor-box">
                         <div className="cursor-selector-mid">
-                            <img className="cursor-selector-image" src={selectorCursor}/>
+                            <img className="cursor-selector-image" src={selectorCursor} alt={"selectorCursor"}/>
                             <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-selector-inner">
                                 <span style={{backgroundColor: color}}>{cursorName}</span>
                             </div>
@@ -62,7 +62,7 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                             <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-pencil-inner">
                                 <span style={{backgroundColor: color}}>{cursorName}</span>
                             </div>
-                            <img className="cursor-pencil-image" src={eraserCursor}/>
+                            <img className="cursor-pencil-image" src={eraserCursor} alt={"selectorCursor"}/>
                         </div>
                     </div>
                 );
@@ -74,7 +74,7 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                             <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-shape-inner">
                                 <span style={{backgroundColor: color}}>{cursorName}</span>
                             </div>
-                            <img src={textCursor}/>
+                            <img src={textCursor} alt={"selectorCursor"}/>
                         </div>
                     </div>
                 );
@@ -86,7 +86,7 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                             <div style={{opacity: cursorName === undefined ? 0 : 1}} className="cursor-shape-inner">
                                 <span style={{backgroundColor: color}}>{cursorName}</span>
                             </div>
-                            <img src={shapeCursor}/>
+                            <img src={shapeCursor} alt={"shapeCursor"}/>
                         </div>
                     </div>
                 );
@@ -98,6 +98,7 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
 export class CursorTool implements CursorAdapter {
     private readonly cursors: {[memberId: number]: Cursor} = {};
     private roomMembers: ReadonlyArray<RoomMember> = [];
+    private isFirstFrameReady: boolean = false;
     public createCursor(): CursorDescription {
         return {x: 64, y: 64, width: 128, height: 128};
     }
@@ -126,13 +127,16 @@ export class CursorTool implements CursorAdapter {
         });
     }
     public setPlayer(player: Player): void {
-        this.setColorAndAppliance(player.state.roomMembers);
+        if (this.isFirstFrameReady) {
+            this.setColorAndAppliance(player.state.roomMembers);
+        }
         player.callbacks.on("onPlayerStateChanged", (modifyState: Partial<RoomState>): void => {
             if (modifyState.roomMembers) {
                 this.setColorAndAppliance(modifyState.roomMembers);
             }
         });
         player.callbacks.on("onLoadFirstFrame", (): void => {
+            this.isFirstFrameReady = true;
             this.setColorAndAppliance(player.state.roomMembers);
         })
     }

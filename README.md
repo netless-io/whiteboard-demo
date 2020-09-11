@@ -97,7 +97,7 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
    <ToolBox room={room}/>
    ```
 7. 安全事项
-    
+   
     上线后此配置 **建议维护在后端**
 
 ### 4.3 启动项目
@@ -108,7 +108,7 @@ cd whiteboard
 # 加载依赖
 yarn
 # 启动项目
-yarn start
+yarn dev
 # 打包项目
 yarn build
 ```
@@ -220,13 +220,14 @@ yarn
 lerna bootstrap
 
 # 启动所有脚本的热更新
-lerna run --parallel start
+lerna run --parallel dev
 
 # 构建所有库的 yarn build 命令
 lerna run build
 
 # 只运行 toolbox 的 yarn dev 脚本
 lerna run --scope `lib-name` dev
+# lerna run --parallel  --scope @netless/toolbox --scope whiteboard dev
 
 # 运行除 tool-box 外的 run dev 脚本
 lerna run --ignore @netless/tool-box dev
