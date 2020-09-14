@@ -27,7 +27,7 @@
         "react-dom": "^16.13.1",
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
-        "white-web-sdk": "^2.9.16"
+        "white-web-sdk": "^2.9.17"
     },
     "devDependencies": {
         "@types/react": "^16.9.43",
