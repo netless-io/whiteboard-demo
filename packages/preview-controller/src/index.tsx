@@ -44,13 +44,12 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
         room.setSceneIndex(newActiveIndex);
     }
     private pathName = (path: string): string => {
-        const reg = /\/([^\/]*)\//g;
-        reg.exec(path);
-        if (RegExp.$1 === "aria") {
-            return "";
-        } else {
-            return RegExp.$1;
+        const cells = path.split("/");
+        const popCell = cells.pop();
+        if (popCell === "") {
+            cells.pop();
         }
+        return cells.join("/");
     }
 
     public componentDidMount(): void {
@@ -103,7 +102,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
         const newSceneIndex = activeIndex + 1;
         const scenePath = roomState.sceneState.scenePath;
         const pathName = this.pathName(scenePath);
-        room.putScenes(`/${pathName}`, [{}], newSceneIndex);
+        room.putScenes(pathName, [{}], newSceneIndex);
         room.setSceneIndex(newSceneIndex);
     }
 
