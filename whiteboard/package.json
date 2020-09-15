@@ -20,6 +20,7 @@
         "@netless/white-audio-plugin": "^1.2.16",
         "@netless/white-video-plugin": "^1.2.15",
         "@netless/zoom-controller": "^0.0.3",
+        "@netless/oss-drop-upload": "^0.0.1",
         "antd": "^4.4.3",
         "copy-to-clipboard": "^3.3.1",
         "polly-js": "^1.6.7",

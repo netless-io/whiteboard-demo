@@ -25,6 +25,7 @@ import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
 import {Identity} from "./IndexPage";
+import OssDropUpload from "@netless/oss-drop-upload";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -110,7 +111,6 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     {
                         onPhaseChanged: phase => {
                             this.setState({phase: phase});
-                            console.log(`room ${"uuid"} changed: ${phase}`);
                         },
                         onRoomStateChanged: (modifyState: Partial<RoomState>): void => {
                             if (modifyState.broadcastState) {
@@ -180,7 +180,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 return (
                     <div className="realtime-box">
                         <div className="logo-box">
-                            <img src={logo}/>
+                            <img src={logo} alt={"logo"}/>
                         </div>
                         <div className="tool-box-out">
                             <ToolBox room={room} customerComponent={
@@ -204,13 +204,13 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                 <Tooltip placement="bottom" title={"Vision control"}>
                                     <div className="page-controller-cell"
                                          onClick={()=> this.handleRoomController(room)}>
-                                        <img src={this.state.mode === ViewMode.Broadcaster ? followActive : follow}/>
+                                        <img src={this.state.mode === ViewMode.Broadcaster ? followActive : follow} alt={"follow"}/>
                                     </div>
                                 </Tooltip>
                                 <Tooltip placement="bottom" title={"Docs center"}>
                                     <div className="page-controller-cell"
                                          onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
-                                        <img src={folder}/>
+                                        <img src={folder} alt={"folder"}/>
                                     </div>
                                 </Tooltip>
                                 <InviteButton uuid={uuid}/>
@@ -221,7 +221,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             <div className="page-controller-mid-box">
                                 <Tooltip placement="top" title={"Page preview"}>
                                     <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
-                                        <img src={pages}/>
+                                        <img src={pages} alt={"pages"}/>
                                     </div>
                                 </Tooltip>
                                 <PageController room={room}/>
@@ -232,7 +232,13 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         <DocsCenter handleDocCenterState={this.handleDocCenterState}
                                     isFileOpen={isFileOpen}
                                     room={room}/>
-                        <div ref={this.handleBindRoom} className="whiteboard-box"/>
+                        <OssDropUpload
+                            room={room}
+                            oss={ossConfigObj}>
+                            <div
+                                ref={this.handleBindRoom}
+                                className="whiteboard-box"/>
+                        </OssDropUpload>
                     </div>
                 );
             }
