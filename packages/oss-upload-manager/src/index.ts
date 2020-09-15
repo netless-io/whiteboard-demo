@@ -10,6 +10,7 @@ import {
 import {v4 as uuidv4} from "uuid";
 import {MultipartUploadResult} from "ali-oss";
 import TaskOperator from "./fetch-middleware";
+import * as default_cover from "./image/default_cover.svg";
 
 export type PPTDataType = {
     active: boolean,
@@ -17,6 +18,7 @@ export type PPTDataType = {
     id: string,
     data: any,
     cover?: string,
+    zipUrl?: string,
 };
 
 export enum PPTType {
@@ -50,7 +52,6 @@ export enum PPTProgressPhase {
     Stop,
 }
 
-// const sdkToken = "WHITEcGFydG5lcl9pZD0zZHlaZ1BwWUtwWVN2VDVmNGQ4UGI2M2djVGhncENIOXBBeTcmc2lnPTc1MTBkOWEwNzM1ZjA2MDYwMTMzODBkYjVlNTQ2NDA0OTAzOWU2NjE6YWRtaW5JZD0xNTgmcm9sZT1taW5pJmV4cGlyZV90aW1lPTE1OTAwNzM1NjEmYWs9M2R5WmdQcFlLcFlTdlQ1ZjRkOFBiNjNnY1RoZ3BDSDlwQXk3JmNyZWF0ZV90aW1lPTE1NTg1MTY2MDkmbm9uY2U9MTU1ODUxNjYwODYxNzAw";
 
 export class UploadManager {
     private readonly task: TaskOperator = new TaskOperator();
@@ -127,21 +128,34 @@ export class UploadManager {
                 },
             });
             const ppt = await resp.checkUtilGet();
-            await this.setUpScenes(ppt.scenes, uuid, PPTType.dynamic, sdkToken);
+            await this.setUpScenes(ppt.scenes, uuid, PPTType.dynamic, sdkToken, taskInf.uuid);
         }
     }
 
-    private setUpScenes = async (scenes: ReadonlyArray<SceneDefinition>, uuid: string, type: PPTType, sdkToken: string): Promise<void> => {
+    private setUpScenes = async (
+        scenes: ReadonlyArray<SceneDefinition>,
+        uuid: string,
+        type: PPTType,
+        sdkToken: string,
+        taskUuid?: string,
+    ): Promise<void> => {
         const sceneId = `${uuidv4()}`;
         this.room.putScenes(`/${uuid}/${sceneId}`, scenes);
         this.room.setScenePath(`/${uuid}/${sceneId}/${scenes[0].name}`);
-        const res = await this.task.getCover(uuid, `/${uuid}/${sceneId}/${scenes[0].name}`, 192, 144, sdkToken);
+        let res;
+        try {
+            res = await this.task.getCover(uuid, `/${uuid}/${sceneId}/${scenes[0].name}`, 192, 144, sdkToken);
+        } catch (error) {
+            res = undefined;
+        }
+
         const documentFile: PPTDataType = {
             active: true,
             id: sceneId,
             pptType: type,
             data: scenes,
-            cover: res.url,
+            cover: res ? res.url : default_cover,
+            zipUrl: taskUuid && `https://convertcdn.netless.link/${type === PPTType.dynamic ? "dynamicConvert" : "staticConvert"}/${taskUuid}.zip`,
         };
         const docs: PPTDataType[] = (this.room.state.globalState as any).docs;
         if (docs && docs.length > 0) {
@@ -170,7 +184,7 @@ export class UploadManager {
         }
     }
 
-    private getImageSize(imageInnerSize: imageSize): imageSize {
+    private getImageSize = (imageInnerSize: imageSize): imageSize => {
         const windowSize: imageSize = {width: window.innerWidth, height: window.innerHeight};
         const widthHeightProportion: number = imageInnerSize.width / imageInnerSize.height;
         const maxSize: number = 960;

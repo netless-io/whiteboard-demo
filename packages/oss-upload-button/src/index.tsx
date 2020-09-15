@@ -113,6 +113,10 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                 this.setState({converterPercent: percent * 100});
                 break;
             }
+            case PPTProgressPhase.Stop: {
+                this.setState({converterPercent: 0});
+                this.setState({ossPercent: 0});
+            }
         }
     }
 

@@ -97,7 +97,6 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                     this.setState({phase: phase});
                 },
                 onLoadFirstFrame: () => {
-                    cursorAdapter.setPlayer(player);
                 },
                 onStoppedWithError: (error: Error) => {
                     message.error(`Playback error: ${error}`);

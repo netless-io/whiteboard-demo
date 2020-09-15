@@ -16,7 +16,7 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "@netless/oss-upload-manager": "^1.0.9",
+    "@netless/oss-upload-manager": "^1.1.0",
     "@netless/loading-bar": "^0.0.1",
     "react-dropzone": "4.2.10",
     "ali-oss": "^6.10.0"
