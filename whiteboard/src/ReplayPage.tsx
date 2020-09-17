@@ -3,7 +3,7 @@ import {RouteComponentProps} from "react-router";
 import {CursorTool} from "@netless/cursor-tool";
 import polly from "polly-js";
 import {message} from "antd";
-import {WhiteWebSdk, PlayerPhase, Player} from "white-web-sdk";
+import {WhiteWebSdk, PlayerPhase, Player, createPlugins} from "white-web-sdk";
 import video_play from "./assets/image/video-play.svg";
 import "video.js/dist/video-js.css";
 import "./ReplayPage.less";
@@ -15,6 +15,8 @@ import LoadingPage from "./LoadingPage";
 import logo from "./assets/image/logo.svg";
 import ExitButtonPlayer from "./components/ExitButtonPlayer";
 import { Identity } from "./IndexPage";
+import {videoPlugin} from "@netless/white-video-plugin";
+import {audioPlugin} from "@netless/white-audio-plugin";
 export type PlayerPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
@@ -55,12 +57,14 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
     }
 
     public async componentDidMount(): Promise<void> {
-        window.addEventListener("resize", this.onWindowResize);
         window.addEventListener("keydown", this.handleSpaceKey);
-        const {uuid} = this.props.match.params;
+        const {uuid, identity} = this.props.match.params;
+        const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
+        plugins.setPluginContext("video", {identity: identity === Identity.teacher ? "host" : ""});
+        plugins.setPluginContext("audio", {identity: identity === Identity.teacher ? "host" : ""});
         const roomToken = await this.getRoomToken(uuid);
         if (uuid && roomToken) {
-            const whiteWebSdk = new WhiteWebSdk({appIdentifier: netlessToken.appIdentifier});
+            const whiteWebSdk = new WhiteWebSdk({appIdentifier: netlessToken.appIdentifier, plugins: plugins});
             await this.loadPlayer(whiteWebSdk, uuid, roomToken);
         }
     }
@@ -95,8 +99,6 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
             }, {
                 onPhaseChanged: phase => {
                     this.setState({phase: phase});
-                },
-                onLoadFirstFrame: () => {
                 },
                 onStoppedWithError: (error: Error) => {
                     message.error(`Playback error: ${error}`);
