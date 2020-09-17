@@ -5,6 +5,8 @@ import logo from "./assets/image/logo.svg";
 import {Button, Input} from "antd";
 import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
+import {LocalStorageRoomDataType} from "./HistoryPage";
+import moment from "moment";
 
 export type JoinPageStates = {
     roomId: string;
@@ -26,16 +28,64 @@ export default class JoinPage extends React.Component<RouteComponentProps<{}>, J
         if (this.state.name !== localStorage.getItem("userName")) {
             localStorage.setItem("userName", this.state.name);
         }
+        this.setRoomList(this.state.roomId, userId);
         this.props.history.push(`/whiteboard/${Identity.student}/${this.state.roomId}/${userId}/`);
     }
-
+    public setRoomList = (uuid: string, userId: string): void => {
+        const rooms = localStorage.getItem("rooms");
+        const timestamp = moment(new Date()).format("lll");
+        if (rooms) {
+            const roomArray: LocalStorageRoomDataType[] = JSON.parse(rooms);
+            const room = roomArray.find(data => data.uuid === uuid);
+            if (!room) {
+                localStorage.setItem(
+                    "rooms",
+                    JSON.stringify([
+                        {
+                            uuid: uuid,
+                            time: timestamp,
+                            identity: Identity.teacher,
+                            userId: userId,
+                        },
+                        ...roomArray,
+                    ]),
+                );
+            } else {
+                const newRoomArray = roomArray.filter(data => data.uuid !== uuid);
+                localStorage.setItem(
+                    "rooms",
+                    JSON.stringify([
+                        {
+                            uuid: uuid,
+                            time: timestamp,
+                            identity: Identity.teacher,
+                            userId: userId,
+                        },
+                        ...newRoomArray,
+                    ]),
+                );
+            }
+        } else {
+            localStorage.setItem(
+                "rooms",
+                JSON.stringify([
+                    {
+                        uuid: uuid,
+                        time: timestamp,
+                        identity: Identity.teacher,
+                        userId: userId,
+                    },
+                ]),
+            );
+        }
+    };
     public render(): React.ReactNode {
         const {roomId, name} = this.state;
         return (
             <div className="page-index-box">
                 <div className="page-index-mid-box">
                     <div className="page-index-logo-box">
-                        <img src={logo}/>
+                        <img src={logo} alt={"logo"}/>
                         <span>
                                 0.0.1
                         </span>

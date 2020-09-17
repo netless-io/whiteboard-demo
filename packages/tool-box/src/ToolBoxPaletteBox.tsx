@@ -63,7 +63,7 @@ export default class ToolBoxPaletteBox extends React.Component<ToolBoxPaletteBox
         const colorCell = toolPaletteConfig.map((data, index) => {
             const newColor = this.hexToRgb(data);
             return (
-               <div className="cell-mid-color" key={`color-${index}`} style={{borderColor: this.isMatchColor(newColor) ? "#106BC5" : "#FFFFFF"}}>
+               <div className="cell-mid-color" key={`color-${index}`} style={{borderColor: this.isMatchColor(newColor) ? "#3381FF" : "#FFFFFF"}}>
                    <div onClick={() => this.selectColor(newColor)}
                         className="cell-color" style={{backgroundColor: data}}>
                    </div>

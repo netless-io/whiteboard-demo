@@ -101,7 +101,7 @@ export default class PlayerController extends React.Component<PlayerControllerPr
     private renderMultipleNode = (multipleInner: number): React.ReactNode => {
         const {multiple} = this.state;
         if (multipleInner === multiple) {
-            return <div style={{color: "#106BC5"}}>{multipleInner}x</div>
+            return <div style={{color: "#3381FF"}}>{multipleInner}x</div>
         } else {
             return <div>{multipleInner}x</div>
         }

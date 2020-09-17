@@ -7,7 +7,7 @@
         <g id="Whiteboard-Guidelines" transform="translate(-64.000000, -295.000000)">
             <g id="circle-pressed" transform="translate(64.000000, 295.000000)">
                 <rect id="矩形备份-44" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="40" height="40" rx="2"></rect>
-                <circle id="椭圆形" stroke="#106BC5" cx="20" cy="20" r="7"></circle>
+                <circle id="椭圆形" stroke="#3381FF" cx="20" cy="20" r="7"></circle>
             </g>
         </g>
     </g>

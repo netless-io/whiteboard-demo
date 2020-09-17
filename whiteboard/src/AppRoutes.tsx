@@ -8,6 +8,7 @@ import WhiteboardPage from "./WhiteboardPage";
 import ReplayPage from "./ReplayPage";
 import JoinPage from "./JoinPage";
 import AddNamePage from "./AddNamePage";
+import HistoryPage from "./HistoryPage"
 export class AppRoutes extends React.Component<{}, {}> {
 
     public constructor(props: {}) {
@@ -24,6 +25,7 @@ export class AppRoutes extends React.Component<{}, {}> {
                     <Route path="/replay/:identity/:uuid/:userId/" component={ReplayPage} />
                     <Route path="/whiteboard/:identity/:uuid/:userId/" component={WhiteboardPage} />
                     <Route path="/whiteboard/:identity/:uuid?/" component={WhiteboardCreatorPage} />
+                    <Route path="/history/" component={HistoryPage} />
                     <Route path="/join/" component={JoinPage}/>
                     <Route path="/name/:uuid?/" component={AddNamePage}/>
                     <Route path="/" component={IndexPage}/>
