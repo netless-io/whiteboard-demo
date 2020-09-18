@@ -12,8 +12,8 @@ export type IndexPageStates = {
     visible: boolean;
 };
 export enum Identity {
-    teacher = "teacher",
-    student = "student",
+    creator = "creator",
+    joiner = "joiner",
 }
 class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates> {
     public constructor(props: RouteComponentProps<{}>) {
@@ -27,7 +27,7 @@ class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates
 
     private handleCreate = (): void => {
         if (this.state.name) {
-            this.props.history.push(`/whiteboard/${Identity.teacher}`);
+            this.props.history.push(`/whiteboard/${Identity.creator}`);
         } else {
             this.props.history.push("/name/");
         }

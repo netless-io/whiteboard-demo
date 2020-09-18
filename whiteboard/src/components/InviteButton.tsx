@@ -38,7 +38,7 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
     private handleCopy = (): void => {
         const { uuid } = this.props;
         this.handleInvite();
-        copy(`房间号：${uuid}\n加入链接：https://demo.netless.link/whiteboard/${Identity.student}/${uuid}/`);
+        copy(`房间号：${uuid}\n加入链接：https://demo.netless.link/whiteboard/${Identity.joiner}/${uuid}/`);
         message.success("已经将信息复制到剪贴板");
 
     }
@@ -72,12 +72,12 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
                     <div className="invite-url-box">
                         <span style={{width: 96}}>加入链接：</span>
                         <Input size={"middle"}
-                               value={`${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.student}/${uuid}/`}
+                               value={`${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`}
                                addonAfter={
                                    <CopyOutlined
                                        onClick={() => {
                                            copy(
-                                               `${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.student}/${uuid}/`,
+                                               `${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`,
                                            );
                                            message.success("已经将链接复制到剪贴板");
                                        }}

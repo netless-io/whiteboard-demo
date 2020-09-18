@@ -4,7 +4,7 @@ import {message} from "antd";
 import {RouteComponentProps} from "react-router";
 import moment from "moment";
 import PageError from "./PageError";
-import {netlessWhiteboardApi, RoomType} from "./apiMiddleware";
+import {netlessWhiteboardApi} from "./apiMiddleware";
 import LoadingPage from "./LoadingPage";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
@@ -51,7 +51,7 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
                         {
                             uuid: uuid,
                             time: timestamp,
-                            identity: Identity.teacher,
+                            identity: Identity.creator,
                             userId: userId,
                         },
                         ...roomArray,
@@ -65,7 +65,7 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
                         {
                             uuid: uuid,
                             time: timestamp,
-                            identity: Identity.teacher,
+                            identity: Identity.creator,
                             userId: userId,
                         },
                         ...newRoomArray,
@@ -79,7 +79,7 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
                     {
                         uuid: uuid,
                         time: timestamp,
-                        identity: Identity.teacher,
+                        identity: Identity.creator,
                         userId: userId,
                     },
                 ]),

@@ -29,7 +29,7 @@ export default class JoinPage extends React.Component<RouteComponentProps<{}>, J
             localStorage.setItem("userName", this.state.name);
         }
         this.setRoomList(this.state.roomId, userId);
-        this.props.history.push(`/whiteboard/${Identity.student}/${this.state.roomId}/${userId}/`);
+        this.props.history.push(`/whiteboard/${Identity.joiner}/${this.state.roomId}/${userId}/`);
     }
     public setRoomList = (uuid: string, userId: string): void => {
         const rooms = localStorage.getItem("rooms");
@@ -44,7 +44,7 @@ export default class JoinPage extends React.Component<RouteComponentProps<{}>, J
                         {
                             uuid: uuid,
                             time: timestamp,
-                            identity: Identity.teacher,
+                            identity: Identity.creator,
                             userId: userId,
                         },
                         ...roomArray,
@@ -58,7 +58,7 @@ export default class JoinPage extends React.Component<RouteComponentProps<{}>, J
                         {
                             uuid: uuid,
                             time: timestamp,
-                            identity: Identity.teacher,
+                            identity: Identity.creator,
                             userId: userId,
                         },
                         ...newRoomArray,
@@ -72,7 +72,7 @@ export default class JoinPage extends React.Component<RouteComponentProps<{}>, J
                     {
                         uuid: uuid,
                         time: timestamp,
-                        identity: Identity.teacher,
+                        identity: Identity.creator,
                         userId: userId,
                     },
                 ]),

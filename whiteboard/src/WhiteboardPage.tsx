@@ -78,8 +78,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
                 const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
-                plugins.setPluginContext("video", {identity: identity === Identity.teacher ? "host" : ""});
-                plugins.setPluginContext("audio", {identity: identity === Identity.teacher ? "host" : ""});
+                plugins.setPluginContext("video", {identity: identity === Identity.creator ? "host" : ""});
+                plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
                 const whiteWebSdk = new WhiteWebSdk({
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,

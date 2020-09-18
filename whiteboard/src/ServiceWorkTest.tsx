@@ -1,5 +1,6 @@
 import * as React from "react";
 import "./ServiceWorkTest.less";
+import * as zip from "./assets/image/zip.svg";
 
 export default class ServiceWorkTest extends React.Component<{}, {}> {
     public constructor(props: {}) {
@@ -7,8 +8,9 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
     }
     public render(): React.ReactNode {
         return (
-            <div>
-                <div>
+            <div className="service-box">
+                <div className="service-box-zip">
+                    <img src={zip} alt={"zip"}/>
                 </div>
             </div>
         );

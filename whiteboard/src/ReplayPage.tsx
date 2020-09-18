@@ -60,8 +60,8 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         window.addEventListener("keydown", this.handleSpaceKey);
         const {uuid, identity} = this.props.match.params;
         const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
-        plugins.setPluginContext("video", {identity: identity === Identity.teacher ? "host" : ""});
-        plugins.setPluginContext("audio", {identity: identity === Identity.teacher ? "host" : ""});
+        plugins.setPluginContext("video", {identity: identity === Identity.creator ? "host" : ""});
+        plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
         const roomToken = await this.getRoomToken(uuid);
         if (uuid && roomToken) {
             const whiteWebSdk = new WhiteWebSdk({appIdentifier: netlessToken.appIdentifier, plugins: plugins});
