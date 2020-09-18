@@ -5,33 +5,36 @@ import "@netless/zip";
 import {netlessCaches} from "./NetlessCaches";
 
 const contentTypesByExtension = {
-    'css': 'text/css',
-    'js': 'application/javascript',
-    'png': 'image/png',
-    'jpg': 'image/jpeg',
-    'jpeg': 'image/jpeg',
-    'html': 'text/html',
-    'htm': 'text/html'
+    "css": "text/css",
+    "js": "application/javascript",
+    "png": "image/png",
+    "jpg": "image/jpeg",
+    "jpeg": "image/jpeg",
+    "html": "text/html",
+    "htm": "text/html"
 };
+const testUrl = "https://convertcdn.netless.link/dynamicConvert/769e4fd0f9a811ea8b9c074232aaccd4.zip";
 export default class ServiceWorkTest extends React.Component<{}, {}> {
 
     public constructor(props: {}) {
         super(props);
     }
 
-    private getZipReader = async (data): Promise<any> => {
+    private getZipReader = (data: any): Promise<any> => {
         return new Promise((fulfill, reject) => {
             zip.createReader(new zip.ArrayBufferReader(data), fulfill, reject);
         });
     }
-    private startDownload = async (): Promise<void> => {
-        const testUrl = "https://convertcdn.netless.link/dynamicConvert/769e4fd0f9a811ea8b9c074232aaccd4.zip";
-        fetch(testUrl).then((res) => res.arrayBuffer()).then(this.getZipReader).then(this.cacheContents);
+    private startDownload = async (url): Promise<void> => {
+        const res = await fetch(url);
+        const buffer = await res.arrayBuffer();
+        const zipReader = await this.getZipReader(buffer);
+        return await this.cacheContents(zipReader);
     }
 
-    private cacheContents = async (reader: any): Promise<void> => {
-        return new Promise( (fulfill, reject) => {
-            reader.getEntries( (entries) => {
+    private cacheContents = (reader: any): Promise<void> => {
+        return new Promise((fulfill, reject) => {
+            reader.getEntries((entries) => {
                 console.log('Installing', entries.length, 'files from zip');
                 Promise.all(entries.map(this.cacheEntry)).then(fulfill as any, reject);
             });
@@ -39,25 +42,20 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
     }
 
 
-   private cacheEntry =  async (entry: any): Promise<void> => {
+    private cacheEntry = (entry: any): Promise<void> => {
         if (entry.directory) {
             return Promise.resolve();
         }
-        return new Promise( (fulfill, reject) => {
-             entry.getData(new zip.BlobWriter(), (data) => {
-                return netlessCaches.openCache("netless").then( (cache) => {
+        return new Promise((fulfill, reject) => {
+            entry.getData(new zip.BlobWriter(), (data) => {
+                return netlessCaches.openCache("netless").then((cache) => {
                     const location = this.getLocation(entry.filename);
-                    console.log(location);
-                    console.log(entry);
-                    console.log(entry.filename);
                     const response = new Response(data, {
                         headers: {
-                            'Content-Type': this.getContentType(entry.filename)
+                            "Content-Type": this.getContentType(entry.filename)
                         }
                     });
-                    console.log('-> Caching', location,
-                        '(size:', entry.uncompressedSize, 'bytes)');
-                    if (entry.filename === 'index.html') {
+                    if (entry.filename === "index.html") {
                         cache.put(this.getLocation(), response.clone());
                     }
                     return cache.put(location, response);
@@ -67,19 +65,19 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
     }
 
     private getContentType = (filename: any): string => {
-        const tokens = filename.split('.');
+        const tokens = filename.split(".");
         const extension = tokens[tokens.length - 1];
-        return contentTypesByExtension[extension] || 'text/plain';
+        return contentTypesByExtension[extension] || "text/plain";
     }
 
-    private getLocation = (filename?: string): string =>  {
+    private getLocation = (filename?: string): string => {
         return "https://convertcdn.netless.link/dynamicConvert/" + filename;
     }
 
     public render(): React.ReactNode {
         return (
             <div className="service-box">
-                <div onClick={this.startDownload} className="service-box-zip">
+                <div onClick={() => this.startDownload(testUrl)} className="service-box-zip">
                     <img src={zip_icon} alt={"zip"}/>
                 </div>
             </div>
