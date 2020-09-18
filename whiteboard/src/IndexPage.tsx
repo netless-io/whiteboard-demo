@@ -27,7 +27,7 @@ class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates
 
     private handleCreate = (): void => {
         if (this.state.name) {
-            this.props.history.push(`/whiteboard/${Identity.creator}`);
+            this.props.history.push(`/create/`);
         } else {
             this.props.history.push("/name/");
         }
@@ -85,14 +85,14 @@ class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates
                         <div className="page-index-start-box">
                             <div className="page-index-start-cell">
                                 <Link to={"/join/"}>
-                                    <img src={join}/>
+                                    <img src={join} alt={"join"}/>
                                 </Link>
                                 <span>加入房间</span>
                             </div>
                             <div className="page-cutline-box"/>
                             <div className="page-index-start-cell">
                                 <div onClick={this.handleCreate}>
-                                    <img src={create}/>
+                                    <img src={create} alt={"create"}/>
                                 </div>
                                 <span>创建房间</span>
                             </div>

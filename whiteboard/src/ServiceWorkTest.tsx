@@ -25,7 +25,7 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
         });
     }
     private startDownload = async (): Promise<void> => {
-        const testUrl = "https://white-sdk.oss-cn-beijing.aliyuncs.com/images/test.zip";
+        const testUrl = "https://convertcdn.netless.link/dynamicConvert/769e4fd0f9a811ea8b9c074232aaccd4.zip";
         fetch(testUrl).then((res) => res.arrayBuffer()).then(this.getZipReader).then(this.cacheContents);
     }
 
@@ -47,6 +47,9 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
              entry.getData(new zip.BlobWriter(), (data) => {
                 return netlessCaches.openCache("netless").then( (cache) => {
                     const location = this.getLocation(entry.filename);
+                    console.log(location);
+                    console.log(entry);
+                    console.log(entry.filename);
                     const response = new Response(data, {
                         headers: {
                             'Content-Type': this.getContentType(entry.filename)
@@ -70,7 +73,7 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
     }
 
     private getLocation = (filename?: string): string =>  {
-        return location.href.replace(/worker\.js$/, filename || '');
+        return "https://convertcdn.netless.link/dynamicConvert/" + filename;
     }
 
     public render(): React.ReactNode {

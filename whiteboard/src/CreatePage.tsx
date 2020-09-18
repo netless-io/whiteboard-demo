@@ -9,27 +9,24 @@ import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
 
 export type JoinPageStates = {
-    roomId: string;
-    name: string;
+    roomName: string;
 };
 
 export default class CreatePage extends React.Component<RouteComponentProps, JoinPageStates> {
     public constructor(props: RouteComponentProps) {
         super(props);
-        const name = localStorage.getItem("userName");
         this.state = {
-            roomId: "",
-            name: name ? name : "",
+            roomName: "",
         };
     }
 
     private handleJoin = (): void => {
         const userId = `${Math.floor(Math.random() * 100000)}`;
-        if (this.state.name !== localStorage.getItem("userName")) {
-            localStorage.setItem("userName", this.state.name);
+        if (this.state.roomName !== localStorage.getItem("userName")) {
+            localStorage.setItem("userName", this.state.roomName);
         }
-        this.setRoomList(this.state.roomId, userId);
-        this.props.history.push(`/whiteboard/${Identity.joiner}/${this.state.roomId}/${userId}/`);
+        // this.setRoomList(this.state.roomId, userId);
+        // this.props.history.push(`/whiteboard/${Identity.joiner}/${this.state.roomId}/${userId}/`);
     }
     public setRoomList = (uuid: string, userId: string): void => {
         const rooms = localStorage.getItem("rooms");
@@ -80,7 +77,7 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
         }
     };
     public render(): React.ReactNode {
-        const {roomId, name} = this.state;
+        const {roomName} = this.state;
         return (
             <div className="page-index-box">
                 <div className="page-index-mid-box">
@@ -91,14 +88,9 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
                         </span>
                     </div>
                     <div className="page-index-form-box">
-                        <Input placeholder={"输入名字"}
-                               value={name}
-                               onChange={evt => this.setState({name: evt.target.value})}
-                               className="page-index-input-box"
-                               size={"large"}/>
-                        <Input placeholder={"输入房间号"}
-                               value={roomId}
-                               onChange={evt => this.setState({roomId: evt.target.value})}
+                        <Input placeholder={"输入房间名"}
+                               value={roomName}
+                               onChange={evt => this.setState({roomName: evt.target.value})}
                                className="page-index-input-box"
                                size={"large"}/>
                         <div className="page-index-btn-box">
@@ -109,11 +101,11 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
                                 </Button>
                             </Link>
                             <Button className="page-index-btn"
-                                    disabled={roomId === "" || name === ""}
+                                    disabled={roomName === ""}
                                     size={"large"}
                                     onClick={this.handleJoin}
                                     type={"primary"}>
-                                加入房间
+                                创建房间
                             </Button>
                         </div>
                     </div>

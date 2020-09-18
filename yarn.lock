@@ -1739,10 +1739,10 @@
   resolved "https://registry.yarnpkg.com/@netless/canvas-polyfill/-/canvas-polyfill-0.0.3.tgz#caf77b6b1b666db54cde5edda3751ee292bc088a"
   integrity sha512-X3KodHfvMAIrmVBsj7kbWdcWA+eCr/uhqpix10GKXE+UovIyJd05KyFNMKIAXOMQI79NJrYiHcPBLszRRogygA==
 
-"@netless/zip@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@netless/zip/-/zip-0.0.4.tgz#1e6ec35781d487feee6ba81cf52e1568ff379324"
-  integrity sha512-P9MU9szJnaDQo78HLatgvF/DpbMeFitBJwqG25HcDLjRxNw457XkYI5+w0AXTfV45iDM+3hMcio6rYK6GyfdCQ==
+"@netless/zip@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@netless/zip/-/zip-0.0.6.tgz#b4c82110b16ba718f27a61988fd77240426de216"
+  integrity sha512-hchH9OzktHSlsdXhLjZr6HXqUNNZmc2YVxf2n0vBg/TkGYvDDU+h8o3/JGGl+4Gl3F83mVfWmVheeXxC3hl+RA==
 
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
