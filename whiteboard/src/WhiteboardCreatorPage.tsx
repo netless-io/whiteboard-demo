@@ -30,10 +30,10 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
         };
     }
 
-    private createRoomAndGetUuid = async (room: string, limit: number, mode: RoomType): Promise<string | null>  => {
-        const res = await netlessWhiteboardApi.room.createRoomApi(room, limit, mode);
-        if (res.code === 200) {
-            return res.msg.room.uuid;
+    private createRoomAndGetUuid = async (room: string, limit: number): Promise<string | null>  => {
+        const res = await netlessWhiteboardApi.room.createRoomApi(room, limit);
+        if (res.uuid) {
+            return res.uuid;
         } else {
             return null;
         }
@@ -93,7 +93,8 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
             if (this.props.match.params.uuid) {
                 uuid = this.props.match.params.uuid;
             } else {
-                uuid = await this.createRoomAndGetUuid("test1", 0, RoomType.historied);
+                uuid = await this.createRoomAndGetUuid("test1", 0);
+                console.log(uuid);
                 if (uuid) {
                     this.setRoomList(uuid, userId);
                 }

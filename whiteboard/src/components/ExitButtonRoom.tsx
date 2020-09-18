@@ -19,7 +19,7 @@ export type ExitButtonRoomProps = {
     room: Room;
     userId: string;
     identity: Identity;
-} & RouteComponentProps<{}>;
+} & RouteComponentProps;
 
 class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoomStates> {
     public constructor(props: ExitButtonRoomProps) {
@@ -52,8 +52,8 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
             const res = await netlessWhiteboardApi.room.getCover(
                 room.uuid,
                 room.state.sceneState.scenePath,
-                96,
-                72,
+                192,
+                144,
                 room.roomToken,
             );
             const rooms = localStorage.getItem("rooms");
@@ -78,7 +78,7 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
             <div>
                 <Tooltip placement="bottom" title={"Exit"}>
                     <div className="page-controller-cell" onClick={() => this.setState({exitViewDisable: true})}>
-                        <img src={exit}/>
+                        <img src={exit} alt={"exit"}/>
                     </div>
                 </Tooltip>
                 <Modal
@@ -89,7 +89,7 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
                 >
                     <div className="modal-box">
                         <div onClick={this.handleReplay}>
-                            <img className="modal-box-img" src={replayScreen}/>
+                            <img className="modal-box-img" src={replayScreen} alt={"img"}/>
                         </div>
                         <div className="modal-box-name">观看回放</div>
                         <Button
