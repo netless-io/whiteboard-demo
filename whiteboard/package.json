@@ -4,7 +4,7 @@
     "main": "index.js",
     "scripts": {
         "dev": "webpack-dev-server --historyApiFallback --mode development --port 3000 --open --hot",
-        "build": "webpack --mode production"
+        "build": "webpack --mode production && cp -r ./service-worker/* ./build/"
     },
     "dependencies": {
         "@ant-design/icons": "^4.2.2",
