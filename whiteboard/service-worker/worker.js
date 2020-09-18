@@ -9,22 +9,24 @@ var ZIP_URL = './package.zip';
 zip.useWebWorkers = false;
 
 // During installation, extend the event to recover the package for this recipe and install into an offline cache.
- 
+
 self.oninstall = function(event) {
   console.log("begin install");
 };
 
 // Control the clients as soon as possible.
 
- 
-self.onactivate = function(event) {
-  console.log("onactivate");
-  event.waitUntil(self.clients.claim());
-};
 
+self.onactivate = function(event) {
+  const testUrl = "https://white-sdk.oss-cn-beijing.aliyuncs.com/images/test.zip";
+  fetch(testUrl).then((res) => res.arrayBuffer()).then(getZipReader).then(cacheContents);
+};
 // Answer by querying the cache. If fail, go to the network.
 
- 
+self.addEventListener("message", function(event) {
+  console.log("Handling message event:", event);
+});
+
 self.onfetch = function(event) {
   event.respondWith(openCache().then(function(cache) {
     console.log(event.request);
@@ -36,7 +38,7 @@ self.onfetch = function(event) {
 
 // This wrapper promisifies the zip.js API for reading a zip.
 
- 
+
 function getZipReader(data) {
   return new Promise(function(fulfill, reject) {
     zip.createReader(new zip.ArrayBufferReader(data), fulfill, reject);
@@ -45,7 +47,7 @@ function getZipReader(data) {
 
 // Use the reader to read each of the files inside the zip and put them into the offline cache.
 
- 
+
 function cacheContents(reader) {
   return new Promise(function(fulfill, reject) {
     reader.getEntries(function(entries) {
@@ -57,7 +59,7 @@ function cacheContents(reader) {
 
 // Cache one entry, skipping directories.
 
- 
+
 function cacheEntry(entry) {
   if (entry.directory) { return Promise.resolve(); }
 
@@ -65,7 +67,7 @@ function cacheEntry(entry) {
 
 // The writer specifies the format for the data to be read as. This case, we want a generic blob as blob is one of the supported formats for the Response constructor.
 
- 
+
     entry.getData(new zip.BlobWriter(), function(data) {
       return openCache().then(function(cache) {
         var location = getLocation(entry.filename);
@@ -73,7 +75,7 @@ function cacheEntry(entry) {
 
 // As the zip says nothing about the nature of the file, we extract this information from the file name.
 
- 
+
           'Content-Type': getContentType(entry.filename)
         } });
 
@@ -82,12 +84,12 @@ function cacheEntry(entry) {
 
 // If the entry is the index, cache its contents for root as well.
 
- 
+
         if (entry.filename === 'index.html') {
 
 // Response are one-use objects, as .put() consumes the data in the body we need to clone the response in order to use it twice.
 
- 
+
           cache.put(getLocation(), response.clone());
         }
 
@@ -99,7 +101,7 @@ function cacheEntry(entry) {
 
 // Return the location for each entry.
 
- 
+
 function getLocation(filename) {
   return location.href.replace(/worker\.js$/, filename || '');
 }
@@ -116,7 +118,7 @@ var contentTypesByExtension = {
 
 // Return the content type of a file based on the name extension
 
- 
+
 function getContentType(filename) {
   var tokens = filename.split('.');
   var extension = tokens[tokens.length - 1];
@@ -125,7 +127,7 @@ function getContentType(filename) {
 
 // Opening a cache is an expensive operation. By caching the promise returned by cache.open() we only open the cache once.
 
- 
+
 var cachePromise;
 function openCache() {
   if (!cachePromise) { cachePromise = caches.open('cache-from-zip'); }

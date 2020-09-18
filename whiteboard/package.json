@@ -3,7 +3,7 @@
     "version": "0.0.7",
     "main": "index.js",
     "scripts": {
-        "dev": "webpack-dev-server --historyApiFallback --mode development --port 3000 --open --hot",
+        "dev": "webpack-dev-server --historyApiFallback --mode development --port 8000 --open --hot",
         "build": "webpack --mode production && cp -r ./service-worker/* ./build/"
     },
     "dependencies": {

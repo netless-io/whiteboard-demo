@@ -10,6 +10,7 @@ import JoinPage from "./JoinPage";
 import AddNamePage from "./AddNamePage";
 import HistoryPage from "./HistoryPage"
 import ServiceWorkTest from "./ServiceWorkTest";
+import CreatePage from "./CreatePage";
 export class AppRoutes extends React.Component<{}, {}> {
 
     public constructor(props: {}) {
@@ -28,6 +29,7 @@ export class AppRoutes extends React.Component<{}, {}> {
                     <Route path="/whiteboard/:identity/:uuid?/" component={WhiteboardCreatorPage} />
                     <Route path="/history/" component={HistoryPage} />
                     <Route path="/join/" component={JoinPage}/>
+                    <Route path="/create/" component={CreatePage}/>
                     <Route path="/name/:uuid?/" component={AddNamePage}/>
                     <Route path="/service/" component={ServiceWorkTest}/>
                     <Route path="/" component={IndexPage}/>
