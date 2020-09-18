@@ -18,13 +18,13 @@ self.oninstall = function(event) {
 
 
 self.onactivate = function(event) {
-  const testUrl = "https://white-sdk.oss-cn-beijing.aliyuncs.com/images/test.zip";
-  fetch(testUrl).then((res) => res.arrayBuffer()).then(getZipReader).then(cacheContents);
+  console.log("onactivate");
 };
 // Answer by querying the cache. If fail, go to the network.
 
 self.addEventListener("message", function(event) {
-  console.log("Handling message event:", event);
+  const url = event.data.url;
+  fetch(url).then((res) => res.arrayBuffer()).then(getZipReader).then(cacheContents);
 });
 
 self.onfetch = function(event) {

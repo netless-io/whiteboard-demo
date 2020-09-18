@@ -12,3 +12,10 @@ declare module "*.png" {
     const content: string;
     export = content;
 }
+
+declare module "@netless/zip" {
+    const content: any;
+    export = content;
+}
+
+declare var zip: any;
