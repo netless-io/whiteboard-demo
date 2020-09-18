@@ -94,7 +94,6 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
                 uuid = this.props.match.params.uuid;
             } else {
                 uuid = await this.createRoomAndGetUuid("test1", 0);
-                console.log(uuid);
                 if (uuid) {
                     this.setRoomList(uuid, userId);
                 }
