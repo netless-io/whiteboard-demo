@@ -1,8 +1,8 @@
 import * as React from "react";
-import "./ServiceWorkTest.less";
+import "./Storage.less";
 import * as zip_icon from "./assets/image/zip.svg";
 import "@netless/zip";
-import fetchProgress from "fetch-progress";
+import fetchProgress from "@netless/fetch-progress";
 import {netlessCaches} from "./NetlessCaches";
 import {pptDatas} from "./pptDatas";
 import {WhiteScene} from "white-web-sdk";
@@ -23,7 +23,7 @@ export type ServiceWorkTestStates = {
     progress: number;
 };
 
-export default class ServiceWorkTest extends React.Component<{}, ServiceWorkTestStates> {
+export default class Storage extends React.Component<{}, ServiceWorkTestStates> {
 
     public constructor(props: {}) {
         super(props);
@@ -39,19 +39,10 @@ export default class ServiceWorkTest extends React.Component<{}, ServiceWorkTest
         });
     }
     private startDownload = async (url): Promise<void> => {
+        const that = this;
         const res = await fetch(url).then(fetchProgress({
-            // implement onProgress method
             onProgress(progress) {
-                console.log({ progress });
-                // A possible progress report you will get
-                // {
-                //    total: 3333,
-                //    transferred: 3333,
-                //    speed: 3333,
-                //    eta: 33,
-                //    percentage: 33
-                //    remaining: 3333,
-                // }
+                that.setState({progress: progress.percentage})
             },
         }));
         const buffer = await res.arrayBuffer();
@@ -149,9 +140,12 @@ export default class ServiceWorkTest extends React.Component<{}, ServiceWorkTest
                     icon = scenes[0].ppt.previewURL;
                 }
             }
+
             if (zipUrl) {
                 return (
-                    <div key={`zip-${index}`} onClick={() => this.startDownload(zipUrl)} className="service-box-zip">
+                    <div key={`zip-${index}`}
+                         style={{backgroundColor: "#F2F2F2"}}
+                         onClick={() => this.startDownload(zipUrl)} className="service-box-zip">
                         <img src={icon} alt={"zip"}/>
                     </div>
                 )

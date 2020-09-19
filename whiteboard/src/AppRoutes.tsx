@@ -9,7 +9,7 @@ import ReplayPage from "./ReplayPage";
 import JoinPage from "./JoinPage";
 import AddNamePage from "./AddNamePage";
 import HistoryPage from "./HistoryPage"
-import ServiceWorkTest from "./ServiceWorkTest";
+import Storage from "./Storage";
 import CreatePage from "./CreatePage";
 export class AppRoutes extends React.Component<{}, {}> {
 
@@ -31,7 +31,7 @@ export class AppRoutes extends React.Component<{}, {}> {
                     <Route path="/join/" component={JoinPage}/>
                     <Route path="/create/" component={CreatePage}/>
                     <Route path="/name/:uuid?/" component={AddNamePage}/>
-                    <Route path="/service/" component={ServiceWorkTest}/>
+                    <Route path="/storage/" component={Storage}/>
                     <Route path="/" component={IndexPage}/>
                 </Switch>
             </BrowserRouter>
