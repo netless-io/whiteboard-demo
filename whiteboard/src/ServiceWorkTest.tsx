@@ -2,6 +2,7 @@ import * as React from "react";
 import "./ServiceWorkTest.less";
 import * as zip_icon from "./assets/image/zip.svg";
 import "@netless/zip";
+import fetchProgress from "fetch-progress";
 import {netlessCaches} from "./NetlessCaches";
 import {pptDatas} from "./pptDatas";
 import {WhiteScene} from "white-web-sdk";
@@ -19,6 +20,7 @@ const contentTypesByExtension = {
 const resourcesHost = "convertcdn.netless.link";
 export type ServiceWorkTestStates = {
     space: number;
+    progress: number;
 };
 
 export default class ServiceWorkTest extends React.Component<{}, ServiceWorkTestStates> {
@@ -27,6 +29,7 @@ export default class ServiceWorkTest extends React.Component<{}, ServiceWorkTest
         super(props);
         this.state = {
             space: 0,
+            progress: 0,
         }
     }
 
@@ -36,7 +39,21 @@ export default class ServiceWorkTest extends React.Component<{}, ServiceWorkTest
         });
     }
     private startDownload = async (url): Promise<void> => {
-        const res = await fetch(url);
+        const res = await fetch(url).then(fetchProgress({
+            // implement onProgress method
+            onProgress(progress) {
+                console.log({ progress });
+                // A possible progress report you will get
+                // {
+                //    total: 3333,
+                //    transferred: 3333,
+                //    speed: 3333,
+                //    eta: 33,
+                //    percentage: 33
+                //    remaining: 3333,
+                // }
+            },
+        }));
         const buffer = await res.arrayBuffer();
         const zipReader = await this.getZipReader(buffer);
         await this.refreshSpaceData();
