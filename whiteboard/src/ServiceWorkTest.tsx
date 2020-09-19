@@ -72,11 +72,8 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
 
     private deleteCache = async () => {
         const cache = await netlessCaches.openCache("netless");
-        const keys = await cache.keys();
-        for (const request of keys) {
-            const result = await cache.delete(request);
-            console.log(`remove request: ${request.url} successfully: ${result}`);
-        }
+        const result = await caches.delete("netless");
+        console.log(`remove netless cache successfully: ${result}`);
     }
 
     /**
