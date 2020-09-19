@@ -3,6 +3,8 @@ import "./ServiceWorkTest.less";
 import * as zip_icon from "./assets/image/zip.svg";
 import "@netless/zip";
 import {netlessCaches} from "./NetlessCaches";
+import {pptDatas} from "./pptDatas";
+import {WhiteScene} from "white-web-sdk";
 
 const contentTypesByExtension = {
     "css": "text/css",
@@ -13,7 +15,7 @@ const contentTypesByExtension = {
     "html": "text/html",
     "htm": "text/html"
 };
-const testUrl = "https://convertcdn.netless.link/dynamicConvert/769e4fd0f9a811ea8b9c074232aaccd4.zip";
+const resourcesHost = "convertcdn.netless.link";
 export default class ServiceWorkTest extends React.Component<{}, {}> {
 
     public constructor(props: {}) {
@@ -93,15 +95,41 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
     }
 
     private getLocation = (filename?: string): string => {
-        return "https://convertcdn.netless.link/dynamicConvert/" + filename;
+        return `https://${resourcesHost}/dynamicConvert/${filename}`;
+    }
+
+    private renderZipCells = (): React.ReactNode => {
+        return pptDatas.map((pptData: string, index: number) => {
+            const scenes: WhiteScene[] = JSON.parse(pptData);
+            let icon = zip_icon;
+            let zipUrl;
+            if (scenes[0] && scenes[0].ppt) {
+                const regex = /dynamicConvert\/([^\/]+)/gm;
+                const inner = scenes[0].ppt.src.match(regex);
+                if (inner) {
+                    const taskUuid = inner[0].replace("dynamicConvert/", "")
+                    zipUrl = `https://${resourcesHost}/dynamicConvert/${taskUuid}.zip`
+                }
+                if (scenes[0].ppt.previewURL) {
+                    icon = scenes[0].ppt.previewURL;
+                }
+            }
+            if (zipUrl) {
+                return (
+                    <div key={`zip-${index}`} onClick={() => this.startDownload(zipUrl)} className="service-box-zip">
+                        <img src={icon} alt={"zip"}/>
+                    </div>
+                )
+            } else {
+                return null;
+            }
+        });
     }
 
     public render(): React.ReactNode {
         return (
             <div className="service-box">
-                <div onClick={() => this.startDownload(testUrl)} className="service-box-zip">
-                    <img src={zip_icon} alt={"zip"}/>
-                </div>
+                {this.renderZipCells()}
             </div>
         );
     }

@@ -35,9 +35,6 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
 
     private handleJoin = async (): Promise<void> => {
         const userId = `${Math.floor(Math.random() * 100000)}`;
-        if (this.state.roomName !== localStorage.getItem("userName")) {
-            localStorage.setItem("userName", this.state.roomName);
-        }
         const uuid = await this.createRoomAndGetUuid(this.state.roomName, 0);
         if (uuid) {
             this.setRoomList(uuid, this.state.roomName, userId);

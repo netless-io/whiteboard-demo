@@ -1,6 +1,6 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
-import {createPlugins, Room, RoomPhase, RoomState, ViewMode, WhiteWebSdk, DefaultHotKeys} from "white-web-sdk";
+import {createPlugins, DefaultHotKeys, Room, RoomPhase, RoomState, ViewMode, WhiteWebSdk} from "white-web-sdk";
 import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
 import PageController from "@netless/page-controller";
@@ -26,6 +26,9 @@ import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
 import {Identity} from "./IndexPage";
 import OssDropUpload from "@netless/oss-drop-upload";
+import {pptDatas} from "./pptDatas";
+import {PPTDataType, PPTType} from "@netless/oss-upload-manager";
+import {v4 as uuidv4} from "uuid";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -68,6 +71,33 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         this.setState({whiteboardLayerDownRef: ref});
         if (room) {
             room.bindHtmlElement(ref);
+        }
+    }
+
+    private setDefaultPptData = (pptDatas: string[], room: Room): void => {
+        const docs: PPTDataType[] = (room.state.globalState as any).docs;
+        if (docs && docs.length > 1) {
+            return;
+        }
+        if (pptDatas.length > 0) {
+            for(let pptData of pptDatas){
+                const sceneId = uuidv4();
+                const scenes = JSON.parse(pptData);
+                const documentFile: PPTDataType = {
+                    active: false,
+                    id: sceneId,
+                    pptType: PPTType.dynamic,
+                    data: scenes,
+                };
+                const docs = (room.state.globalState as any).docs;
+                if (docs && docs.length > 0) {
+                    const newDocs = [documentFile, ...docs];
+                    room.setGlobalState({docs: newDocs});
+                } else {
+                    room.setGlobalState({docs: [documentFile]});
+                }
+                room.putScenes(`/${room.uuid}/${sceneId}`, scenes);
+            }
         }
     }
 
@@ -133,6 +163,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         enableDrawPoint: false
                     }
                 });
+                this.setDefaultPptData(pptDatas, room);
                 if (room.state.broadcastState) {
                     this.setState({mode: room.state.broadcastState.mode})
                 }

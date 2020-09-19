@@ -3,8 +3,8 @@ import {Room, RoomState} from "white-web-sdk";
 import MenuBox from "@netless/menu-box";
 import * as close from "./image/close.svg";
 import * as deleteIcon from "./image/delete.svg";
+import * as default_cover from "./image/default_cover.svg";
 import "./index.less";
-import {v4 as uuidv4} from "uuid";
 
 export type PPTDataType = {
     active: boolean,
@@ -25,6 +25,7 @@ export type WhiteboardFileProps = {
     room: Room;
     handleDocCenterState: (state: boolean) => void;
     isFileOpen: boolean;
+    initPptDatas?: string[];
 };
 
 export type WhiteboardFileStates = {
@@ -77,12 +78,20 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
 
     private initHomeDoc = (room: Room): void => {
         const {roomState} = this.state;
-        if ((roomState.globalState as any).docs === undefined) {
+        const docs = (roomState.globalState as any).docs;
+        if (docs === undefined) {
             room.setGlobalState({docs: [{
                     active: true,
                     pptType: PPTType.init,
                     id: "init",
                 }]})
+        }
+        if (docs && docs.length > 0 && docs[0].id !== "init") {
+            room.setGlobalState({docs: [{
+                    active: true,
+                    pptType: PPTType.init,
+                    id: "init",
+                }, ...docs]})
         }
     }
 
@@ -127,12 +136,13 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
             }
             return url;
         } else {
-            return undefined;
+            return default_cover;
         }
     }
 
     private renderDocCells = (): React.ReactNode => {
         const {roomState} = this.state;
+
         const docs: PPTDataType[] = (roomState.globalState as any).docs;
         if (docs && docs.length > 0) {
             return docs.map(data => {
@@ -144,7 +154,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div onClick={() => this.selectDoc(data.id)}
                                  style={{borderColor: data.active ? "#71C3FC" : "#F4F4F4"}}
                                  className="menu-ppt-image-box">
-                                <img src={this.handleCoverUrl(data.cover)}/>
+                                <img src={this.handleCoverUrl(data.cover)} alt={"cover"}/>
                             </div>
                             <div className="menu-ppt-name">
                                 <input onBlur={ evt => {
@@ -156,7 +166,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                                     静态
                                 </div>
                                 <div onClick={() => this.removeScene(data)}>
-                                    <img src={deleteIcon}/>
+                                    <img src={deleteIcon} alt={"deleteIcon"}/>
                                 </div>
                             </div>
                         </div>

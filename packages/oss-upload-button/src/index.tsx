@@ -274,7 +274,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                             <div className="oss-upload-title-section">
                                 <div className="oss-upload-title">资料转网页</div>
                                 <div className="oss-upload-icon">
-                                    <img src={fileTransWeb}/>
+                                    <img src={fileTransWeb} alt={"fileTransWeb"}/>
                                 </div>
                             </div>
                             <div className="oss-upload-section-script">
@@ -293,7 +293,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                             <div className="oss-upload-title-section">
                                 <div className="oss-upload-title">文档转图片</div>
                                 <div className="oss-upload-icon">
-                                    <img src={fileTransImg}/>
+                                    <img src={fileTransImg} alt={"fileTransImg"}/>
                                 </div>
                             </div>
                             <div className="oss-upload-section-script">
@@ -325,7 +325,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                 <Tooltip placement={"right"} title={"upload"}>
                     <div className="oss-upload-cell-box-left">
                         <div className="oss-upload-cell">
-                            <img src={isActive ? uploadActive : upload}/>
+                            <img src={isActive ? uploadActive : upload} alt={"upload"}/>
                         </div>
                     </div>
                 </Tooltip>
