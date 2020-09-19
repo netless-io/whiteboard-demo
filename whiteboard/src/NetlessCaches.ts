@@ -41,7 +41,7 @@ export class NetlessCaches {
         }
     }
 
-    public hasTaskUUID = async (uuid: string) =>  {
+    public hasTaskUUID = async (uuid: string): Promise<boolean> =>  {
         if (this.netlessCaches) {
             const cache = await this.netlessCaches;
             const keys = await cache.keys();

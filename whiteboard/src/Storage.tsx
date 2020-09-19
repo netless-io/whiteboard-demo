@@ -47,7 +47,6 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
         }));
         const buffer = await res.arrayBuffer();
         const zipReader = await this.getZipReader(buffer);
-        await this.refreshSpaceData();
         return await this.cacheContents(zipReader);
     }
 
@@ -65,7 +64,7 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
     }
 
     private refreshSpaceData = async (): Promise<void> => {
-        const res = await this.calculateCache();
+        const res = await netlessCaches.calculateCache();
         this.setState({space: Math.round(res/(1024 * 1024))});
     }
 
@@ -97,28 +96,6 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
         return contentTypesByExtension[extension] || "text/plain";
     }
 
-    private deleteCache = async () => {
-        const cache = await netlessCaches.openCache("netless");
-        const result = await caches.delete("netless");
-        await this.refreshSpaceData();
-        console.log(`remove netless cache successfully: ${result}`);
-    }
-
-    /**
-     * 计算 cache 占用空间，大小单位为 Byte，/1024 为 KiB 大小。
-     */
-    private calculateCache = async () => {
-        const cache = await netlessCaches.openCache("netless");
-        const keys = await cache.keys();
-        let size = 0;
-        for (const request of keys) {
-            const response = await cache.match(request)!;
-            if (response) {
-                size += await (await response.blob()).size
-            }
-        }
-        return size;
-    }
 
     private getLocation = (filename?: string): string => {
         return `https://${resourcesHost}/dynamicConvert/${filename}`;
@@ -129,23 +106,26 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
             const scenes: WhiteScene[] = JSON.parse(pptData);
             let icon = zip_icon;
             let zipUrl;
+            let isDownload = false;
             if (scenes[0] && scenes[0].ppt) {
                 const regex = /dynamicConvert\/([^\/]+)/gm;
                 const inner = scenes[0].ppt.src.match(regex);
                 if (inner) {
-                    const taskUuid = inner[0].replace("dynamicConvert/", "")
-                    zipUrl = `https://${resourcesHost}/dynamicConvert/${taskUuid}.zip`
+                    const taskUuid = inner[0].replace("dynamicConvert/", "");
+                    zipUrl = `https://${resourcesHost}/dynamicConvert/${taskUuid}.zip`;
                 }
                 if (scenes[0].ppt.previewURL) {
                     icon = scenes[0].ppt.previewURL;
                 }
             }
-
             if (zipUrl) {
                 return (
                     <div key={`zip-${index}`}
-                         style={{backgroundColor: "#F2F2F2"}}
-                         onClick={() => this.startDownload(zipUrl)} className="service-box-zip">
+                         style={{backgroundColor: isDownload ? "#F2F2F2" : "red"}}
+                         onClick={async () => {
+                             await this.startDownload(zipUrl)
+                             await this.refreshSpaceData();
+                         }} className="service-box-zip">
                         <img src={icon} alt={"zip"}/>
                     </div>
                 )
@@ -160,7 +140,8 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
             <div className="service-box">
                 {this.state.space}
                 <Button onClick={async () => {
-                    await this.deleteCache();
+                    await netlessCaches.deleteCache();
+                    await this.refreshSpaceData();
                 }}>
                     清空
                 </Button>
