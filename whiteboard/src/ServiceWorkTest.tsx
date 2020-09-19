@@ -70,6 +70,31 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
         return contentTypesByExtension[extension] || "text/plain";
     }
 
+    private deleteCache = async () => {
+        const cache = await netlessCaches.openCache("netless");
+        const keys = await cache.keys();
+        for (const request of keys) {
+            const result = await cache.delete(request);
+            console.log(`remove request: ${request.url} successfully: ${result}`);
+        }
+    }
+
+    /**
+     * 计算 cache 占用空间，大小单位为 Byte，/1024 为 KiB 大小。
+     */
+    private calculateCache = async () => {
+        const cache = await netlessCaches.openCache("netless");
+        const keys = await cache.keys();
+        let size = 0;
+        for (const request of keys) {
+            const response = await cache.match(request)!;
+            if (response) {
+                size += await (await response.blob()).size
+            }
+        }
+        return size;
+    }
+
     private getLocation = (filename?: string): string => {
         return "https://convertcdn.netless.link/dynamicConvert/" + filename;
     }
