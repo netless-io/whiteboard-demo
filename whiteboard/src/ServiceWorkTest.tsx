@@ -5,6 +5,7 @@ import "@netless/zip";
 import {netlessCaches} from "./NetlessCaches";
 import {pptDatas} from "./pptDatas";
 import {WhiteScene} from "white-web-sdk";
+import {Button} from "antd";
 
 const contentTypesByExtension = {
     "css": "text/css",
@@ -16,10 +17,17 @@ const contentTypesByExtension = {
     "htm": "text/html"
 };
 const resourcesHost = "convertcdn.netless.link";
-export default class ServiceWorkTest extends React.Component<{}, {}> {
+export type ServiceWorkTestStates = {
+    space: number;
+};
+
+export default class ServiceWorkTest extends React.Component<{}, ServiceWorkTestStates> {
 
     public constructor(props: {}) {
         super(props);
+        this.state = {
+            space: 0,
+        }
     }
 
     private getZipReader = (data: any): Promise<any> => {
@@ -31,6 +39,7 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
         const res = await fetch(url);
         const buffer = await res.arrayBuffer();
         const zipReader = await this.getZipReader(buffer);
+        await this.refreshSpaceData();
         return await this.cacheContents(zipReader);
     }
 
@@ -43,6 +52,14 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
         });
     }
 
+    public async componentDidMount(): Promise<void> {
+        await this.refreshSpaceData();
+    }
+
+    private refreshSpaceData = async (): Promise<void> => {
+        const res = await this.calculateCache();
+        this.setState({space: Math.round(res/(1024 * 1024))});
+    }
 
     private cacheEntry = (entry: any): Promise<void> => {
         if (entry.directory) {
@@ -75,6 +92,7 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
     private deleteCache = async () => {
         const cache = await netlessCaches.openCache("netless");
         const result = await caches.delete("netless");
+        await this.refreshSpaceData();
         console.log(`remove netless cache successfully: ${result}`);
     }
 
@@ -129,6 +147,12 @@ export default class ServiceWorkTest extends React.Component<{}, {}> {
     public render(): React.ReactNode {
         return (
             <div className="service-box">
+                {this.state.space}
+                <Button onClick={async () => {
+                    await this.deleteCache();
+                }}>
+                    清空
+                </Button>
                 {this.renderZipCells()}
             </div>
         );
