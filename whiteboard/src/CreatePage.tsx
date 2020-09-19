@@ -2,14 +2,17 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import "./CreatePage.less";
 import logo from "./assets/image/logo.svg";
-import {Button, Input} from "antd";
+import {Button, Input, Radio} from "antd";
 import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
+import {RadioChangeEvent} from "antd/lib/radio/interface";
+import {netlessWhiteboardApi} from "./apiMiddleware";
 
 export type JoinPageStates = {
     roomName: string;
+    value: boolean;
 };
 
 export default class CreatePage extends React.Component<RouteComponentProps, JoinPageStates> {
@@ -17,18 +20,31 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
         super(props);
         this.state = {
             roomName: "",
+            value: false,
         };
     }
 
-    private handleJoin = (): void => {
+    private createRoomAndGetUuid = async (room: string, limit: number): Promise<string | null>  => {
+        const res = await netlessWhiteboardApi.room.createRoomApi(room, limit);
+        if (res.uuid) {
+            return res.uuid;
+        } else {
+            return null;
+        }
+    }
+
+    private handleJoin = async (): Promise<void> => {
         const userId = `${Math.floor(Math.random() * 100000)}`;
         if (this.state.roomName !== localStorage.getItem("userName")) {
             localStorage.setItem("userName", this.state.roomName);
         }
-        // this.setRoomList(this.state.roomId, userId);
-        // this.props.history.push(`/whiteboard/${Identity.joiner}/${this.state.roomId}/${userId}/`);
+        const uuid = await this.createRoomAndGetUuid(this.state.roomName, 0);
+        if (uuid) {
+            this.setRoomList(uuid, this.state.roomName, userId);
+            this.props.history.push(`/whiteboard/${Identity.creator}/${uuid}/${userId}/`);
+        }
     }
-    public setRoomList = (uuid: string, userId: string): void => {
+    public setRoomList = (uuid: string, roomName: string, userId: string): void => {
         const rooms = localStorage.getItem("rooms");
         const timestamp = moment(new Date()).format("lll");
         if (rooms) {
@@ -42,6 +58,7 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
                             uuid: uuid,
                             time: timestamp,
                             identity: Identity.creator,
+                            roomName: roomName,
                             userId: userId,
                         },
                         ...roomArray,
@@ -56,6 +73,7 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
                             uuid: uuid,
                             time: timestamp,
                             identity: Identity.creator,
+                            roomName: roomName,
                             userId: userId,
                         },
                         ...newRoomArray,
@@ -70,14 +88,23 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
                         uuid: uuid,
                         time: timestamp,
                         identity: Identity.creator,
+                        roomName: roomName,
                         userId: userId,
                     },
                 ]),
             );
         }
     };
+
+    private onChange = (e: RadioChangeEvent): void => {
+        this.setState({value: e.target.value});
+    };
     public render(): React.ReactNode {
         const {roomName} = this.state;
+        const options = [
+            { label: "开启预加载", value: true },
+            { label: "关闭预加载", value: false },
+        ];
         return (
             <div className="page-index-box">
                 <div className="page-index-mid-box">
@@ -90,8 +117,9 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
                     <div className="page-index-form-box">
                         <Input placeholder={"输入房间名"}
                                value={roomName}
+                               style={{marginBottom: 28}}
                                onChange={evt => this.setState({roomName: evt.target.value})}
-                               className="page-index-input-box"
+                               className="page-create-input-box"
                                size={"large"}/>
                         <div className="page-index-btn-box">
                             <Link to={"/"}>
