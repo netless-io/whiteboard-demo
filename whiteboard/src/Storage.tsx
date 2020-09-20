@@ -2,25 +2,20 @@ import * as React from "react";
 import "./Storage.less";
 import * as zip_icon from "./assets/image/zip.svg";
 import "@netless/zip";
-import fetchProgress from "@netless/fetch-progress";
 import {netlessCaches} from "./NetlessCaches";
 import {pptDatas} from "./pptDatas";
 import {WhiteScene} from "white-web-sdk";
-import {Button} from "antd";
+import {Button, Tag} from "antd";
+import StorageCell from "./StorageCell";
+import {Link} from "react-router-dom";
+import {LeftOutlined} from "@ant-design/icons";
+import empty_box from "./assets/image/empty-box.svg";
 
-const contentTypesByExtension = {
-    "css": "text/css",
-    "js": "application/javascript",
-    "png": "image/png",
-    "jpg": "image/jpeg",
-    "jpeg": "image/jpeg",
-    "html": "text/html",
-    "htm": "text/html"
-};
-const resourcesHost = "convertcdn.netless.link";
 export type ServiceWorkTestStates = {
     space: number;
     progress: number;
+    availableSpace: number;
+    pptDatas: string[];
 };
 
 export default class Storage extends React.Component<{}, ServiceWorkTestStates> {
@@ -29,34 +24,10 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
         super(props);
         this.state = {
             space: 0,
+            availableSpace: 0,
             progress: 0,
+            pptDatas: pptDatas,
         }
-    }
-
-    private getZipReader = (data: any): Promise<any> => {
-        return new Promise((fulfill, reject) => {
-            zip.createReader(new zip.ArrayBufferReader(data), fulfill, reject);
-        });
-    }
-    private startDownload = async (url): Promise<void> => {
-        const that = this;
-        const res = await fetch(url).then(fetchProgress({
-            onProgress(progress) {
-                that.setState({progress: progress.percentage})
-            },
-        }));
-        const buffer = await res.arrayBuffer();
-        const zipReader = await this.getZipReader(buffer);
-        return await this.cacheContents(zipReader);
-    }
-
-    private cacheContents = (reader: any): Promise<void> => {
-        return new Promise((fulfill, reject) => {
-            reader.getEntries((entries) => {
-                console.log('Installing', entries.length, 'files from zip');
-                Promise.all(entries.map(this.cacheEntry)).then(fulfill as any, reject);
-            });
-        });
     }
 
     public async componentDidMount(): Promise<void> {
@@ -64,89 +35,75 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
     }
 
     private refreshSpaceData = async (): Promise<void> => {
-        const res = await netlessCaches.calculateCache();
-        this.setState({space: Math.round(res/(1024 * 1024))});
-    }
-
-    private cacheEntry = (entry: any): Promise<void> => {
-        if (entry.directory) {
-            return Promise.resolve();
-        }
-        return new Promise((fulfill, reject) => {
-            entry.getData(new zip.BlobWriter(), (data) => {
-                return netlessCaches.openCache("netless").then((cache) => {
-                    const location = this.getLocation(entry.filename);
-                    const response = new Response(data, {
-                        headers: {
-                            "Content-Type": this.getContentType(entry.filename)
-                        }
-                    });
-                    if (entry.filename === "index.html") {
-                        cache.put(this.getLocation(), response.clone());
-                    }
-                    return cache.put(location, response);
-                }).then(fulfill, reject);
-            });
-        });
-    }
-
-    private getContentType = (filename: any): string => {
-        const tokens = filename.split(".");
-        const extension = tokens[tokens.length - 1];
-        return contentTypesByExtension[extension] || "text/plain";
-    }
-
-
-    private getLocation = (filename?: string): string => {
-        return `https://${resourcesHost}/dynamicConvert/${filename}`;
+        const space = await netlessCaches.calculateCache();
+        const availableSpace = await netlessCaches.availableSpace();
+        this.setState({space: Math.round(space), availableSpace: Math.round(availableSpace)});
     }
 
     private renderZipCells = (): React.ReactNode => {
+        const {pptDatas} = this.state;
         return pptDatas.map((pptData: string, index: number) => {
             const scenes: WhiteScene[] = JSON.parse(pptData);
             let icon = zip_icon;
-            let zipUrl;
-            let isDownload = false;
             if (scenes[0] && scenes[0].ppt) {
+                if (scenes[0].ppt.previewURL) {
+                    icon = scenes[0].ppt.previewURL;
+                }
                 const regex = /dynamicConvert\/([^\/]+)/gm;
                 const inner = scenes[0].ppt.src.match(regex);
                 if (inner) {
                     const taskUuid = inner[0].replace("dynamicConvert/", "");
-                    zipUrl = `https://${resourcesHost}/dynamicConvert/${taskUuid}.zip`;
-                }
-                if (scenes[0].ppt.previewURL) {
-                    icon = scenes[0].ppt.previewURL;
+                    return (
+                        <div key={`zip-${index}`}>
+                            <StorageCell
+                                icon={icon}
+                                taskUuid={taskUuid}
+                                refreshSpaceData={this.refreshSpaceData}/>
+                        </div>
+                    )
                 }
             }
-            if (zipUrl) {
-                return (
-                    <div key={`zip-${index}`}
-                         style={{backgroundColor: isDownload ? "#F2F2F2" : "red"}}
-                         onClick={async () => {
-                             await this.startDownload(zipUrl)
-                             await this.refreshSpaceData();
-                         }} className="service-box-zip">
-                        <img src={icon} alt={"zip"}/>
-                    </div>
-                )
-            } else {
-                return null;
-            }
+
+            return null;
         });
     }
 
     public render(): React.ReactNode {
-        return (
-            <div className="service-box">
-                {this.state.space}
-                <Button onClick={async () => {
-                    await netlessCaches.deleteCache();
-                    await this.refreshSpaceData();
-                }}>
-                    清空
-                </Button>
-                {this.renderZipCells()}
-            </div>
-        );
-    }
+            return (
+                <div className="page-index-box">
+                    <div className="page-index-mid-box">
+                        <div className="page-history-head">
+                            <div className="page-history-head-left">
+                                <Link to={"/"}>
+                                    <div className="page-history-back">
+                                        <LeftOutlined /> <div>返回</div>
+                                    </div>
+                                </Link>
+                                <Tag color={"blue"} style={{marginLeft: 8}}>{this.state.space}(mb) / {this.state.availableSpace}(mb)</Tag>
+                            </div>
+                            <Button
+                                type="link"
+                                size={"small"}
+                                style={{ marginRight: 20, fontSize: 14 }}
+                                onClick={async () => {
+                                    await netlessCaches.deleteCache();
+                                    await this.refreshSpaceData();
+                                }}
+                            >
+                                清空缓存
+                            </Button>
+                        </div>
+                        {this.state.pptDatas.length === 0 ? (
+                            <div className="page-history-body-empty">
+                                <img src={empty_box} alt={"empty_box"} />
+                            </div>
+                        ) : (
+                            <div className="page-history-body">
+                                {this.renderZipCells()}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
 }
