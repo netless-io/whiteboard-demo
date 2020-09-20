@@ -41,25 +41,21 @@ export class NetlessCaches {
     }
 
     public deleteTaskUUID = async (uuid: string) =>  {
-        if (this.netlessCaches) {
-            const cache = await this.netlessCaches;
-            const keys = await cache.keys();
-            for (const request of keys) {
-                if (request.url.indexOf(uuid) !== -1) {
-                    await cache.delete(request);
-                }
+        const cache = await this.openCache("netless");
+        const keys = await cache.keys();
+        for (const request of keys) {
+            if (request.url.indexOf(uuid) !== -1) {
+                await cache.delete(request);
             }
         }
     }
 
     public hasTaskUUID = async (uuid: string): Promise<boolean> =>  {
-        if (this.netlessCaches) {
-            const cache = await this.netlessCaches;
-            const keys = await cache.keys();
-            for (const request of keys) {
-                if (request.url.indexOf(uuid) !== -1) {
-                    return true;
-                }
+        const cache = await this.openCache("netless");
+        const keys = await cache.keys();
+        for (const request of keys) {
+            if (request.url.indexOf(uuid) !== -1) {
+                return true;
             }
         }
         return false;
