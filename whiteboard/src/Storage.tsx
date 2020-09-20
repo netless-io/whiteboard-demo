@@ -41,7 +41,7 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
     }
 
     private renderZipCells = (): React.ReactNode => {
-        const {pptDatas} = this.state;
+        const {pptDatas, space} = this.state;
         return pptDatas.map((pptData: string, index: number) => {
             const scenes: WhiteScene[] = JSON.parse(pptData);
             let icon = zip_icon;
@@ -56,6 +56,7 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
                     return (
                         <div key={`zip-${index}`}>
                             <StorageCell
+                                space={space}
                                 icon={icon}
                                 taskUuid={taskUuid}
                                 refreshSpaceData={this.refreshSpaceData}/>
@@ -66,6 +67,11 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
 
             return null;
         });
+    }
+
+    private clearSpace = async (): Promise<void> => {
+        await netlessCaches.deleteCache();
+        await this.refreshSpaceData();
     }
 
     public render(): React.ReactNode {
@@ -79,16 +85,16 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
                                         <LeftOutlined /> <div>返回</div>
                                     </div>
                                 </Link>
-                                <Tag color={"blue"} style={{marginLeft: 8}}>{this.state.space}(mb) / {this.state.availableSpace}(mb)</Tag>
+                                <Tag
+                                    color={"blue"}
+                                    style={{marginLeft: 8}}>{this.state.space}(mb) / {this.state.availableSpace}(mb)
+                                </Tag>
                             </div>
                             <Button
                                 type="link"
                                 size={"small"}
                                 style={{ marginRight: 20, fontSize: 14 }}
-                                onClick={async () => {
-                                    await netlessCaches.deleteCache();
-                                    await this.refreshSpaceData();
-                                }}
+                                onClick={this.clearSpace}
                             >
                                 清空缓存
                             </Button>
