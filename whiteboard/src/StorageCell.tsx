@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./StorageCell.less";
 import {netlessCaches} from "./NetlessCaches";
-import {Button} from "antd";
+import {Button, Progress} from "antd";
 
 export type StorageCellStates = {
     isDownload: boolean;
@@ -26,9 +26,7 @@ export default class StorageCell extends React.Component<StorageCellProps, Stora
     }
 
     public async componentDidMount(): Promise<void> {
-        console.log("taskUuid", this.props.taskUuid);
         const res = await netlessCaches.hasTaskUUID(this.props.taskUuid);
-        console.log("res", res);
         this.setState({isDownload: res});
     }
 
@@ -55,8 +53,16 @@ export default class StorageCell extends React.Component<StorageCellProps, Stora
                     <div className="room-cell-left">
                         <div className="room-cell-image">
                             <img src={icon} alt={"cover"} />
+                            <div className="room-cell-image-cover">
+                                <Progress
+                                    width={42}
+                                    style={{color: "white"}}
+                                    strokeWidth={6}
+                                    type="circle"
+                                    trailColor={"white"}
+                                    percent={this.state.progress} />
+                            </div>
                         </div>
-                        <div>{this.state.progress}</div>
                     </div>
                     <div className="room-download-cell-right">
                         <Button

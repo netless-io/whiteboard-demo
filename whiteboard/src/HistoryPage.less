@@ -45,8 +45,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 16px;
+    margin-bottom: 16px;
     position: relative;
 }
 .room-cell-left {
@@ -58,11 +58,27 @@
 .room-cell-image {
     width: 96px;
     height: 72px;
-    background-color: #EEF0F6;
     margin-right: 16px;
+    position: relative;
     img {
         width: 100%;
         height: 100%;
+        position: absolute;
+        z-index: 1;
+    }
+}
+
+.room-cell-image-cover {
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    .ant-progress-text {
+        color: white;
     }
 }
 
@@ -89,7 +105,6 @@
     align-items: flex-end;
     justify-content: space-between;
     position: absolute;
-    width: 100%;
     right: 0;
     cursor: pointer;
 }
