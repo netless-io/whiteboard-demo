@@ -15,8 +15,8 @@ export enum Identity {
     creator = "creator",
     joiner = "joiner",
 }
-class IndexPage extends React.Component<RouteComponentProps<{}>, IndexPageStates> {
-    public constructor(props: RouteComponentProps<{}>) {
+class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
+    public constructor(props: RouteComponentProps) {
         super(props);
         const name = localStorage.getItem("userName");
         this.state = {

@@ -13,8 +13,8 @@ export type JoinPageStates = {
     name: string;
 };
 
-export default class JoinPage extends React.Component<RouteComponentProps<{}>, JoinPageStates> {
-    public constructor(props: RouteComponentProps<{}>) {
+export default class JoinPage extends React.Component<RouteComponentProps, JoinPageStates> {
+    public constructor(props: RouteComponentProps) {
         super(props);
         const name = localStorage.getItem("userName");
         this.state = {

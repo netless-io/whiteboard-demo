@@ -41,7 +41,7 @@ export default class AddNamePage extends React.Component<AddNamePageProps, JoinP
             <div className="page-index-box">
                 <div className="page-index-mid-box">
                     <div className="page-index-logo-box">
-                        <img src={logo}/>
+                        <img src={logo} alt={"logo"}/>
                         <span>
                                 0.0.1
                         </span>

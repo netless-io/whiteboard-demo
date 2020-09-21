@@ -12,7 +12,9 @@ export default class PageError extends React.Component<{}, {}> {
         return (
             <div className="page404-box">
                 <div className="page404-image-box">
-                    <img className="page404-image-inner" src={room_not_find}/>
+                    <img className="page404-image-inner"
+                         src={room_not_find}
+                         alt={"room_not_find"}/>
                     <div className="page404-inner">
                         <div className="page404-inner-title">
                             抱歉，您要访问的页面不存在

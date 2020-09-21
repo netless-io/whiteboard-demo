@@ -17,7 +17,7 @@ export type ExitButtonPlayerProps = {
     identity: Identity;
     uuid: string;
     userId: string;
-} & RouteComponentProps<{}>;
+} & RouteComponentProps;
 
 class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps, ExitButtonPlayerStates> {
     public constructor(props: ExitButtonPlayerProps) {
@@ -41,7 +41,7 @@ class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps, ExitButton
             <div>
                 <Tooltip placement="bottom" title={"Exit"}>
                     <div className="page-controller-cell" onClick={() => this.setState({exitViewDisable: true})}>
-                        <img src={exit}/>
+                        <img src={exit} alt={"exit"}/>
                     </div>
                 </Tooltip>
                 <Modal
@@ -52,7 +52,7 @@ class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps, ExitButton
                 >
                     <div className="modal-box">
                         <div onClick={this.handleReplay}>
-                            <img className="modal-box-img" src={replayScreen}/>
+                            <img className="modal-box-img" src={replayScreen} alt={"replayScreen"}/>
                         </div>
                         <div className="modal-box-name">回到白板</div>
                         <Button

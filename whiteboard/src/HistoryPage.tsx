@@ -21,8 +21,8 @@ export type LocalStorageRoomDataType = {
     cover?: string;
 };
 
-export default class JoinPage extends React.Component<RouteComponentProps<{}>, JoinPageStates> {
-    public constructor(props: RouteComponentProps<{}>) {
+export default class JoinPage extends React.Component<RouteComponentProps, JoinPageStates> {
+    public constructor(props: RouteComponentProps) {
         super(props);
         const rooms = localStorage.getItem("rooms");
         this.state = {

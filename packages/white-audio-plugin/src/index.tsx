@@ -64,9 +64,6 @@ export const audioPlugin: Plugin<PluginContext, WhiteAudioPluginAttributes> = Ob
     },
     hitTest: (plugin: PluginInstance<PluginContext, WhiteAudioPluginAttributes>): boolean => {
         const memberState = (plugin as any).component.context.getMemberState();
-        if (memberState && memberState.currentApplianceName === "eraser") {
-            return false;
-        }
-        return true;
+        return !(memberState && memberState.currentApplianceName === "eraser");
     },
 });

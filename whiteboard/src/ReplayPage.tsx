@@ -83,12 +83,6 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         });
     }
 
-    private onWindowResize = (): void => {
-        if (this.state.player) {
-            this.state.player.refreshViewSize();
-        }
-    }
-
     private startPlayer = async (whiteWebSdk: WhiteWebSdk, uuid: string, roomToken: string): Promise<void> => {
         const cursorAdapter = new CursorTool();
         const player = await whiteWebSdk.replayRoom(
@@ -181,7 +175,7 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                 return (
                     <div className="player-out-box">
                         <div className="logo-box">
-                            <img src={logo}/>
+                            <img src={logo} alt={"logo"}/>
                         </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
@@ -206,7 +200,10 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                                     className="player-mask">
                                     {phase === PlayerPhase.Pause &&
                                     <div className="player-big-icon">
-                                        <img style={{width: 50, marginLeft: 6}} src={video_play}/>
+                                        <img
+                                            style={{width: 50, marginLeft: 6}}
+                                            src={video_play}
+                                            alt={"video_play"}/>
                                     </div>}
                                 </div>
                                 <div style={{backgroundColor: "#F2F2F2"}}

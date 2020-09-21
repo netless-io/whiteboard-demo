@@ -2,12 +2,11 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import "./CreatePage.less";
 import logo from "./assets/image/logo.svg";
-import {Button, Input, Radio} from "antd";
+import {Button, Input} from "antd";
 import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
-import {RadioChangeEvent} from "antd/lib/radio/interface";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 
 export type JoinPageStates = {
@@ -93,15 +92,8 @@ export default class CreatePage extends React.Component<RouteComponentProps, Joi
         }
     };
 
-    private onChange = (e: RadioChangeEvent): void => {
-        this.setState({value: e.target.value});
-    };
     public render(): React.ReactNode {
         const {roomName} = this.state;
-        const options = [
-            { label: "开启预加载", value: true },
-            { label: "关闭预加载", value: false },
-        ];
         return (
             <div className="page-index-box">
                 <div className="page-index-mid-box">
