@@ -3,8 +3,7 @@ import "./Storage.less";
 import * as zip_icon from "./assets/image/zip.svg";
 import "@netless/zip";
 import {netlessCaches} from "./NetlessCaches";
-import {pptDatas} from "./pptDatas";
-import {WhiteScene} from "white-web-sdk";
+import {taskUuids, TaskUuidType} from "./taskUuids";
 import {Button, Progress, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {LeftOutlined} from "@ant-design/icons";
@@ -13,13 +12,14 @@ import empty_box from "./assets/image/empty-box.svg";
 export type ServiceWorkTestStates = {
     space: number;
     availableSpace: number;
-    pptDatas: string[];
+    pptDatas: TaskUuidType[];
     pptDatasStates: PptDatasType[];
 };
 
 export type PptDatasType = {
     taskUuid: string | null;
     progress: number;
+    name: string;
     cover: string;
     isDownload: boolean;
 };
@@ -31,46 +31,21 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
         this.state = {
             space: 0,
             availableSpace: 0,
-            pptDatas: pptDatas,
+            pptDatas: taskUuids,
             pptDatasStates: [],
         }
     }
 
     public async componentDidMount(): Promise<void> {
         await this.refreshSpaceData();
-        const pptDatasStates: PptDatasType[] = await Promise.all(pptDatas.map(async ppt => {
-            const scenes: WhiteScene[] = JSON.parse(ppt);
-            let cover = zip_icon;
-            if (scenes[0] && scenes[0].ppt) {
-                if (scenes[0].ppt.previewURL) {
-                    cover = scenes[0].ppt.previewURL;
-                }
-                const regex = /dynamicConvert\/([^\/]+)/gm;
-                const inner = scenes[0].ppt.src.match(regex);
-                if (inner) {
-                    const taskUuid = inner[0].replace("dynamicConvert/", "");
-                    return {
-                        taskUuid: taskUuid,
-                        progress: 0,
-                        cover: cover,
-                        isDownload: await netlessCaches.hasTaskUUID(taskUuid),
-                    };
-                } else {
-                    return {
-                        taskUuid: null,
-                        progress: 0,
-                        cover: cover,
-                        isDownload: false,
-                    };
-                }
-            } else {
-                return {
-                    taskUuid: null,
-                    progress: 0,
-                    cover: cover,
-                    isDownload: false,
-                };
-            }
+        const pptDatasStates: PptDatasType[] = await Promise.all(taskUuids.map(async ppt => {
+            return {
+                taskUuid: ppt.taskUuid,
+                progress: 0,
+                name: ppt.name ? ppt.name : "",
+                cover: zip_icon,
+                isDownload: await netlessCaches.hasTaskUUID(ppt.taskUuid),
+            };
         }));
         this.setState({pptDatasStates: pptDatasStates});
     }
@@ -101,6 +76,9 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
                                             trailColor={"white"}
                                             percent={pptData.progress} />
                                     </div>}
+                                </div>
+                                <div>
+                                    <div className="room-cell-text">{pptData.name}</div>
                                 </div>
                             </div>
                             <div className="room-download-cell-right">
