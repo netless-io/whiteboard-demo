@@ -22,8 +22,6 @@ self.onfetch = function(event) {
         return response || fetch(event.request);
       });
     }));
-  } else {
-    return fetch(event.request);
   }
 };
 
