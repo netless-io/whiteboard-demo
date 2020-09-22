@@ -7,11 +7,3 @@ ReactDOM.render(
     <AppRoutes/>,
   document.getElementById("root") as HTMLElement,
 );
-if (navigator.serviceWorker && navigator.serviceWorker.register) {
-    navigator.serviceWorker.register('./worker.js').then(function(registration) {
-      console.log("install")
-    }).catch(function(error) {
-      console.log('An error happened during installing the service worker:');
-      console.log(error.message);
-    });
-}
