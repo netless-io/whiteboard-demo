@@ -33,6 +33,10 @@ class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
         }
     }
 
+    public componentDidMount() {
+        this.register();
+    }
+
     private updateName = (isEmpty?: boolean): void => {
         if (isEmpty) {
             localStorage.removeItem("userName");
@@ -42,6 +46,18 @@ class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
             this.setState({ visible: false });
         }
     };
+
+    private register(): void {
+        if (navigator.serviceWorker && navigator.serviceWorker.register) {
+            navigator.serviceWorker.register('./worker.js').then(function(registration) {
+              console.log("registration finish")
+            }).catch(function(error) {
+              console.log('An error happened during installing the service worker:');
+              console.log(error.message);
+            });
+        }
+        
+    }
 
     public render(): React.ReactNode {
             return (
