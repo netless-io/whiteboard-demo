@@ -17,24 +17,9 @@ export class AppRoutes extends React.Component<{}, {}> {
         super(props);
     }
 
-    public componentDidMount(): void {
-        this.register();
-    }
-
     public componentDidCatch(error: any, inf: any): void {
         message.error(`网页加载发生错误：${error}`);
     }
-    private register(): void {
-        if (navigator.serviceWorker && navigator.serviceWorker.register) {
-            navigator.serviceWorker.register('./worker.js').then(function(registration) {
-                console.log("registration finish")
-            }).catch(function(error) {
-                console.log('An error happened during installing the service worker:');
-                console.log(error.message);
-            });
-        }
-    }
-
     public render(): React.ReactNode {
         return (
             <BrowserRouter>
