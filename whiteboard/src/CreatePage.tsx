@@ -9,12 +9,12 @@ import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 
-export type JoinPageStates = {
+export type CreatePageStates = {
     roomName: string;
     value: boolean;
 };
 
-export default class CreatePage extends React.Component<RouteComponentProps, JoinPageStates> {
+export default class CreatePage extends React.Component<RouteComponentProps, CreatePageStates> {
     public constructor(props: RouteComponentProps) {
         super(props);
         this.state = {

@@ -1,6 +1,6 @@
 {
   "name": "@netless/oss-drop-upload",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "private": false,
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "@netless/oss-upload-manager": "^1.1.0",
+    "@netless/oss-upload-manager": "^1.1.1",
     "@netless/loading-bar": "^0.0.1",
     "react-dropzone": "4.2.10",
     "ali-oss": "^6.10.0"

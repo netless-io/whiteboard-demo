@@ -26,9 +26,10 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
     }
 
     private renderAvatar = (roomMember: RoomMember): React.ReactNode => {
-        const color = `rgb(${roomMember.memberState.strokeColor[0]}, ${roomMember.memberState.strokeColor[1]}, ${roomMember.memberState.strokeColor[2]})`
-        if (roomMember.payload.avatar) {
-            const isHaveName = roomMember.payload.cursorName !== undefined;
+        const color = `rgb(${roomMember.memberState.strokeColor[0]}, ${roomMember.memberState.strokeColor[1]}, ${roomMember.memberState.strokeColor[2]})`;
+
+        if (this.detectAvatar(roomMember)) {
+            const isHaveName = this.detectCursorName(roomMember);
             return (
                 <img className="cursor-selector-avatar"
                      style={{
@@ -46,18 +47,34 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
     }
 
     private getOpacity = (roomMember: RoomMember): number => {
-        const cursorName = roomMember.payload.cursorName;
-        const avatar = roomMember.payload.avatar;
+        const cursorName = this.getCursorName(roomMember);
+        const avatar = this.detectAvatar(roomMember);
         if (cursorName === undefined && avatar === undefined) {
             return 0;
         } else {
             return 1;
         }
     }
+
+    private getCursorName = (roomMember: RoomMember): string | undefined => {
+        if (roomMember.payload && roomMember.payload.cursorName) {
+            return roomMember.payload.cursorName;
+        } else {
+            return undefined;
+        }
+    }
+
+    private detectCursorName = (roomMember: RoomMember): boolean => {
+        return !!(roomMember.payload && roomMember.payload.cursorName);
+    }
+
+    private detectAvatar = (roomMember: RoomMember): boolean => {
+        return !!(roomMember.payload && roomMember.payload.avatar);
+    }
     public render(): React.ReactNode {
         const {roomMember} = this.props;
-        const cursorName = roomMember.payload.cursorName;
-        const isHaveName = roomMember.payload.cursorName !== undefined;
+        const cursorName = this.getCursorName(roomMember);
+        const isHaveName = this.detectCursorName(roomMember);
         const color = `rgb(${roomMember.memberState.strokeColor[0]}, ${roomMember.memberState.strokeColor[1]}, ${roomMember.memberState.strokeColor[2]}, ${isHaveName ? 1 : 0})`;
         const appliance = roomMember.memberState.currentApplianceName;
         switch (appliance) {
