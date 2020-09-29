@@ -61,12 +61,17 @@ export class NetlessCaches {
         return false;
     }
 
-    public startDownload = async (taskUuid: string, onProgress?: (progress: number) => void): Promise<void> => {
+    public startDownload = async (taskUuid: string, onProgress?: (progress: number, controller: AbortController) => void): Promise<void> => {
+        const controller = new AbortController();
+        const signal = controller.signal;
         const zipUrl = `https://${resourcesHost}/dynamicConvert/${taskUuid}.zip`;
-        const res = await fetch(zipUrl).then(fetchProgress({
+        const res = await fetch(zipUrl, {
+            method: "get",
+            signal: signal,
+        }).then(fetchProgress({
             onProgress(progress) {
                 if (onProgress) {
-                    onProgress(progress.percentage);
+                    onProgress(progress.percentage, controller);
                 }
             },
         }));
