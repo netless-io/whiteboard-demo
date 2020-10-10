@@ -159,26 +159,12 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
     }
 
     private downloadCell = async (taskUuid: string): Promise<void> => {
-        await netlessCaches.startDownload(taskUuid, (progress: number) => {
-            const pptDatasStates = this.state.pptDatasStates.map(pptData => {
-                if (pptData.taskUuid === taskUuid) {
-                    pptData.progress = progress;
-                    if (pptData.progress === 100) {
-                        pptData.progress = 0;
-                        pptData.downloadState = DownloadState.downloaded;
-                        return pptData;
-                    } else {
-                        pptData.downloadState = DownloadState.downloading;
-                        return pptData;
-                    }
-                } else {
-                    return pptData;
-                }
-            });
-            this.setState({pptDatasStates: pptDatasStates});
-        });
-        await this.refreshSpaceData();
-        this.refreshPptListState();
+        const {downloader, pptDatasStates} = this.state;
+        if (downloader) {
+            await downloader.download(taskUuid, pptDatasStates);
+            await this.refreshSpaceData();
+            this.refreshPptListState();
+        }
     }
 
     private onProgressUpdate = (pptDatasStates: PptDatasType[]): void => {
@@ -190,11 +176,11 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
     }
 
     private downloadAllCell = async (): Promise<void> => {
-        const {downloader} = this.state;
+        const {downloader, pptDatasStates} = this.state;
         if (downloader) {
             downloader.start();
             this.setState({downloadAllState: DownloadState.downloading});
-            await downloader.downloadAll();
+            await downloader.downloadAll(pptDatasStates);
             this.refreshPptListState();
         }
     }
@@ -238,9 +224,14 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
         }
     }
 
+    private detectCellIsDownloading = (): boolean => {
+        const {pptDatasStates} = this.state;
+        return !!pptDatasStates.find(pptDatasState => pptDatasState.downloadState === DownloadState.downloading);
+    }
+
     private renderButton = (): React.ReactNode => {
         const {downloadAllState, downloader} = this.state;
-        if (downloadAllState === DownloadState.downloading) {
+        if (downloadAllState === DownloadState.downloading || this.detectCellIsDownloading()) {
             return (
                 <Button
                     type="link"
@@ -316,6 +307,7 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
                                 <Button
                                     type="link"
                                     size={"small"}
+                                    disabled={this.detectCellIsDownloading()}
                                     style={{ marginRight: 20, fontSize: 14 }}
                                     onClick={this.clearSpace}
                                 >
@@ -340,7 +332,8 @@ export default class Storage extends React.Component<{}, ServiceWorkTestStates> 
 
 class Downloader {
     private didStop: boolean = false;
-    private readonly pptDatasStates: PptDatasType[];
+    private pptDatasStates: PptDatasType[];
+    private activeObjs: {controller: AbortController, uuid: string}[] = [];
     private readonly onProgressUpdate: (pptDatasStates: PptDatasType[]) => void;
     private readonly onPptSuccess: () => Promise<void>;
     public pptListState: PptListState;
@@ -355,6 +348,26 @@ class Downloader {
     }
     public stop = (): void => {
         this.didStop = true;
+        this.stopActive();
+    }
+
+    private stopActive = (): void => {
+        for (let activeObj of this.activeObjs) {
+            activeObj.controller.abort();
+            const newPptDatasStates = this.pptDatasStates.map(pptData => {
+                if (pptData.taskUuid === activeObj.uuid) {
+                    pptData.progress = 0;
+                    pptData.downloadState = DownloadState.preDownload;
+                    return pptData;
+                } else {
+                    return pptData;
+                }
+            });
+            this.onProgressUpdate(newPptDatasStates);
+            this.pptListState = this.getPptListState();
+            netlessCaches.deleteTaskUUID(activeObj.uuid).catch(error => console.log(error));
+            this.pptDatasStates = newPptDatasStates;
+        }
     }
 
     public start = (): void => {
@@ -382,15 +395,41 @@ class Downloader {
     private detectIsDownload = (ppt: PptDatasType): boolean => {
         return ppt.downloadState === DownloadState.downloaded;
     }
-    public downloadAll = async (): Promise<void> => {
-        for (let ppt of this.pptDatasStates) {
+
+    public download = async (taskUuid: string, pptDatasStates: PptDatasType[]): Promise<void> => {
+        await netlessCaches.startDownload(taskUuid, (progress: number, controller: AbortController) => {
+            const newPptDatasStates = pptDatasStates.map(pptData => {
+                if (pptData.taskUuid === taskUuid) {
+                    pptData.progress = progress;
+                    if (pptData.progress === 100) {
+                        pptData.progress = 0;
+                        this.activeObjs = this.activeObjs.filter(activeObj => activeObj.uuid !== taskUuid);
+                        pptData.downloadState = DownloadState.downloaded;
+                        return pptData;
+                    } else {
+                        this.activeObjs = [...this.activeObjs, {controller: controller, uuid: taskUuid}];
+                        pptData.downloadState = DownloadState.downloading;
+                        return pptData;
+                    }
+                } else {
+                    return pptData;
+                }
+            });
+            this.pptDatasStates = newPptDatasStates;
+            this.pptListState = this.getPptListState();
+            this.onProgressUpdate(newPptDatasStates);
+        });
+    }
+
+    public downloadAll = async (pptDatasStates: PptDatasType[]): Promise<void> => {
+        for (let ppt of pptDatasStates) {
             if (this.didStop) {
                 break;
             }
             if (ppt.taskUuid && !this.detectIsDownload(ppt)) {
                 await netlessCaches.startDownload(ppt.taskUuid, async (progress: number, controller: AbortController) => {
                     if (this.didStop) {
-                        const pptDatasStates = this.pptDatasStates.map(pptData => {
+                        const newPptDatasStates = pptDatasStates.map(pptData => {
                             if (pptData.taskUuid === ppt.taskUuid) {
                                 pptData.progress = 0;
                                 pptData.downloadState = DownloadState.preDownload;
@@ -400,10 +439,11 @@ class Downloader {
                             }
                         });
                         await netlessCaches.deleteTaskUUID(ppt.taskUuid!);
-                        this.onProgressUpdate(pptDatasStates);
+                        this.onProgressUpdate(newPptDatasStates);
+                        this.pptDatasStates = newPptDatasStates;
                         controller.abort();
                     } else {
-                        const pptDatasStates = this.pptDatasStates.map(pptData => {
+                        const newPptDatasStates = pptDatasStates.map(pptData => {
                             if (pptData.taskUuid === ppt.taskUuid) {
                                 pptData.progress = progress;
                                 if (pptData.progress === 100) {
@@ -418,7 +458,8 @@ class Downloader {
                                 return pptData;
                             }
                         });
-                        this.onProgressUpdate(pptDatasStates);
+                        this.pptDatasStates = newPptDatasStates;
+                        this.onProgressUpdate(newPptDatasStates);
                     }
                 });
                 this.pptListState = this.getPptListState();
