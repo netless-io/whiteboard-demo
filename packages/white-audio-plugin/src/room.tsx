@@ -5,11 +5,10 @@ import "./index.less";
 import * as mute_icon from "./image/mute_icon.svg";
 import * as audio_plugin from "./image/audio_plugin.svg";
 import * as delete_icon from "./image/delete_icon.svg";
-
-const timeout = (ms: any) => new Promise(res => setTimeout(res, ms));
 import {PluginContext} from "./Plugins";
 import {WhiteAudioPluginAttributes} from "./index";
 import {ProgressSyncNode} from "./ProgressSyncNode";
+const timeout = (ms: any) => new Promise(res => setTimeout(res, ms));
 
 export enum IdentityType {
     host = "host",
@@ -323,7 +322,7 @@ export default class WhiteAudioPluginRoom extends React.Component<WhiteAudioPlug
             return null;
         }
     }
-    
+
     private renderNavigation = (): React.ReactNode => {
         const { plugin } = this.props;
         if ((plugin.attributes as any).isNavigationDisable === true) {

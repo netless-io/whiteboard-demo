@@ -32,7 +32,7 @@ enum PptListState {
 }
 
 export type PptDatasType = {
-    taskUuid: string | null;
+    taskUuid: string;
     progress: number;
     name: string;
     cover: string;

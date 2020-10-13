@@ -1,8 +1,9 @@
 import * as React from "react";
 import BraftEditor from "braft-editor";
 import {CNode, RoomConsumer, Room, PlayerConsumer, Player, PluginProps, Plugin, PluginInstance} from "white-web-sdk";
-import "braft-editor/dist/index.css";
 import "./index.less";
+import WhiteEditorPluginRoom from "./room";
+import WhiteVideoPluginRoom from "@netless/white-video-plugin/dist/room";
 
 export type WhiteEditorPluginProps = PluginProps<{}, WhiteEditorPluginAttributes>;
 
@@ -27,7 +28,10 @@ class WhiteEditorPlugin extends React.Component<WhiteEditorPluginProps, {}> {
                     {(room: Room | undefined) => {
                         if (room) {
                             return (
-                                <BraftEditor/>
+                               <WhiteEditorPluginRoom
+                                   {...this.props}
+                                   room={room}
+                               />
                             );
                         } else {
                             return null;
@@ -38,7 +42,9 @@ class WhiteEditorPlugin extends React.Component<WhiteEditorPluginProps, {}> {
                     {(player: Player | undefined) => {
                         if (player) {
                             return (
-                                <BraftEditor/>
+                                <div style={{backgroundColor: "white", width: 600, height: 600}}>
+                                    <BraftEditor/>
+                                </div>
                             );
                         } else {
                             return null;
@@ -53,16 +59,8 @@ class WhiteEditorPlugin extends React.Component<WhiteEditorPluginProps, {}> {
 export const editorPlugin: Plugin<{}, WhiteEditorPluginAttributes> = Object.freeze({
     kind: "editor",
     render: WhiteEditorPlugin,
-    defaultAttributes: {
-        play: false,
-        seek: 0,
-        mute: false,
-        volume: 1,
-        currentTime: 0,
-    },
     hitTest: (plugin: PluginInstance<{}, WhiteEditorPluginAttributes>): boolean => {
         const memberState = (plugin as any).component.context.getMemberState();
         return !(memberState && memberState.currentApplianceName === "eraser");
-
     },
 });

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Room, RoomState} from "white-web-sdk";
+import {Room, RoomState } from "white-web-sdk";
 import MenuBox from "@netless/menu-box";
 import * as close from "./image/close.svg";
 import * as deleteIcon from "./image/delete.svg";
@@ -179,7 +179,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div onClick={() => this.selectDoc(data.id)}
                                  style={{borderColor: data.active ? "#71C3FC" : "#F4F4F4"}}
                                  className="menu-ppt-image-box">
-                                <img src={this.handleCoverUrl(data.cover)}/>
+                                <img src={this.handleCoverUrl(data.cover)} alt={"cover"}/>
                             </div>
                             <div className="menu-ppt-name">
                                 <input onChange={ evt => {
@@ -191,7 +191,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                                     动态
                                 </div>
                                 <div className="menu-ppt-type-icon" onClick={() => this.removeScene(data)}>
-                                    <img src={deleteIcon}/>
+                                    <img src={deleteIcon}  alt={"deleteIcon"}/>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +244,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div className="menu-title-left">
                                 <div className="menu-head-btn" style={{marginLeft: 8}}
                                      onClick={() => handleDocCenterState(false)}>
-                                    <img src={close}/>
+                                    <img src={close} alt={"close"}/>
                                 </div>
                             </div>
                         </div>

@@ -1734,10 +1734,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@netless/canvas-polyfill@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@netless/canvas-polyfill/-/canvas-polyfill-0.0.3.tgz#caf77b6b1b666db54cde5edda3751ee292bc088a"
-  integrity sha512-X3KodHfvMAIrmVBsj7kbWdcWA+eCr/uhqpix10GKXE+UovIyJd05KyFNMKIAXOMQI79NJrYiHcPBLszRRogygA==
+"@netless/canvas-polyfill@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@netless/canvas-polyfill/-/canvas-polyfill-0.0.4.tgz#b5f28eefeb9c1e8ff8253fa1b044ccb1dc1b7c9c"
+  integrity sha512-7NzsJrba0R/mq/l10SkIZQwbrNVJyPxZYrjK6xL3Ts732iWAVuS2UB0u3s6iGeUVcqV39A679yva8APWRl4M0A==
 
 "@netless/fetch-progress@^0.0.1":
   version "0.0.1"
@@ -11692,12 +11692,12 @@ which@^1.2.14, which@^1.2.9, which@^1.3.1:
   dependencies:
     isexe "^2.0.0"
 
-white-web-sdk@^2.9.12, white-web-sdk@^2.9.17:
-  version "2.9.17"
-  resolved "https://registry.yarnpkg.com/white-web-sdk/-/white-web-sdk-2.9.17.tgz#d42312765322186d3a24e6fe68f59d01e8233195"
-  integrity sha512-KsHjV0uym6mBUSeeNbnt/EjHsWN4Uh/8ElnDeK+MirPqHbHWc7/NLzuVkKxntF/YhQ3CfuiCfOM3E80W8M0JyQ==
+white-web-sdk@^2.10.2:
+  version "2.10.2"
+  resolved "https://registry.yarnpkg.com/white-web-sdk/-/white-web-sdk-2.10.2.tgz#b94ca84075c87997b0e8d32e80a7fcbb5e0fabff"
+  integrity sha512-0T5hhGrIpY90tbukn0rrFZcdAlcJj/v+U9Scj4gckFhUtv4n2o7YyDKFn4GHmW8WkZYDbcsYvgYqTmKYRozzNw==
   dependencies:
-    "@netless/canvas-polyfill" "^0.0.3"
+    "@netless/canvas-polyfill" "^0.0.4"
     atob "^2.1.0"
     bezier-js "^2.4.4"
     color "^3.1.0"
