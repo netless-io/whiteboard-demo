@@ -3,8 +3,6 @@ import BraftEditor from "braft-editor";
 import {CNode, RoomConsumer, Room, PlayerConsumer, Player, PluginProps, Plugin, PluginInstance} from "white-web-sdk";
 import "./index.less";
 import WhiteEditorPluginRoom from "./room";
-import WhiteVideoPluginRoom from "@netless/white-video-plugin/dist/room";
-
 export type WhiteEditorPluginProps = PluginProps<{}, WhiteEditorPluginAttributes>;
 
 export type WhiteEditorPluginAttributes = {
