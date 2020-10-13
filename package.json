@@ -20,8 +20,5 @@
   "workspaces": [
     "packages/*",
     "whiteboard"
-  ],
-  "dependencies": {
-    "white-web-sdk": "^2.10.2"
-  }
+  ]
 }
