@@ -7,6 +7,7 @@ export type DownloadLogicState = {
 
 export type DownloadLogicCallbacks = {
     readonly onUpdateState: (state: Partial<DownloadLogicState>) => void;
+    readonly onSpaceUpdate: () => void;
     readonly onCatchDownloadingError: (error: Error, task: PPTTask) => void;
 };
 
@@ -108,6 +109,7 @@ export class DownloadLogic {
                     // 如果取不到 downloading 对象，标记一下 phase，也会让 controller 在首次获取后自动 abort
                     taskNode.downloading?.controller.abort();
                     taskNode.phase = TaskPhase.NotCached;
+                    taskNode.downloading = undefined;
                     this.refreshState(this.mode, index);
                 }
             }
@@ -239,6 +241,7 @@ export class DownloadLogic {
 
     private refreshState(mode: DownloadingMode, ...indexes: number[]): void {
         const updatedState: Partial<DownloadLogicState> = {};
+        let didSpaceUpdate = false;
 
         if (this.mode !== mode) {
             updatedState.mode = this.mode = mode;
@@ -246,9 +249,18 @@ export class DownloadLogic {
         if (indexes.length > 0) {
             const newPPTStates = [...this.pptStates];
             for (const index of indexes) {
-                newPPTStates[index] = this.createPPTState(this.taskNodes[index]);
+                const originState = newPPTStates[index];
+                const newState = this.createPPTState(this.taskNodes[index]);
+
+                if (originState.phase !== newState.phase) {
+                    didSpaceUpdate = true;
+                }
+                newPPTStates[index] = newState;
             }
             updatedState.pptStates = this.pptStates = Object.freeze(newPPTStates);
+        }
+        if (didSpaceUpdate) {
+            this.callbacks.onSpaceUpdate();
         }
         this.callbacks.onUpdateState(updatedState);
     }

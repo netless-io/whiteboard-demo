@@ -1,10 +1,13 @@
 import * as React from "react";
 import "./Storage.less";
 import "@netless/zip";
-import {Button, Progress, Tag} from "antd";
-import {Link} from "react-router-dom";
-import {LeftOutlined} from "@ant-design/icons";
-import {taskUuids} from "./taskUuids";
+
+import { Button, Progress, Tag } from "antd";
+import { Link } from "react-router-dom";
+import { LeftOutlined } from "@ant-design/icons";
+import { taskUuids } from "./taskUuids";
+import { AsyncRefresher } from './tools/AsyncRefresher';
+import { netlessCaches } from "./NetlessCaches";
 
 import * as zip_icon from "./assets/image/zip.svg";
 import empty_box from "./assets/image/empty-box.svg";
@@ -19,20 +22,27 @@ import {
 } from './logics/DownloadLogic';
 
 export type StorageState = DownloadLogicState & {
-    readonly downloader?: DownloadLogic
-    readonly space: number;
-    readonly availableSpace: number;
+    readonly downloader?: DownloadLogic;
+    readonly space?: number;
+    readonly availableSpace?: number;
 };
 
 export default class Storage extends React.Component<{}, StorageState> {
+
+    private readonly spaceRefresher: AsyncRefresher = new AsyncRefresher(100, async () => {
+        const space = await netlessCaches.calculateCache();
+        const availableSpace = await netlessCaches.availableSpace();
+        this.setState({
+            space: Math.round(space),
+            availableSpace: Math.round(availableSpace),
+        });
+    });
 
     public constructor(props: {}) {
         super(props);
         this.state = {
             mode: DownloadingMode.Freedom,
             pptStates: [],
-            space: 0,
-            availableSpace: 0,
         };
     }
 
@@ -44,13 +54,19 @@ export default class Storage extends React.Component<{}, StorageState> {
             }));
             const downloader = await DownloadLogic.create(tasks, {
                 onUpdateState: state => this.setState(state as any),
+                onSpaceUpdate: () => this.spaceRefresher.invoke(),
                 onCatchDownloadingError: this.onCatchDownloadingError,
             });
             this.setState({...downloader.state, downloader});
+            this.spaceRefresher.invoke();
 
         } catch (error) {
             console.error(error);
         }
+    }
+
+    public componentWillUnmount(): void {
+        this.spaceRefresher.cancel();
     }
 
     private onCatchDownloadingError = (error: Error, task: PPTTask): void => {
@@ -84,6 +100,10 @@ export default class Storage extends React.Component<{}, StorageState> {
     }
 
     private renderHeadView(downloader: DownloadLogic): React.ReactNode {
+        const shouldDisplaySpaceTag = (
+            typeof this.state.space === "number" &&
+            typeof this.state.availableSpace === "number"
+        );
         return (
             <div className="page-history-head">
                 <div className="page-history-head-left">
@@ -92,10 +112,10 @@ export default class Storage extends React.Component<{}, StorageState> {
                             <LeftOutlined /> <div>返回</div>
                         </div>
                     </Link>
-                    <Tag
+                    {shouldDisplaySpaceTag && <Tag
                         color={"blue"}
                         style={{marginLeft: 8}}>{this.state.space}(mb) / {this.state.availableSpace}(mb)
-                    </Tag>
+                    </Tag>}
                 </div>
                 <div>
                     {this.renderDownloadOneByOneButton(downloader)}
