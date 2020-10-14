@@ -1,4 +1,4 @@
-import { netlessCaches } from 'NetlessCaches';
+import { netlessCaches } from "../NetlessCaches";
 
 export type DownloadLogicState = {
     mode: DownloadingMode;
@@ -148,14 +148,42 @@ export class DownloadLogic {
         }
     }
 
+    public removeAll(): void {
+        if (this.mode === DownloadingMode.Freedom) {
+            const indexes: number[] = [];
+
+            for (let i = 0; i < this.taskNodes.length; ++ i) {
+                const taskNode = this.taskNodes[i];
+                if (taskNode.phase === TaskPhase.Downloading ||
+                    taskNode.phase === TaskPhase.Cached) {
+                    taskNode.downloading?.controller.abort();
+                    taskNode.phase = TaskPhase.NotCached;
+                    netlessCaches.deleteTaskUUID(taskNode.uuid)
+                                 .catch(error => console.error(error));
+                    indexes.push(i);
+                }
+            }
+            this.refreshState(this.mode, ...indexes);
+        }
+    }
+
     private async downloadNextOneByOne(): Promise<void> {
         if (this.oneByOneState) {
             let index = this.oneByOneState.index;
-            const taskNode = this.taskNodes[index];
-
+            let taskNode: PPTTaskNode;
             try {
-                await this.download(index);
-                index ++;
+                do {
+                    taskNode = this.taskNodes[index];
+
+                    if (taskNode.phase === TaskPhase.NotCached) {
+                        await this.download(index);
+                        index ++;
+                        break;
+                    } else {
+                        index ++;
+                    }
+                } while (index < this.taskNodes.length);
+
                 if (index < this.taskNodes.length) {
                     this.downloadNextOneByOne();
 
@@ -167,9 +195,9 @@ export class DownloadLogic {
                 this.oneByOneState = null;
                 this.refreshState(DownloadingMode.Freedom);
                 this.callbacks.onCatchDownloadingError(error, {
-                    uuid: taskNode.uuid,
-                    name: taskNode.name,
-                })
+                    uuid: taskNode!.uuid,
+                    name: taskNode!.name,
+                });
             }
         }
     }
