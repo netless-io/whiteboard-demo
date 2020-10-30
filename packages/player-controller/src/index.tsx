@@ -7,6 +7,7 @@ import SeekSlider from "./SeekSlider";
 import {displayWatch} from "./WatchDisplayer";
 import * as video_pause from "./image/video_pause.svg";
 import * as video_play from "./image/video_play.svg";
+import { CombinePlayer } from '@netless/combine-player/dist/Types';
 
 export type PlayerControllerStates = {
     phase: PlayerPhase;
@@ -17,6 +18,7 @@ export type PlayerControllerStates = {
 
 export type PlayerControllerProps = {
     player: Player;
+    combinePlayer?: CombinePlayer;
 };
 
 export default class PlayerController extends React.Component<PlayerControllerProps, PlayerControllerStates> {
@@ -53,18 +55,16 @@ export default class PlayerController extends React.Component<PlayerControllerPr
     }
 
     private onClickOperationButton = (player: Player): void => {
+        const playerControl = this.props.combinePlayer || player;
         switch (player.phase) {
             case PlayerPhase.WaitingFirstFrame:
-            case PlayerPhase.Pause: {
-                player.play();
+            case PlayerPhase.Pause:
+            case PlayerPhase.Ended: {
+                playerControl.play();
                 break;
             }
             case PlayerPhase.Playing: {
-                player.pause();
-                break;
-            }
-            case PlayerPhase.Ended: {
-                player.seekToProgressTime(0);
+                playerControl.pause();
                 break;
             }
         }
@@ -155,7 +155,7 @@ export default class PlayerController extends React.Component<PlayerControllerPr
     }
 
     public render(): React.ReactNode {
-        const {player} = this.props;
+        const {player, combinePlayer} = this.props;
         return (
             <div className="player-schedule">
                 <div className="player-mid-box">
@@ -165,7 +165,12 @@ export default class PlayerController extends React.Component<PlayerControllerPr
                         onChange={(time: number, offsetTime: number) => {
                             if (player) {
                                 this.setState({currentTime: time});
-                                player.seekToProgressTime(time);
+
+                                if (combinePlayer) {
+                                    combinePlayer.seek(time);
+                                } else {
+                                    player.seekToProgressTime(time);
+                                }
                             }
                         }}
                         hideHoverTime={true}
