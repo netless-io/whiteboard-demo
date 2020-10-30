@@ -49,11 +49,8 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
 
     private getRoomToken = async (uuid: string): Promise<string | null> => {
         const roomToken = await netlessWhiteboardApi.room.joinRoomApi(uuid);
-        if (roomToken) {
-            return roomToken;
-        } else {
-            return null;
-        }
+
+        return roomToken || null;
     };
 
     public async componentDidMount(): Promise<void> {
@@ -64,23 +61,26 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
         const roomToken = await this.getRoomToken(uuid);
         if (uuid && roomToken) {
-            const whiteWebSdk = new WhiteWebSdk({appIdentifier: netlessToken.appIdentifier, plugins: plugins});
+            const whiteWebSdk = new WhiteWebSdk({
+                appIdentifier: netlessToken.appIdentifier,
+                plugins,
+            });
             await this.loadPlayer(whiteWebSdk, uuid, roomToken);
         }
     }
 
     private loadPlayer = async (whiteWebSdk: WhiteWebSdk, uuid: string, roomToken: string): Promise<void> => {
-        await polly().waitAndRetry(10).executeForPromise(async () => {
-            const replayState = await whiteWebSdk.isPlayable({room: uuid});
-            if (replayState) {
-                this.setState({replayState: true});
-                await this.startPlayer(whiteWebSdk, uuid, roomToken);
-                return Promise.resolve();
-            } else {
-                this.setState({replayState: false});
-                return Promise.reject();
-            }
+        const replayState = await polly().waitAndRetry(10).executeForPromise(async () => {
+             return await whiteWebSdk.isPlayable({
+                region: "cn-hz",
+                room: uuid,
+            });
         });
+
+        if (replayState) {
+            this.setState({replayState: true});
+            await this.startPlayer(whiteWebSdk, uuid, roomToken);
+        }
     }
 
     private startPlayer = async (whiteWebSdk: WhiteWebSdk, uuid: string, roomToken: string): Promise<void> => {
