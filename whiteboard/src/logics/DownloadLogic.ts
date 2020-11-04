@@ -25,6 +25,7 @@ export enum TaskPhase {
     NotCached,
     Downloading,
     Cached,
+    Failed,
 }
 
 export enum DownloadingMode {
@@ -56,7 +57,7 @@ export class DownloadLogic {
         return new DownloadLogic(await Promise.all(nodePromises), callbacks);
     }
 
-    private readonly taskNodes: readonly PPTTaskNode[];
+    private readonly taskNodes: PPTTaskNode[];
     private readonly callbacks: DownloadLogicCallbacks;
 
     private mode: DownloadingMode = DownloadingMode.Freedom;
@@ -64,7 +65,7 @@ export class DownloadLogic {
     private oneByOneState: DownloadingOneByOneState | null = null;
 
     private constructor(taskNodes: PPTTaskNode[], callbacks: DownloadLogicCallbacks) {
-        this.taskNodes = Object.freeze(taskNodes);
+        this.taskNodes = taskNodes;
         this.callbacks = Object.freeze({...callbacks});
         this.pptStates = this.taskNodes.map(task => this.createPPTState(task));
     }
@@ -76,12 +77,24 @@ export class DownloadLogic {
         };
     }
 
+    public async addTask(task: PPTTask): Promise<void> {
+        if (!this.taskNodes.some(taskNode => taskNode.uuid === task.uuid)) {
+            const isCached = await netlessCaches.hasTaskUUID(task.uuid);
+            const phase = isCached ? TaskPhase.Cached : TaskPhase.NotCached;
+            const index = this.taskNodes.length;
+
+            this.taskNodes[index] = {...task, phase};
+            this.refreshState(this.mode, index);
+        }
+    }
+
     public startTask(uuid: string): void {
         if (this.mode === DownloadingMode.Freedom) {
             const index = this.taskNodes.findIndex(task => task.uuid === uuid);
             if (index !== -1) {
                 const taskNode = this.taskNodes[index];
-                if (taskNode.phase === TaskPhase.NotCached) {
+                if (taskNode.phase === TaskPhase.NotCached ||
+                    taskNode.phase === TaskPhase.Failed) {
                     this.download(index)
                         .catch(error => this.callbacks.onCatchDownloadingError(error, {
                             uuid: taskNode.uuid,
@@ -156,13 +169,21 @@ export class DownloadLogic {
 
             for (let i = 0; i < this.taskNodes.length; ++ i) {
                 const taskNode = this.taskNodes[i];
-                if (taskNode.phase === TaskPhase.Downloading ||
-                    taskNode.phase === TaskPhase.Cached) {
-                    taskNode.downloading?.controller.abort();
-                    taskNode.phase = TaskPhase.NotCached;
-                    netlessCaches.deleteTaskUUID(taskNode.uuid)
-                                 .catch(error => console.error(error));
-                    indexes.push(i);
+                switch (taskNode.phase) {
+                    case TaskPhase.Downloading:
+                    case TaskPhase.Cached: {
+                        taskNode.downloading?.controller.abort();
+                        taskNode.phase = TaskPhase.NotCached;
+                        netlessCaches.deleteTaskUUID(taskNode.uuid)
+                                     .catch(error => console.error(error));
+                        indexes.push(i);
+                        break;
+                    }
+                    case TaskPhase.Failed: {
+                        taskNode.phase = TaskPhase.NotCached;
+                        indexes.push(i);
+                        break;
+                    }
                 }
             }
             this.refreshState(this.mode, ...indexes);
@@ -178,7 +199,14 @@ export class DownloadLogic {
                     taskNode = this.taskNodes[index];
 
                     if (taskNode.phase === TaskPhase.NotCached) {
-                        await this.download(index);
+                        try {
+                            await this.download(index);
+                        } catch (error) {
+                            this.callbacks.onCatchDownloadingError(error, {
+                                uuid: taskNode!.uuid,
+                                name: taskNode!.name,
+                            });
+                        }
                         index ++;
                         break;
                     } else {
@@ -196,10 +224,7 @@ export class DownloadLogic {
             } catch (error) {
                 this.oneByOneState = null;
                 this.refreshState(DownloadingMode.Freedom);
-                this.callbacks.onCatchDownloadingError(error, {
-                    uuid: taskNode!.uuid,
-                    name: taskNode!.name,
-                });
+                console.error(error);
             }
         }
     }
@@ -230,7 +255,7 @@ export class DownloadLogic {
             taskNode.phase = TaskPhase.Cached;
 
         } catch (error) {
-            taskNode.phase = TaskPhase.NotCached;
+            taskNode.phase = TaskPhase.Failed;
             throw error;
 
         } finally {
@@ -252,7 +277,7 @@ export class DownloadLogic {
                 const originState = newPPTStates[index];
                 const newState = this.createPPTState(this.taskNodes[index]);
 
-                if (originState.phase !== newState.phase) {
+                if (!originState || originState.phase !== newState.phase) {
                     didSpaceUpdate = true;
                 }
                 newPPTStates[index] = newState;
