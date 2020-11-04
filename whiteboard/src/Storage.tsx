@@ -261,6 +261,17 @@ export default class Storage extends React.Component<{}, StorageState> {
                     </Button>
                 );
             }
+            case TaskPhase.Failed: {
+                return (
+                    <Button
+                        onClick={() => downloader.startTask(pptState.uuid)}
+                        type={"primary"}
+                        disabled={!enable}
+                        style={{width: 96}}>
+                        重新下载
+                    </Button>
+                );
+            }
         }
     }
 }
