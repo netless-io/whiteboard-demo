@@ -57,7 +57,7 @@ export class DownloadLogic {
         return new DownloadLogic(await Promise.all(nodePromises), callbacks);
     }
 
-    private readonly taskNodes: readonly PPTTaskNode[];
+    private readonly taskNodes: PPTTaskNode[];
     private readonly callbacks: DownloadLogicCallbacks;
 
     private mode: DownloadingMode = DownloadingMode.Freedom;
@@ -65,7 +65,7 @@ export class DownloadLogic {
     private oneByOneState: DownloadingOneByOneState | null = null;
 
     private constructor(taskNodes: PPTTaskNode[], callbacks: DownloadLogicCallbacks) {
-        this.taskNodes = Object.freeze(taskNodes);
+        this.taskNodes = taskNodes;
         this.callbacks = Object.freeze({...callbacks});
         this.pptStates = this.taskNodes.map(task => this.createPPTState(task));
     }
@@ -75,6 +75,17 @@ export class DownloadLogic {
             mode: this.mode,
             pptStates: this.pptStates,
         };
+    }
+
+    public async addTask(task: PPTTask): Promise<void> {
+        if (!this.taskNodes.some(taskNode => taskNode.uuid === task.uuid)) {
+            const isCached = await netlessCaches.hasTaskUUID(task.uuid);
+            const phase = isCached ? TaskPhase.Cached : TaskPhase.NotCached;
+            const index = this.taskNodes.length;
+
+            this.taskNodes[index] = {...task, phase};
+            this.refreshState(this.mode, index);
+        }
     }
 
     public startTask(uuid: string): void {
@@ -266,7 +277,7 @@ export class DownloadLogic {
                 const originState = newPPTStates[index];
                 const newState = this.createPPTState(this.taskNodes[index]);
 
-                if (originState.phase !== newState.phase) {
+                if (!originState || originState.phase !== newState.phase) {
                     didSpaceUpdate = true;
                 }
                 newPPTStates[index] = newState;

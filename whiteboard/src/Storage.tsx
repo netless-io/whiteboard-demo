@@ -5,7 +5,7 @@ import "@netless/zip";
 import { Button, Progress, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
-import { taskUuids } from "./taskUuids";
+import { taskUuids, taskUuuidsToPush } from "./taskUuids";
 import { AsyncRefresher } from './tools/AsyncRefresher';
 import { netlessCaches } from "./NetlessCaches";
 
@@ -23,6 +23,8 @@ import {
 
 export type StorageState = DownloadLogicState & {
     readonly downloader?: DownloadLogic;
+    readonly isAdding: boolean;
+    readonly nextAddIndex: number;
     readonly space?: number;
     readonly availableSpace?: number;
 };
@@ -42,6 +44,8 @@ export default class Storage extends React.Component<{}, StorageState> {
         super(props);
         this.state = {
             mode: DownloadingMode.Freedom,
+            isAdding: false,
+            nextAddIndex: 0,
             pptStates: [],
         };
     }
@@ -118,10 +122,49 @@ export default class Storage extends React.Component<{}, StorageState> {
                     </Tag>}
                 </div>
                 <div>
+                    {this.renderAddTaskButton(downloader)}
                     {this.renderDownloadOneByOneButton(downloader)}
                     {this.renderCleanAllCacheButton(downloader)}
                 </div>
             </div>
+        );
+    }
+
+    private async onClickAddTask(downloader: DownloadLogic): Promise<void> {
+        const {taskUuid, name} = taskUuuidsToPush[this.state.nextAddIndex];
+        const task: PPTTask = {
+            uuid: taskUuid,
+            name: name || "",
+        };
+        this.setState({
+            isAdding: true,
+        });
+        try {
+            await downloader.addTask(task);
+        } finally {
+            this.setState({
+                isAdding: false,
+                nextAddIndex: this.state.nextAddIndex + 1,
+            });
+        }
+    }
+
+    private renderAddTaskButton(downloader: DownloadLogic): React.ReactNode {
+        let disableAdd = false;
+        if (this.state.nextAddIndex >= taskUuuidsToPush.length) {
+            disableAdd = true;
+        } else if (this.state.isAdding) {
+            disableAdd = true;
+        }
+        return (
+            <Button
+                type="link"
+                disabled={disableAdd}
+                size={"small"}
+                style={{ marginRight: 20, fontSize: 14 }}
+                onClick={() => this.onClickAddTask(downloader)}>
+                新增
+            </Button>
         );
     }
 
