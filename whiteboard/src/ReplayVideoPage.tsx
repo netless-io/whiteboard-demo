@@ -7,7 +7,7 @@ import {WhiteWebSdk, PlayerPhase, Player, createPlugins} from "white-web-sdk";
 import video_play from "./assets/image/video-play.svg";
 import "video.js/dist/video-js.css";
 import "./ReplayPage.less";
-import "./ReplaySyncPage.less";
+import "./ReplayVideoPage.less";
 import PageError from "./PageError";
 import PlayerController from "@netless/player-controller";
 import {netlessWhiteboardApi} from "./apiMiddleware";
@@ -21,14 +21,14 @@ import {audioPlugin} from "@netless/white-audio-plugin";
 import CombinePlayerFactory from "@netless/combine-player";
 import { CombinePlayer } from '@netless/combine-player/dist/Types';
 
-export type PlayerSyncPageProps = RouteComponentProps<{
+export type PlayerVideoPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
     userId: string;
 }>;
 
 
-export type PlayerSyncPageStates = {
+export type PlayerVideoPageStates = {
     player?: Player;
     phase: PlayerPhase;
     currentTime: number;
@@ -39,10 +39,10 @@ export type PlayerSyncPageStates = {
     combinePlayer?: CombinePlayer;
 };
 
-export default class NetlessSyncPlayer extends React.Component<PlayerSyncPageProps, PlayerSyncPageStates> {
+export default class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps, PlayerVideoPageStates> {
     private readonly videoRef: React.RefObject<HTMLVideoElement>;
 
-    public constructor(props: PlayerSyncPageProps) {
+    public constructor(props: PlayerVideoPageProps) {
         super(props);
         this.state = {
             currentTime: 0,
