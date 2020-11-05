@@ -23,7 +23,8 @@ export type PlayerControllerProps = {
 
 export default class PlayerController extends React.Component<PlayerControllerProps, PlayerControllerStates> {
     private progressTime: number = 0;
-    private _isMounted = false;
+    private playerOnPhaseChanged: (phase: PlayerPhase) => void
+    private playerOnProgressTimeChanged: (currentTime: number) => void;
 
     public constructor(props: PlayerControllerProps) {
         super(props);
@@ -33,25 +34,28 @@ export default class PlayerController extends React.Component<PlayerControllerPr
             currentTime: 0,
             multiple: props.player.playbackSpeed,
         };
+
+        this.playerOnPhaseChanged = (phase: PlayerPhase): void => {
+            this.setState({phase: phase});
+        };
+
+        this.playerOnProgressTimeChanged = (currentTime: number): void => {
+            this.setState({currentTime: currentTime});
+        };
     }
 
     public componentDidMount(): void {
-        this._isMounted = true;
         const {player} = this.props;
-        player.callbacks.on("onPhaseChanged", (phase: PlayerPhase): void => {
-            if (this._isMounted) {
-                this.setState({phase: phase});
-            }
-        });
-        player.callbacks.on("onProgressTimeChanged", (currentTime: number): void => {
-            if (this._isMounted) {
-                this.setState({currentTime: currentTime});
-            }
-        });
+
+        player.callbacks.on("onPhaseChanged", this.playerOnPhaseChanged);
+        player.callbacks.on("onProgressTimeChanged", this.playerOnProgressTimeChanged);
     }
 
     public componentWillUnmount() {
-        this._isMounted = false;
+        const {player} = this.props;
+
+        player.callbacks.off("onPhaseChanged", this.playerOnPhaseChanged);
+        player.callbacks.off("onProgressTimeChanged", this.playerOnProgressTimeChanged)
     }
 
     private onClickOperationButton = (player: Player): void => {
