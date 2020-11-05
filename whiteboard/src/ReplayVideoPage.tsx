@@ -7,6 +7,7 @@ import {WhiteWebSdk, PlayerPhase, Player, createPlugins} from "white-web-sdk";
 import video_play from "./assets/image/video-play.svg";
 import "video.js/dist/video-js.css";
 import "./ReplayPage.less";
+import "./ReplayVideoPage.less";
 import PageError from "./PageError";
 import PlayerController from "@netless/player-controller";
 import {netlessWhiteboardApi} from "./apiMiddleware";
@@ -17,14 +18,17 @@ import ExitButtonPlayer from "./components/ExitButtonPlayer";
 import { Identity } from "./IndexPage";
 import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
-export type PlayerPageProps = RouteComponentProps<{
+import CombinePlayerFactory from "@netless/combine-player";
+import { CombinePlayer } from '@netless/combine-player/dist/Types';
+
+export type PlayerVideoPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
     userId: string;
 }>;
 
 
-export type PlayerPageStates = {
+export type PlayerVideoPageStates = {
     player?: Player;
     phase: PlayerPhase;
     currentTime: number;
@@ -32,10 +36,13 @@ export type PlayerPageStates = {
     isVisible: boolean;
     replayFail: boolean;
     replayState: boolean;
+    combinePlayer?: CombinePlayer;
 };
 
-export default class NetlessPlayer extends React.Component<PlayerPageProps, PlayerPageStates> {
-    public constructor(props: PlayerPageProps) {
+export default class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps, PlayerVideoPageStates> {
+    private readonly videoRef: React.RefObject<HTMLVideoElement>;
+
+    public constructor(props: PlayerVideoPageProps) {
         super(props);
         this.state = {
             currentTime: 0,
@@ -45,6 +52,8 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
             replayFail: false,
             replayState: false,
         };
+
+        this.videoRef = React.createRef();
     }
 
     private getRoomToken = async (uuid: string): Promise<string | null> => {
@@ -107,6 +116,8 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         this.setState({
             player: player,
         });
+
+        this.initCombinePlayer(player);
     }
 
     private handleBindRoom = (ref: HTMLDivElement): void => {
@@ -118,35 +129,37 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
 
     private handleSpaceKey = (evt: any): void => {
         if (evt.code === "Space") {
-            if (this.state.player) {
-                this.onClickOperationButton(this.state.player);
+            if (this.state.player && this.state.combinePlayer) {
+                this.onClickOperationButton(this.state.player, this.state.combinePlayer);
             }
         }
     }
 
-    private onClickOperationButton = (player: Player): void => {
+    private onClickOperationButton = (player: Player, combinePlayer: CombinePlayer | undefined): void => {
+        if (!player || !combinePlayer) {
+            return;
+        }
+
         switch (player.phase) {
             case PlayerPhase.WaitingFirstFrame:
-            case PlayerPhase.Pause: {
-                player.play();
+            case PlayerPhase.Pause:
+            case PlayerPhase.Ended:{
+                console.log(1);
+                combinePlayer.play();
                 break;
             }
             case PlayerPhase.Playing: {
-                player.pause();
-                break;
-            }
-            case PlayerPhase.Ended: {
-                player.seekToScheduleTime(0);
+                combinePlayer.pause();
                 break;
             }
         }
     }
     private renderScheduleView(): React.ReactNode {
-        const {player, isVisible} = this.state;
-        if (player && isVisible) {
+        const {player, isVisible, combinePlayer} = this.state;
+        if (player && isVisible && combinePlayer) {
             return (
                 <div onMouseEnter={() => this.setState({isVisible: true})}>
-                    <PlayerController player={player}/>
+                    <PlayerController player={player} combinePlayer={combinePlayer}/>
                 </div>
             );
         } else {
@@ -154,9 +167,33 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         }
     }
 
+    private initCombinePlayer(player: Player): void {
+        if (this.videoRef.current === null) {
+            return;
+        }
 
-    public render(): React.ReactNode {
-        const {player, phase, replayState} = this.state;
+        const combinePlayerFactory = new CombinePlayerFactory(player, {
+            url: "https://docs-assets.oss-cn-hangzhou.aliyuncs.com/m3u8-video/test.m3u8",
+            videoDOM: this.videoRef.current,
+        }, true);
+
+        const combinePlayer = combinePlayerFactory.create();
+
+        combinePlayer.setOnStatusChange((status, message) => {
+            console.log("状态发生改变", status, message);
+        });
+
+        this.setState({
+            combinePlayer,
+        });
+
+        (window as any).combinePlayer = combinePlayer;
+
+    }
+
+
+    private getReplayPage() {
+        const {player, phase, replayState, combinePlayer} = this.state;
         const { identity, uuid, userId } = this.props.match.params;
         if (this.state.replayFail) {
             return <PageError/>;
@@ -196,14 +233,14 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                                 onMouseLeave={() => this.setState({isVisible: false})}
                             >
                                 <div
-                                    onClick={() => this.onClickOperationButton(player)}
+                                    onClick={() => this.onClickOperationButton(player, combinePlayer)}
                                     className="player-mask">
                                     {phase === PlayerPhase.Pause &&
                                     <div className="player-big-icon">
-                                        <img
-                                            style={{width: 50, marginLeft: 6}}
-                                            src={video_play}
-                                            alt={"video_play"}/>
+                                      <img
+                                        style={{width: 50, marginLeft: 6}}
+                                        src={video_play}
+                                        alt={"video_play"}/>
                                     </div>}
                                 </div>
                                 <div style={{backgroundColor: "#F2F2F2"}}
@@ -215,5 +252,18 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
                 );
             }
         }
+    }
+
+    public render(): React.ReactNode {
+        return (
+            <div className="overall-box">
+                {this.getReplayPage()}
+                <video
+                    className="video-box video-js"
+                    ref={this.videoRef}
+                    width="500"
+                />
+            </div>
+        )
     }
 }

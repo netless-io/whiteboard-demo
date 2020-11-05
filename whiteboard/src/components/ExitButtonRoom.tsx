@@ -30,12 +30,13 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
         };
     }
 
-    private handleReplay = async (): Promise<void> => {
+    private handleReplay = async (sync = false): Promise<void> => {
         const { room, userId, identity } = this.props;
         if (room) {
             await this.setCover(room);
             await room.disconnect();
-            this.props.history.push(`/replay/${identity}/${room.uuid}/${userId}/`);
+            const replayPagePath = sync ? "replaySync" : "replay";
+            this.props.history.push(`/${replayPagePath}/${identity}/${room.uuid}/${userId}/`);
         }
     }
 
@@ -88,10 +89,14 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
                     onCancel={() => this.setState({exitViewDisable: false})}
                 >
                     <div className="modal-box">
-                        <div onClick={this.handleReplay}>
+                        <div onClick={() => this.handleReplay()}>
                             <img className="modal-box-img" src={replayScreen} alt={"img"}/>
                         </div>
                         <div className="modal-box-name">观看回放</div>
+                        <div onClick={() => this.handleReplay(true)}>
+                            <img className="modal-box-img" src={replayScreen} alt={"img"}/>
+                        </div>
+                        <div className="modal-box-name">观看回放(与视频同步)</div>
                         <Button
                             loading={this.state.isLoading}
                             onClick={this.handleGoBack}

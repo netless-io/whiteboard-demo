@@ -8,9 +8,11 @@
     },
     "dependencies": {
         "@ant-design/icons": "^4.2.2",
+        "@netless/combine-player": "^0.0.3",
         "@netless/cursor-tool": "^0.0.5",
         "@netless/docs-center": "^0.0.2",
         "@netless/fetch-middleware": "^1.0.6",
+        "@netless/fetch-progress": "^0.0.1",
         "@netless/oss-drop-upload": "^0.0.2",
         "@netless/oss-upload-button": "^0.0.7",
         "@netless/page-controller": "^0.0.2",
@@ -19,11 +21,10 @@
         "@netless/redo-undo": "^0.0.1",
         "@netless/tool-box": "^0.0.2",
         "@netless/white-audio-plugin": "^1.2.16",
+        "@netless/white-editor-plugin": "^0.0.1",
         "@netless/white-video-plugin": "^1.2.15",
-        "@netless/white-editor-plugin":  "^0.0.1",
         "@netless/zip": "^0.0.6",
         "@netless/zoom-controller": "^0.0.3",
-        "@netless/fetch-progress": "^0.0.1",
         "antd": "^4.4.3",
         "copy-to-clipboard": "^3.3.1",
         "polly-js": "^1.6.7",
@@ -31,7 +32,7 @@
         "react-dom": "^16.13.1",
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
-        "white-web-sdk": "^2.10.2"
+        "white-web-sdk": "2.11.2"
     },
     "devDependencies": {
         "@types/react": "^16.9.43",

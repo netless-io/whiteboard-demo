@@ -16,8 +16,9 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "antd": "^4.4.3",
-    "@ant-design/icons": "^4.2.2"
+    "@ant-design/icons": "^4.2.2",
+    "@netless/combine-player": "^0.0.2",
+    "antd": "^4.4.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
