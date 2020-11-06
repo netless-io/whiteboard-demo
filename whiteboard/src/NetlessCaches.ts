@@ -75,6 +75,9 @@ export class NetlessCaches {
                 }
             },
         }));
+        if (res.status !== 200) {
+            throw new Error(`download task ${JSON.stringify(taskUuid)} failed with status ${res.status}`);
+        }
         const buffer = await res.arrayBuffer();
         const zipReader = await this.getZipReader(buffer);
         return await this.cacheContents(zipReader);
