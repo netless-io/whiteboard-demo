@@ -32,6 +32,7 @@
         "react-dom": "^16.13.1",
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
+        "video.js": "^7.10.2",
         "white-web-sdk": "2.11.2"
     },
     "devDependencies": {
