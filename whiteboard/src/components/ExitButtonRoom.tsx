@@ -35,7 +35,7 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
         if (room) {
             await this.setCover(room);
             await room.disconnect();
-            const replayPagePath = sync ? "replaySync" : "replay";
+            const replayPagePath = sync ? "replay-video" : "replay";
             this.props.history.push(`/${replayPagePath}/${identity}/${room.uuid}/${userId}/`);
         }
     }
