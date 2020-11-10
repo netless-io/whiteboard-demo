@@ -1746,10 +1746,10 @@
   dependencies:
     video.js "^7.8.4"
 
-"@netless/combine-player@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.npmjs.org/@netless/combine-player/-/combine-player-0.0.3.tgz#2f5a0912f5f5c8cd90ced9ffd4d707ec136d9201"
-  integrity sha512-wLWKyN8K4pCxA6coX1SkpoXCZJhcRDQqdCFZXa8JPfNuApkAUxhzt5T2FKYZmq8p2ICKKopg+enipu/i5LmfTg==
+"@netless/combine-player@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/@netless/combine-player/-/combine-player-1.0.0.tgz#ac3841c404b3d4c1fd6d2ad7dc9a4dc4bfd3e3dd"
+  integrity sha512-aX65HbCWIedkASaEaq/CmA6ll/wogYVRUUdN38n3uSfMyqKYoRfQf+TWy1wWhZ6eBXbrOqTtxRB3ofBdi2jz8g==
   dependencies:
     video.js "^7.8.4"
 
@@ -11778,10 +11778,10 @@ which@^1.2.14, which@^1.2.9, which@^1.3.1:
   dependencies:
     isexe "^2.0.0"
 
-white-web-sdk@2.11.2:
-  version "2.11.2"
-  resolved "https://registry.npmjs.org/white-web-sdk/-/white-web-sdk-2.11.2.tgz#bc98167a781a7b365222195a807b1bc8c1ba9a43"
-  integrity sha512-BLiwSE2eqjWO706eCuGs1HOko1yPBgftgYEAanvk8NQ1t7VA+kdkTvFXnlT4Nc9rZ1/ECFYTcRp74OskbplZLQ==
+white-web-sdk@2.11.3:
+  version "2.11.3"
+  resolved "https://registry.npmjs.org/white-web-sdk/-/white-web-sdk-2.11.3.tgz#ecd5e811e668447bca5a719172c20813f33b68fd"
+  integrity sha512-7j4NyrMTKp9McnghXx9u8nXkSSETBEIeril8qbzUlSLmVbczkAFMFeldP4ybYGed+mlVbtlqKy7D+G9wb0pbeA==
   dependencies:
     "@netless/canvas-polyfill" "^0.0.4"
     atob "^2.1.0"

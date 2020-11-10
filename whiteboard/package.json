@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "@ant-design/icons": "^4.2.2",
-        "@netless/combine-player": "^0.0.3",
+        "@netless/combine-player": "^1.0.0",
         "@netless/cursor-tool": "^0.0.5",
         "@netless/docs-center": "^0.0.2",
         "@netless/fetch-middleware": "^1.0.6",
@@ -33,7 +33,7 @@
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
         "video.js": "^7.10.2",
-        "white-web-sdk": "2.11.2"
+        "white-web-sdk": "2.11.3"
     },
     "devDependencies": {
         "@types/react": "^16.9.43",
