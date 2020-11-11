@@ -19,7 +19,7 @@ const patch = JSON.stringify({
 });
 
 
-const deployment = "react-demo";
+const deployment = "demo-react";
 (async () => {
     const build = `docker build --rm -f dockerfile -t ${registry}/${imageName}:latest .`;
     await execInDir(whiteboardDir, build);
