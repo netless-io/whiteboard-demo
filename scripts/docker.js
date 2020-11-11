@@ -3,8 +3,8 @@ const {exec, execInDir, remoteCommand} = require("./shell");
 const path = require("path");
 
 const whiteboardDir = path.resolve(__dirname, "../whiteboard");
-const imageName = "react-whiteboard";
-const registry = `netless-dev-registry.ap-southeast-1.cr.aliyuncs.com/prod`;
+const imageName = "demo-react";
+const registry = `registry-dev.netless.link/demo`;
 
 const patch = JSON.stringify({
     "spec": {
@@ -26,5 +26,5 @@ const deployment = "react-demo";
     const push = `docker push ${registry}/${imageName}:latest`;
     await exec(push);
     await exec("sleep 120");
-    await remoteCommand("k8s-site", [`kubectl patch deployment ${deployment} -n site --patch '` + patch + `'`]);
+    await remoteCommand("k8s-company-dev", [`kubectl patch deployment ${deployment} -n demo --patch '` + patch + `'`]);
 })();
