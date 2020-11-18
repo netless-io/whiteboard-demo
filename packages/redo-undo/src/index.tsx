@@ -22,7 +22,9 @@ export default class RedoUndo extends React.Component<RedoUndoProps, RedoUndoSta
     }
     public componentDidMount(): void {
         const {room} = this.props;
-        room.disableSerialization = false;
+        if (room.isWritable) {
+            room.disableSerialization = false;
+        }
         room.callbacks.on("onCanUndoStepsUpdate", (steps: number): void => {
             this.setState({
                 undoSteps: steps,
