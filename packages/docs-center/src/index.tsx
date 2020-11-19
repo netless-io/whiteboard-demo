@@ -73,10 +73,12 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
         room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
             this.setState({roomState: {...room.state, ...modifyState}});
         });
-        this.initHomeDoc(room);
+        if (room.isWritable) {
+            this.initHomeDoc(room);
+        }
     }
 
-    private initHomeDoc = (room: Room): void => {
+    private initHomeDoc(room: Room): void {
         const {roomState} = this.state;
         const docs = (roomState.globalState as any).docs;
         if (docs === undefined) {
