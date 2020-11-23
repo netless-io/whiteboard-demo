@@ -1,6 +1,6 @@
 
 
-# react-whiteboard
+# Flat-web
 
 ![](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/react-whiteoard-home.png)
 
