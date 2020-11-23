@@ -54,13 +54,14 @@ export enum PPTProgressPhase {
 
 
 export class UploadManager {
-    private readonly task: TaskOperator = new TaskOperator();
+    private readonly task: TaskOperator;
     private readonly ossClient: any;
     private readonly room: Room;
 
-    public constructor(ossClient: any, room: Room) {
+    public constructor(ossClient: any, room: Room, apiOrigin?: string) {
         this.ossClient = ossClient;
         this.room = room;
+        this.task = new TaskOperator(apiOrigin);
     }
 
     private getFileType = (fileName: string): string => {

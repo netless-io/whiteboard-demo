@@ -1,10 +1,14 @@
 import Fetcher from "@netless/fetch-middleware";
-const fetcher = new Fetcher(5000, "https://shunt-api.netless.link/v5");
 
 export default class TaskOperator {
+    private readonly fetcher: Fetcher;
+
+    constructor(apiOrigin: string = "https://shunt-api.netless.link/v5") {
+        this.fetcher = new Fetcher(5000, apiOrigin);
+    }
 
     public async createPPTTaskInf(pptURL: string, type: string, preview: boolean, sdkToken: string): Promise<any> {
-        const json = await fetcher.post<any>({
+        const json = await this.fetcher.post<any>({
             path: `services/conversion/tasks`,
             headers: {
                 token: sdkToken,
@@ -20,7 +24,7 @@ export default class TaskOperator {
 
     // roomToken ro sdkToken
     public async getCover(uuid: string, path: string, width: number, height: number, token: string): Promise<any> {
-        const json = await fetcher.post<any>({
+        const json = await this.fetcher.post<any>({
             path: `rooms/${uuid}/screenshots`,
             headers: {
                 token: token,
@@ -35,7 +39,7 @@ export default class TaskOperator {
     }
 
     public async createTaskToken(taskUuid: string, lifespan: number, role: string, sdkToken: string): Promise<string> {
-        const json = await fetcher.post<any>({
+        const json = await this.fetcher.post<any>({
             path: `tokens/tasks/${taskUuid}`,
             headers: {
                 token: sdkToken,

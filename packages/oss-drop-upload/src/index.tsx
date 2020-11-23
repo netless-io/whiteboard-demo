@@ -24,6 +24,7 @@ export type OssDropUploadProps = {
     room: Room,
     oss: OSSConfigObjType,
     style?: CSSProperties,
+    apiOrigin?: string;
 };
 
 export default class OssDropUpload extends React.Component<OssDropUploadProps, OssDropUploadStates> {
@@ -52,9 +53,9 @@ export default class OssDropUpload extends React.Component<OssDropUploadProps, O
         rejectedFiles: File[],
         event: React.DragEvent<HTMLDivElement>): Promise<void> => {
         event.persist();
-        const {room} = this.props;
+        const {room, apiOrigin} = this.props;
         try {
-            const uploadManager = new UploadManager(this.client, room);
+            const uploadManager = new UploadManager(this.client, room, apiOrigin);
             await Promise.all([
                 uploadManager.uploadImageFiles(acceptedFiles, event.clientX, event.clientY, this.onProgress),
             ]);
