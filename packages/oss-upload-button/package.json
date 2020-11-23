@@ -1,6 +1,6 @@
 {
   "name": "@netless/oss-upload-button",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "private": false,
   "main": "dist/index.js",

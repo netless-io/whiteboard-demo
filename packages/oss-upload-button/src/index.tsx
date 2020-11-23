@@ -41,6 +41,7 @@ export type OssUploadButtonProps = {
     appIdentifier: string;
     sdkToken: string;
     whiteboardRef?: HTMLDivElement,
+    apiOrigin?: string;
 };
 
 export default class OssUploadButton extends React.Component<OssUploadButtonProps, OssUploadButtonStates> {
@@ -64,7 +65,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
 
     private uploadStatic = async (event: any): Promise<void> => {
         const {uuid, roomToken} = this.props.room;
-        const uploadManager = new UploadManager(this.client, this.props.room);
+        const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin);
         const whiteWebSdk = new WhiteWebSdk({appIdentifier: this.props.appIdentifier});
         const pptConverter = whiteWebSdk.pptConverter(roomToken);
         try {
@@ -84,7 +85,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
 
     private uploadDynamic = async (event: any): Promise<void> => {
         const {uuid, roomToken} = this.props.room;
-        const uploadManager = new UploadManager(this.client, this.props.room);
+        const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin);
         const whiteWebSdk = new WhiteWebSdk({appIdentifier: this.props.appIdentifier});
         const pptConverter = whiteWebSdk.pptConverter(roomToken);
         try {
@@ -137,7 +138,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     private uploadImage = async (event: any): Promise<void> => {
         const uploadFileArray: File[] = [];
         uploadFileArray.push(event.file);
-        const uploadManager = new UploadManager(this.client, this.props.room);
+        const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin);
         try {
             if (this.props.whiteboardRef) {
                 const {clientWidth, clientHeight} = this.props.whiteboardRef;
@@ -153,7 +154,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private getUrl = async (event: any): Promise<string> => {
-        const uploadManager = new UploadManager(this.client, this.props.room);
+        const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin);
         const res = await uploadManager.addFile(`${uuidv4()}/${event.file.name}`, event.file, this.progress);
         const isHttps = res.indexOf("https") !== -1;
         let url;
