@@ -2,13 +2,16 @@ import * as React from "react";
 import "./PageError.less";
 import room_not_find from "./assets/image/room_not_find.svg";
 import {Button} from "antd";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
-export default class PageError extends React.Component<{}, {}> {
-    public constructor(props: {}) {
+
+class PageError extends React.Component<WithTranslation, {}> {
+    public constructor(props: WithTranslation) {
         super(props);
     }
     public render(): React.ReactNode {
+        const { t } = this.props
         return (
             <div className="page404-box">
                 <div className="page404-image-box">
@@ -17,14 +20,14 @@ export default class PageError extends React.Component<{}, {}> {
                          alt={"room_not_find"}/>
                     <div className="page404-inner">
                         <div className="page404-inner-title">
-                            抱歉，您要访问的页面不存在
+                            {t('pageErrorTitle')}
                         </div>
                         <div className="page404-inner-script">
-                            可能是链接地址有误，页面已经被移除或者隐藏
+                            {t('pageErrorInner')}
                         </div>
                         <Link to={"/"}>
-                            <Button size={"large"} style={{width: 118}}>
-                                返回首页
+                            <Button size={"large"} style={{width: 118}}>çç
+                                {t('backHomePage')}
                             </Button>
                         </Link>
                     </div>
@@ -33,3 +36,5 @@ export default class PageError extends React.Component<{}, {}> {
         );
     }
 }
+
+export default withTranslation()(PageError)

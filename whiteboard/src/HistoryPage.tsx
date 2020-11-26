@@ -7,6 +7,7 @@ import { Identity } from "./IndexPage";
 import { LeftOutlined } from "@ant-design/icons";
 import empty_box from "./assets/image/empty-box.svg";
 import board from "./assets/image/board.svg";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export type JoinPageStates = {
     rooms: LocalStorageRoomDataType[];
@@ -20,9 +21,8 @@ export type LocalStorageRoomDataType = {
     roomName?: string;
     cover?: string;
 };
-
-export default class JoinPage extends React.Component<RouteComponentProps, JoinPageStates> {
-    public constructor(props: RouteComponentProps) {
+class JoinPage extends React.Component<RouteComponentProps & WithTranslation, JoinPageStates> {
+    public constructor(props: RouteComponentProps & WithTranslation) {
         super(props);
         const rooms = localStorage.getItem("rooms");
         this.state = {
@@ -40,6 +40,7 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
 
     private renderCells = (): React.ReactNode => {
         const { rooms } = this.state;
+        const { t } = this.props 
         if (rooms.length > 0) {
             return rooms.map(room => {
                 return (
@@ -60,13 +61,13 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
                                     type={"primary"}
                                     style={{ width: 96 }}
                                 >
-                                    进入房间
+                                    {t('enterRoom')}
                                 </Button>
                                 <Button
                                     onClick={() => this.handleReplay(room)}
                                     style={{ width: 96 }}
                                 >
-                                    查看回放
+                                    {t('watchReplay')}
                                 </Button>
                             </div>
                         </div>
@@ -80,13 +81,14 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
     };
 
     public render(): React.ReactNode {
+        const { t } = this.props 
         return (
             <div className="page-index-box">
                 <div className="page-index-mid-box">
                     <div className="page-history-head">
                         <Link to={"/"}>
                             <div className="page-history-back">
-                                <LeftOutlined /> <div>返回</div>
+                                <LeftOutlined /> <div>{t('back')}</div>
                             </div>
                         </Link>
                         <Button
@@ -98,7 +100,7 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
                                 this.setState({ rooms: [] });
                             }}
                         >
-                            清空
+                            {t('clear')}
                         </Button>
                     </div>
                     {this.state.rooms.length === 0 ? (
@@ -113,3 +115,5 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
         );
     }
 }
+
+export default withTranslation()(JoinPage)

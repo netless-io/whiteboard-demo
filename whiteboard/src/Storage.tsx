@@ -8,6 +8,8 @@ import { LeftOutlined } from "@ant-design/icons";
 import { taskUuids, taskUuuidsToPush } from "./taskUuids";
 import { AsyncRefresher } from './tools/AsyncRefresher';
 import { netlessCaches } from "./NetlessCaches";
+import { withTranslation, WithTranslation } from "react-i18next"
+
 
 import * as zip_icon from "./assets/image/zip.svg";
 import empty_box from "./assets/image/empty-box.svg";
@@ -29,7 +31,7 @@ export type StorageState = DownloadLogicState & {
     readonly availableSpace?: number;
 };
 
-export default class Storage extends React.Component<{}, StorageState> {
+class Storage extends React.Component<WithTranslation, StorageState> {
 
     private readonly spaceRefresher: AsyncRefresher = new AsyncRefresher(100, async () => {
         const space = await netlessCaches.calculateCache();
@@ -40,7 +42,7 @@ export default class Storage extends React.Component<{}, StorageState> {
         });
     });
 
-    public constructor(props: {}) {
+    public constructor(props: WithTranslation) {
         super(props);
         this.state = {
             mode: DownloadingMode.Freedom,
@@ -104,6 +106,7 @@ export default class Storage extends React.Component<{}, StorageState> {
     }
 
     private renderHeadView(downloader: DownloadLogic): React.ReactNode {
+        const { t } = this.props
         const shouldDisplaySpaceTag = (
             typeof this.state.space === "number" &&
             typeof this.state.availableSpace === "number"
@@ -113,7 +116,7 @@ export default class Storage extends React.Component<{}, StorageState> {
                 <div className="page-history-head-left">
                     <Link to={"/"}>
                         <div className="page-history-back">
-                            <LeftOutlined /> <div>返回</div>
+                            <LeftOutlined /> <div>{t('back')}</div>
                         </div>
                     </Link>
                     {shouldDisplaySpaceTag && <Tag
@@ -150,6 +153,7 @@ export default class Storage extends React.Component<{}, StorageState> {
     }
 
     private renderAddTaskButton(downloader: DownloadLogic): React.ReactNode {
+        const { t } = this.props
         let disableAdd = false;
         if (this.state.nextAddIndex >= taskUuuidsToPush.length) {
             disableAdd = true;
@@ -163,12 +167,13 @@ export default class Storage extends React.Component<{}, StorageState> {
                 size={"small"}
                 style={{ marginRight: 20, fontSize: 14 }}
                 onClick={() => this.onClickAddTask(downloader)}>
-                新增
+                {t('add')}
             </Button>
         );
     }
 
     private renderDownloadOneByOneButton(downloader: DownloadLogic): React.ReactNode {
+        const { t } = this.props
         let node: React.ReactNode = null;
         switch (this.state.mode) {
             case DownloadingMode.OneByOne: {
@@ -178,7 +183,7 @@ export default class Storage extends React.Component<{}, StorageState> {
                         size={"small"}
                         style={{ marginRight: 20, fontSize: 14 }}
                         onClick={() => downloader.abort()}>
-                        暂停下载
+                        {t('stopDownload')}
                     </Button>
                 );
                 break;
@@ -195,7 +200,7 @@ export default class Storage extends React.Component<{}, StorageState> {
                         style={{ marginRight: 20, fontSize: 14 }}
                         disabled={disabled}
                         onClick={() => downloader.startOneByOne()}>
-                        全部下载
+                        {t('downloadAll')}
                     </Button>
                 );
                 break;
@@ -205,6 +210,7 @@ export default class Storage extends React.Component<{}, StorageState> {
     }
 
     private renderCleanAllCacheButton(downloader: DownloadLogic): React.ReactNode {
+        const { t } = this.props
         const enable = (
             this.state.mode === DownloadingMode.Freedom &&
             this.state.pptStates.some(ppt => ppt.phase !== TaskPhase.NotCached)
@@ -216,12 +222,13 @@ export default class Storage extends React.Component<{}, StorageState> {
                 disabled={!enable}
                 style={{ marginRight: 20, fontSize: 14 }}
                 onClick={() => downloader.removeAll()}>
-                清空缓存
+                {t('clearCache')}
             </Button>
         );
     }
 
     private renderZipCell(downloader: DownloadLogic, pptState: PPTState): React.ReactNode {
+        const { t } = this.props
         const displayProgress = (
             pptState.phase === TaskPhase.Downloading
         );
@@ -257,7 +264,7 @@ export default class Storage extends React.Component<{}, StorageState> {
                             onClick={() => downloader.removeTask(pptState.uuid)}
                             disabled={!enableRemoveCache}
                             style={{width: 96}}>
-                            删除
+                            {t('delete')}
                         </Button>
                     </div>
                 </div>
@@ -267,6 +274,7 @@ export default class Storage extends React.Component<{}, StorageState> {
     }
 
     private renderDownloadButton(downloader: DownloadLogic, pptState: PPTState): React.ReactNode {
+        const { t } = this.props
         const enable = (
             this.state.mode === DownloadingMode.Freedom &&
             pptState.phase !== TaskPhase.Cached
@@ -279,7 +287,7 @@ export default class Storage extends React.Component<{}, StorageState> {
                         type={"primary"}
                         disabled={!enable}
                         style={{width: 96}}>
-                        下载
+                        {t('download')}
                     </Button>
                 );
             }
@@ -290,7 +298,7 @@ export default class Storage extends React.Component<{}, StorageState> {
                         type={"primary"}
                         disabled={!enable}
                         style={{width: 96}}>
-                        暂停
+                        {t('stop')}
                     </Button>
                 );
             }
@@ -300,7 +308,7 @@ export default class Storage extends React.Component<{}, StorageState> {
                         disabled
                         type={"primary"}
                         style={{width: 96}}>
-                        已下载
+                        {t('downloaded')}
                     </Button>
                 );
             }
@@ -311,10 +319,12 @@ export default class Storage extends React.Component<{}, StorageState> {
                         type={"primary"}
                         disabled={!enable}
                         style={{width: 96}}>
-                        重新下载
+                        {t('downloadAgain')}
                     </Button>
                 );
             }
         }
     }
 }
+
+export default withTranslation()(Storage)

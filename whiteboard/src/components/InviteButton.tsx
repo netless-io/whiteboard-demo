@@ -5,7 +5,8 @@ import copy from "copy-to-clipboard";
 import inviteActive from "../assets/image/invite-active.svg";
 import invite from "../assets/image/invite.svg";
 import {CopyOutlined} from "@ant-design/icons/lib";
-import {Identity} from "../IndexPage";
+import { Identity } from "../IndexPage";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export type InviteButtonStates = {
     inviteDisable: boolean;
@@ -15,8 +16,8 @@ export type InviteButtonProps = {
     uuid: string;
 };
 
-export default class InviteButton extends React.Component<InviteButtonProps, InviteButtonStates> {
-    public constructor(props: InviteButtonProps) {
+class InviteButton extends React.Component<InviteButtonProps & WithTranslation, InviteButtonStates> {
+    public constructor(props: InviteButtonProps & WithTranslation) {
         super(props);
         this.state = {
             inviteDisable: false,
@@ -36,25 +37,27 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
     }
 
     private handleCopy = (): void => {
+        const { t } = this.props
         const { uuid } = this.props;
         this.handleInvite();
-        copy(`房间号：${uuid}\n加入链接：https://demo.netless.link/whiteboard/${Identity.joiner}/${uuid}/`);
-        message.success("已经将信息复制到剪贴板");
+        copy(`{t('roomNumber')}：${uuid}\n{t('joinLink')}：https://demo.netless.link/whiteboard/${Identity.joiner}/${uuid}/`);
+        message.success(t('copyClipboard'));
 
     }
 
     private renderInviteContent = (): React.ReactNode => {
+        const { t } = this.props
         const {uuid} = this.props;
         const isLocal = location.hostname === "localhost";
         return (
             <div className="invite-box">
                 <div className="invite-box-title">
-                    邀请加入
+                    {t('inviteJoin')}
                 </div>
                 <div style={{width: 400, height: 0.5, backgroundColor: "#E7E7E7"}}/>
                 <div className="invite-text-box">
                     <div className="invite-url-box" style={{marginBottom: 12}}>
-                        <span style={{width: 96}}>房间号：</span>
+                        <span style={{width: 96}}>{t('roomNumber')}：</span>
                         <Input
                             size={"middle"}
                             value={uuid}
@@ -62,7 +65,7 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
                                 <CopyOutlined
                                     onClick={() => {
                                         copy(uuid);
-                                        message.success("已经将 uuid 黏贴到剪贴板");
+                                        message.success(t('copyUuidMessage'));
                                     }}
                                 />
                             }
@@ -70,7 +73,7 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
 
                     </div>
                     <div className="invite-url-box">
-                        <span style={{width: 96}}>加入链接：</span>
+                        <span style={{width: 96}}>{t('joinLink')}：</span>
                         <Input size={"middle"}
                                value={`${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`}
                                addonAfter={
@@ -79,7 +82,7 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
                                            copy(
                                                `${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`,
                                            );
-                                           message.success("已经将链接复制到剪贴板");
+                                           message.success(t('copyClipboard'));
                                        }}
                                    />
                                }/>
@@ -87,7 +90,7 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
                 </div>
                 <div className="invite-button-box">
                     <Button onClick={this.handleCopy} style={{width: 164, height: 40}} type={"primary"} size={"middle"}>
-                        复制
+                        {t('copy')}
                     </Button>
                 </div>
             </div>
@@ -111,3 +114,4 @@ export default class InviteButton extends React.Component<InviteButtonProps, Inv
     }
 }
 
+export default withTranslation()(InviteButton)

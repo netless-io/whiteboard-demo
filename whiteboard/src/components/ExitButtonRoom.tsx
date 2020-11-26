@@ -8,7 +8,8 @@ import exit from "../assets/image/exit.svg";
 import replayScreen from "../assets/image/replay-screen.png";
 import { Identity } from "../IndexPage";
 import {netlessWhiteboardApi} from "../apiMiddleware";
-import {LocalStorageRoomDataType} from "../HistoryPage";
+import { LocalStorageRoomDataType } from "../HistoryPage";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export type ExitButtonRoomStates = {
     exitViewDisable: boolean;
@@ -21,8 +22,8 @@ export type ExitButtonRoomProps = {
     identity: Identity;
 } & RouteComponentProps;
 
-class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoomStates> {
-    public constructor(props: ExitButtonRoomProps) {
+class ExitButtonRoom extends React.Component<ExitButtonRoomProps & WithTranslation, ExitButtonRoomStates> {
+    public constructor(props: ExitButtonRoomProps & WithTranslation) {
         super(props);
         this.state = {
             exitViewDisable: false,
@@ -75,6 +76,7 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
     };
 
     public render(): React.ReactNode {
+        const { t } = this.props
         return (
             <div>
                 <Tooltip placement="bottom" title={"Exit"}>
@@ -85,24 +87,24 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
                 <Modal
                     visible={this.state.exitViewDisable}
                     footer={null}
-                    title={"退出教室"}
+                    title={t('exitRoom')}
                     onCancel={() => this.setState({exitViewDisable: false})}
                 >
                     <div className="modal-box">
                         <div onClick={() => this.handleReplay()}>
                             <img className="modal-box-img" src={replayScreen} alt={"img"}/>
                         </div>
-                        <div className="modal-box-name">观看回放</div>
+                        <div className="modal-box-name">{t('watchReplay')}</div>
                         <div onClick={() => this.handleReplay(true)}>
                             <img className="modal-box-img" src={replayScreen} alt={"img"}/>
                         </div>
-                        <div className="modal-box-name">观看回放(与视频同步)</div>
+                        <div className="modal-box-name">{t('syncReplay')}</div>
                         <Button
                             loading={this.state.isLoading}
                             onClick={this.handleGoBack}
                             style={{width: 176}}
                             size="large">
-                            确认退出
+                            {t('confirmExit')}
                         </Button>
                     </div>
                 </Modal>
@@ -111,5 +113,5 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps, ExitButtonRoom
     }
 }
 
-export default withRouter(ExitButtonRoom)
+export default withRouter(withTranslation()(ExitButtonRoom))
 

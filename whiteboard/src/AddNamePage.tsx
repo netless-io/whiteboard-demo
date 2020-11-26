@@ -5,6 +5,7 @@ import "./AddNamePage.less";
 import logo from "./assets/image/logo.svg";
 import {Button, Input} from "antd";
 import { Identity } from "./IndexPage";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export type JoinPageStates = {
     name: string;
@@ -13,8 +14,8 @@ export type JoinPageStates = {
 
 export type AddNamePageProps = RouteComponentProps<{uuid?: string}>;
 
-export default class AddNamePage extends React.Component<AddNamePageProps, JoinPageStates> {
-    public constructor(props: AddNamePageProps) {
+class AddNamePage extends React.Component<AddNamePageProps & WithTranslation, JoinPageStates> {
+    public constructor(props: AddNamePageProps & WithTranslation) {
         super(props);
         const {uuid} = this.props.match.params;
         this.state = {
@@ -36,6 +37,7 @@ export default class AddNamePage extends React.Component<AddNamePageProps, JoinP
     }
 
     public render(): React.ReactNode {
+        const { t } = this.props
         const {name, uuid} = this.state;
         return (
             <div className="page-index-box">
@@ -47,7 +49,7 @@ export default class AddNamePage extends React.Component<AddNamePageProps, JoinP
                         </span>
                     </div>
                     <div className="page-index-form-box">
-                        <Input placeholder={"输入昵称"}
+                        <Input placeholder={t('setNickname')}
                                maxLength={8}
                                value={name}
                                onChange={evt => this.setState({name: evt.target.value})}
@@ -62,7 +64,7 @@ export default class AddNamePage extends React.Component<AddNamePageProps, JoinP
                             <Link to={"/"}>
                                 <Button className="page-index-btn"
                                         size={"large"}>
-                                    返回首页
+                                    {t('backHomePage')}
                                 </Button>
                             </Link>
                             <Button className="page-index-btn"
@@ -70,7 +72,7 @@ export default class AddNamePage extends React.Component<AddNamePageProps, JoinP
                                     size={"large"}
                                     onClick={this.handleJoin}
                                     type={"primary"}>
-                                {uuid ? "加入房间" : "创建房间"}
+                                {uuid ? t('joinRoom') : t('createRoom')}
                             </Button>
                         </div>
                     </div>
@@ -80,3 +82,4 @@ export default class AddNamePage extends React.Component<AddNamePageProps, JoinP
     }
 }
 
+export default withTranslation()(AddNamePage)

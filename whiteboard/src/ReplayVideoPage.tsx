@@ -20,6 +20,8 @@ import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
 import CombinePlayerFactory from "@netless/combine-player";
 import { CombinePlayer } from '@netless/combine-player/dist/Types';
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 
 export type PlayerVideoPageProps = RouteComponentProps<{
     identity: Identity;
@@ -39,10 +41,10 @@ export type PlayerVideoPageStates = {
     combinePlayer?: CombinePlayer;
 };
 
-export default class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps, PlayerVideoPageStates> {
+class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTranslation, PlayerVideoPageStates> {
     private readonly videoRef: React.RefObject<HTMLVideoElement>;
 
-    public constructor(props: PlayerVideoPageProps) {
+    public constructor(props: PlayerVideoPageProps & WithTranslation) {
         super(props);
         this.state = {
             currentTime: 0,
@@ -172,6 +174,7 @@ export default class NetlessVideoPlayer extends React.Component<PlayerVideoPageP
     }
 
     private initCombinePlayer(player: Player): void {
+        const { t } = this.props
         if (this.videoRef.current === null) {
             return;
         }
@@ -184,7 +187,7 @@ export default class NetlessVideoPlayer extends React.Component<PlayerVideoPageP
         const combinePlayer = combinePlayerFactory.create();
 
         combinePlayer.setOnStatusChange((status, message) => {
-            console.log("状态发生改变", status, message);
+            console.log(t('changeStatus'), status, message);
         });
 
         this.setState({
@@ -197,13 +200,14 @@ export default class NetlessVideoPlayer extends React.Component<PlayerVideoPageP
 
 
     private getReplayPage() {
+        const { t } = this.props
         const {player, phase, replayState, combinePlayer} = this.state;
         const { identity, uuid, userId } = this.props.match.params;
         if (this.state.replayFail) {
             return <PageError/>;
         }
         if (!replayState) {
-            return <LoadingPage text={"正在生成回放请耐心等待"}/>;
+            return <LoadingPage text={t('waitingReplayGenerate')}/>;
         }
         if (player === undefined) {
             return <LoadingPage/>;
@@ -271,3 +275,5 @@ export default class NetlessVideoPlayer extends React.Component<PlayerVideoPageP
         )
     }
 }
+
+export default withTranslation()(NetlessVideoPlayer)

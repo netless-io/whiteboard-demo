@@ -7,15 +7,17 @@ import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
-import {netlessWhiteboardApi} from "./apiMiddleware";
+import { netlessWhiteboardApi } from "./apiMiddleware";
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 
 export type CreatePageStates = {
     roomName: string;
     value: boolean;
 };
 
-export default class CreatePage extends React.Component<RouteComponentProps, CreatePageStates> {
-    public constructor(props: RouteComponentProps) {
+class CreatePage extends React.Component<RouteComponentProps & WithTranslation, CreatePageStates> {
+    public constructor(props: RouteComponentProps & WithTranslation) {
         super(props);
         this.state = {
             roomName: "",
@@ -93,6 +95,7 @@ export default class CreatePage extends React.Component<RouteComponentProps, Cre
     };
 
     public render(): React.ReactNode {
+        const { t } = this.props
         const {roomName} = this.state;
         return (
             <div className="page-index-box">
@@ -104,7 +107,7 @@ export default class CreatePage extends React.Component<RouteComponentProps, Cre
                         </span>
                     </div>
                     <div className="page-index-form-box">
-                        <Input placeholder={"输入房间名"}
+                        <Input placeholder={t('setRoomName')}
                                value={roomName}
                                style={{marginBottom: 28}}
                                onChange={evt => this.setState({roomName: evt.target.value})}
@@ -114,7 +117,7 @@ export default class CreatePage extends React.Component<RouteComponentProps, Cre
                             <Link to={"/"}>
                                 <Button className="page-index-btn"
                                         size={"large"}>
-                                    返回首页
+                                    {t('backHomePage')}
                                 </Button>
                             </Link>
                             <Button className="page-index-btn"
@@ -122,7 +125,7 @@ export default class CreatePage extends React.Component<RouteComponentProps, Cre
                                     size={"large"}
                                     onClick={this.handleJoin}
                                     type={"primary"}>
-                                创建房间
+                                {t('createRoom')}
                             </Button>
                         </div>
                     </div>
@@ -132,3 +135,4 @@ export default class CreatePage extends React.Component<RouteComponentProps, Cre
     }
 }
 
+export default withTranslation()(CreatePage)
