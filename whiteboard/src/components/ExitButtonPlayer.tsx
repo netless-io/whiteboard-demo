@@ -7,6 +7,7 @@ import "./ExitButton.less";
 import exit from "../assets/image/exit.svg";
 import replayScreen from "../assets/image/replay-screen.png";
 import { Identity } from "../IndexPage";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export type ExitButtonPlayerStates = {
     exitViewDisable: boolean;
@@ -19,8 +20,8 @@ export type ExitButtonPlayerProps = {
     userId: string;
 } & RouteComponentProps;
 
-class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps, ExitButtonPlayerStates> {
-    public constructor(props: ExitButtonPlayerProps) {
+class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps & WithTranslation, ExitButtonPlayerStates> {
+    public constructor(props: ExitButtonPlayerProps & WithTranslation) {
         super(props);
         this.state = {
             exitViewDisable: false,
@@ -37,6 +38,7 @@ class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps, ExitButton
     }
 
     public render(): React.ReactNode {
+        const { t } = this.props
         return (
             <div>
                 <Tooltip placement="bottom" title={"Exit"}>
@@ -47,19 +49,19 @@ class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps, ExitButton
                 <Modal
                     visible={this.state.exitViewDisable}
                     footer={null}
-                    title={"退出回放"}
+                    title={t('quiteReplay')}
                     onCancel={() => this.setState({exitViewDisable: false})}
                 >
                     <div className="modal-box">
                         <div onClick={this.handleReplay}>
                             <img className="modal-box-img" src={replayScreen} alt={"replayScreen"}/>
                         </div>
-                        <div className="modal-box-name">回到白板</div>
+                        <div className="modal-box-name">{t('backWhiteboard')}</div>
                         <Button
                             onClick={this.handleGoBack}
                             style={{width: 176}}
                             size="large">
-                            确认退出
+                            {t('confirmExit')}
                         </Button>
                     </div>
                 </Modal>
@@ -68,5 +70,5 @@ class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps, ExitButton
     }
 }
 
-export default withRouter(ExitButtonPlayer)
+export default withRouter(withTranslation()(ExitButtonPlayer))
 

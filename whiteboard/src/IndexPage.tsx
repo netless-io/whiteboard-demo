@@ -6,6 +6,8 @@ import join from "./assets/image/join.svg";
 import create from "./assets/image/create.svg";
 import "./IndexPage.less";
 import {Button, Input, Popover} from "antd";
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { SwitchLanguage } from './SwitchLanguage';
 
 export type IndexPageStates = {
     name: string;
@@ -15,8 +17,8 @@ export enum Identity {
     creator = "creator",
     joiner = "joiner",
 }
-class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
-    public constructor(props: RouteComponentProps) {
+class IndexPage extends React.Component<RouteComponentProps & WithTranslation, IndexPageStates> {
+    public constructor(props: RouteComponentProps & WithTranslation) {
         super(props);
         const name = localStorage.getItem("userName");
         this.state = {
@@ -60,18 +62,19 @@ class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
     }
 
     public render(): React.ReactNode {
+        const { t } = this.props
             return (
                 <div className="page-index-box">
                     <div className="page-index-mid-box">
                         <div className="page-index-logo-box">
-                            <img src={logo} alt={"logo"}/>
+                            <img src={logo} alt={"logo"} />
                             {localStorage.getItem("rooms") && (
                                 <Link to={"/history"}>
-                                    <div className="page-index-history">历史记录</div>
+                                    <div className="page-index-history">{t('historyRecord')}</div>
                                 </Link>
                             )}
                             <Link to={"/storage/"}>
-                                <div className="page-index-storage">预加载</div>
+                                <div className="page-index-storage">{t('preload')}</div>
                             </Link>
                             <Popover visible={this.state.visible} placement={"bottom"} trigger="click" content={
                                 <div className="page-index-name-box" >
@@ -83,21 +86,21 @@ class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
                                         style={{width: 120, marginTop: 12}}
                                         type={"primary"}
                                         size={"small"}>
-                                        更新
+                                        {t('update')}
                                     </Button>
                                     <Button
                                         onClick={() => this.updateName(true)}
                                         style={{ width: 120, marginTop: 12 }}
                                         size={"small"}
                                     >
-                                        清空
+                                        {t('clear')}
                                     </Button>
 
                                 </div>
-                            } title={"编辑昵称"}>
+                            } title={t('editName')}>
                                 <span onClick={() => this.setState({visible: true})}>
                                     <span style={{color: "#3381FF"}}>{this.state.name}</span>
-                                    <span>欢迎使用 👋 </span>
+                                    <span>{t('welcome')} 👋 </span>
                                 </span>
                             </Popover>
                         </div>
@@ -106,19 +109,19 @@ class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
                                 <Link to={"/join/"}>
                                     <img src={join} alt={"join"}/>
                                 </Link>
-                                <span>加入房间</span>
+                                <span>{t('join')}</span>
                             </div>
                             <div className="page-cutline-box"/>
                             <div className="page-index-start-cell">
                                 <div onClick={this.handleCreate}>
                                     <img src={create} alt={"create"}/>
                                 </div>
-                                <span>创建房间</span>
+                                <span>{t('create')}</span>
                             </div>
                         </div>
                         <div className="page-index-link-box">
                             <div className="page-index-cell-left">
-                                <a href={"https://netless.link/"} target={"_blank"}>官网</a>
+                                <a href={"https://netless.link/"} target={"_blank"}>{t('officialWebsite')}</a>
                             </div>
                             <div className="page-cutline-link-box"/>
                             <div className="page-index-cell-right">
@@ -126,7 +129,7 @@ class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
                             </div>
                         </div>
                         <div className="page-index-start-term">
-                            本开源项目遵循<a href={"https://opensource.org/licenses/MIT"} target={"_blank"}>《 MIT 开源协议》</a>
+                            {t('license')}<a href={"https://opensource.org/licenses/MIT"} target={"_blank"}>《 {t('MITLicense')} 》</a>
                         </div>
                     </div>
                 </div>
@@ -134,4 +137,4 @@ class IndexPage extends React.Component<RouteComponentProps, IndexPageStates> {
     }
 }
 
-export default withRouter(IndexPage);
+export default withRouter(withTranslation()(IndexPage));

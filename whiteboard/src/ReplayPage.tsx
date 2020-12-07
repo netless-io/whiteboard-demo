@@ -16,7 +16,9 @@ import logo from "./assets/image/logo.svg";
 import ExitButtonPlayer from "./components/ExitButtonPlayer";
 import { Identity } from "./IndexPage";
 import {videoPlugin} from "@netless/white-video-plugin";
-import {audioPlugin} from "@netless/white-audio-plugin";
+import { audioPlugin } from "@netless/white-audio-plugin";
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 export type PlayerPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
@@ -34,8 +36,8 @@ export type PlayerPageStates = {
     replayState: boolean;
 };
 
-export default class NetlessPlayer extends React.Component<PlayerPageProps, PlayerPageStates> {
-    public constructor(props: PlayerPageProps) {
+class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, PlayerPageStates> {
+    public constructor(props: PlayerPageProps & WithTranslation) {
         super(props);
         this.state = {
             currentTime: 0,
@@ -160,13 +162,14 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
 
 
     public render(): React.ReactNode {
+        const { t } = this.props
         const {player, phase, replayState} = this.state;
         const { identity, uuid, userId } = this.props.match.params;
         if (this.state.replayFail) {
             return <PageError/>;
         }
         if (!replayState) {
-            return <LoadingPage text={"正在生成回放请耐心等待"}/>;
+            return <LoadingPage text={"t('waitingReplayGenerate')"}/>;
         }
         if (player === undefined) {
             return <LoadingPage/>;
@@ -221,3 +224,5 @@ export default class NetlessPlayer extends React.Component<PlayerPageProps, Play
         }
     }
 }
+
+export default withTranslation()(NetlessPlayer)

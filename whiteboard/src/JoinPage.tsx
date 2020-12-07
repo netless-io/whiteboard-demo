@@ -7,14 +7,14 @@ import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export type JoinPageStates = {
     roomId: string;
     name: string;
 };
-
-export default class JoinPage extends React.Component<RouteComponentProps, JoinPageStates> {
-    public constructor(props: RouteComponentProps) {
+class JoinPage extends React.Component<RouteComponentProps & WithTranslation, JoinPageStates> {
+    public constructor(props: RouteComponentProps & WithTranslation) {
         super(props);
         const name = localStorage.getItem("userName");
         this.state = {
@@ -80,6 +80,7 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
         }
     };
     public render(): React.ReactNode {
+        const { t } = this.props
         const {roomId, name} = this.state;
         return (
             <div className="page-index-box">
@@ -91,12 +92,12 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
                         </span>
                     </div>
                     <div className="page-index-form-box">
-                        <Input placeholder={"输入名字"}
+                        <Input placeholder={t('setNickname')}
                                value={name}
                                onChange={evt => this.setState({name: evt.target.value})}
                                className="page-index-input-box"
                                size={"large"}/>
-                        <Input placeholder={"输入房间号"}
+                        <Input placeholder={t('roomName')}
                                value={roomId}
                                onChange={evt => this.setState({roomId: evt.target.value})}
                                className="page-index-input-box"
@@ -105,7 +106,7 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
                             <Link to={"/"}>
                                 <Button className="page-index-btn"
                                         size={"large"}>
-                                    返回首页
+                                    {t('backHomePage')}
                                 </Button>
                             </Link>
                             <Button className="page-index-btn"
@@ -113,7 +114,7 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
                                     size={"large"}
                                     onClick={this.handleJoin}
                                     type={"primary"}>
-                                加入房间
+                                {t('joinRoom')}
                             </Button>
                         </div>
                     </div>
@@ -123,3 +124,4 @@ export default class JoinPage extends React.Component<RouteComponentProps, JoinP
     }
 }
 
+export default withTranslation()(JoinPage)

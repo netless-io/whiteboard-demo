@@ -927,6 +927,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.12.0", "@babel/runtime@^7.3.1":
+  version "7.12.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
+  integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.9.2":
   version "7.11.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.0.tgz#f10245877042a815e07f7e693faff0ae9d3a2aac"
@@ -1753,15 +1760,52 @@
   dependencies:
     video.js "^7.8.4"
 
+"@netless/docs-center@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@netless/docs-center/-/docs-center-0.0.2.tgz#3b1e9f2ae41e2e003e3de51a9adab98bb17fa7af"
+  integrity sha512-XZG4+unr0o2Lb09bewhuP4KwxFNLyfcbu2YUngFQh1x1BXFQ4VWLjVUrvfxnXS5sj5npOEsKrYt0QlWGBBOkgg==
+  dependencies:
+    "@netless/menu-box" "^0.0.1"
+
 "@netless/fetch-progress@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@netless/fetch-progress/-/fetch-progress-0.0.1.tgz#e4cc415b92f5acc610b6dd533947e40af39915ec"
   integrity sha512-RHdFtdchZVqcXOuKTxO7YR7Z/Wb3rTamNX1gs9u9754n4lKhvFpM1fOfMFnqNhkAM5hzZcnw9TaK4ew0SFJfmg==
 
+"@netless/oss-drop-upload@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@netless/oss-drop-upload/-/oss-drop-upload-0.0.2.tgz#83544c2af2d3f2dd94c05cb9bc220e07db521ede"
+  integrity sha512-M6JM3wLEdFl5tZOORIf/q5B76/w1K74uuWZmZh0rNkJrxJOyFGItqErkAljVDoAmy6B7rzv0eFWWugcdPlQ3qQ==
+  dependencies:
+    "@netless/loading-bar" "^0.0.1"
+    "@netless/oss-upload-manager" "^1.1.1"
+    ali-oss "^6.10.0"
+    react-dropzone "4.2.10"
+
+"@netless/oss-upload-button@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@netless/oss-upload-button/-/oss-upload-button-0.0.7.tgz#9f4ad4c4df73917b6fc53d05c9c724b24f409f8b"
+  integrity sha512-INP+BU4vQwNT6US/C1k65dA1nYmWf81f4H5zCSeyFVL7YCgijHXHevhq1hChdgw/VzD+nnJt8578wT/opZiWpA==
+  dependencies:
+    "@netless/loading-bar" "^0.0.1"
+    "@netless/oss-upload-manager" "^1.1.1"
+    ali-oss "^6.10.0"
+    antd "^4.4.3"
+
+"@netless/redo-undo@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@netless/redo-undo/-/redo-undo-0.0.1.tgz#8524b90884dfab901aeddfd3d5a362fcc076fcb4"
+  integrity sha512-YVnT5CV7R7WN2jmsMMWHhdJWEyJ49uv0CyQ5UpzIixdLZFEAdpJ9CQcUsAa+/nHDLPJP7tYYRmh2xp9nTy29yQ==
+
 "@netless/zip@^0.0.6":
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/@netless/zip/-/zip-0.0.6.tgz#b4c82110b16ba718f27a61988fd77240426de216"
   integrity sha512-hchH9OzktHSlsdXhLjZr6HXqUNNZmc2YVxf2n0vBg/TkGYvDDU+h8o3/JGGl+4Gl3F83mVfWmVheeXxC3hl+RA==
+
+"@netless/zoom-controller@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@netless/zoom-controller/-/zoom-controller-0.0.3.tgz#5d243e7ec35abac4cd36e2e03d7a085e4da2a4a2"
+  integrity sha512-V1mX6TmAECZyNlPisfvcaxafjaS2GcvNjlYTmFFIFSmWWs6dJ5A2nvpcW9ZsTQ13mcnsuY1YTUxT2SuYZMSPNQ==
 
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
@@ -5876,6 +5920,13 @@ html-minifier-terser@^5.0.1:
     relateurl "^0.2.7"
     terser "^4.6.3"
 
+html-parse-stringify2@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/html-parse-stringify2/-/html-parse-stringify2-2.0.1.tgz#dc5670b7292ca158b7bc916c9a6735ac8872834a"
+  integrity sha1-3FZwtyksoVi3vJFsmmc1rIhyg0o=
+  dependencies:
+    void-elements "^2.0.1"
+
 html-webpack-plugin@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-4.3.0.tgz#53bf8f6d696c4637d5b656d3d9863d89ce8174fd"
@@ -6013,6 +6064,20 @@ humanize-ms@^1.2.0, humanize-ms@^1.2.1:
   integrity sha1-xG4xWaKT9riW2ikxbYtv6Lt5u+0=
   dependencies:
     ms "^2.0.0"
+
+i18next-browser-languagedetector@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-6.0.1.tgz#83654bc87302be2a6a5a75146ffea97b4ca268cf"
+  integrity sha512-3H+OsNQn3FciomUU0d4zPFHsvJv4X66lBelXk9hnIDYDsveIgT7dWZ3/VvcSlpKk9lvCK770blRZ/CwHMXZqWw==
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+
+i18next@^19.8.4:
+  version "19.8.4"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.8.4.tgz#447718f2a26319b8debdbcc6fbc1a9761be7316b"
+  integrity sha512-FfVPNWv+felJObeZ6DSXZkj9QM1Ivvh7NcFCgA8XPtJWHz0iXVa9BUy+QY8EPrCLE+vWgDfV/sc96BgXVo6HAA==
+  dependencies:
+    "@babel/runtime" "^7.12.0"
 
 iconv-lite@0.4.24, iconv-lite@^0.4.15, iconv-lite@^0.4.24:
   version "0.4.24"
@@ -9514,6 +9579,14 @@ react-dropzone@4.2.10:
     attr-accept "^1.0.3"
     prop-types "^15.5.7"
 
+react-i18next@^11.7.3:
+  version "11.7.3"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.7.3.tgz#256461c46baf5b3208c3c6860ca4e569fc7ed053"
+  integrity sha512-7sYZqVZgdaS9Z0ZH6nuJFErCD0zz5wK3jR4/xCrWjZcxHHF3GRu7BXdicbSPprZV4ZYz7LJzxxMHO7dg5Qb70A==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    html-parse-stringify2 "2.0.1"
+
 react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -11545,6 +11618,11 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
+
+void-elements@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
+  integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
 warning@^4.0.1, warning@^4.0.3:
   version "4.0.3"
