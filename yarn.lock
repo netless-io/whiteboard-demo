@@ -1746,17 +1746,17 @@
   resolved "https://registry.yarnpkg.com/@netless/canvas-polyfill/-/canvas-polyfill-0.0.4.tgz#b5f28eefeb9c1e8ff8253fa1b044ccb1dc1b7c9c"
   integrity sha512-7NzsJrba0R/mq/l10SkIZQwbrNVJyPxZYrjK6xL3Ts732iWAVuS2UB0u3s6iGeUVcqV39A679yva8APWRl4M0A==
 
-"@netless/combine-player@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/@netless/combine-player/-/combine-player-0.0.2.tgz#d9f05f3197452557b0be53103e4cae4265d02428"
-  integrity sha512-akxbLrkmzyarV5jVmXtOb4x3jBDyow2LcFYRwWOtUS7mYCDcHWu34XeyqMBIiaHfkMuNW8avQyiFxV8KzlCB1Q==
-  dependencies:
-    video.js "^7.8.4"
-
 "@netless/combine-player@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@netless/combine-player/-/combine-player-1.0.0.tgz#ac3841c404b3d4c1fd6d2ad7dc9a4dc4bfd3e3dd"
   integrity sha512-aX65HbCWIedkASaEaq/CmA6ll/wogYVRUUdN38n3uSfMyqKYoRfQf+TWy1wWhZ6eBXbrOqTtxRB3ofBdi2jz8g==
+  dependencies:
+    video.js "^7.8.4"
+
+"@netless/combine-player@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@netless/combine-player/-/combine-player-1.1.1.tgz#9b7cdb1a85e5d591181e0e110583a9175c4cf189"
+  integrity sha512-p8ovcKsp1i1MLrZ76rEHh9I2HjZehiyDtPxmKTgzXg4Unp/vrd4Gv2KAGTMv07Hazz7oP7GVzZpz1Bdp2TM7BQ==
   dependencies:
     video.js "^7.8.4"
 
