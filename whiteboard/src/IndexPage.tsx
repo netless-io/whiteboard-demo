@@ -109,14 +109,14 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
                                 <Link to={"/join/"}>
                                     <img src={join} alt={"join"}/>
                                 </Link>
-                                <span>{t('join')}</span>
+                                <span>{t('joinRoom')}</span>
                             </div>
                             <div className="page-cutline-box"/>
                             <div className="page-index-start-cell">
                                 <div onClick={this.handleCreate}>
                                     <img src={create} alt={"create"}/>
                                 </div>
-                                <span>{t('create')}</span>
+                                <span>{t('createRoom')}</span>
                             </div>
                         </div>
                         <div className="page-index-link-box">
