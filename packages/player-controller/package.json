@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
-    "@netless/combine-player": "^0.0.2",
+    "@netless/combine-player": "^1.1.3",
     "antd": "^4.4.3"
   },
   "peerDependencies": {
