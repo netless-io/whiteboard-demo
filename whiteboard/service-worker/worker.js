@@ -17,8 +17,12 @@ self.onfetch = function(event) {
   const request = event.request;
   const url = new URL(request.url);
   if (url.origin === "https://convertcdn.netless.link" || url.origin === fetchOrigin) {
+    console.log("service worker inject");
     event.respondWith(openCache().then(function(cache) {
       return cache.match(event.request).then(function(response) {
+        if (response) {
+          console.log("service worker catch success");
+        }
         return response || fetch(event.request);
       });
     }));
