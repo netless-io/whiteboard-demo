@@ -20,3 +20,5 @@ export const ossConfigObj: OSSConfigObjType = {
     folder: process.env.FOLDER!,
     prefix: process.env.PREFIX!,
 };
+
+export const h5DemoUrl = process.env.H5DEMOURL!;

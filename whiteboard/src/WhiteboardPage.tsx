@@ -20,7 +20,7 @@ import folder from "./assets/image/folder.svg";
 import follow from "./assets/image/follow.svg"
 import followActive from "./assets/image/follow-active.svg";
 import logo from "./assets/image/logo.svg";
-import {netlessToken, ossConfigObj} from "./appToken";
+import {netlessToken, ossConfigObj, h5DemoUrl} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
@@ -235,7 +235,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     if (!bridge) {
                         bridge = await IframeBridge.insert({
                             room,
-                            url: "https://l1shen.github.io/kehou_kejian",
+                            url: h5DemoUrl,
                             width: 1280,
                             height: 720,
                             displaySceneDir: "/"

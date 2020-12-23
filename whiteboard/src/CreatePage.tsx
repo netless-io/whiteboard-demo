@@ -2,7 +2,7 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import "./CreatePage.less";
 import logo from "./assets/image/logo.svg";
-import {Button, Input, Switch, Checkbox} from "antd";
+import {Button, Input, Checkbox} from "antd";
 import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
