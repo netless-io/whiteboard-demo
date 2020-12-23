@@ -127,7 +127,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
                                className="page-create-input-box"
                                size={"large"}/>
                         <div style={{marginBottom: 18, width: "100%", marginLeft: 95 }}>
-                            <Checkbox style={{marginRight: 5}} onChange={this.handleEnableH5} /> 开启 h5 demo
+                            <Checkbox style={{marginRight: 5}} onChange={this.handleEnableH5} /> {t("enableH5Demo")}
                         </div>
                         <div className="page-index-btn-box">
                             <Link to={"/"}>
