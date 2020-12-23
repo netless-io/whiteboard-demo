@@ -1,6 +1,6 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
-import {createPlugins, DefaultHotKeys, Room, RoomPhase, RoomState, ViewMode, WhiteWebSdk} from "white-web-sdk";
+import {createPlugins, DefaultHotKeys, Room, RoomPhase, RoomState, ViewMode, WhiteWebSdk, WhiteWebSdkConfiguration} from "white-web-sdk";
 import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
 import PageController from "@netless/page-controller";
@@ -31,6 +31,7 @@ import {PPTDataType, PPTType} from "@netless/oss-upload-manager";
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
 import {LocalStorageRoomDataType} from "./HistoryPage";
+import {IframeWrapper, IframeBridge} from "@netless/iframe-bridge";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -154,16 +155,26 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     private startJoinRoom = async (): Promise<void> => {
         const {uuid, userId, identity} = this.props.match.params;
         this.setRoomList(uuid, userId);
+        const query = new URLSearchParams(this.props.location.search);
+        const enableH5 = Boolean(query.get("h5"));
         try {
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
                 const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
                 plugins.setPluginContext("video", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
-                const whiteWebSdk = new WhiteWebSdk({
+                let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
-                });
+                }
+                if (enableH5) {
+                    const pluginParam = {
+                        wrappedComponents: [IframeWrapper],
+                        invisiblePlugins: [IframeBridge]
+                    }
+                    whiteWebSdkParams = Object.assign(whiteWebSdkParams, pluginParam)
+                }
+                const whiteWebSdk = new WhiteWebSdk(whiteWebSdkParams);
                 const cursorName = localStorage.getItem("userName");
                 const cursorAdapter = new CursorTool();
                 const room = await whiteWebSdk.joinRoom({
@@ -219,6 +230,19 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 }
                 this.setState({room: room});
                 (window as any).room = room;
+                if (enableH5) {
+                    let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
+                    if (!bridge) {
+                        bridge = await IframeBridge.insert({
+                            room,
+                            url: "https://l1shen.github.io/kehou_kejian",
+                            width: 1280,
+                            height: 720,
+                            displaySceneDir: "/"
+                        })
+                    }
+                    (window as any).bridge = bridge;
+                }
             }
         } catch (error) {
             message.error(error);
