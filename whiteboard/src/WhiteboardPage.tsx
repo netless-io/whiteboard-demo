@@ -156,7 +156,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         const {uuid, userId, identity} = this.props.match.params;
         this.setRoomList(uuid, userId);
         const query = new URLSearchParams(this.props.location.search);
-        const enableH5 = Boolean(query.get("h5"));
+        const h5Url = decodeURIComponent(query.get("h5Url") || "");
         try {
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
@@ -167,7 +167,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
                 }
-                if (enableH5) {
+                if (h5Url) {
                     const pluginParam = {
                         wrappedComponents: [IframeWrapper],
                         invisiblePlugins: [IframeBridge]
@@ -230,8 +230,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 }
                 this.setState({room: room});
                 (window as any).room = room;
-                if (enableH5) {
-                    this.handleEnableH5(room);
+                if (h5Url) {
+                    this.handleEnableH5(room, h5Url);
                 }
             }
         } catch (error) {
@@ -240,13 +240,13 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         }
     }
 
-    private handleEnableH5 = async (room: Room) => {
+    private handleEnableH5 = async (room: Room, h5Url: string) => {
         let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
         if (!bridge) {
             const h5SceneDir = "/h5";
             bridge = await IframeBridge.insert({
                 room,
-                url: h5DemoUrl,
+                url: h5Url,
                 width: 1280,
                 height: 720,
                 displaySceneDir: h5SceneDir

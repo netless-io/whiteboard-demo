@@ -2,19 +2,21 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import "./CreatePage.less";
 import logo from "./assets/image/logo.svg";
-import {Button, Input, Checkbox} from "antd";
+import {Button, Input, Select} from "antd";
 import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
 import { netlessWhiteboardApi } from "./apiMiddleware";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { CheckboxChangeEvent } from "antd/lib/checkbox";
+import { h5DemoUrl } from "./appToken";
+
+const { Option } = Select;
 
 export type CreatePageStates = {
     roomName: string;
     value: boolean;
-    enableH5: boolean;
+    h5Url: string;
 };
 
 class CreatePage extends React.Component<RouteComponentProps & WithTranslation, CreatePageStates> {
@@ -23,7 +25,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
         this.state = {
             roomName: "",
             value: false,
-            enableH5: false,
+            h5Url: "",
         };
     }
 
@@ -36,9 +38,8 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
         }
     }
 
-    private handleEnableH5 = (e: CheckboxChangeEvent) => {
-        const checked = e.target.checked;
-        this.setState({ enableH5: checked });
+    private handleSelectH5 = (value: string) => {
+        this.setState({ h5Url: value });
     }
 
 
@@ -48,8 +49,8 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
         if (uuid) {
             this.setRoomList(uuid, this.state.roomName, userId);
             let url = `/whiteboard/${Identity.creator}/${uuid}/${userId}`;
-            if (this.state.enableH5) {
-                url = url + `?h5=true`;
+            if (this.state.h5Url) {
+                url = url + `?h5Url=${encodeURIComponent(this.state.h5Url)}`;
             }
             this.props.history.push(url);
         }
@@ -127,7 +128,12 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
                                className="page-create-input-box"
                                size={"large"}/>
                         <div style={{marginBottom: 18, width: "100%", marginLeft: 95 }}>
-                            <Checkbox style={{marginRight: 5}} onChange={this.handleEnableH5} /> {t("enableH5Demo")}
+                            <Select
+                                placeholder={t("tryH5Courseware")}
+                                style={{ width: '80%' }}
+                                onChange={this.handleSelectH5}>
+                                <Option value={h5DemoUrl}>{h5DemoUrl}</Option>
+                            </Select>
                         </div>
        
                         <div className="page-index-btn-box">
