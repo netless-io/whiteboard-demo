@@ -2,18 +2,21 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import "./CreatePage.less";
 import logo from "./assets/image/logo.svg";
-import {Button, Input} from "antd";
+import {Button, Input, Select} from "antd";
 import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
 import { netlessWhiteboardApi } from "./apiMiddleware";
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { h5DemoUrl } from "./appToken";
 
+const { Option } = Select;
 
 export type CreatePageStates = {
     roomName: string;
     value: boolean;
+    h5Url: string;
 };
 
 class CreatePage extends React.Component<RouteComponentProps & WithTranslation, CreatePageStates> {
@@ -22,6 +25,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
         this.state = {
             roomName: "",
             value: false,
+            h5Url: "",
         };
     }
 
@@ -34,15 +38,19 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
         }
     }
 
+    private handleSelectH5 = (value: string) => {
+        this.setState({ h5Url: value });
+    }
+
+
     private handleJoin = async (): Promise<void> => {
         const userId = `${Math.floor(Math.random() * 100000)}`;
         const uuid = await this.createRoomAndGetUuid(this.state.roomName, 0);
         if (uuid) {
             this.setRoomList(uuid, this.state.roomName, userId);
             let url = `/whiteboard/${Identity.creator}/${uuid}/${userId}`;
-            const query = new URLSearchParams(this.props.location.search);
-            if (query.get("h5")) {
-                url = url + `?h5=true`;
+            if (this.state.h5Url) {
+                url = url + `?h5Url=${encodeURIComponent(this.state.h5Url)}`;
             }
             this.props.history.push(url);
         }
@@ -119,6 +127,15 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
                                onChange={evt => this.setState({roomName: evt.target.value})}
                                className="page-create-input-box"
                                size={"large"}/>
+                        <div style={{marginBottom: 18, width: "100%", marginLeft: 95 }}>
+                            <Select
+                                placeholder={t("tryH5Courseware")}
+                                style={{ width: '80%' }}
+                                onChange={this.handleSelectH5}>
+                                <Option value={h5DemoUrl}>{h5DemoUrl}</Option>
+                            </Select>
+                        </div>
+       
                         <div className="page-index-btn-box">
                             <Link to={"/"}>
                                 <Button className="page-index-btn"

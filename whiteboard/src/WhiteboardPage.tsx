@@ -156,7 +156,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         const {uuid, userId, identity} = this.props.match.params;
         this.setRoomList(uuid, userId);
         const query = new URLSearchParams(this.props.location.search);
-        const enableH5 = Boolean(query.get("h5"));
+        const h5Url = decodeURIComponent(query.get("h5Url") || "");
         try {
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
@@ -167,7 +167,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
                 }
-                if (enableH5) {
+                if (h5Url) {
                     const pluginParam = {
                         wrappedComponents: [IframeWrapper],
                         invisiblePlugins: [IframeBridge]
@@ -230,24 +230,40 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 }
                 this.setState({room: room});
                 (window as any).room = room;
-                if (enableH5) {
-                    let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
-                    if (!bridge) {
-                        bridge = await IframeBridge.insert({
-                            room,
-                            url: h5DemoUrl,
-                            width: 1280,
-                            height: 720,
-                            displaySceneDir: "/"
-                        })
-                    }
-                    (window as any).bridge = bridge;
+                if (h5Url) {
+                    this.handleEnableH5(room, h5Url);
                 }
             }
         } catch (error) {
             message.error(error);
             console.log(error);
         }
+    }
+
+    private handleEnableH5 = async (room: Room, h5Url: string) => {
+        let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
+        if (!bridge) {
+            const h5SceneDir = "/h5";
+            bridge = await IframeBridge.insert({
+                room,
+                url: h5Url,
+                width: 1280,
+                height: 720,
+                displaySceneDir: h5SceneDir
+            })
+            const scenes = room.entireScenes();
+            if (!scenes[h5SceneDir]) {
+                room.putScenes(h5SceneDir, this.createH5Scenes(6));
+            }
+            if (room.state.sceneState.contextPath !== h5SceneDir) {
+                room.setScenePath(h5SceneDir);
+            }
+        }
+        (window as any).bridge = bridge;
+    }
+
+    private createH5Scenes = (pageNumber: number) => {
+        return new Array(pageNumber).fill(1).map((_, index) => ({ name: `${index + 1}` }));
     }
 
     private handlePreviewState = (state: boolean): void => {
