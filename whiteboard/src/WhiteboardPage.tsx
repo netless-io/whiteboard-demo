@@ -231,23 +231,39 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 this.setState({room: room});
                 (window as any).room = room;
                 if (enableH5) {
-                    let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
-                    if (!bridge) {
-                        bridge = await IframeBridge.insert({
-                            room,
-                            url: h5DemoUrl,
-                            width: 1280,
-                            height: 720,
-                            displaySceneDir: "/"
-                        })
-                    }
-                    (window as any).bridge = bridge;
+                    this.handleEnableH5(room);
                 }
             }
         } catch (error) {
             message.error(error);
             console.log(error);
         }
+    }
+
+    private handleEnableH5 = async (room: Room) => {
+        let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
+        if (!bridge) {
+            const h5SceneDir = "/h5";
+            bridge = await IframeBridge.insert({
+                room,
+                url: h5DemoUrl,
+                width: 1280,
+                height: 720,
+                displaySceneDir: h5SceneDir
+            })
+            const scenes = room.entireScenes();
+            if (!scenes[h5SceneDir]) {
+                room.putScenes(h5SceneDir, this.createH5Scenes(6));
+            }
+            if (room.state.sceneState.contextPath !== h5SceneDir) {
+                room.setScenePath(h5SceneDir);
+            }
+        }
+        (window as any).bridge = bridge;
+    }
+
+    private createH5Scenes = (pageNumber: number) => {
+        return new Array(pageNumber).fill(1).map((_, index) => ({ name: `${index + 1}` }));
     }
 
     private handlePreviewState = (state: boolean): void => {
