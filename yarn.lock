@@ -1739,19 +1739,19 @@
   resolved "https://registry.yarnpkg.com/@netless/canvas-polyfill/-/canvas-polyfill-0.0.4.tgz#b5f28eefeb9c1e8ff8253fa1b044ccb1dc1b7c9c"
   integrity sha512-7NzsJrba0R/mq/l10SkIZQwbrNVJyPxZYrjK6xL3Ts732iWAVuS2UB0u3s6iGeUVcqV39A679yva8APWRl4M0A==
 
-"@netless/combine-player@^1.1.1", "@netless/combine-player@^1.1.3":
+"@netless/combine-player@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@netless/combine-player/-/combine-player-1.1.3.tgz#905d2db65ff62d6813d9992fb2829bb62049e9fa"
   integrity sha512-lJHgCYpC0kBgdXeOxOscidG0GeNq6AjfUXydGrtiSvgTNJm3+PmGKnY7GZ0FePNuFP9LPWhnuqJ8BztjU4wEWg==
   dependencies:
     video.js "^7.8.4"
 
-"@netless/docs-center@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@netless/docs-center/-/docs-center-0.0.2.tgz#3b1e9f2ae41e2e003e3de51a9adab98bb17fa7af"
-  integrity sha512-XZG4+unr0o2Lb09bewhuP4KwxFNLyfcbu2YUngFQh1x1BXFQ4VWLjVUrvfxnXS5sj5npOEsKrYt0QlWGBBOkgg==
+"@netless/combine-player@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@netless/combine-player/-/combine-player-1.1.4.tgz#49caede3d6bded15714440bffa703a1b4ccd1b46"
+  integrity sha512-JAP7rudcnjQ81Mrg1Bnuw5hifjp8frnNCLIt/M6yp9aj1+dK4YEAxcL0+jHoBGdhZOK3ShioJkXQVyMQ/X3gsw==
   dependencies:
-    "@netless/menu-box" "^0.0.1"
+    video.js "^7.8.4"
 
 "@netless/fetch-progress@^0.0.1":
   version "0.0.1"
@@ -1766,49 +1766,10 @@
     eventemitter2 "^6.4.3"
     react "^16.13.1"
 
-"@netless/oss-drop-upload@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@netless/oss-drop-upload/-/oss-drop-upload-0.0.2.tgz#83544c2af2d3f2dd94c05cb9bc220e07db521ede"
-  integrity sha512-M6JM3wLEdFl5tZOORIf/q5B76/w1K74uuWZmZh0rNkJrxJOyFGItqErkAljVDoAmy6B7rzv0eFWWugcdPlQ3qQ==
-  dependencies:
-    "@netless/loading-bar" "^0.0.1"
-    "@netless/oss-upload-manager" "^1.1.1"
-    ali-oss "^6.10.0"
-    react-dropzone "4.2.10"
-
-"@netless/oss-upload-button@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@netless/oss-upload-button/-/oss-upload-button-0.0.7.tgz#9f4ad4c4df73917b6fc53d05c9c724b24f409f8b"
-  integrity sha512-INP+BU4vQwNT6US/C1k65dA1nYmWf81f4H5zCSeyFVL7YCgijHXHevhq1hChdgw/VzD+nnJt8578wT/opZiWpA==
-  dependencies:
-    "@netless/loading-bar" "^0.0.1"
-    "@netless/oss-upload-manager" "^1.1.1"
-    ali-oss "^6.10.0"
-    antd "^4.4.3"
-
-"@netless/player-controller@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.npmjs.org/@netless/player-controller/-/player-controller-0.0.5.tgz#22e2fcff777693127ffc7f50d46d4e139d1e85cb"
-  integrity sha512-NpmpF53VSC/whbGysnbW2TRejHYMZPZUpIAbYcHDZQgJzHZq39LokW7kswE0DrY13WP8Hc8CNHVfyvWhKofNoA==
-  dependencies:
-    "@ant-design/icons" "^4.2.2"
-    "@netless/combine-player" "^1.1.1"
-    antd "^4.4.3"
-
-"@netless/redo-undo@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@netless/redo-undo/-/redo-undo-0.0.1.tgz#8524b90884dfab901aeddfd3d5a362fcc076fcb4"
-  integrity sha512-YVnT5CV7R7WN2jmsMMWHhdJWEyJ49uv0CyQ5UpzIixdLZFEAdpJ9CQcUsAa+/nHDLPJP7tYYRmh2xp9nTy29yQ==
-
 "@netless/zip@^0.0.6":
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/@netless/zip/-/zip-0.0.6.tgz#b4c82110b16ba718f27a61988fd77240426de216"
   integrity sha512-hchH9OzktHSlsdXhLjZr6HXqUNNZmc2YVxf2n0vBg/TkGYvDDU+h8o3/JGGl+4Gl3F83mVfWmVheeXxC3hl+RA==
-
-"@netless/zoom-controller@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@netless/zoom-controller/-/zoom-controller-0.0.3.tgz#5d243e7ec35abac4cd36e2e03d7a085e4da2a4a2"
-  integrity sha512-V1mX6TmAECZyNlPisfvcaxafjaS2GcvNjlYTmFFIFSmWWs6dJ5A2nvpcW9ZsTQ13mcnsuY1YTUxT2SuYZMSPNQ==
 
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
