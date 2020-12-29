@@ -1758,10 +1758,10 @@
   resolved "https://registry.yarnpkg.com/@netless/fetch-progress/-/fetch-progress-0.0.1.tgz#e4cc415b92f5acc610b6dd533947e40af39915ec"
   integrity sha512-RHdFtdchZVqcXOuKTxO7YR7Z/Wb3rTamNX1gs9u9754n4lKhvFpM1fOfMFnqNhkAM5hzZcnw9TaK4ew0SFJfmg==
 
-"@netless/iframe-bridge@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.npmjs.org/@netless/iframe-bridge/-/iframe-bridge-1.0.7.tgz#577927d127e4c91ba514269c80441101f67e74da"
-  integrity sha512-q9IDvXrCR0B3erUNGEAPS7tiq5+s7WOv/Pv5zhPkwjXDmQOdA7CxFdzqeLma5v1nv8ciV0xBIkzjrxh0JrOS7w==
+"@netless/iframe-bridge@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.npmjs.org/@netless/iframe-bridge/-/iframe-bridge-1.0.8.tgz#b24a9704720d8fe0c9a2ae8d2e92105b9b7b9b0a"
+  integrity sha512-HeUYt57nAmjIuXuTWa81gJSdWvaJm5Z8JDfTykkkJirQ0iaKbObvl68hSv1uF/9YOPpmMDdnVLxH89BnFO3Clg==
   dependencies:
     eventemitter2 "^6.4.3"
     react "^16.13.1"

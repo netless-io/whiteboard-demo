@@ -111,6 +111,12 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
     public render(): React.ReactNode {
         const {uuid, userId, foundError} = this.state;
         const {identity} = this.props.match.params;
+        const query = new URLSearchParams(window.location.search);
+        const h5Url = query.get("h5Url");
+        let url = `/whiteboard/${identity}/${uuid}/${userId}/`;
+        if (h5Url) {
+            url = url + `?h5Url=${encodeURIComponent(h5Url)}`;
+        }
         if (foundError) {
             return <PageError/>;
         } else if (localStorage.getItem("userName") === null) {
@@ -120,7 +126,7 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
                 return <Redirect to={`/name/`}/>;
             }
         } else if (uuid && userId) {
-            return <Redirect to={`/whiteboard/${identity}/${uuid}/${userId}/`} />;
+            return <Redirect to={url} />;
         }
         return <LoadingPage/>;
     }
