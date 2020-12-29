@@ -39,16 +39,31 @@ class InviteButton extends React.Component<InviteButtonProps & WithTranslation, 
     private handleCopy = (): void => {
         const { t } = this.props
         const { uuid } = this.props;
+        let url = `https://demo.netless.link/whiteboard/${Identity.joiner}/${uuid}/`;
+        const h5Url = this.getH5Url();
+        if (h5Url) {
+            url = url + `?h5Url=${h5Url}`;
+        }
         this.handleInvite();
-        copy(`{t('roomNumber')}：${uuid}\n{t('joinLink')}：https://demo.netless.link/whiteboard/${Identity.joiner}/${uuid}/`);
+        copy(`{t('roomNumber')}：${uuid}\n{t('joinLink')}：${url}`);
         message.success(t('copyClipboard'));
+    }
 
+    private getH5Url = () => {
+        const query = new URLSearchParams(window.location.search);
+        return query.get("h5Url");
     }
 
     private renderInviteContent = (): React.ReactNode => {
         const { t } = this.props
         const {uuid} = this.props;
         const isLocal = location.hostname === "localhost";
+        const protocol = isLocal ? "http" : "https";
+        let shareLink = `${protocol}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`
+        const h5Url = this.getH5Url();
+        if (h5Url) {
+            shareLink = shareLink + `?h5Url=${h5Url}`;
+        }
         return (
             <div className="invite-box">
                 <div className="invite-box-title">
@@ -75,13 +90,11 @@ class InviteButton extends React.Component<InviteButtonProps & WithTranslation, 
                     <div className="invite-url-box">
                         <span style={{width: 96}}>{t('joinLink')}：</span>
                         <Input size={"middle"}
-                               value={`${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`}
+                               value={shareLink}
                                addonAfter={
                                    <CopyOutlined
                                        onClick={() => {
-                                           copy(
-                                               `${isLocal ? "http" : "https"}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`,
-                                           );
+                                           copy(shareLink);
                                            message.success(t('copyClipboard'));
                                        }}
                                    />
