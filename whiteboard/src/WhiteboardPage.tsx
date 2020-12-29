@@ -155,7 +155,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     private startJoinRoom = async (): Promise<void> => {
         const {uuid, userId, identity} = this.props.match.params;
         this.setRoomList(uuid, userId);
-        const query = new URLSearchParams(this.props.location.search);
+        const query = new URLSearchParams(window.location.search);
         const h5Url = decodeURIComponent(query.get("h5Url") || "");
         try {
             const roomToken = await this.getRoomToken(uuid);

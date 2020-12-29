@@ -62,7 +62,7 @@ class InviteButton extends React.Component<InviteButtonProps & WithTranslation, 
         let shareLink = `${protocol}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`
         const h5Url = this.getH5Url();
         if (h5Url) {
-            shareLink = shareLink + `?h5Url=${h5Url}`;
+            shareLink = shareLink + `?h5Url=${encodeURIComponent(h5Url)}`;
         }
         return (
             <div className="invite-box">
