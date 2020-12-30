@@ -9,7 +9,7 @@ import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
 import { netlessWhiteboardApi } from "./apiMiddleware";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { h5DemoUrl } from "./appToken";
+import { h5DemoUrl, h5DemoUrl2 } from "./appToken";
 
 const { Option } = Select;
 
@@ -133,6 +133,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
                                 style={{ width: '80%' }}
                                 onChange={this.handleSelectH5}>
                                 <Option value={h5DemoUrl}>{h5DemoUrl}</Option>
+                                <Option value={h5DemoUrl2}>{h5DemoUrl2}</Option>
                             </Select>
                         </div>
        

@@ -22,3 +22,4 @@ export const ossConfigObj: OSSConfigObjType = {
 };
 
 export const h5DemoUrl = process.env.H5DEMOURL!;
+export const h5DemoUrl2 = process.env.H5DEMOURL2!;
