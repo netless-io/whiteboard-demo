@@ -20,7 +20,7 @@ import folder from "./assets/image/folder.svg";
 import follow from "./assets/image/follow.svg"
 import followActive from "./assets/image/follow-active.svg";
 import logo from "./assets/image/logo.svg";
-import {netlessToken, ossConfigObj, h5DemoUrl} from "./appToken";
+import {netlessToken, ossConfigObj, h5DemoUrl2} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
@@ -32,6 +32,7 @@ import {v4 as uuidv4} from "uuid";
 import moment from "moment";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import {IframeWrapper, IframeBridge} from "@netless/iframe-bridge";
+import { IframeAdapter } from "./tools/IframeAdapter";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -244,6 +245,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
         if (!bridge) {
             const h5SceneDir = "/h5";
+            let totalPage = 6;
             bridge = await IframeBridge.insert({
                 room,
                 url: h5Url,
@@ -252,12 +254,18 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 displaySceneDir: h5SceneDir
             })
             const scenes = room.entireScenes();
+            if (h5Url === h5DemoUrl2) {
+                totalPage = 3;
+            }
             if (!scenes[h5SceneDir]) {
-                room.putScenes(h5SceneDir, this.createH5Scenes(6));
+                room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
             }
             if (room.state.sceneState.contextPath !== h5SceneDir) {
                 room.setScenePath(h5SceneDir);
             }
+        }
+        if (h5Url === h5DemoUrl2) {
+            new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId);
         }
         (window as any).bridge = bridge;
     }
