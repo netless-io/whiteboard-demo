@@ -1,19 +1,18 @@
 import { IframeBridge } from "@netless/iframe-bridge";
 import { Room, RoomMember, RoomState } from "white-web-sdk";
-import { h5DemoUrl2 } from "../appToken";
-
-const h5Url = new URL(h5DemoUrl2);
 
 export class IframeAdapter {
     private bridge: IframeBridge;
     private room: Room;
     private IframeEvent = "IframeEvent";
     private userId: string;
+    private h5Url: URL;
 
-    constructor(room: Room, bridge: IframeBridge, userId: string) {
+    constructor(room: Room, bridge: IframeBridge, userId: string, url: string) {
         this.bridge = bridge;
         this.room = room;
         this.userId = userId;
+        this.h5Url = new URL(url);
         room.callbacks.on("onRoomStateChanged", (state: RoomState) => {
             if (state.sceneState) {
                 this.jumpPage(state.sceneState.index);
@@ -36,9 +35,22 @@ export class IframeAdapter {
 
     private addMessageListener() {
         const listener = (event: MessageEvent) => {
-            if (event.origin === h5Url.origin) {
+            if (event.origin === this.h5Url.origin) {
                 const data = event.data;
-                this.room.dispatchMagixEvent(this.IframeEvent, data);
+                try {
+                    const { method, toPage } = JSON.parse(data);
+                    console.log(method);
+                    if (method === "onJumpPage") {
+                        this.room.setSceneIndex(toPage - 1);
+                    } else {
+                        this.room.dispatchMagixEvent(this.IframeEvent, data);
+                    }
+                    if (method === "onLoadComplete") {
+                        this.jumpPage(this.room.state.sceneState.index);
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             }
         }
         window.addEventListener("message", listener);

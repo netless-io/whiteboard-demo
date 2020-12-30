@@ -20,7 +20,7 @@ import folder from "./assets/image/folder.svg";
 import follow from "./assets/image/follow.svg"
 import followActive from "./assets/image/follow-active.svg";
 import logo from "./assets/image/logo.svg";
-import {netlessToken, ossConfigObj, h5DemoUrl2} from "./appToken";
+import {netlessToken, ossConfigObj, h5DemoUrl2, h5DemoUrl3} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
@@ -257,6 +257,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             if (h5Url === h5DemoUrl2) {
                 totalPage = 3;
             }
+            if (h5Url === h5DemoUrl3) {
+                totalPage = 14;
+            }
             if (!scenes[h5SceneDir]) {
                 room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
             }
@@ -264,8 +267,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 room.setScenePath(h5SceneDir);
             }
         }
-        if (h5Url === h5DemoUrl2) {
-            new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId);
+        if (h5Url === h5DemoUrl2 || h5Url === h5DemoUrl3) {
+            new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
         }
         (window as any).bridge = bridge;
     }
