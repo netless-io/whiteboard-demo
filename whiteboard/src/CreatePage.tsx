@@ -129,6 +129,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
                                size={"large"}/>
                         <div style={{marginBottom: 18, width: "100%", marginLeft: 95 }}>
                             <Select
+                                size={"large"}
                                 placeholder={t("tryH5Courseware")}
                                 style={{ width: '80%' }}
                                 onChange={this.handleSelectH5}>
@@ -137,7 +138,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
                                 <Option value={h5DemoUrl3}>{h5DemoUrl3}</Option>
                             </Select>
                         </div>
-       
+
                         <div className="page-index-btn-box">
                             <Link to={"/"}>
                                 <Button className="page-index-btn"
