@@ -21,6 +21,6 @@ export const ossConfigObj: OSSConfigObjType = {
     prefix: process.env.PREFIX!,
 };
 
-export const h5DemoUrl = process.env.H5DEMOURL!;
-export const h5DemoUrl2 = process.env.H5DEMOURL2!;
-export const h5DemoUrl3 = process.env.H5DEMOURL3!;
+export const h5DemoUrl = "https://demo-h5.netless.group/docs/";
+export const h5DemoUrl2 = "https://h5tapi-uat.acadsoc.com.cn/H5tTemplate/index.html?role=0&version=zttqxgb6t7r";
+export const h5DemoUrl3 = "https://demo-h5.netless.group/dist2020/";
