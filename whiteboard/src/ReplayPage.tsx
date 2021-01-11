@@ -3,14 +3,14 @@ import {RouteComponentProps} from "react-router";
 import {CursorTool} from "@netless/cursor-tool";
 import polly from "polly-js";
 import {message} from "antd";
-import {WhiteWebSdk, PlayerPhase, Player, createPlugins} from "white-web-sdk";
+import {WhiteWebSdk, PlayerPhase, Player, createPlugins, WhiteWebSdkConfiguration} from "white-web-sdk";
 import video_play from "./assets/image/video-play.svg";
 import "video.js/dist/video-js.css";
 import "./ReplayPage.less";
 import PageError from "./PageError";
 import PlayerController from "@netless/player-controller";
 import {netlessWhiteboardApi} from "./apiMiddleware";
-import {netlessToken} from "./appToken";
+import {h5DemoUrl2, h5DemoUrl3, netlessToken} from "./appToken";
 import LoadingPage from "./LoadingPage";
 import logo from "./assets/image/logo.svg";
 import ExitButtonPlayer from "./components/ExitButtonPlayer";
@@ -18,6 +18,9 @@ import { Identity } from "./IndexPage";
 import {videoPlugin} from "@netless/white-video-plugin";
 import { audioPlugin } from "@netless/white-audio-plugin";
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { getQueryH5Url } from "./tools/QueryGetter";
+import { IframeBridge, IframeWrapper } from "@netless/iframe-bridge";
+import { ReplayAdapter } from "./tools/ReplayAdapter";
 
 export type PlayerPageProps = RouteComponentProps<{
     identity: Identity;
@@ -63,10 +66,18 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
         plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
         const roomToken = await this.getRoomToken(uuid);
         if (uuid && roomToken) {
-            const whiteWebSdk = new WhiteWebSdk({
+            const h5Url = getQueryH5Url();
+            let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                 appIdentifier: netlessToken.appIdentifier,
-                plugins,
-            });
+                plugins: plugins,
+            }
+            if (h5Url) {
+                whiteWebSdkParams = Object.assign(whiteWebSdkParams, {
+                    invisiblePlugins: [IframeBridge],
+                    wrappedComponents: [IframeWrapper]
+                })
+            }
+            const whiteWebSdk = new WhiteWebSdk(whiteWebSdkParams);
             await this.loadPlayer(whiteWebSdk, uuid, roomToken);
         }
     }
@@ -91,6 +102,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
 
     private startPlayer = async (whiteWebSdk: WhiteWebSdk, uuid: string, roomToken: string): Promise<void> => {
         const cursorAdapter = new CursorTool();
+        let firstPlay = false;
         const player = await whiteWebSdk.replayRoom(
             {
                 room: uuid,
@@ -99,6 +111,16 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
             }, {
                 onPhaseChanged: phase => {
                     this.setState({phase: phase});
+                    if (phase === PlayerPhase.Playing) {
+                        if (!firstPlay) {
+                            const h5Url = getQueryH5Url();
+                            if (h5Url && (h5Url === h5DemoUrl2 || h5Url === h5DemoUrl3)) {
+                                const bridge = player.getInvisiblePlugin(IframeBridge.kind);
+                                new ReplayAdapter(player, bridge as IframeBridge, this.props.match.params.userId, h5Url)
+                            }
+                        }
+                        firstPlay = true;
+                    }
                 },
                 onStoppedWithError: (error: Error) => {
                     message.error(`Playback error: ${error}`);
@@ -108,6 +130,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                     this.setState({currentTime: scheduleTime});
                 },
             });
+        
         (window as any).player = player;
         cursorAdapter.setPlayer(player);
         this.setState({
