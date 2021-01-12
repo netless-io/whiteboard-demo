@@ -13,9 +13,11 @@ export class IframeAdapter {
         this.room = room;
         this.userId = userId;
         this.h5Url = new URL(url);
+        let prevIndex = room.state.sceneState.index;
         room.callbacks.on("onRoomStateChanged", (state: RoomState) => {
-            if (state.sceneState) {
+            if (state.sceneState && state.sceneState.index !== prevIndex) {
                 this.jumpPage(state.sceneState.index);
+                prevIndex = state.sceneState.index;
             }
         })
         room.addMagixEventListener(this.IframeEvent, (event) => {

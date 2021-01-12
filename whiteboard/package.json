@@ -15,7 +15,7 @@
         "@netless/fetch-progress": "^0.0.1",
         "@netless/oss-drop-upload": "^0.0.4",
         "@netless/oss-upload-button": "^0.0.9",
-        "@netless/iframe-bridge": "^1.0.8",
+        "@netless/iframe-bridge": "^1.1.0",
         "@netless/page-controller": "^0.0.2",
         "@netless/player-controller": "^0.0.6",
         "@netless/preview-controller": "^0.0.2",
