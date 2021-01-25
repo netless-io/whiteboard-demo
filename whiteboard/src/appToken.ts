@@ -21,6 +21,27 @@ export const ossConfigObj: OSSConfigObjType = {
     prefix: process.env.PREFIX!,
 };
 
+export type H5OSSCOnfigObjType = {
+    h5AccessKeyId: string;
+    h5AccessKeySecret: string;
+    h5Region: string;
+    h5Bucket: string;
+    h5Folder: string;
+    h5SiteFolder: string;
+    h5Prefix: string;
+}
+
+export const h5OssConfigObj = {
+    h5AccessKeyId: process.env.H5AK!,
+    h5AccessKeySecret: process.env.H5SK!,
+    h5Region: process.env.H5REGION!,
+    h5Bucket: process.env.H5BUCKET!,
+    h5Folder: process.env.H5FOLDER!,
+    h5SiteFolder: process.env.H5SITEFOLDER!,
+    h5Prefix: process.env.H5PREFIX!
+}
+
+
 export const h5DemoUrl = "https://demo-h5.netless.group/docs/";
 export const h5DemoUrl2 = "https://h5tapi-uat.acadsoc.com.cn/H5tTemplate/index.html?role=0&version=zttqxgb6t7r";
 export const h5DemoUrl3 = "https://demo-h5.netless.group/dist2020/";
