@@ -1,7 +1,8 @@
 import  * as React from "react";
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter, Router} from "react-router-dom";
 import {Route, Switch} from "react-router";
 import {message} from "antd";
+import { history } from "./BrowserHistory";
 import WhiteboardCreatorPage from "./WhiteboardCreatorPage";
 import IndexPage from "./IndexPage";
 import WhiteboardPage from "./WhiteboardPage";
@@ -23,7 +24,7 @@ export class AppRoutes extends React.Component<{}, {}> {
     }
     public render(): React.ReactNode {
         return (
-            <BrowserRouter>
+            <Router history={history}>
                 <Switch>
                     <Route path="/replay/:identity/:uuid/:userId/" component={ReplayPage} />
                     <Route path="/replay-video/:identity/:uuid/:userId/" component={ReplayVideoPage} />
@@ -36,7 +37,7 @@ export class AppRoutes extends React.Component<{}, {}> {
                     <Route path="/storage/" component={Storage}/>
                     <Route path="/" component={IndexPage}/>
                 </Switch>
-            </BrowserRouter>
+            </Router>
       );
     }
 }

@@ -20,7 +20,7 @@ import folder from "./assets/image/folder.svg";
 import follow from "./assets/image/follow.svg"
 import followActive from "./assets/image/follow-active.svg";
 import logo from "./assets/image/logo.svg";
-import {netlessToken, ossConfigObj, h5DemoUrl2, h5DemoUrl3} from "./appToken";
+import {netlessToken, ossConfigObj, h5DemoUrl2, h5DemoUrl3, h5DemoUrl} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
@@ -33,6 +33,7 @@ import moment from "moment";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import {IframeWrapper, IframeBridge} from "@netless/iframe-bridge";
 import { IframeAdapter } from "./tools/IframeAdapter";
+import { H5UploadButton } from "./components/H5UploadButton";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -152,12 +153,14 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 ]),
             );
         }
-    };
+    }
+
     private startJoinRoom = async (): Promise<void> => {
         const {uuid, userId, identity} = this.props.match.params;
         this.setRoomList(uuid, userId);
         const query = new URLSearchParams(window.location.search);
         const h5Url = decodeURIComponent(query.get("h5Url") || "");
+        const h5Dir = query.get("h5Dir");
         try {
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
@@ -231,7 +234,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 }
                 this.setState({room: room});
                 (window as any).room = room;
-                if (h5Url) {
+                if (h5Url && h5Dir) {
+                    this.handleEnableH5(room, h5Url, h5Dir);
+                } else if (h5Url) {
                     this.handleEnableH5(room, h5Url);
                 }
             }
@@ -241,10 +246,10 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         }
     }
 
-    private handleEnableH5 = async (room: Room, h5Url: string) => {
+    private handleEnableH5 = async (room: Room, h5Url: string, dir?: string) => {
         let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
         if (!bridge) {
-            const h5SceneDir = "/h5";
+            const h5SceneDir = dir || "/h5";
             let totalPage = 6;
             bridge = await IframeBridge.insert({
                 room,
@@ -252,26 +257,32 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 width: 1280,
                 height: 720,
                 displaySceneDir: h5SceneDir
-            })
-            const scenes = room.entireScenes();
-            if (h5Url === h5DemoUrl2) {
-                totalPage = 3;
-            }
-            if (h5Url === h5DemoUrl3) {
-                totalPage = 14;
-            }
-            if (!scenes[h5SceneDir]) {
-                room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
-            }
-            if (room.state.sceneState.contextPath !== h5SceneDir) {
-                room.setScenePath(h5SceneDir);
+            });
+            if ([h5DemoUrl, h5DemoUrl2, h5DemoUrl3].includes(h5Url)) {
+                const scenes = room.entireScenes();
+                if (h5Url === h5DemoUrl2) {
+                    totalPage = 3;
+                }
+                if (h5Url === h5DemoUrl3) {
+                    totalPage = 14;
+                }
+                if (!scenes[h5SceneDir]) {
+                    room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
+                }
+                if (room.state.sceneState.contextPath !== h5SceneDir) {
+                    room.setScenePath(h5SceneDir);
+                }
             }
         }
         if (h5Url === h5DemoUrl2 || h5Url === h5DemoUrl3) {
             new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
         }
+        if (dir) {
+            new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
+        }
         (window as any).bridge = bridge;
     }
+
 
     private createH5Scenes = (pageNumber: number) => {
         return new Array(pageNumber).fill(1).map((_, index) => ({ name: `${index + 1}` }));
@@ -344,6 +355,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                          onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
                                         <img src={folder} alt={"folder"}/>
                                     </div>
+                                </Tooltip>
+                                <Tooltip placement="bottom" title={"H5 Course"}>
+                                    <H5UploadButton room={room} />
                                 </Tooltip>
                                 <InviteButton uuid={uuid}/>
                                 <ExitButtonRoom identity={identity} room={room} userId={userId} />

@@ -14,12 +14,14 @@ export class IframeAdapter {
         this.userId = userId;
         this.h5Url = new URL(url);
         let prevIndex = room.state.sceneState.index;
-        room.callbacks.on("onRoomStateChanged", (state: RoomState) => {
+        const eventName = this.isReplay(room) ? "onPlayerStateChanged" : "onRoomStateChanged";
+        room.callbacks.on(eventName, (state: RoomState) => {
             if (state.sceneState && state.sceneState.index !== prevIndex) {
                 this.jumpPage(state.sceneState.index);
                 prevIndex = state.sceneState.index;
             }
         })
+
         room.addMagixEventListener(this.IframeEvent, (event) => {
             if (event.authorId === this.currentMember(room)?.memberId) {
                 return;
@@ -63,6 +65,10 @@ export class IframeAdapter {
             method: "onJumpPage",
             toPage: index + 1,
         })
+    }
+
+    private isReplay(room: Room) {
+        return "isPlayable" in room;
     }
 
     private currentMember(room: Room): RoomMember | undefined {

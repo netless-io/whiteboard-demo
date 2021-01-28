@@ -37,8 +37,4 @@ export class ReplayAdapter {
             toPage: index + 1,
         })
     }
-
-    private currentMember(player: Player): RoomMember | undefined {
-        return player.state.roomMembers.find(member => member.payload.userId === this.userId);
-    }
 }
