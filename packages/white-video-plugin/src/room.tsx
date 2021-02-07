@@ -38,6 +38,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
     private readonly reactionSeekTimeDisposer: IReactionDisposer;
     private readonly reactionVolumeDisposer: IReactionDisposer;
     private readonly reactionMuteDisposer: IReactionDisposer;
+    private readonly reactionSyncDisposer: IReactionDisposer;
     private readonly player: React.RefObject<HTMLVideoElement>;
     private syncNode: ProgressSyncNode;
     private selfUserInf: SelfUserInf | null = null;
@@ -49,6 +50,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
         this.reactionPlayDisposer = this.startPlayReaction();
         this.reactionVolumeDisposer = this.startVolumeReaction();
         this.reactionMuteDisposer = this.startMuteTimeReaction();
+        this.reactionSyncDisposer = this.startSyncReaction();
         this.state = {
             play: false,
             seek: 0,
@@ -64,11 +66,12 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
         this.syncNode = new ProgressSyncNode(this.player.current!);
         await this.handleStartCondition();
     }
-
+    private playerState: boolean = false;
     private handleStartCondition = async (): Promise<void> => {
         const { plugin } = this.props;
         this.setMyIdentityRoom();
         await this.handleNativePlayerState(plugin.attributes.play);
+        this.playerState = plugin.attributes.play;
         if (this.player.current) {
             this.handleFirstSeek();
             this.player.current.addEventListener("play", () => {
@@ -154,6 +157,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
 
     private handleRemotePlayState = (play: boolean): void => {
         const { plugin } = this.props;
+        this.playerState = play;
         const currentTime = plugin.attributes.currentTime;
         if (this.selfUserInf) {
             if (this.selfUserInf.identity === IdentityType.host) {
@@ -166,11 +170,18 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
         }
     }
 
+    private lastSyncProgressTimestamp: number = 0;
+
     private onTimeUpdate = (currentTime: number): void => {
         const { plugin } = this.props;
-        if (this.selfUserInf) {
-            if (this.selfUserInf.identity === IdentityType.host) {
-                plugin.putAttributes({ currentTime: currentTime });
+        const fireTimestamp = Date.now();
+        const threshold = 1000;
+        if (fireTimestamp - this.lastSyncProgressTimestamp > threshold) {
+            this.lastSyncProgressTimestamp = fireTimestamp;
+            if (this.selfUserInf) {
+                if (this.selfUserInf.identity === IdentityType.host) {
+                    plugin.putAttributes({ currentTime: currentTime, play: this.playerState });
+                }
             }
         }
     }
@@ -211,6 +222,20 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
             return plugin.attributes.seek;
         }, async seek => {
             await this.handleSeekReaction(seek, plugin.attributes.seekTime);
+        });
+    }
+
+    private startSyncReaction(): IReactionDisposer {
+        const { plugin } = this.props;
+        return reaction(() => {
+            return plugin.attributes.currentTime;
+        }, async currentTime => {
+            if (!this.isHost()) {
+                const threshold = 2;
+                if (this.player.current && Math.abs(currentTime - this.player.current.currentTime) > threshold) {
+                    this.player.current.currentTime = currentTime;
+                }
+            }
         });
     }
 
@@ -260,6 +285,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
         this.reactionMuteDisposer();
         this.reactionVolumeDisposer();
         this.reactionSeekTimeDisposer();
+        this.reactionSyncDisposer()
         if (this.player.current) {
             this.player.current.pause();
         }

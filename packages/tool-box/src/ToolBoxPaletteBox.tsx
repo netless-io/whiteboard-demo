@@ -1,12 +1,15 @@
 import * as React from "react";
-import  "./ToolBoxPaletteBox.less";
-import { Room, RoomState} from "white-web-sdk";
+import "./ToolBoxPaletteBox.less";
+import {ApplianceNames, Room, RoomState} from "white-web-sdk";
 import toolPaletteConfig from "./ToolPaletteConfig";
 import mask from "./image/mask.svg";
+
 export type ToolBoxPaletteBoxProps = {
     displayStroke: boolean;
+    displaySelectAppliance: boolean;
     room: Room;
     roomState: RoomState;
+    selectAppliance: (applianceName: ApplianceNames) => void;
 };
 
 export type ToolBoxPaletteBoxStates = {
@@ -63,11 +66,12 @@ export default class ToolBoxPaletteBox extends React.Component<ToolBoxPaletteBox
         const colorCell = toolPaletteConfig.map((data, index) => {
             const newColor = this.hexToRgb(data);
             return (
-               <div className="cell-mid-color" key={`color-${index}`} style={{borderColor: this.isMatchColor(newColor) ? "#3381FF" : "#FFFFFF"}}>
-                   <div onClick={() => this.selectColor(newColor)}
-                        className="cell-color" style={{backgroundColor: data}}>
-                   </div>
-               </div>
+                <div className="cell-mid-color" key={`color-${index}`}
+                     style={{borderColor: this.isMatchColor(newColor) ? "#3381FF" : "#FFFFFF"}}>
+                    <div onClick={() => this.selectColor(newColor)}
+                         className="cell-color" style={{backgroundColor: data}}>
+                    </div>
+                </div>
             );
         });
         return (
@@ -82,36 +86,75 @@ export default class ToolBoxPaletteBox extends React.Component<ToolBoxPaletteBox
         if (!displayStroke) {
             return null;
         }
-        return [
-            <div key={"key-color"} className="tool-box-stroke-box">
-                <div className="tool-box-input-box">
-                    <input className="palette-stroke-slider"
-                           type="range"
-                           min={1}
-                           max={32}
-                           onChange={this.setStrokeWidth}
-                           defaultValue={roomState.memberState.strokeWidth}
-                           onMouseUp={
-                               () => room.setMemberState({strokeWidth: roomState.memberState.strokeWidth})
-                           }/>
+        return (
+            <>
+                <div className="tool-box-stroke-box">
+                    <div className="tool-box-input-box">
+                        <input className="palette-stroke-slider"
+                               type="range"
+                               min={1}
+                               max={32}
+                               onChange={this.setStrokeWidth}
+                               defaultValue={roomState.memberState.strokeWidth}
+                               onMouseUp={
+                                   () => room.setMemberState({strokeWidth: roomState.memberState.strokeWidth})
+                               }/>
+                    </div>
+                    <div className="tool-box-mask-box">
+                        <img src={mask} alt={"mask"}/>
+                    </div>
+                    <div className="tool-box-under-box-2" style={{width: 156 * this.state.percentage}}/>
+                    <div className="tool-box-under-box"/>
                 </div>
-                <div className="tool-box-mask-box">
-                    <img src={mask}/>
+                <div className="stroke-script">
+                    <div className="stroke-script-text">细</div>
+                    <div className="stroke-script-text">粗</div>
                 </div>
-                <div className="tool-box-under-box-2" style={{width: 156 * this.state.percentage}}/>
-                <div className="tool-box-under-box"/>
-            </div>,
-            <div key="key-script" className="stroke-script">
-                <div className="stroke-script-text">细</div>
-                <div className="stroke-script-text">粗</div>
-            </div>,
-            <div key="key-cut-line" style={{width: 156, height: 1, backgroundColor: "#E7E7E7"}}/>
-        ];
+                <div style={{width: 156, height: 1, backgroundColor: "#E7E7E7"}}/>
+            </>
+        );
+    }
+
+
+    private renderTools = (): React.ReactNode => {
+        const {selectAppliance, displaySelectAppliance} = this.props;
+        if (!displaySelectAppliance) {
+            return null;
+        }
+        return (
+            <>
+                <div className={""}>
+                    <div
+                        onClick={() => {
+                            selectAppliance(ApplianceNames.pencil);
+                        }}
+                    >1
+                    </div>
+                    <div
+                        onClick={() => {
+                            selectAppliance(ApplianceNames.ellipse);
+                        }}
+                    >2</div>
+                    <div
+                        onClick={() => {
+                            selectAppliance(ApplianceNames.rectangle);
+                        }}
+                    >3</div>
+                    <div
+                        onClick={() => {
+                            selectAppliance(ApplianceNames.straight);
+                        }}
+                    >4</div>
+                </div>
+                <div style={{width: 156, height: 1, backgroundColor: "#E7E7E7"}}/>
+            </>
+        );
     }
 
     public render(): React.ReactNode {
         return (
             <div className="palette-box">
+                {this.renderTools()}
                 {this.renderStrokeWidth()}
                 {this.renderColor()}
             </div>
