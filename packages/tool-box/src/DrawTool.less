@@ -1,0 +1,24 @@
+.draw-tool-box {
+  display: flex;
+  flex-direction: row;
+  width: 156px;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-between;
+}
+
+.draw-tool-box-cell {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  user-select: none;
+  border-radius: 2px;
+  &:hover {
+    background: rgba(33,35,36,0.1);
+  }
+}

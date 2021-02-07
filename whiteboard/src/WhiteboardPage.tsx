@@ -246,7 +246,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         }
     }
 
-    private handleEnableH5 = async (room: Room, h5Url: string, dir?: string) => {
+    private handleEnableH5 = async (room: Room, h5Url: string, dir?: string): Promise<void> => {
         let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
         if (!bridge) {
             const h5SceneDir = dir || "/h5";
@@ -322,9 +322,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             default: {
                 return (
                     <div className="realtime-box">
-                        <div className="logo-box">
-                            <img src={logo} alt={"logo"}/>
-                        </div>
+                        {/*<div className="logo-box">*/}
+                        {/*    <img src={logo} alt={"logo"}/>*/}
+                        {/*</div>*/}
                         <div className="tool-box-out">
                             <ToolBox room={room} customerComponent={
                                 [

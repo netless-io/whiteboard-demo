@@ -314,23 +314,23 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
 
     public render(): React.ReactNode {
         const {isActive} = this.state;
-        return [
-            <TopLoadingBar key={"top-loading-bar-oss"} style={{backgroundColor: "#71C3FC", height: 4}} loadingPercent={this.state.ossPercent}/>,
-            <TopLoadingBar key={"top-loading-bar-converter"} style={{backgroundColor: "#71C3FC", height: 4}}
-                           loadingPercent={this.state.converterPercent}/>,
-            <Popover trigger="click"
-                     key={"oss-upload-popper"}
-                     onVisibleChange={this.handleVisibleChange}
-                     placement={"leftBottom"}
-                     content={this.renderUploadButton()}>
-                <Tooltip placement={"right"} title={"upload"}>
+        return (
+            <>
+                <TopLoadingBar style={{backgroundColor: "#71C3FC", height: 4}} loadingPercent={this.state.ossPercent}/>
+                <TopLoadingBar style={{backgroundColor: "#71C3FC", height: 4}}
+                               loadingPercent={this.state.converterPercent}/>
+                <Popover trigger="hover"
+                         key={"oss-upload-popper"}
+                         onVisibleChange={this.handleVisibleChange}
+                         placement={"leftBottom"}
+                         content={this.renderUploadButton()}>
                     <div className="oss-upload-cell-box-left">
                         <div className="oss-upload-cell">
                             <img src={isActive ? uploadActive : upload} alt={"upload"}/>
                         </div>
                     </div>
-                </Tooltip>
-            </Popover>
-        ];
+                </Popover>
+            </>
+        );
     }
 }
