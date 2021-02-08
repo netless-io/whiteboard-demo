@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
-    <title>pen</title>
-    <desc>Created with Sketch.</desc>
-    <g id="页面-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Whiteboard-Guidelines" transform="translate(-168.000000, -216.000000)">
-            <g id="pen" transform="translate(168.000000, 216.000000)">
-                <rect id="矩形备份-40" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="40" height="40" rx="2"></rect>
-                <path d="M13,27 C15.0952381,23.6666667 18.4285714,22 23,22 C29.8571429,22 13.2857143,15.8 27,13" id="路径-5备份" stroke="#212324" stroke-linecap="round" stroke-linejoin="round" transform="translate(20.000000, 20.000000) scale(-1, 1) translate(-20.000000, -20.000000) "></path>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>follow备份 3</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="切图" transform="translate(-8.000000, -44.000000)" stroke="#444E60">
+            <g id="folder备份" transform="translate(8.000000, 44.000000)">
+                <path d="M15.2700286,11.5822879 L9.44305056,17.4092659 C9.06480988,17.7875066 8.55180543,18 8.01689232,18 L6,18 L6,18 L6,15.9831077 C6,15.4481946 6.2124934,14.9351901 6.59073408,14.5569494 L14.5569494,6.59073408 C15.3445949,5.80308864 16.6216205,5.80308864 17.4092659,6.59073408 C18.1969114,7.37837953 18.1969114,8.65540512 17.4092659,9.44305056 L17.4092659,9.44305056 L17.4092659,9.44305056 C18.1969114,10.230696 18.1969114,11.5077216 17.4092659,12.295367 L14.5569494,15.1476835 L14.5569494,15.1476835" id="路径"></path>
             </g>
         </g>
     </g>

@@ -52,10 +52,10 @@ export default class RedoUndo extends React.Component<RedoUndoProps, RedoUndoSta
         return (
             <div className="redo-undo">
                 <div className="redo-undo-controller-btn " onClick={this.handleUndo}>
-                    <img src={undoSteps === 0 ? undoDisabled : undo}/>
+                    <img src={undoSteps === 0 ? undoDisabled : undo} alt={"undo"}/>
                 </div>
                 <div className="redo-undo-controller-btn" onClick={this.handleRedo}>
-                    <img src={redoSteps === 0 ? redoDisabled : redo}/>
+                    <img src={redoSteps === 0 ? redoDisabled : redo} alt={"redo"}/>
                 </div>
             </div>
         );

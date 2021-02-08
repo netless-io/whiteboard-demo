@@ -246,7 +246,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         }
     }
 
-    private handleEnableH5 = async (room: Room, h5Url: string, dir?: string) => {
+    private handleEnableH5 = async (room: Room, h5Url: string, dir?: string): Promise<void> => {
         let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
         if (!bridge) {
             const h5SceneDir = dir || "/h5";
@@ -322,9 +322,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             default: {
                 return (
                     <div className="realtime-box">
-                        <div className="logo-box">
-                            <img src={logo} alt={"logo"}/>
-                        </div>
+                        {/*<div className="logo-box">*/}
+                        {/*    <img src={logo} alt={"logo"}/>*/}
+                        {/*</div>*/}
                         <div className="tool-box-out">
                             <ToolBox room={room} customerComponent={
                                 [
@@ -345,15 +345,15 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
                                 <Tooltip placement="bottom" title={"Vision control"}>
-                                    <div className="page-controller-cell"
+                                    <div className="page-preview-cell"
                                          onClick={()=> this.handleRoomController(room)}>
-                                        <img src={this.state.mode === ViewMode.Broadcaster ? followActive : follow} alt={"follow"}/>
+                                        <img style={{width: "28px"}} src={this.state.mode === ViewMode.Broadcaster ? followActive : follow} alt={"follow"}/>
                                     </div>
                                 </Tooltip>
                                 <Tooltip placement="bottom" title={"Docs center"}>
-                                    <div className="page-controller-cell"
+                                    <div className="page-preview-cell"
                                          onClick={() => this.setState({isFileOpen: !this.state.isFileOpen})}>
-                                        <img src={folder} alt={"folder"}/>
+                                        <img style={{width: "28px"}} src={folder} alt={"folder"}/>
                                     </div>
                                 </Tooltip>
                                 <Tooltip placement="bottom" title={"H5 Course"}>
@@ -365,12 +365,12 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         </div>
                         <div className="page-controller-box">
                             <div className="page-controller-mid-box">
+                                <PageController room={room}/>
                                 <Tooltip placement="top" title={"Page preview"}>
-                                    <div className="page-controller-cell" onClick={() => this.handlePreviewState(true)}>
+                                    <div className="page-preview-cell" onClick={() => this.handlePreviewState(true)}>
                                         <img src={pages} alt={"pages"}/>
                                     </div>
                                 </Tooltip>
-                                <PageController room={room}/>
                             </div>
                         </div>
                         <PreviewController handlePreviewState={this.handlePreviewState} isVisible={isMenuVisible}

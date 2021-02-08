@@ -1,11 +1,11 @@
 const toolPaletteConfig: string[] = [
-    "#FC3A3F",
-    "#FD8343",
-    "#FFDA56",
+    "#EC3455",
+    "#F5AD46",
     "#60E8C6",
     "#57B2FC",
-    "#4486F6",
-    "#9D27B0",
+    "#005BF6",
+    "#9E51B6",
+    "#68AB5D",
     "#1D2129",
 ];
 

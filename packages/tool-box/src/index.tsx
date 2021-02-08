@@ -1,6 +1,9 @@
 import * as React from "react";
-import {ApplianceNames, Room, RoomState} from "white-web-sdk";
+import {ApplianceNames, Color, Room, RoomState} from "white-web-sdk";
 import {Popover, Tooltip} from "antd";
+import DrawTool from "./DrawTool";
+import ColorTool from "./ColorTool";
+import StrokeWidthTool from "./StrokeWidthTool";
 import "./index.less";
 import * as selector from "./image/selector.svg";
 import * as selectorActive from "./image/selector-active.svg";
@@ -22,8 +25,10 @@ import * as rectangle from "./image/rectangle.svg";
 import * as rectangleActive from "./image/rectangle-active.svg";
 import * as straight from "./image/straight.svg";
 import * as straightActive from "./image/straight-active.svg";
-
-import ToolBoxPaletteBox from "./ToolBoxPaletteBox";
+import * as subscript from "./image/subscript.svg";
+import * as subscriptActive from "./image/subscript-active.svg";
+import * as clear from "./image/clear.svg";
+import * as clearActive from "./image/clear-active.svg";
 
 export type ToolBoxProps = {
     room: Room;
@@ -31,8 +36,8 @@ export type ToolBoxProps = {
 };
 export type ToolBoxStates = {
     strokeEnable: boolean;
-    extendsPanel: boolean;
     roomState: RoomState;
+    isClearActive: boolean;
 };
 type ApplianceDescription = {
     readonly icon: string;
@@ -42,7 +47,7 @@ type ApplianceDescription = {
     readonly hasTool: boolean;
 };
 export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates> {
-    private static readonly descriptions: { readonly [applianceName: string]: ApplianceDescription } = Object.freeze({
+    public static readonly descriptions: { readonly [applianceName: string]: ApplianceDescription } = Object.freeze({
         selector: Object.freeze({
             icon: selector,
             iconActive: selectorActive,
@@ -121,8 +126,8 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         super(props);
         this.state = {
             strokeEnable: false,
-            extendsPanel: false,
             roomState: props.room.state,
+            isClearActive: false,
         };
     }
 
@@ -136,100 +141,25 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     public clickAppliance = (applianceName: ApplianceNames): void => {
         const {room} = this.props;
         room.setMemberState({currentApplianceName: applianceName});
-        this.setState({extendsPanel: true});
     }
 
-    public clickDrawAppliance = (applianceName: ApplianceNames): void => {
-        const {room} = this.props;
-        room.setMemberState({currentApplianceName: applianceName});
-    }
-    private onVisibleChange = (visible: boolean): void => {
-        if (!visible) {
-            this.setState({extendsPanel: false});
-        }
-    }
-
-    private renderApplianceButton(applianceName: ApplianceNames, description: ApplianceDescription): React.ReactElement {
+    private renderButton = (applianceName: ApplianceNames, description: ApplianceDescription): React.ReactElement => {
         const {roomState} = this.state;
         const currentApplianceName = roomState.memberState.currentApplianceName;
         const isSelected = currentApplianceName === applianceName;
-        const isExtendable = description.hasStroke || description.hasColor;
         const iconUrl = isSelected ? description.iconActive : description.icon;
         const cell = (
             <div key={`${applianceName}`} className="tool-box-cell-box-left">
                 <div className="tool-box-cell"
-                     onClick={(event) => this.clickAppliance(applianceName)}>
+                     onClick={() => this.clickAppliance(applianceName)}>
                     <img src={iconUrl} alt={"iconUrl"}/>
                 </div>
             </div>
         );
-        if (isExtendable && isSelected) {
-            return (
-                <Popover key={applianceName}
-                         visible={this.state.extendsPanel}
-                         placement={"right"}
-                         trigger="click"
-                         onVisibleChange={this.onVisibleChange}
-                         content={this.renderToolBoxPaletteBox(description)}>
-                    <Tooltip placement={"right"} title={applianceName}>
-                        {cell}
-                    </Tooltip>
-                </Popover>
-            );
-        } else {
-            return (
-                <Tooltip placement={"right"} key={applianceName} title={applianceName}>
-                    {cell}
-                </Tooltip>
-            );
-        }
-    }
-
-    private renderDrawButton = (applianceName: ApplianceNames, description: ApplianceDescription): React.ReactElement => {
-        const {roomState} = this.state;
-        const currentApplianceName = roomState.memberState.currentApplianceName;
-        const isSelected = currentApplianceName === applianceName;
-        const isExtendable = description.hasStroke || description.hasColor;
-        const iconUrl = isSelected ? description.iconActive : description.icon;
-        const cell = (
-            <div key={`${applianceName}`} className="tool-box-cell-box-left">
-                <div className="tool-box-cell"
-                     onClick={(event) => this.clickAppliance(applianceName)}>
-                    <img src={iconUrl} alt={"iconUrl"}/>
-                </div>
-            </div>
-        );
-        if (isExtendable && isSelected) {
-            return (
-                <Popover key={applianceName}
-                         visible={this.state.extendsPanel}
-                         placement={"right"}
-                         trigger="click"
-                         onVisibleChange={this.onVisibleChange}
-                         content={this.renderToolBoxPaletteBox(description)}>
-                    <Tooltip placement={"right"} title={applianceName}>
-                        {cell}
-                    </Tooltip>
-                </Popover>
-            );
-        } else {
-            return (
-                <Tooltip placement={"right"} key={applianceName} title={applianceName}>
-                    {cell}
-                </Tooltip>
-            );
-        }
-    }
-
-    private renderToolBoxPaletteBox(description: ApplianceDescription): React.ReactNode {
-        const {room} = this.props;
-        const {roomState} = this.state;
         return (
-            <ToolBoxPaletteBox room={room}
-                               roomState={roomState}
-                               selectAppliance={this.clickDrawAppliance}
-                               displaySelectAppliance={description.hasTool}
-                               displayStroke={description.hasStroke}/>
+            <Tooltip placement={"right"} key={applianceName} title={applianceName}>
+                {cell}
+            </Tooltip>
         );
     }
 
@@ -239,36 +169,135 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                 return <div key={`tool-customer-${index}`}>{data}</div>;
             });
             nodes.push(customerNodes);
+            nodes.push(this.renderCleanCell())
             return nodes;
         } else {
             return nodes;
         }
     }
 
+    private isDraw = (applianceName: ApplianceNames): boolean => {
+        return applianceName === ApplianceNames.pencil || applianceName === ApplianceNames.ellipse ||
+            applianceName === ApplianceNames.rectangle || applianceName === ApplianceNames.straight;
+    }
+
     private renderNodes = (): React.ReactNode[] => {
         const nodes: React.ReactNode[] = [];
-        let drawNode = this.renderDrawButton(this.currentDraw as ApplianceNames, ToolBox.descriptions[this.currentDraw]);
         const {roomState} = this.state;
         const currentApplianceName = roomState.memberState.currentApplianceName;
         for (const applianceName in ToolBox.descriptions) {
             const description = ToolBox.descriptions[applianceName];
-            if (applianceName === ApplianceNames.pencil || applianceName === ApplianceNames.ellipse ||
-                applianceName === ApplianceNames.rectangle || applianceName === ApplianceNames.straight ) {
+            if (this.isDraw(applianceName as ApplianceNames)) {
                 if (currentApplianceName === applianceName) {
-                    drawNode = this.renderDrawButton(applianceName as ApplianceNames, description);
                     this.currentDraw = applianceName;
                 }
             } else {
-                const node = this.renderDrawButton(applianceName as ApplianceNames, description);
+                const node = this.renderButton(applianceName as ApplianceNames, description);
                 nodes.push(node);
             }
         }
-        nodes.splice(1, 0, drawNode);
         return nodes
+    }
+
+    private componentToHex = (c: number): string =>  {
+        const hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    private rgbToHex = (rgb: Color): string => {
+        return "#" +this.componentToHex(rgb[0]) + this.componentToHex(rgb[1]) + this.componentToHex(rgb[2]);
+    }
+
+    private renderDrawContext = (): React.ReactNode => {
+        const {roomState} = this.state;
+        return (
+            <div className="palette-box">
+                <DrawTool selectAppliance={this.clickAppliance} roomState={roomState} />
+            </div>
+        );
+    }
+
+    private renderDraw = (): React.ReactNode => {
+        const description = ToolBox.descriptions[this.currentDraw]
+        const {roomState} = this.state;
+        const currentApplianceName = roomState.memberState.currentApplianceName;
+        const isSelected = currentApplianceName === this.currentDraw;
+        const iconUrl = isSelected ? description.iconActive : description.icon;
+        const subscriptUrl = isSelected ? subscriptActive : subscript;
+        return (
+            <Popover key={"draw"}
+                     placement={"right"}
+                     trigger="hover"
+                     content={this.renderDrawContext}>
+                <div key="draw-inner" className="tool-box-cell-box-left">
+                    <div className="tool-box-cell"
+                         onClick={() => this.clickAppliance(this.currentDraw)}>
+                        <img src={iconUrl} alt={"iconUrl"}/>
+                        <img className="tool-box-cell-subscript" src={subscriptUrl} alt={"subscriptUrl"}/>
+                    </div>
+                </div>
+            </Popover>
+        );
+    }
+
+    private renderColorContext = (): React.ReactNode => {
+        const {room} = this.props;
+        const {roomState} = this.state
+        return (
+            <div className="palette-box">
+                <StrokeWidthTool
+                    room={room}
+                    roomState={roomState} />
+                <ColorTool room={room} roomState={roomState}/>
+            </div>
+        );
+    }
+
+    private renderColorCell = (): React.ReactNode => {
+        const {room} = this.props;
+        const strokeColor = room.state.memberState.strokeColor;
+        return (
+            <Popover key={"color"}
+                     placement={"right"}
+                     trigger="hover"
+                     content={this.renderColorContext}>
+                <div key="draw-inner" className="tool-box-cell-box-left">
+                    <div className="tool-box-cell"
+                         onClick={() => this.clickAppliance(this.currentDraw)}>
+                        <div className="tool-box-cell-color" style={{backgroundColor: this.rgbToHex(strokeColor)}}/>
+                        <img className="tool-box-cell-subscript" src={subscript} alt={"subscriptUrl"}/>
+                    </div>
+                </div>
+            </Popover>
+        );
+    }
+
+    private renderCleanCell = (): React.ReactNode => {
+        const {room} = this.props;
+        const {isClearActive} = this.state;
+        return (
+            <div
+                onMouseEnter={() => {
+                    this.setState({isClearActive: true})
+                }}
+                onMouseLeave={() => {
+                    this.setState({isClearActive: false})
+                }}
+                onClick={() => {
+                    room.cleanCurrentScene();
+                }}
+                className="tool-box-cell-box-left">
+                <div className="tool-box-cell">
+                    <img src={isClearActive ? clearActive : clear} alt={"clear"}/>
+                </div>
+            </div>
+        )
     }
 
     public render(): React.ReactNode {
         const nodes = this.renderNodes();
+        nodes.splice(1, 0, this.renderDraw());
+        nodes.push(this.renderColorCell());
         return (
             <div className="tool-mid-box-left">
                 {this.addCustomerComponent(nodes)}

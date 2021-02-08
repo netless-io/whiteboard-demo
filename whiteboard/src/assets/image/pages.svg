@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
-    <title>pages</title>
-    <desc>Created with Sketch.</desc>
-    <g id="页面-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Whiteboard-Guidelines" transform="translate(-432.000000, -374.000000)">
-            <g id="pages" transform="translate(432.000000, 374.000000)">
-                <rect id="矩形备份-24" fill="#FFFFFF" opacity="0.01" x="0" y="0" width="32" height="32"></rect>
-                <rect id="矩形" stroke="#212324" stroke-linecap="round" stroke-linejoin="round" x="10" y="12" width="10" height="10" rx="2"></rect>
-                <path d="M14,10 L20,10 C21.1045695,10 22,10.8954305 22,12 L22,18" id="矩形备份-3" stroke="#212324" stroke-linecap="round" stroke-linejoin="round"></path>
-            </g>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>page</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="切图" transform="translate(-88.000000, -260.000000)" stroke="#444E60">
+            <rect id="矩形" x="94" y="268" width="10" height="10" rx="2"></rect>
+            <path d="M98,266 L104,266 C105.104569,266 106,266.895431 106,268 L106,274" id="矩形备份-3"></path>
         </g>
     </g>
 </svg>

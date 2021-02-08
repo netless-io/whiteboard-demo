@@ -153,19 +153,19 @@ export default class ScaleController extends React.Component<ScaleControllerProp
             <div className="scale-controller-box">
                 <div className="scale-controller-btn"
                      onClick={() => this.moveTo100()}>
-                    <img src={reset}/>
+                    <img src={reset} alt={"reset"}/>
                 </div>
                 <div className="scale-controller-cut-line"/>
                 <div className="scale-controller-btn"
                      onClick={() => this.moveRuleIndex(-1)}>
-                    <img src={less}/>
+                    <img src={less} alt={"less"}/>
                 </div>
                 <div>
                     {Math.ceil(this.state.roomState.zoomScale * 100)} <span style={{opacity: 0.6}}>%</span>
                 </div>
                 <div className="scale-controller-btn"
                      onClick={() => this.moveRuleIndex(+1)}>
-                    <img src={plus}/>
+                    <img src={plus} alt={"plus"}/>
                 </div>
             </div>
         );
