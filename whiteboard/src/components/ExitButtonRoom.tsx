@@ -86,8 +86,8 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps & WithTranslati
         return (
             <div>
                 <Tooltip placement="bottom" title={"Exit"}>
-                    <div className="page-controller-cell" onClick={() => this.setState({exitViewDisable: true})}>
-                        <img src={exit} alt={"exit"}/>
+                    <div className="page-preview-cell" onClick={() => this.setState({exitViewDisable: true})}>
+                        <img src={exit} style={{width: "28px"}} alt={"exit"}/>
                     </div>
                 </Tooltip>
                 <Modal

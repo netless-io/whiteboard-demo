@@ -83,21 +83,21 @@ export default class PageController extends React.Component<PageControllerProps,
         return (
             <div className="whiteboard-annex-box">
                 <div onClick={() => this.setFirstStep()}
-                     className="whiteboard-annex-arrow-left">
-                    <img src={this.isFirst() ? firstDisabled : first}/>
+                     className="whiteboard-annex-arrow">
+                    <img src={this.isFirst() ? firstDisabled : first} alt={"first"}/>
                 </div>
                 <div onClick={() => this.handlePptPreviousStep()}
-                     className="whiteboard-annex-arrow-left">
-                    <img src={this.isFirst() ? backDisabled : back}/>
+                     className="whiteboard-annex-arrow">
+                    <img src={this.isFirst() ? backDisabled : back} alt={"back"}/>
                 </div>
                 {this.pageNumber()}
                 <div onClick={() => this.handlePptNextStep()}
-                     className="whiteboard-annex-arrow-right">
-                    <img src={this.isLast() ? nextDisabled : next}/>
+                     className="whiteboard-annex-arrow">
+                    <img src={this.isLast() ? nextDisabled : next} alt={"next"}/>
                 </div>
                 <div onClick={() => this.setLastStep()}
-                     className="whiteboard-annex-arrow-left">
-                    <img src={this.isLast() ? lastDisabled : last}/>
+                     className="whiteboard-annex-arrow">
+                    <img src={this.isLast() ? lastDisabled : last} alt={"last"}/>
                 </div>
             </div>
         );

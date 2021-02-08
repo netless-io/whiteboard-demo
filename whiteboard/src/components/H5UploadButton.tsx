@@ -8,7 +8,7 @@ import { h5OssConfigObj } from "../appToken";
 import { history } from "../BrowserHistory";
 
 export type H5UploadButtonStates = {
-    visable: boolean;
+    visible: boolean;
     fileList: File[];
     percent: number;
     startUpload: boolean;
@@ -26,7 +26,7 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
     constructor(props: H5UploadButtonProps) {
         super(props);
         this.state = {
-            visable: false,
+            visible: false,
             fileList: [],
             percent: 0,
             startUpload: false,
@@ -46,29 +46,29 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
             clearInterval(this.state.getSiteTimer);
         }
     }
-    
+
     private onVisibleChange = (event: boolean): void => {
         if (event) {
-            this.setState({visable: true});
+            this.setState({visible: true});
         } else {
-            this.setState({visable: false});
+            this.setState({visible: false});
         }
     }
 
-    private uploadFile = async (payload) => {
+    private uploadFile = async (payload): Promise<void> => {
         this.setState({ startUpload: true })
         const file = this.state.fileList[0];
         const uuid = uuidv4();
         const name = `${h5OssConfigObj.h5Folder}/${uuid}.zip`;
         try {
-            const result = await this.oss.multipartUpload(name, file, { 
+             await this.oss.multipartUpload(name, file, {
                 progress: p => {
                     this.setState({ percent: Math.round(p * 100) });
                 }
             })
             const siteUrl = `${h5OssConfigObj.h5Prefix}${h5OssConfigObj.h5SiteFolder}/${uuid}`;
             this.setState({ deploying: true });
-            this.tryGetSite(payload, uuid, siteUrl);
+            await this.tryGetSite(payload, uuid, siteUrl);
         } catch (error) {
             console.log(error);
             message.error(`上传失败: ${JSON.stringify(error)}`,)
@@ -112,9 +112,9 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
     private createH5Scenes = (pageNumber: number) => {
         return new Array(pageNumber).fill(1).map((_, index) => ({ name: `${index + 1}` }));
     }
- 
-    private onFinish = (values: any) => {
-        this.uploadFile(values);
+
+    private onFinish = async (values: any): Promise<void> => {
+        await this.uploadFile(values);
     }
 
     private beforeUpload = file => {
@@ -138,7 +138,7 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
                     </Form.Item>
                     <Form.Item label="页数" name="pageNumber"
                         rules={[{ required: true }]}>
-                        <Input type="number"></Input>
+                        <Input type="number"/>
                     </Form.Item>
                     <Form.Item wrapperCol={{ span: 12, offset: 8 }}>
                         <Button type="primary" htmlType="submit" block>
@@ -169,7 +169,7 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
     renderContent() {
         return (
             <Card style={{ width: "25rem" }} title="上传 H5 文件">
-              {this.state.startUpload ? this.renderProgress() : this.renderForm()} 
+              {this.state.startUpload ? this.renderProgress() : this.renderForm()}
             </Card>
         );
     }
@@ -177,13 +177,13 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
     render(): React.ReactNode {
         return (
             <Popover
-                visible={this.state.visable}
+                visible={this.state.visible}
                 onVisibleChange={this.onVisibleChange}
                 trigger="click"
                 placement={"bottomRight"}
                 content={this.renderContent()}>
-                <div className="page-controller-cell">
-                    <CloudUploadOutlined style={{ fontSize: "1rem" }} />
+                <div className="page-preview-cell">
+                    <CloudUploadOutlined style={{ fontSize: "14px" }} />
                 </div>
             </Popover>
         )

@@ -27,6 +27,8 @@ import * as straight from "./image/straight.svg";
 import * as straightActive from "./image/straight-active.svg";
 import * as subscript from "./image/subscript.svg";
 import * as subscriptActive from "./image/subscript-active.svg";
+import * as clear from "./image/clear.svg";
+import * as clearActive from "./image/clear-active.svg";
 
 export type ToolBoxProps = {
     room: Room;
@@ -35,6 +37,7 @@ export type ToolBoxProps = {
 export type ToolBoxStates = {
     strokeEnable: boolean;
     roomState: RoomState;
+    isClearActive: boolean;
 };
 type ApplianceDescription = {
     readonly icon: string;
@@ -124,6 +127,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         this.state = {
             strokeEnable: false,
             roomState: props.room.state,
+            isClearActive: false,
         };
     }
 
@@ -165,6 +169,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                 return <div key={`tool-customer-${index}`}>{data}</div>;
             });
             nodes.push(customerNodes);
+            nodes.push(this.renderCleanCell())
             return nodes;
         } else {
             return nodes;
@@ -265,6 +270,28 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                 </div>
             </Popover>
         );
+    }
+
+    private renderCleanCell = (): React.ReactNode => {
+        const {room} = this.props;
+        const {isClearActive} = this.state;
+        return (
+            <div
+                onMouseEnter={() => {
+                    this.setState({isClearActive: true})
+                }}
+                onMouseLeave={() => {
+                    this.setState({isClearActive: false})
+                }}
+                onClick={() => {
+                    room.cleanCurrentScene();
+                }}
+                className="tool-box-cell-box-left">
+                <div className="tool-box-cell">
+                    <img src={isClearActive ? clearActive : clear} alt={"clear"}/>
+                </div>
+            </div>
+        )
     }
 
     public render(): React.ReactNode {

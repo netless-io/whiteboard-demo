@@ -117,8 +117,9 @@ class InviteButton extends React.Component<InviteButtonProps & WithTranslation, 
                      onVisibleChange={this.onVisibleChange}
                      content={() => this.renderInviteContent()}
                      placement={"bottomRight"}>
-                <div className="page-controller-cell" onClick={this.handleInvite}>
+                <div className="page-preview-cell" onClick={this.handleInvite}>
                     <img
+                        style={{width: "28px"}}
                         src={this.state.inviteDisable ? inviteActive : invite}
                         alt={"invite"}/>
                 </div>
