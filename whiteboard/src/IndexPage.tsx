@@ -76,6 +76,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
                             <Link to={"/storage/"}>
                                 <div className="page-index-storage">{t('preload')}</div>
                             </Link>
+                            <SwitchLanguage />
                             <Popover visible={this.state.visible} placement={"bottom"} trigger="click" content={
                                 <div className="page-index-name-box" >
                                     <Input maxLength={8}
