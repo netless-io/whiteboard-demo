@@ -85,9 +85,6 @@ export default class WhiteAudioPluginRoom extends React.Component<WhiteAudioPlug
             });
             this.player.current.addEventListener("pause", () => {
                 this.handleRemotePlayState(false);
-                if (this.player.current) {
-                    this.player.current.currentTime = plugin.attributes.currentTime;
-                }
             });
             this.player.current.addEventListener("seeked", () => {
                 if (this.player.current) {
