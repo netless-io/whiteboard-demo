@@ -79,10 +79,6 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
             });
             this.player.current.addEventListener("pause", () => {
                 this.handleRemotePlayState(false);
-                // TODO 暂停的时候 seek 对齐
-                if (this.player.current) {
-                    this.player.current.currentTime = plugin.attributes.currentTime;
-                }
             });
             this.player.current.addEventListener("seeked", () => {
                 if (this.player.current) {
