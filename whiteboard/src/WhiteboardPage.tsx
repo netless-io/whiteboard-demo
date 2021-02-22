@@ -170,6 +170,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
+                    pptParams: {
+                        useServerWrap: true,
+                    },
                 }
                 if (h5Url) {
                     const pluginParam = {
