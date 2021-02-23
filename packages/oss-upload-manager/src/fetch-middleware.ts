@@ -3,7 +3,7 @@ import Fetcher from "@netless/fetch-middleware";
 export default class TaskOperator {
     private readonly fetcher: Fetcher;
 
-    constructor(apiOrigin: string = "https://shunt-api.netless.link/v5") {
+    constructor(apiOrigin: string = "https://api.netless.link/v5") {
         this.fetcher = new Fetcher(5000, apiOrigin);
     }
 

@@ -1,6 +1,16 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
-import {createPlugins, DefaultHotKeys, Room, RoomPhase, RoomState, ViewMode, WhiteWebSdk, WhiteWebSdkConfiguration} from "white-web-sdk";
+import {
+    createPlugins,
+    DefaultHotKeys,
+    PPTKind,
+    Room,
+    RoomPhase,
+    RoomState,
+    ViewMode,
+    WhiteWebSdk,
+    WhiteWebSdkConfiguration
+} from "white-web-sdk";
 import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
 import PageController from "@netless/page-controller";
@@ -19,21 +29,20 @@ import pages from "./assets/image/pages.svg"
 import folder from "./assets/image/folder.svg";
 import follow from "./assets/image/follow.svg"
 import followActive from "./assets/image/follow-active.svg";
-import logo from "./assets/image/logo.svg";
-import {netlessToken, ossConfigObj, h5DemoUrl2, h5DemoUrl3, h5DemoUrl} from "./appToken";
+import {h5DemoUrl, h5DemoUrl2, h5DemoUrl3, netlessToken, ossConfigObj} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
 import {Identity} from "./IndexPage";
 import OssDropUpload from "@netless/oss-drop-upload";
 import {pptDatas} from "./taskUuids";
-import {PPTDataType, PPTType} from "@netless/oss-upload-manager";
+import {PPTDataType} from "@netless/oss-upload-manager";
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
 import {LocalStorageRoomDataType} from "./HistoryPage";
-import {IframeWrapper, IframeBridge} from "@netless/iframe-bridge";
-import { IframeAdapter } from "./tools/IframeAdapter";
-import { H5UploadButton } from "./components/H5UploadButton";
+import {IframeBridge, IframeWrapper} from "@netless/iframe-bridge";
+import {IframeAdapter} from "./tools/IframeAdapter";
+import {H5UploadButton} from "./components/H5UploadButton";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -91,7 +100,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 const documentFile: PPTDataType = {
                     active: false,
                     id: sceneId,
-                    pptType: PPTType.dynamic,
+                    pptType: PPTKind.Dynamic,
                     data: scenes,
                 };
                 const docs = (room.state.globalState as any).docs;
@@ -238,9 +247,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 this.setState({room: room});
                 (window as any).room = room;
                 if (h5Url && h5Dir) {
-                    this.handleEnableH5(room, h5Url, h5Dir);
+                    await this.handleEnableH5(room, h5Url, h5Dir);
                 } else if (h5Url) {
-                    this.handleEnableH5(room, h5Url);
+                    await this.handleEnableH5(room, h5Url);
                 }
             }
         } catch (error) {

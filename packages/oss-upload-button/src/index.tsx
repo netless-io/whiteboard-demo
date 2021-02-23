@@ -1,10 +1,10 @@
 import * as React from "react";
-import {message, Popover, Tooltip, Upload} from "antd";
+import {message, Popover, Upload} from "antd";
 import * as OSS from "ali-oss";
 import {PPTProgressPhase, UploadManager} from "@netless/oss-upload-manager";
 import TopLoadingBar from "@netless/loading-bar";
 import "./index.less";
-import {PPTKind, Room, WhiteWebSdk} from "white-web-sdk";
+import {PPTKind, Room} from "white-web-sdk";
 import * as upload from "./image/upload.svg";
 import * as image from "./image/image.svg";
 import * as uploadActive from "./image/upload-active.svg";
@@ -64,14 +64,11 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private uploadStatic = async (event: any): Promise<void> => {
-        const {uuid, roomToken} = this.props.room;
+        const {uuid} = this.props.room;
         const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin);
-        const whiteWebSdk = new WhiteWebSdk({appIdentifier: this.props.appIdentifier});
-        const pptConverter = whiteWebSdk.pptConverter(roomToken);
         try {
             await uploadManager.convertFile(
                 event.file,
-                pptConverter,
                 PPTKind.Static,
                 this.props.oss.folder,
                 uuid,
@@ -84,14 +81,11 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private uploadDynamic = async (event: any): Promise<void> => {
-        const {uuid, roomToken} = this.props.room;
+        const {uuid} = this.props.room;
         const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin);
-        const whiteWebSdk = new WhiteWebSdk({appIdentifier: this.props.appIdentifier});
-        const pptConverter = whiteWebSdk.pptConverter(roomToken);
         try {
             await uploadManager.convertFile(
                 event.file,
-                pptConverter,
                 PPTKind.Dynamic,
                 this.props.oss.folder,
                 uuid,
@@ -216,7 +210,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                             <div className="oss-upload-title-section">
                                 <div className="oss-upload-title">上传图片</div>
                                 <div className="oss-upload-icon">
-                                    <img src={image}/>
+                                    <img src={image} alt={"image"}/>
                                 </div>
                             </div>
                             <div className="oss-upload-section-script">
@@ -237,7 +231,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                             <div className="oss-upload-title-section">
                                 <div className="oss-upload-title">上传视频</div>
                                 <div className="oss-upload-icon">
-                                    <img src={Video}/>
+                                    <img src={Video} alt={"Video"}/>
                                 </div>
                             </div>
                             <div className="oss-upload-section-script">
@@ -256,7 +250,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                             <div className="oss-upload-title-section">
                                 <div className="oss-upload-title">上传音频</div>
                                 <div className="oss-upload-icon">
-                                    <img src={Audio}/>
+                                    <img src={Audio} alt={"Audio"}/>
                                 </div>
                             </div>
                             <div className="oss-upload-section-script">
