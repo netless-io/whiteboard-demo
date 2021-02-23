@@ -2,10 +2,9 @@ import {
     AnimationMode,
     ApplianceNames,
     createPPTTask,
-    LegacyPPTConverter,
-    PPT,
     PPTKind,
-    Room, SceneDefinition
+    Room,
+    SceneDefinition
 } from "white-web-sdk";
 import {v4 as uuidv4} from "uuid";
 import {MultipartUploadResult} from "ali-oss";
@@ -14,18 +13,12 @@ import * as default_cover from "./image/default_cover.svg";
 
 export type PPTDataType = {
     active: boolean,
-    pptType: PPTType,
+    pptType: PPTKind,
     id: string,
     data: any,
     cover?: string,
     zipUrl?: string,
 };
-
-export enum PPTType {
-    dynamic = "dynamic",
-    static = "static",
-    init = "init",
-}
 
 export type imageSize = {
     width: number,
@@ -72,7 +65,6 @@ export class UploadManager {
 
     public async convertFile(
         rawFile: File,
-        pptConverter: LegacyPPTConverter,
         kind: PPTKind,
         folder: string,
         uuid: string,
@@ -82,61 +74,39 @@ export class UploadManager {
         const fileType = this.getFileType(rawFile.name);
         const path = `/${folder}/${uuid}${fileType}`;
         const pptURL = await this.addFile(path, rawFile, onProgress);
-        let res: PPT;
-        if (kind === PPTKind.Static) {
-            try {
-                res = await pptConverter.convert({
-                    url: pptURL,
-                    kind: kind,
-                    onProgressUpdated: progress => {
-                        if (onProgress) {
-                            onProgress(PPTProgressPhase.Converting, progress);
-                        }
-                    },
-                });
-                await this.setUpScenes(res.scenes, uuid, PPTType.static, sdkToken);
-                if (onProgress) {
-                    onProgress(PPTProgressPhase.Stop, 1);
-                }
-            } catch (error) {
-                if (onProgress) {
-                    onProgress(PPTProgressPhase.Stop, 1);
-                }
-            }
-        } else {
-            const taskInf = await this.task.createPPTTaskInf(pptURL, "dynamic", true, sdkToken);
-            const taskToken = await this.task.createTaskToken(taskInf.uuid, 0, "admin", sdkToken);
-            const resp = createPPTTask({
-                uuid: taskInf.uuid,
-                kind: PPTKind.Dynamic,
-                taskToken: taskToken,
-                callbacks: {
-                    onProgressUpdated: progress => {
-                        if (onProgress) {
-                            onProgress(PPTProgressPhase.Converting, progress.convertedPercentage);
-                        }
-                    },
-                    onTaskFail: () => {
-                        if (onProgress) {
-                            onProgress(PPTProgressPhase.Stop, 1);
-                        }
-                    },
-                    onTaskSuccess: () => {
-                        if (onProgress) {
-                            onProgress(PPTProgressPhase.Stop, 1);
-                        }
-                    },
+
+        const taskInf = await this.task.createPPTTaskInf(pptURL, kind, true, sdkToken);
+        const taskToken = await this.task.createTaskToken(taskInf.uuid, 0, "admin", sdkToken);
+        const resp = createPPTTask({
+            uuid: taskInf.uuid,
+            kind: kind,
+            taskToken: taskToken,
+            callbacks: {
+                onProgressUpdated: progress => {
+                    if (onProgress) {
+                        onProgress(PPTProgressPhase.Converting, progress.convertedPercentage);
+                    }
                 },
-            });
-            const ppt = await resp.checkUtilGet();
-            await this.setUpScenes(ppt.scenes, uuid, PPTType.dynamic, sdkToken, taskInf.uuid);
-        }
+                onTaskFail: () => {
+                    if (onProgress) {
+                        onProgress(PPTProgressPhase.Stop, 1);
+                    }
+                },
+                onTaskSuccess: () => {
+                    if (onProgress) {
+                        onProgress(PPTProgressPhase.Stop, 1);
+                    }
+                },
+            },
+        });
+        const ppt = await resp.checkUtilGet();
+        await this.setUpScenes(ppt.scenes, uuid, kind, sdkToken, taskInf.uuid);
     }
 
     private setUpScenes = async (
         scenes: ReadonlyArray<SceneDefinition>,
         uuid: string,
-        type: PPTType,
+        type: PPTKind,
         sdkToken: string,
         taskUuid?: string,
     ): Promise<void> => {
@@ -156,7 +126,7 @@ export class UploadManager {
             pptType: type,
             data: scenes,
             cover: res ? res.url : default_cover,
-            zipUrl: taskUuid && `https://convertcdn.netless.link/${type === PPTType.dynamic ? "dynamicConvert" : "staticConvert"}/${taskUuid}.zip`,
+            zipUrl: taskUuid && `https://convertcdn.netless.link/${type === PPTKind.Dynamic ? "dynamicConvert" : "staticConvert"}/${taskUuid}.zip`,
         };
         const docs: PPTDataType[] = (this.room.state.globalState as any).docs;
         if (docs && docs.length > 0) {
