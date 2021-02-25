@@ -82,7 +82,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
                             {index + 1}
                         </div>
                         <div onClick={() => this.removeScene()} className="page-box-under-right">
-                            <img src={deleteIcon}/>
+                            <img src={deleteIcon} alt={"deleteIcon"}/>
                         </div>
                     </div>
                 </div>
@@ -124,11 +124,11 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
                             </div>
                             <div className="menu-title-left">
                                 <div onClick={this.addPage} className="menu-head-btn">
-                                    <img src={addPage}/>
+                                    <img src={addPage} alt={"addPage"}/>
                                 </div>
                                 <div className="menu-head-btn" style={{marginLeft: 8}}
                                      onClick={() => handlePreviewState(false)}>
-                                    <img src={close}/>
+                                    <img src={close} alt={"close"}/>
                                 </div>
                             </div>
                         </div>
