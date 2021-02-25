@@ -40,9 +40,10 @@ import {PPTDataType} from "@netless/oss-upload-manager";
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
 import {LocalStorageRoomDataType} from "./HistoryPage";
-import {IframeBridge, IframeWrapper} from "@netless/iframe-bridge";
-import {IframeAdapter} from "./tools/IframeAdapter";
-import {H5UploadButton} from "./components/H5UploadButton";
+import {IframeWrapper, IframeBridge} from "@netless/iframe-bridge";
+import { IframeAdapter } from "./tools/IframeAdapter";
+import { H5UploadButton } from "./components/H5UploadButton";
+import i18n from "./i18n"
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -344,6 +345,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                                      appIdentifier={netlessToken.appIdentifier}
                                                      sdkToken={netlessToken.sdkToken}
                                                      room={room}
+                                                     i18nLanguage={i18n.language}
                                                      whiteboardRef={whiteboardLayerDownRef}/>,
                                 ]
                             }/>
