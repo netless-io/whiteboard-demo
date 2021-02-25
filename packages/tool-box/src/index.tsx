@@ -286,6 +286,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                 onClick={() => {
                     room.cleanCurrentScene();
                 }}
+                key={"key"}
                 className="tool-box-cell-box-left">
                 <div className="tool-box-cell">
                     <img src={isClearActive ? clearActive : clear} alt={"clear"}/>

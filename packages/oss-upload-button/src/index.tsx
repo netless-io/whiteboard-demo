@@ -63,6 +63,9 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             region: props.oss.region,
             bucket: props.oss.bucket,
         });
+        message.config({
+            top: 40,
+        })
     }
 
     private uploadStatic = async (event: any): Promise<void> => {
@@ -107,7 +110,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                 break;
             }
             case PPTProgressPhase.Converting: {
-                this.setState({converterPercent: percent * 100});
+                this.setState({converterPercent: percent});
                 break;
             }
             case PPTProgressPhase.Stop: {
