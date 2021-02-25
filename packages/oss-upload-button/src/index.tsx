@@ -29,12 +29,7 @@ export type OssUploadButtonStates = {
     uploadState: PPTProgressPhase,
 };
 
-export const FileUploadStatic: string = "application/pdf, " +
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation, " +
-    "application/vnd.ms-powerpoint, " +
-    "application/msword, " +
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document, " +
-    "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+export const FileUploadStatic: string = ".doc,.docx,.ppt,.pptx,.pdf";
 
 export type OssUploadButtonProps = {
     room: Room,
@@ -225,7 +220,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             if (key === "uploadAudio") return 'Upload Audio';
             if (key === "uploadAudioInner") return 'Supports MP3 format.';
             if (key === "documentToWebpage") return 'Document to Webpage';
-            if (key === "documentToWebpageInner") return 'Only PPTX format is supported , For PPT files please convert to PPTX manually.';
+            if (key === "documentToWebpageInner") return 'Only PPTX format is supported, For PPT files please convert to PPTX manually.';
             if (key === "documentToImage") return 'Document to Image';
             if (key === "documentToImageInner") return 'Supports PPT、PPTX、DOC、DOCX and PDF format.';
             if (key === "uploadingMessage") return 'Uploading...';
