@@ -33,7 +33,8 @@ export const FileUploadStatic: string = "application/pdf, " +
     "application/vnd.openxmlformats-officedocument.presentationml.presentation, " +
     "application/vnd.ms-powerpoint, " +
     "application/msword, " +
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document, " +
+    "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
 
 export type OssUploadButtonProps = {
     room: Room,
@@ -45,7 +46,7 @@ export type OssUploadButtonProps = {
     i18nLanguage?: string;
 };
 
-export default class OssUploadButton extends React.Component<OssUploadButtonProps , OssUploadButtonStates> {
+export default class OssUploadButton extends React.Component<OssUploadButtonProps, OssUploadButtonStates> {
     private readonly client: any;
 
     public constructor(props: OssUploadButtonProps) {
@@ -220,7 +221,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             if (key === "uploadVideoInner") return 'Supports MP4 format.';
             if (key === "uploadAudio") return 'Upload Audio';
             if (key === "uploadAudioInner") return 'Supports MP3 format.';
-            if (key === "documentToWebpage") return 'Document to Webpage.';
+            if (key === "documentToWebpage") return 'Document to Webpage';
             if (key === "documentToWebpageInner") return 'Only PPTX format is supported , For PPT files please convert to PPTX manually.';
             if (key === "documentToImage") return 'Document to Image';
             if (key === "documentToImageInner") return 'Supports PPT、PPTX、DOC、DOCX and PDF format.';
@@ -231,8 +232,6 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private renderUploadButton = (): React.ReactNode => {
-        
-
         return (
             <div className="oss-upload-box">
                 <Upload
