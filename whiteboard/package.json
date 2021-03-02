@@ -39,7 +39,7 @@
         "react-router-dom": "^4.3.1",
         "uuid": "^8.3.2",
         "video.js": "^7.10.2",
-        "white-web-sdk": "2.11.11"
+        "white-web-sdk": "2.12.1"
     },
     "devDependencies": {
         "@types/ali-oss": "^6.0.7",

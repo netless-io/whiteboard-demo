@@ -15,7 +15,9 @@ export enum IdentityType {
     listener = "listener",
 }
 
-export type WhiteVideoPluginProps = {room: Room} & PluginProps<PluginContext, WhiteVideoPluginAttributes>;
+export type WhiteVideoPluginProps = {
+    room: Room,
+} & PluginProps<PluginContext, WhiteVideoPluginAttributes>;
 
 export type WhiteVideoPluginStates = {
     play: boolean;
