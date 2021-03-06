@@ -440,6 +440,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
                                    pointerEvents: this.detectVideoClickEnable(),
                                    outline: "none",
                                }}
+                               disablePictureInPicture={true}
                                onLoadedMetadataCapture={this.handleOnLoadedMetadataCapture}
                                onEnded={this.handleOnEnd}
                                controls
