@@ -15,7 +15,9 @@ export enum IdentityType {
     listener = "listener",
 }
 
-export type WhiteVideoPluginProps = {room: Room} & PluginProps<PluginContext, WhiteVideoPluginAttributes>;
+export type WhiteVideoPluginProps = {
+    room: Room,
+} & PluginProps<PluginContext, WhiteVideoPluginAttributes>;
 
 export type WhiteVideoPluginStates = {
     play: boolean;
@@ -438,6 +440,7 @@ export default class WhiteVideoPluginRoom extends React.Component<WhiteVideoPlug
                                    pointerEvents: this.detectVideoClickEnable(),
                                    outline: "none",
                                }}
+                               disablePictureInPicture={true}
                                onLoadedMetadataCapture={this.handleOnLoadedMetadataCapture}
                                onEnded={this.handleOnEnd}
                                controls
