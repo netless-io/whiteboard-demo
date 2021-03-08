@@ -1,10 +1,10 @@
 import * as React from "react";
-import {message, Popover, Upload} from "antd";
+import { message, Popover, Upload } from "antd";
 import * as OSS from "ali-oss";
-import {PPTProgressPhase, UploadManager} from "@netless/oss-upload-manager";
+import { PPTProgressPhase, UploadManager } from "@netless/oss-upload-manager";
 import TopLoadingBar from "@netless/loading-bar";
 import "./index.less";
-import {PPTKind, Room} from "white-web-sdk";
+import { PPTKind, Room } from "white-web-sdk";
 import * as upload from "./image/upload.svg";
 import * as image from "./image/image.svg";
 import * as uploadActive from "./image/upload-active.svg";
@@ -12,7 +12,7 @@ import * as fileTransWeb from "./image/file-trans-web.svg";
 import * as fileTransImg from "./image/file-trans-img.svg";
 import * as Video from "./image/video.svg";
 import * as Audio from "./image/audio.svg";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 type OSSConfigObjType = {
     accessKeyId: string;
     accessKeySecret: string;
@@ -21,6 +21,14 @@ type OSSConfigObjType = {
     folder: string;
     prefix: string;
 };
+
+export enum UploadType {
+    Image,
+    Video,
+    Audio,
+    Dynamic,
+    Static,
+}
 
 export type OssUploadButtonStates = {
     isActive: boolean,
@@ -40,6 +48,7 @@ export type OssUploadButtonProps = {
     apiOrigin?: string;
     i18nLanguage?: string;
     region?: string;
+    enables?: UploadType[];
 };
 
 export default class OssUploadButton extends React.Component<OssUploadButtonProps, OssUploadButtonStates> {
@@ -65,7 +74,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private uploadStatic = async (event: any): Promise<void> => {
-        const {uuid} = this.props.room;
+        const { uuid } = this.props.room;
         const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin, this.props.region);
         try {
             await uploadManager.convertFile(
@@ -82,7 +91,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private uploadDynamic = async (event: any): Promise<void> => {
-        const {uuid} = this.props.room;
+        const { uuid } = this.props.room;
         const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin, this.props.region);
         try {
             await uploadManager.convertFile(
@@ -99,19 +108,19 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private progress = (phase: PPTProgressPhase, percent: number): void => {
-        this.setState({uploadState: phase});
+        this.setState({ uploadState: phase });
         switch (phase) {
             case PPTProgressPhase.Uploading: {
-                this.setState({ossPercent: percent * 100});
+                this.setState({ ossPercent: percent * 100 });
                 break;
             }
             case PPTProgressPhase.Converting: {
-                this.setState({converterPercent: percent});
+                this.setState({ converterPercent: percent });
                 break;
             }
             case PPTProgressPhase.Stop: {
-                this.setState({converterPercent: 0});
-                this.setState({ossPercent: 0});
+                this.setState({ converterPercent: 0 });
+                this.setState({ ossPercent: 0 });
             }
         }
     }
@@ -136,7 +145,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin, this.props.region);
         try {
             if (this.props.whiteboardRef) {
-                const {clientWidth, clientHeight} = this.props.whiteboardRef;
+                const { clientWidth, clientHeight } = this.props.whiteboardRef;
                 await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
             } else {
                 const clientWidth = window.innerWidth;
@@ -230,129 +239,184 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         return '';
     }
 
+    private renderUploadImage(): React.ReactNode {
+        return (
+            <Upload
+                key="upload-image"
+                accept={"image/*"}
+                showUploadList={false}
+                customRequest={this.uploadImage}>
+                <div className="oss-upload-section">
+                    <div className="oss-upload-section-inner">
+                        <div className="oss-upload-title-section">
+                            <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'uploadImage')}</div>
+                            <div className="oss-upload-icon">
+                                <img src={image} alt={"image"} />
+                            </div>
+                        </div>
+                        <div className="oss-upload-section-script">
+                            <div className="oss-upload-section-text">
+                                {this.translate(this.props.i18nLanguage, 'uploadImageInner')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Upload>
+        )
+    }
+
+    private renderUploadVideo(): React.ReactNode {
+        return (
+            <Upload
+                key="upload-video"
+                accept={"video/mp4"}
+                showUploadList={false}
+                customRequest={this.uploadVideo}>
+                <div className="oss-upload-section">
+                    <div className="oss-upload-section-inner">
+                        <div className="oss-upload-title-section">
+                            <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'uploadVideo')}</div>
+                            <div className="oss-upload-icon">
+                                <img src={Video} alt={"Video"} />
+                            </div>
+                        </div>
+                        <div className="oss-upload-section-script">
+                            <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'uploadVideoInner')}</div>
+                        </div>
+                    </div>
+                </div>
+            </Upload>
+        );
+    }
+
+    private renderUploadAudio(): React.ReactNode {
+        return (
+            <Upload
+                key="upload-audio"
+                accept={"audio/mp3"}
+                showUploadList={false}
+                customRequest={this.uploadAudio}>
+                <div className="oss-upload-section">
+                    <div className="oss-upload-section-inner">
+                        <div className="oss-upload-title-section">
+                            <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'uploadAudio')}</div>
+                            <div className="oss-upload-icon">
+                                <img src={Audio} alt={"Audio"} />
+                            </div>
+                        </div>
+                        <div className="oss-upload-section-script">
+                            <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'uploadAudioInner')}</div>
+                        </div>
+                    </div>
+                </div>
+            </Upload>
+        );
+    }
+
+    private renderUploadDynamic(): React.ReactNode {
+        return (
+            <Upload
+                key="upload-dynamic"
+                accept={"application/vnd.openxmlformats-officedocument.presentationml.presentation"}
+                showUploadList={false}
+                customRequest={this.uploadDynamic}>
+                <div className="oss-upload-section">
+                    <div className="oss-upload-section-inner">
+                        <div className="oss-upload-title-section">
+                            <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'documentToWebpage')}</div>
+                            <div className="oss-upload-icon">
+                                <img src={fileTransWeb} alt={"fileTransWeb"} />
+                            </div>
+                        </div>
+                        <div className="oss-upload-section-script">
+                            <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'documentToWebpageInner')}</div>
+                        </div>
+                    </div>
+                </div>
+            </Upload>
+        );
+    }
+
+    private renderUploadStatic(): React.ReactNode {
+        return (
+            <Upload
+                key="upload-static"
+                accept={FileUploadStatic}
+                showUploadList={false}
+                customRequest={this.uploadStatic}>
+                <div className="oss-upload-section">
+                    <div className="oss-upload-section-inner">
+                        <div className="oss-upload-title-section">
+                            <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'documentToImage')}</div>
+                            <div className="oss-upload-icon">
+                                <img src={fileTransImg} alt={"fileTransImg"} />
+                            </div>
+                        </div>
+                        <div className="oss-upload-section-script">
+                            <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'documentToImageInner')}</div>
+                        </div>
+                    </div>
+                </div>
+            </Upload>
+        );
+    }
+
     private renderUploadButton = (): React.ReactNode => {
+        const enables = this.props.enables ?? [
+            UploadType.Image,
+            UploadType.Video,
+            UploadType.Audio,
+            UploadType.Dynamic,
+            UploadType.Static,
+        ];
         return (
             <div className="oss-upload-box">
-                <Upload
-                    accept={"image/*"}
-                    showUploadList={false}
-                    customRequest={this.uploadImage}>
-                    <div className="oss-upload-section">
-                        <div className="oss-upload-section-inner">
-                            <div className="oss-upload-title-section">
-                                <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'uploadImage')}</div>
-                                <div className="oss-upload-icon">
-                                    <img src={image} alt={"image"}/>
-                                </div>
-                            </div>
-                            <div className="oss-upload-section-script">
-                                <div className="oss-upload-section-text">
-                                    {this.translate(this.props.i18nLanguage, 'uploadImageInner')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Upload>
-                <div style={{width: 208, height: 0.5, backgroundColor: "#E7E7E7"}}/>
-                <Upload
-                    accept={"video/mp4"}
-                    showUploadList={false}
-                    customRequest={this.uploadVideo}>
-                    <div className="oss-upload-section">
-                        <div className="oss-upload-section-inner">
-                            <div className="oss-upload-title-section">
-                                <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'uploadVideo')}</div>
-                                <div className="oss-upload-icon">
-                                    <img src={Video} alt={"Video"}/>
-                                </div>
-                            </div>
-                            <div className="oss-upload-section-script">
-                                <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'uploadVideoInner')}</div>
-                            </div>
-                        </div>
-                    </div>
-                </Upload>
-                <div style={{width: 208, height: 0.5, backgroundColor: "#E7E7E7"}}/>
-                <Upload
-                    accept={"audio/mp3"}
-                    showUploadList={false}
-                    customRequest={this.uploadAudio}>
-                    <div className="oss-upload-section">
-                        <div className="oss-upload-section-inner">
-                            <div className="oss-upload-title-section">
-                                <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'uploadAudio')}</div>
-                                <div className="oss-upload-icon">
-                                    <img src={Audio} alt={"Audio"}/>
-                                </div>
-                            </div>
-                            <div className="oss-upload-section-script">
-                                <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'uploadAudioInner')}</div>
-                            </div>
-                        </div>
-                    </div>
-                </Upload>
-                <div style={{width: 208, height: 0.5, backgroundColor: "#E7E7E7"}}/>
-                <Upload
-                    accept={"application/vnd.openxmlformats-officedocument.presentationml.presentation"}
-                    showUploadList={false}
-                    customRequest={this.uploadDynamic}>
-                    <div className="oss-upload-section">
-                        <div className="oss-upload-section-inner">
-                            <div className="oss-upload-title-section">
-                                <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'documentToWebpage')}</div>
-                                <div className="oss-upload-icon">
-                                    <img src={fileTransWeb} alt={"fileTransWeb"}/>
-                                </div>
-                            </div>
-                            <div className="oss-upload-section-script">
-                                <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'documentToWebpageInner')}</div>
-                            </div>
-                        </div>
-                    </div>
-                </Upload>
-                <div style={{width: 208, height: 0.5, backgroundColor: "#E7E7E7"}}/>
-                <Upload
-                    accept={FileUploadStatic}
-                    showUploadList={false}
-                    customRequest={this.uploadStatic}>
-                    <div className="oss-upload-section">
-                        <div className="oss-upload-section-inner">
-                            <div className="oss-upload-title-section">
-                                <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'documentToImage')}</div>
-                                <div className="oss-upload-icon">
-                                    <img src={fileTransImg} alt={"fileTransImg"}/>
-                                </div>
-                            </div>
-                            <div className="oss-upload-section-script">
-                                <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'documentToImageInner')}</div>
-                            </div>
-                        </div>
-                    </div>
-                </Upload>
+                {this.injectDividers(enables.map(type => {
+                    if (type === UploadType.Image) return this.renderUploadImage();
+                    if (type === UploadType.Video) return this.renderUploadVideo();
+                    if (type === UploadType.Audio) return this.renderUploadAudio();
+                    if (type === UploadType.Dynamic) return this.renderUploadDynamic();
+                    if (type === UploadType.Static) return this.renderUploadStatic();
+                    return null;
+                }))}
             </div>
         );
     }
 
+    private renderDivider(key: number): React.ReactNode {
+        return <div key={key} style={{ width: 208, height: 0.5, backgroundColor: "#E7E7E7" }} />;
+    }
+
+    private injectDividers(arr: React.ReactNode[]): React.ReactNode {
+        let i = 1;
+        const result: React.ReactNode[] = [];
+        for (const e of arr) {
+            result.push(e, this.renderDivider(i));
+            i += 1;
+        }
+        result.pop();
+        return result;
+    }
 
     private handleVisibleChange = (event: boolean): void => {
-        this.setState({isActive: event})
+        this.setState({ isActive: event })
     }
 
     public render(): React.ReactNode {
-        const {isActive} = this.state;
+        const { isActive } = this.state;
         return (
             <>
-                <TopLoadingBar style={{backgroundColor: "#71C3FC", height: 4}} loadingPercent={this.state.ossPercent}/>
-                <TopLoadingBar style={{backgroundColor: "#71C3FC", height: 4}}
-                               loadingPercent={this.state.converterPercent}/>
+                <TopLoadingBar style={{ backgroundColor: "#71C3FC", height: 4 }} loadingPercent={this.state.ossPercent} />
+                <TopLoadingBar style={{ backgroundColor: "#71C3FC", height: 4 }}
+                    loadingPercent={this.state.converterPercent} />
                 <Popover trigger="hover"
-                         key={"oss-upload-popper"}
-                         onVisibleChange={this.handleVisibleChange}
-                         placement={"leftBottom"}
-                         content={this.renderUploadButton()}>
+                    key={"oss-upload-popper"}
+                    onVisibleChange={this.handleVisibleChange}
+                    placement={"leftBottom"}
+                    content={this.renderUploadButton()}>
                     <div className="oss-upload-cell-box-left">
                         <div className="oss-upload-cell">
-                            <img src={isActive ? uploadActive : upload} alt={"upload"}/>
+                            <img src={isActive ? uploadActive : upload} alt={"upload"} />
                         </div>
                     </div>
                 </Popover>
