@@ -58,6 +58,7 @@ export type WhiteboardPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
     userId: string;
+    region?: string;
 }>;
 export default class WhiteboardPage extends React.Component<WhiteboardPageProps, WhiteboardPageStates> {
     public constructor(props: WhiteboardPageProps) {
@@ -345,6 +346,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                                      appIdentifier={netlessToken.appIdentifier}
                                                      sdkToken={netlessToken.sdkToken}
                                                      room={room}
+                                                     region={this.props.region}
                                                      i18nLanguage={i18n.language}
                                                      whiteboardRef={whiteboardLayerDownRef}/>,
                                 ]
@@ -394,6 +396,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                     room={room}/>
                         <OssDropUpload
                             room={room}
+                            region={this.props.region}
                             oss={ossConfigObj}>
                             <div
                                 ref={this.handleBindRoom}
