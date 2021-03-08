@@ -3,7 +3,7 @@ import Fetcher from "@netless/fetch-middleware";
 export default class TaskOperator {
     private readonly fetcher: Fetcher;
 
-    constructor(apiOrigin: string = "https://api.netless.link/v5") {
+    constructor(apiOrigin: string = "https://api.netless.link/v5", readonly region?: string) {
         this.fetcher = new Fetcher(5000, apiOrigin);
     }
 
@@ -12,6 +12,7 @@ export default class TaskOperator {
             path: `services/conversion/tasks`,
             headers: {
                 token: sdkToken,
+                region: this.region,
             },
             body: {
                 resource: pptURL,
@@ -28,6 +29,7 @@ export default class TaskOperator {
             path: `rooms/${uuid}/screenshots`,
             headers: {
                 token: token,
+                region: this.region,
             },
             body: {
                 path: path,
@@ -43,6 +45,7 @@ export default class TaskOperator {
             path: `tokens/tasks/${taskUuid}`,
             headers: {
                 token: sdkToken,
+                region: this.region,
             },
             body: {
                 lifespan: lifespan,

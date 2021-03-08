@@ -50,11 +50,13 @@ export class UploadManager {
     private readonly task: TaskOperator;
     private readonly ossClient: any;
     private readonly room: Room;
+    private readonly region?: string;
 
-    public constructor(ossClient: any, room: Room, apiOrigin?: string) {
+    public constructor(ossClient: any, room: Room, apiOrigin?: string, region?: string) {
         this.ossClient = ossClient;
         this.room = room;
-        this.task = new TaskOperator(apiOrigin);
+        this.task = new TaskOperator(apiOrigin, region);
+        this.region = region;
     }
 
     private getFileType = (fileName: string): string => {
@@ -81,6 +83,7 @@ export class UploadManager {
             uuid: taskInf.uuid,
             kind: kind,
             taskToken: taskToken,
+            region: this.region,
             callbacks: {
                 onProgressUpdated: progress => {
                     if (onProgress) {
