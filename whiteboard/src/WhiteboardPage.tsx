@@ -322,7 +322,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
 
     public render(): React.ReactNode {
         const {room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
-        const { identity, uuid, userId } = this.props.match.params;
+        const { identity, uuid, userId, region } = this.props.match.params;
         if (room === undefined) {
             return <LoadingPage/>;
         }
@@ -346,7 +346,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                                      appIdentifier={netlessToken.appIdentifier}
                                                      sdkToken={netlessToken.sdkToken}
                                                      room={room}
-                                                     region={this.props.region}
+                                                     region={region}
                                                      i18nLanguage={i18n.language}
                                                      whiteboardRef={whiteboardLayerDownRef}/>,
                                 ]
@@ -396,7 +396,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                     room={room}/>
                         <OssDropUpload
                             room={room}
-                            region={this.props.region}
+                            region={region}
                             oss={ossConfigObj}>
                             <div
                                 ref={this.handleBindRoom}

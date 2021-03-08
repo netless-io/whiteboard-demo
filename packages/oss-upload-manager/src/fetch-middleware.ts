@@ -10,10 +10,10 @@ export default class TaskOperator {
     public async createPPTTaskInf(pptURL: string, type: string, preview: boolean, sdkToken: string): Promise<any> {
         const json = await this.fetcher.post<any>({
             path: `services/conversion/tasks`,
-            headers: {
+            headers: JSON.parse(JSON.stringify({
                 token: sdkToken,
                 region: this.region,
-            },
+            })),
             body: {
                 resource: pptURL,
                 type: type,
@@ -27,10 +27,10 @@ export default class TaskOperator {
     public async getCover(uuid: string, path: string, width: number, height: number, token: string): Promise<any> {
         const json = await this.fetcher.post<any>({
             path: `rooms/${uuid}/screenshots`,
-            headers: {
+            headers: JSON.parse(JSON.stringify({
                 token: token,
                 region: this.region,
-            },
+            })),
             body: {
                 path: path,
                 width: width,
@@ -43,10 +43,10 @@ export default class TaskOperator {
     public async createTaskToken(taskUuid: string, lifespan: number, role: string, sdkToken: string): Promise<string> {
         const json = await this.fetcher.post<any>({
             path: `tokens/tasks/${taskUuid}`,
-            headers: {
+            headers: JSON.parse(JSON.stringify({
                 token: sdkToken,
                 region: this.region,
-            },
+            })),
             body: {
                 lifespan: lifespan,
                 role: role,
