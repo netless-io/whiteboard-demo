@@ -8,8 +8,8 @@ import deleteIcon from "./image/delete.svg";
 
 export type PreviewControllerState = {
     isFocus: boolean;
-    roomState: RoomState;
     hoverCellIndex: number | null;
+    scenesCount: number;
 };
 
 export type PreviewControllerProps = {
@@ -20,23 +20,13 @@ export type PreviewControllerProps = {
 
 class PreviewController extends React.Component<PreviewControllerProps, PreviewControllerState> {
 
-    private ref: HTMLDivElement | null = null;
-
     public constructor(props: PreviewControllerProps) {
         super(props);
         this.state = {
             isFocus: false,
-            roomState: props.room.state,
             hoverCellIndex: null,
+            scenesCount: 0,
         };
-    }
-
-
-    private removeScene(): void {
-        const {room} = this.props;
-        const {roomState} = this.state;
-        const scenePath = roomState.sceneState.scenePath;
-        room.removeScenes(`${scenePath}`);
     }
 
     private setScenePath = (newActiveIndex: number) => {
@@ -53,21 +43,19 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
     }
 
     public componentDidMount(): void {
-        const {room} = this.props;
-        room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
-            this.setState({roomState: {...room.state, ...modifyState}});
+        const { room } = this.props;
+        this.setState({ scenesCount: room.state.sceneState.scenes.length });
+        room.callbacks.on("onRoomStateChanged", (): void => {
+            this.setState({ scenesCount: room.state.sceneState.scenes.length });
         });
-    }
-
-    private setRef(ref: HTMLDivElement | null): void {
-        this.ref = ref;
     }
 
     private renderPreviewCells = (scenes: ReadonlyArray<WhiteScene>, activeIndex: number, sceneDir: any): React.ReactNode => {
         const nodes: React.ReactNode = scenes.map((scene, index) => {
             const isActive = index === activeIndex;
+            const scenePath = sceneDir.concat(scene.name).join("/");
             return (
-                <div key={`key-${index}`} className="page-out-box">
+                <div key={`key-${scenePath}`} className="page-out-box">
                     <div
                         onClick={() => {
                             this.setScenePath(index);
@@ -75,13 +63,14 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
                         className="page-box" style={{borderColor: isActive ? "#71C3FC" : "#F4F4F4"}}>
                         <PageImage
                             room={this.props.room}
-                            path={sceneDir.concat(scene.name).join("/")}/>
+                            path={scenePath}
+                        />
                     </div>
                     <div className="page-box-under">
                         <div className="page-box-under-left">
                             {index + 1}
                         </div>
-                        <div onClick={() => this.removeScene()} className="page-box-under-right">
+                        <div onClick={() => this.props.room.removeScenes(`${scenePath}`)} className="page-box-under-right">
                             <img src={deleteIcon} alt={"deleteIcon"}/>
                         </div>
                     </div>
@@ -96,27 +85,24 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
     }
 
     private addPage = (): void => {
-        const {roomState} = this.state;
         const {room} = this.props;
-        const activeIndex = roomState.sceneState.index;
+        const activeIndex = room.state.sceneState.index;
         const newSceneIndex = activeIndex + 1;
-        const scenePath = roomState.sceneState.scenePath;
+        const scenePath = room.state.sceneState.scenePath;
         const pathName = this.pathName(scenePath);
         room.putScenes(pathName, [{}], newSceneIndex);
         room.setSceneIndex(newSceneIndex);
     }
 
     public render(): React.ReactNode {
-        const {roomState} = this.state;
-        const {isVisible, handlePreviewState} = this.props;
-        const scenes = roomState.sceneState.scenes;
-        const sceneDir = roomState.sceneState.scenePath.split("/");
+        const {isVisible, handlePreviewState, room} = this.props;
+        const scenes = room.state.sceneState.scenes;
+        const sceneDir = room.state.sceneState.scenePath.split("/");
         sceneDir.pop();
-        const activeIndex = roomState.sceneState.index;
+        const activeIndex = room.state.sceneState.index;
         return (
             <MenuBox width={240} isVisible={isVisible}>
-                <div
-                    ref={this.setRef.bind(this)} className="menu-annex-box">
+                <div className="menu-annex-box">
                     <div className="menu-title-line-box">
                         <div className="menu-title-line">
                             <div className="menu-title-text-box">
@@ -147,21 +133,35 @@ export type PageImageProps = { path: string, room: Room };
 
 class PageImage extends React.Component<PageImageProps, {}> {
 
-    private ref?: HTMLDivElement | null;
+    private ref = React.createRef<HTMLDivElement>()
 
-    public constructor(props: any) {
-        super(props);
+    public componentDidMount(): void {
+        const { room } = this.props;
+        window.setTimeout(() => {
+            this.syncPreview();
+        });
+        room.callbacks.on("onRoomStateChanged", (): void => {
+            if (room.state.sceneState.scenePath === this.props.path && this.ref.current) {
+                this.syncPreview();
+            }
+        });
     }
 
-    private setupDivRef = (ref: HTMLDivElement | null) => {
-        if (ref) {
-            this.ref = ref;
-            this.props.room.scenePreview(this.props.path, ref, 208, 156);
+    public componentDidUpdate(prevProps: PageImageProps): void {
+        if (prevProps.path !== this.props.path) {
+            this.syncPreview();
         }
     }
 
     public render(): React.ReactNode {
-        return <div className="ppt-image" ref={this.setupDivRef.bind(this)}/>;
+        return <div className="ppt-image" ref={this.ref}/>;
+    }
+
+    private syncPreview(): void {
+        if (this.ref.current) {
+            this.props.room.scenePreview(this.props.path, this.ref.current, 208, 156);
+            this.ref.current.dataset.path = this.props.path;
+        }
     }
 }
 
