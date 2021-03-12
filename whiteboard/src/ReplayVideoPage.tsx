@@ -13,7 +13,7 @@ import PlayerController from "@netless/player-controller";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import {netlessToken} from "./appToken";
 import LoadingPage from "./LoadingPage";
-import logo from "./assets/image/logo.svg";
+import logo from "./assets/image/logo.png";
 import ExitButtonPlayer from "./components/ExitButtonPlayer";
 import { Identity } from "./IndexPage";
 import {videoPlugin} from "@netless/white-video-plugin";

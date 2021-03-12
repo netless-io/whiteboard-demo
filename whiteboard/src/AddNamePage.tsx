@@ -2,7 +2,7 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import {Link} from "react-router-dom";
 import "./AddNamePage.less";
-import logo from "./assets/image/logo.svg";
+import logo from "./assets/image/logo.png";
 import {Button, Input} from "antd";
 import { Identity } from "./IndexPage";
 import { withTranslation, WithTranslation } from 'react-i18next';
