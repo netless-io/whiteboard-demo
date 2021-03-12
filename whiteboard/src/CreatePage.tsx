@@ -25,7 +25,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
         this.state = {
             roomName: "",
             value: false,
-            h5Url: "",
+            h5Url: this.props.t("tryH5Courseware"),
         };
     }
 
@@ -49,7 +49,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
         if (uuid) {
             this.setRoomList(uuid, this.state.roomName, userId);
             let url = `/whiteboard/${Identity.creator}/${uuid}/${userId}`;
-            if (this.state.h5Url) {
+            if (this.state.h5Url && this.state.h5Url !== this.props.t("tryH5Courseware")) {
                 url = url + `?h5Url=${encodeURIComponent(this.state.h5Url)}`;
             }
             this.props.history.push(url);
@@ -110,7 +110,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
 
     public render(): React.ReactNode {
         const { t } = this.props
-        const {roomName} = this.state;
+        const {roomName,h5Url} = this.state;
         return (
             <div className="page-index-box">
                 <div className="page-index-mid-box">
@@ -130,9 +130,10 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
                         <div style={{marginBottom: 18, width: "100%", marginLeft: 95 }}>
                             <Select
                                 size={"large"}
+                                value={h5Url}
                                 placeholder={t("tryH5Courseware")}
                                 style={{ width: '80%' }}
-                                onChange={this.handleSelectH5}>
+                                onSelect={this.handleSelectH5}>
                                 <Option value={h5DemoUrl}>{h5DemoUrl}</Option>
                                 <Option value={h5DemoUrl2}>{h5DemoUrl2}</Option>
                                 <Option value={h5DemoUrl3}>{h5DemoUrl3}</Option>
