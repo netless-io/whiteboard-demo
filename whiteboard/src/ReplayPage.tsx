@@ -12,7 +12,7 @@ import PlayerController from "@netless/player-controller";
 import {netlessWhiteboardApi} from "./apiMiddleware";
 import {h5DemoUrl2, h5DemoUrl3, netlessToken} from "./appToken";
 import LoadingPage from "./LoadingPage";
-import logo from "./assets/image/logo.svg";
+import logo from "./assets/image/logo.png";
 import ExitButtonPlayer from "./components/ExitButtonPlayer";
 import { Identity } from "./IndexPage";
 import {videoPlugin} from "@netless/white-video-plugin";
@@ -132,7 +132,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                     this.setState({currentTime: scheduleTime});
                 },
             });
-        
+
         (window as any).player = player;
         cursorAdapter.setPlayer(player);
         this.setState({
@@ -207,7 +207,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                 return (
                     <div className="player-out-box">
                         <div className="logo-box">
-                            <img src={logo} alt={"logo"}/>
+                            <img style={{height: 24}} src={logo} alt={"logo"}/>
                         </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">

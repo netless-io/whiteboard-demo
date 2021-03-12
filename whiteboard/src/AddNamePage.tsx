@@ -2,7 +2,7 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import {Link} from "react-router-dom";
 import "./AddNamePage.less";
-import logo from "./assets/image/logo.svg";
+import logo from "./assets/image/logo.png";
 import {Button, Input} from "antd";
 import { Identity } from "./IndexPage";
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -43,7 +43,7 @@ class AddNamePage extends React.Component<AddNamePageProps & WithTranslation, Jo
             <div className="page-index-box">
                 <div className="page-index-mid-box">
                     <div className="page-index-logo-box">
-                        <img src={logo} alt={"logo"}/>
+                        <img style={{height: 24}} src={logo} alt={"logo"}/>
                         <span>
                                 0.0.1
                         </span>

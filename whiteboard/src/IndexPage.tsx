@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Link, withRouter} from "react-router-dom"
 import {RouteComponentProps} from "react-router";
-import logo from "./assets/image/logo.svg";
+import logo from "./assets/image/logo.png";
 import join from "./assets/image/join.svg";
 import create from "./assets/image/create.svg";
 import "./IndexPage.less";
@@ -58,7 +58,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
               console.log(error.message);
             });
         }
-        
+
     }
 
     public render(): React.ReactNode {
@@ -67,7 +67,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
                 <div className="page-index-box">
                     <div className="page-index-mid-box">
                         <div className="page-index-logo-box">
-                            <img src={logo} alt={"logo"} />
+                            <img style={{height: 24}} src={logo} alt={"logo"} />
                             {localStorage.getItem("rooms") && (
                                 <Link to={"/history"}>
                                     <div className="page-index-history">{t('historyRecord')}</div>
@@ -122,11 +122,11 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
                         </div>
                         <div className="page-index-link-box">
                             <div className="page-index-cell-left">
-                                <a href={"https://netless.link/"} target={"_blank"}>{t('officialWebsite')}</a>
+                                <a href={"https://www.agora.io/cn/interactive-whiteboard"} target={"_blank"}>{t('officialWebsite')}</a>
                             </div>
                             <div className="page-cutline-link-box"/>
                             <div className="page-index-cell-right">
-                                <a href={"https://github.com/netless-io/react-whiteboard"} target={"_blank"}>Github</a>
+                                <a href={"https://github.com/netless-io/flat-web"} target={"_blank"}>Github</a>
                             </div>
                         </div>
                         <div className="page-index-start-term">

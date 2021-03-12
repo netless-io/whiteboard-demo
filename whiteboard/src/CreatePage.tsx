@@ -1,7 +1,7 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import "./CreatePage.less";
-import logo from "./assets/image/logo.svg";
+import logo from "./assets/image/logo.png";
 import {Button, Input, Select} from "antd";
 import {Link} from "react-router-dom";
 import { Identity } from "./IndexPage";
@@ -115,7 +115,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
             <div className="page-index-box">
                 <div className="page-index-mid-box">
                     <div className="page-index-logo-box">
-                        <img src={logo} alt={"logo"}/>
+                        <img style={{height: 24}} src={logo} alt={"logo"}/>
                         <span>
                                 0.0.1
                         </span>
