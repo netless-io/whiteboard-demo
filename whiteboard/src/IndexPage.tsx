@@ -67,7 +67,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
                 <div className="page-index-box">
                     <div className="page-index-mid-box">
                         <div className="page-index-logo-box">
-                            <img style={{height: 24}} src={logo} alt={"logo"} />
+                            <img src={logo} alt={"logo"} />
                             {localStorage.getItem("rooms") && (
                                 <Link to={"/history"}>
                                     <div className="page-index-history">{t('historyRecord')}</div>

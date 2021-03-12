@@ -43,7 +43,7 @@ class AddNamePage extends React.Component<AddNamePageProps & WithTranslation, Jo
             <div className="page-index-box">
                 <div className="page-index-mid-box">
                     <div className="page-index-logo-box">
-                        <img style={{height: 24}} src={logo} alt={"logo"}/>
+                        <img src={logo} alt={"logo"}/>
                         <span>
                                 0.0.1
                         </span>

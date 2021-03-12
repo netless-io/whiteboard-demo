@@ -207,7 +207,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                 return (
                     <div className="player-out-box">
                         <div className="logo-box">
-                            <img style={{height: 24}} src={logo} alt={"logo"}/>
+                            <img src={logo} alt={"logo"}/>
                         </div>
                         <div className="room-controller-box">
                             <div className="page-controller-mid-box">
