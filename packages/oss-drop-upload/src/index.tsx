@@ -3,7 +3,7 @@ import * as OSS from "ali-oss";
 import {PPTProgressPhase, UploadManager} from "@netless/oss-upload-manager";
 import TopLoadingBar from "@netless/loading-bar";
 import {ApplianceNames, Room} from "white-web-sdk";
-import Dropzone from "react-dropzone";
+import Dropzone, { FileRejection } from "react-dropzone";
 import "./index.less";
 import {CSSProperties} from "react";
 type OSSConfigObjType = {
@@ -51,7 +51,7 @@ export default class OssDropUpload extends React.Component<OssDropUploadProps, O
 
     private onDropFiles = async (
         acceptedFiles: File[],
-        rejectedFiles: File[],
+        rejectedFiles: FileRejection[],
         event: React.DragEvent<HTMLDivElement>): Promise<void> => {
         event.persist();
         const {room, apiOrigin} = this.props;
@@ -68,15 +68,19 @@ export default class OssDropUpload extends React.Component<OssDropUploadProps, O
     }
     public render(): React.ReactNode {
         return (
-            <Dropzone
-                accept={"image/*"}
-                disableClick={true}
-                style={this.props.style}
-                className="whiteboard-out-box"
-                onDrop={this.onDropFiles}>
-                <TopLoadingBar style={{backgroundColor: "#71C3FC", height: 4}}
-                               loadingPercent={this.state.ossPercent}/>
-                {this.props.children}
+            <Dropzone noClick accept={"image/*"} onDrop={this.onDropFiles}>
+                {() => (
+                    <div
+                        style={this.props.style}
+                        className="whiteboard-out-box"
+                    >
+                        <TopLoadingBar
+                            style={{ backgroundColor: "#71C3FC", height: 4 }}
+                            loadingPercent={this.state.ossPercent}
+                        />
+                        {this.props.children}
+                    </div>
+                )}
             </Dropzone>
         );
     }

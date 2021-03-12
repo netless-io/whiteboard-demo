@@ -168,7 +168,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             const customerNodes = this.props.customerComponent.map((data: React.ReactNode, index: number) => {
                 return <div key={`tool-customer-${index}`}>{data}</div>;
             });
-            nodes.push(customerNodes);
+            nodes.push(...customerNodes);
             nodes.push(this.renderCleanCell())
             return nodes;
         } else {
