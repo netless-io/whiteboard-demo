@@ -10,8 +10,8 @@ export default class FloatLink extends React.Component<{}, {}> {
         return (
             <a href={"https://sso.agora.io/cn/v3/signup"} target={"_blank"}>
                 <div className="float-link">
-                    <img src={gift} alt={"gift"}/>
-                    <div>免费领取 10,000 分钟使用时长</div>
+                    <img src={gift} alt="gift" />
+                    <div className="float-link-text">免费领取 10,000 分钟使用时长</div>
                 </div>
             </a>
         );

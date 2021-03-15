@@ -56,7 +56,7 @@ export default class OssDropUpload extends React.Component<OssDropUploadProps, O
         event.persist();
         const {room, apiOrigin} = this.props;
         try {
-            const uploadManager = new UploadManager(this.client, room, apiOrigin);
+            const uploadManager = new UploadManager(this.client, room, apiOrigin, this.props.region);
             await Promise.all([
                 uploadManager.uploadImageFiles(acceptedFiles, event.clientX, event.clientY, this.onProgress),
             ]);
