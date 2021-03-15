@@ -8,6 +8,7 @@ import "./IndexPage.less";
 import {Button, Input, Popover} from "antd";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { SwitchLanguage } from './SwitchLanguage';
+import SwitchRegion from "./components/SwitchRegion";
 
 export type IndexPageStates = {
     name: string;
@@ -65,6 +66,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
         const { t } = this.props
             return (
                 <div className="page-index-box">
+                    <SwitchRegion />
                     <div className="page-index-mid-box">
                         <div className="page-index-logo-box">
                             <img src={logo} alt={"logo"} />
@@ -99,8 +101,8 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
 
                                 </div>
                             } title={t('editName')}>
-                                <span onClick={() => this.setState({visible: true})}>
-                                    <span style={{color: "#3381FF"}}>{this.state.name}</span>
+                                <span style={{ paddingTop: 8 }} onClick={() => this.setState({visible: true})}>
+                                    <span style={{color: "#3381FF"}}>{this.state.name}</span>&nbsp;
                                     <span>{t('welcome')} 👋 </span>
                                 </span>
                             </Popover>

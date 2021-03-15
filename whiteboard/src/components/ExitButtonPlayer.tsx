@@ -8,6 +8,7 @@ import exit from "../assets/image/exit.svg";
 import replayScreen from "../assets/image/replay-screen.png";
 import { Identity } from "../IndexPage";
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { region } from "../region";
 
 export type ExitButtonPlayerStates = {
     exitViewDisable: boolean;
@@ -30,7 +31,7 @@ class ExitButtonPlayer extends React.Component<ExitButtonPlayerProps & WithTrans
 
     private handleReplay = async (): Promise<void> => {
         const { identity, uuid, userId } = this.props;
-        this.props.history.push(`/whiteboard/${identity}/${uuid}/${userId}/`);
+        this.props.history.push(`/whiteboard/${identity}/${uuid}/${userId}/${region}`);
     }
 
     private handleGoBack = async (): Promise<void> => {

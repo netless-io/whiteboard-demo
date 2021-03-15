@@ -21,11 +21,13 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { getQueryH5Url } from "./tools/QueryGetter";
 import { IframeBridge, IframeWrapper } from "@netless/iframe-bridge";
 import { ReplayAdapter } from "./tools/ReplayAdapter";
+import { region, Region } from "./region";
 
 export type PlayerPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
     userId: string;
+    region?: Region;
 }>;
 
 
@@ -85,7 +87,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
     private loadPlayer = async (whiteWebSdk: WhiteWebSdk, uuid: string, roomToken: string): Promise<void> => {
         await polly().waitAndRetry(10).executeForPromise(async () => {
             const isPlayable =  whiteWebSdk.isPlayable({
-                region: "cn-hz",
+                region,
                 room: uuid,
             });
 
@@ -189,7 +191,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
     public render(): React.ReactNode {
         const { t } = this.props
         const {player, phase, replayState} = this.state;
-        const { identity, uuid, userId } = this.props.match.params;
+        const { identity, uuid, userId, region } = this.props.match.params;
         if (this.state.replayFail) {
             return <PageError/>;
         }

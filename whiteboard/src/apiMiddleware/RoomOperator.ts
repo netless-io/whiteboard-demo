@@ -1,12 +1,15 @@
 import Fetcher from "@netless/fetch-middleware";
-import {netlessToken} from "../appToken";
-const fetcher = new Fetcher(5000, "https://shunt-api.netless.link/v5");
+import { netlessToken } from "../appToken";
+import { region } from "../region";
+
+const fetcher = new Fetcher(5000, "https://api.netless.link/v5");
 export class RoomOperator {
     public async createRoomApi(name: string, limit: number): Promise<any> {
         const json = await fetcher.post<any>({
             path: `rooms`,
             headers: {
                 token: netlessToken.sdkToken,
+                region,
             },
             body: {
                 name: name,
@@ -21,6 +24,7 @@ export class RoomOperator {
             path: `tokens/rooms/${uuid}`,
             headers: {
                 token: netlessToken.sdkToken,
+                region,
             },
             body: {
                 lifespan: 0,
@@ -41,6 +45,7 @@ export class RoomOperator {
             path: `rooms/${uuid}/screenshots`,
             headers: {
                 token: token,
+                region,
             },
             body: {
                 path: path,

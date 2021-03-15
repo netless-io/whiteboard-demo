@@ -1,12 +1,10 @@
 .float-link {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: row;
   background-color: #3381FF;
   color: white;
-  width: 243px;
   height: 44px;
+  padding-left: 8px;
   border-top-right-radius: 22px;
   border-bottom-right-radius: 22px;
   position: absolute;
@@ -14,4 +12,20 @@
   left: 0;
   top: 0;
   cursor: pointer;
+  overflow: hidden;
+  &:hover {
+    .float-link-text {
+      width: 207px;
+      opacity: 1;
+    }
+  }
+}
+
+.float-link-text {
+  width: 0;
+  padding-right: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: width .4s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity .2s linear;
 }
