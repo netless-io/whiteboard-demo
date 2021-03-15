@@ -161,8 +161,7 @@ export default class WhiteVideoPluginReplay extends React.Component<WhiteVideoPl
                                 pointerEvents: "none",
                                 outline: "none",
                             }}
-                            controls
-                            controlsList={"nodownload nofullscreen"}
+                            controls={false}
                             preload="auto"
                         />
                     </div>
