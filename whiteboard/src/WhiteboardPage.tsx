@@ -44,6 +44,7 @@ import {IframeWrapper, IframeBridge} from "@netless/iframe-bridge";
 import { IframeAdapter } from "./tools/IframeAdapter";
 import { H5UploadButton } from "./components/H5UploadButton";
 import i18n from "./i18n"
+import { Region } from "./region";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -58,7 +59,7 @@ export type WhiteboardPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
     userId: string;
-    region?: string;
+    region?: Region;
 }>;
 export default class WhiteboardPage extends React.Component<WhiteboardPageProps, WhiteboardPageStates> {
     public constructor(props: WhiteboardPageProps) {
