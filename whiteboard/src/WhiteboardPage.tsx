@@ -44,7 +44,7 @@ import {IframeWrapper, IframeBridge} from "@netless/iframe-bridge";
 import { IframeAdapter } from "./tools/IframeAdapter";
 import { H5UploadButton } from "./components/H5UploadButton";
 import i18n from "./i18n"
-import { region, Region } from "./region";
+import { Region } from "./region";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -59,7 +59,7 @@ export type WhiteboardPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
     userId: string;
-    region?: Region;
+    region: Region;
 }>;
 export default class WhiteboardPage extends React.Component<WhiteboardPageProps, WhiteboardPageStates> {
     public constructor(props: WhiteboardPageProps) {
@@ -168,7 +168,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     }
 
     private startJoinRoom = async (): Promise<void> => {
-        const {uuid, userId, identity} = this.props.match.params;
+        const {uuid, userId, identity,region} = this.props.match.params;
         this.setRoomList(uuid, userId);
         const query = new URLSearchParams(window.location.search);
         const h5Url = decodeURIComponent(query.get("h5Url") || "");
@@ -377,7 +377,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                 <Tooltip placement="bottom" title={"H5 Course"}>
                                     <H5UploadButton room={room} />
                                 </Tooltip>
-                                <InviteButton uuid={uuid}/>
+                                <InviteButton uuid={uuid} region={region} />
                                 <ExitButtonRoom identity={identity} room={room} userId={userId} />
                             </div>
                         </div>

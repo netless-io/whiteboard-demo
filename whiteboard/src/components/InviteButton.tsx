@@ -7,6 +7,7 @@ import invite from "../assets/image/invite.svg";
 import {CopyOutlined} from "@ant-design/icons/lib";
 import { Identity } from "../IndexPage";
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { Region } from "../region";
 
 export type InviteButtonStates = {
     inviteDisable: boolean;
@@ -14,6 +15,7 @@ export type InviteButtonStates = {
 
 export type InviteButtonProps = {
     uuid: string;
+    region: Region
 };
 
 class InviteButton extends React.Component<InviteButtonProps & WithTranslation, InviteButtonStates> {
@@ -37,15 +39,14 @@ class InviteButton extends React.Component<InviteButtonProps & WithTranslation, 
     }
 
     private handleCopy = (): void => {
-        const { t } = this.props
-        const { uuid } = this.props;
-        let url = `https://demo.netless.link/whiteboard/${Identity.joiner}/${uuid}/`;
+        const { t, uuid, region } = this.props;
+        let url = `https://demo.netless.link/whiteboard/${Identity.joiner}/${uuid}/${region}`;
         const h5Url = this.getH5Url();
         if (h5Url) {
             url = url + `?h5Url=${h5Url}`;
         }
         this.handleInvite();
-        copy(`{t('roomNumber')}：${uuid}\n{t('joinLink')}：${url}`);
+        copy(`${t('roomNumber')}：${uuid}\n${t('joinLink')}：${url}`);
         message.success(t('copyClipboard'));
     }
 
@@ -55,11 +56,10 @@ class InviteButton extends React.Component<InviteButtonProps & WithTranslation, 
     }
 
     private renderInviteContent = (): React.ReactNode => {
-        const { t } = this.props
-        const {uuid} = this.props;
+        const { t, uuid, region } = this.props;
         const isLocal = location.hostname === "localhost";
         const protocol = isLocal ? "http" : "https";
-        let shareLink = `${protocol}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/`
+        let shareLink = `${protocol}://${location.host}/whiteboard/${Identity.joiner}/${uuid}/${region}`
         const h5Url = this.getH5Url();
         if (h5Url) {
             shareLink = shareLink + `?h5Url=${encodeURIComponent(h5Url)}`;

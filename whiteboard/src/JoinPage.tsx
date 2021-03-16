@@ -8,6 +8,7 @@ import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { region } from "./region";
 
 export type JoinPageStates = {
     roomId: string;
@@ -29,7 +30,7 @@ class JoinPage extends React.Component<RouteComponentProps & WithTranslation, Jo
             localStorage.setItem("userName", this.state.name);
         }
         this.setRoomList(this.state.roomId, userId);
-        this.props.history.push(`/whiteboard/${Identity.joiner}/${this.state.roomId}/${userId}/`);
+        this.props.history.push(`/whiteboard/${Identity.joiner}/${this.state.roomId}/${userId}/${region}`);
     }
     public setRoomList = (uuid: string, userId: string): void => {
         const rooms = localStorage.getItem("rooms");

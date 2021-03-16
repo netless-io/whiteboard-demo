@@ -6,6 +6,7 @@ import logo from "./assets/image/logo.png";
 import {Button, Input} from "antd";
 import { Identity } from "./IndexPage";
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { region } from "./region";
 
 export type JoinPageStates = {
     name: string;
@@ -28,12 +29,7 @@ class AddNamePage extends React.Component<AddNamePageProps & WithTranslation, Jo
         const {name} = this.state;
         const {uuid} = this.props.match.params;
         localStorage.setItem("userName", name);
-        if (uuid) {
-            this.props.history.push(`/whiteboard/${Identity.creator}/${uuid}/`);
-
-        } else {
-            this.props.history.push(`/whiteboard/${Identity.creator}/`);
-        }
+        this.props.history.push(`/whiteboard/${Identity.creator}/${uuid || ''}/${region}`);
     }
 
     public render(): React.ReactNode {
