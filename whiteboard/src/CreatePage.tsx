@@ -10,6 +10,7 @@ import moment from "moment";
 import { netlessWhiteboardApi } from "./apiMiddleware";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { h5DemoUrl, h5DemoUrl2, h5DemoUrl3 } from "./appToken";
+import { region } from "./region";
 
 const { Option } = Select;
 
@@ -48,7 +49,7 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
         const uuid = await this.createRoomAndGetUuid(this.state.roomName, 0);
         if (uuid) {
             this.setRoomList(uuid, this.state.roomName, userId);
-            let url = `/whiteboard/${Identity.creator}/${uuid}/${userId}`;
+            let url = `/whiteboard/${Identity.creator}/${uuid}/${userId}/${region}`;
             if (this.state.h5Url && this.state.h5Url !== this.props.t("tryH5Courseware")) {
                 url = url + `?h5Url=${encodeURIComponent(this.state.h5Url)}`;
             }

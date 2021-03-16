@@ -4,7 +4,7 @@ import {Route, Switch} from "react-router";
 import {message} from "antd";
 import { history } from "./BrowserHistory";
 import WhiteboardCreatorPage from "./WhiteboardCreatorPage";
-import IndexPage from "./IndexPage";
+import IndexPage, { Identity } from "./IndexPage";
 import WhiteboardPage from "./WhiteboardPage";
 import ReplayPage from "./ReplayPage";
 import ReplayVideoPage from "./ReplayVideoPage";
@@ -26,10 +26,10 @@ export class AppRoutes extends React.Component<{}, {}> {
         return (
             <Router history={history}>
                 <Switch>
-                    <Route path="/replay/:identity/:uuid/:userId/:region?" component={ReplayPage} />
-                    <Route path="/replay-video/:identity/:uuid/:userId/" component={ReplayVideoPage} />
-                    <Route path="/whiteboard/:identity/:uuid/:userId/:region?" component={WhiteboardPage} />
-                    <Route path="/whiteboard/:identity/:uuid?/" component={WhiteboardCreatorPage} />
+                    <Route path="/replay/:identity/:uuid/:userId/:region" component={ReplayPage} />
+                    <Route path="/replay-video/:identity/:uuid/:userId/:region" component={ReplayVideoPage} />
+                    <Route path="/whiteboard/:identity/:uuid/:userId/:region" component={WhiteboardPage} />
+                    <Route path="/whiteboard/:identity/:uuid/:region" component={WhiteboardCreatorPage} />
                     <Route path="/history/" component={HistoryPage} />
                     <Route path="/join/" component={JoinPage}/>
                     <Route path="/create/" component={CreatePage}/>

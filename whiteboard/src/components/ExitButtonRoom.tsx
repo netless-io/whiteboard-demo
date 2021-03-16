@@ -11,6 +11,7 @@ import {netlessWhiteboardApi} from "../apiMiddleware";
 import { LocalStorageRoomDataType } from "../HistoryPage";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { getQueryH5Url } from "../tools/QueryGetter";
+import { region } from "../region";
 
 export type ExitButtonRoomStates = {
     exitViewDisable: boolean;
@@ -38,7 +39,7 @@ class ExitButtonRoom extends React.Component<ExitButtonRoomProps & WithTranslati
             await this.setCover(room);
             await room.disconnect();
             const replayPagePath = sync ? "replay-video" : "replay";
-            let url = `/${replayPagePath}/${identity}/${room.uuid}/${userId}/`;
+            let url = `/${replayPagePath}/${identity}/${room.uuid}/${userId}/${region}`;
             const h5Url = getQueryH5Url();
             if (h5Url) {
                 url = url + `?h5Url=${encodeURIComponent(h5Url)}`;

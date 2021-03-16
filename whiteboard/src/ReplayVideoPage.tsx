@@ -21,12 +21,14 @@ import {audioPlugin} from "@netless/white-audio-plugin";
 import CombinePlayerFactory from "@netless/combine-player";
 import { CombinePlayer } from '@netless/combine-player/dist/Types';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { Region } from "./region";
 
 
 export type PlayerVideoPageProps = RouteComponentProps<{
     identity: Identity;
     uuid: string;
     userId: string;
+    region: Region;
 }>;
 
 
@@ -66,7 +68,7 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
 
     public async componentDidMount(): Promise<void> {
         window.addEventListener("keydown", this.handleSpaceKey);
-        const {uuid, identity} = this.props.match.params;
+        const {uuid, identity, region} = this.props.match.params;
         const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
         plugins.setPluginContext("video", {identity: identity === Identity.creator ? "host" : ""});
         plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
@@ -75,6 +77,7 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
             const whiteWebSdk = new WhiteWebSdk({
                 appIdentifier: netlessToken.appIdentifier,
                 plugins,
+                region,
             });
             await this.loadPlayer(whiteWebSdk, uuid, roomToken);
         }
