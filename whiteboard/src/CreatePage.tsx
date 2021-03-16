@@ -130,7 +130,6 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
                         <div style={{marginBottom: 18, width: "100%", marginLeft: 95 }}>
                             <Select
                                 size={"large"}
-                                value={h5Url}
                                 placeholder={t("tryH5Courseware")}
                                 style={{ width: '80%' }}
                                 onSelect={this.handleSelectH5}>
