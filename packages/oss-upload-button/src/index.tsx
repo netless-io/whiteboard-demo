@@ -293,7 +293,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         return (
             <Upload
                 key="upload-audio"
-                accept={"audio/mp3"}
+                accept={".mp3,audio/mp3"}
                 showUploadList={false}
                 customRequest={this.uploadAudio}>
                 <div className="oss-upload-section">
