@@ -1,6 +1,6 @@
 {
   "name": "@netless/white-audio-plugin",
-  "version": "1.2.20",
+  "version": "1.2.21",
   "description": "a audio plugin for white-web-sdk which can play audio in whiteboard room and sync to everyone in room",
   "private": false,
   "main": "dist/index.js",
