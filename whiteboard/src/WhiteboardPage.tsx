@@ -2,7 +2,7 @@ import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import {
     createPlugins,
-    DefaultHotKeys,
+    DefaultHotKeys, DeviceType,
     PPTKind,
     Room,
     RoomPhase,
@@ -45,6 +45,7 @@ import { IframeAdapter } from "./tools/IframeAdapter";
 import { H5UploadButton } from "./components/H5UploadButton";
 import i18n from "./i18n"
 import { Region } from "./region";
+import {isMobile, isWindows} from "react-device-detect";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -179,10 +180,21 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
                 plugins.setPluginContext("video", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
+                let deviceType: DeviceType;
+                if (isWindows) {
+                    deviceType = DeviceType.Surface;
+                } else {
+                    if (isMobile) {
+                        deviceType = DeviceType.Touch;
+                    } else {
+                        deviceType = DeviceType.Desktop;
+                    }
+                }
                 let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
                     region,
+                    deviceType: deviceType,
                     // pptParams: {
                     //     useServerWrap: true,
                     // },
