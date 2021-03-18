@@ -102,7 +102,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
         const activeIndex = room.state.sceneState.index;
         return (
             <MenuBox width={240} isVisible={isVisible}>
-                <div className="menu-annex-box">
+                <div className="menu-annex-box" style={{ outline: 0 }}>
                     <div className="menu-title-line-box">
                         <div className="menu-title-line">
                             <div className="menu-title-text-box">
