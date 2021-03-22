@@ -1,5 +1,6 @@
-import { IframeBridge } from "@netless/iframe-bridge";
+import { IframeBridge, DomEvents } from "@netless/iframe-bridge";
 import { Room, RoomMember, RoomState } from "white-web-sdk";
+import {message} from "antd";
 
 export class IframeAdapter {
     private bridge: IframeBridge;
@@ -29,25 +30,34 @@ export class IframeAdapter {
             this.postMessage(JSON.parse(event.payload));
         })
         this.addMessageListener();
+        IframeBridge.emitter.on(DomEvents.IframeLoad, () => {
+            message.info("loaded")
+        });
     }
+
 
     private postMessage(message: any) {
         if (this.bridge.iframe) {
             this.bridge.iframe.contentWindow?.postMessage(JSON.stringify(message), "*");
         }
     }
-
+    private createH5Scenes = (pageNumber: number) => {
+        return new Array(pageNumber).fill(1).map((_, index) => ({ name: `${index + 1}` }));
+    }
     private addMessageListener() {
         const listener = (event: MessageEvent) => {
             if (event.origin === this.h5Url.origin) {
                 const data = event.data;
                 try {
-                    const { method, toPage } = JSON.parse(data);
+                    const { method, toPage, totalPages } = JSON.parse(data);
                     console.log(method);
                     if (method === "onJumpPage") {
                         this.room.setSceneIndex(toPage - 1);
                     } else {
                         this.room.dispatchMagixEvent(this.IframeEvent, data);
+                    }
+                    if (method === "onPagenum") {
+                        this.room.putScenes(this.bridge.attributes.displaySceneDir, this.createH5Scenes(totalPages));
                     }
                     if (method === "onLoadComplete") {
                         this.jumpPage(this.room.state.sceneState.index);

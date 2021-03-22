@@ -29,6 +29,8 @@ import * as subscript from "./image/subscript.svg";
 import * as subscriptActive from "./image/subscript-active.svg";
 import * as clear from "./image/clear.svg";
 import * as clearActive from "./image/clear-active.svg";
+import * as click from "./image/click.svg";
+import * as clickActive from "./image/click-active.svg";
 
 export type ToolBoxProps = {
     room: Room;
@@ -48,6 +50,13 @@ type ApplianceDescription = {
 };
 export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates> {
     public static readonly descriptions: { readonly [applianceName: string]: ApplianceDescription } = Object.freeze({
+        click: Object.freeze({
+            icon: click,
+            iconActive: clickActive,
+            hasColor: false,
+            hasStroke: false,
+            hasTool: false,
+        }),
         selector: Object.freeze({
             icon: selector,
             iconActive: selectorActive,
@@ -297,7 +306,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
 
     public render(): React.ReactNode {
         const nodes = this.renderNodes();
-        nodes.splice(1, 0, this.renderDraw());
+        nodes.splice(2, 0, this.renderDraw());
         nodes.push(this.renderColorCell());
         return (
             <div className="tool-mid-box-left">

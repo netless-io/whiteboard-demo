@@ -217,6 +217,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                             userId: userId,
                             cursorName: cursorName,
                         },
+                        disableNewPencil: false,
                         floatBar: true,
                         hotKeys: {
                             ...DefaultHotKeys,
