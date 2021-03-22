@@ -92,23 +92,25 @@ export default class ScaleController extends React.Component<ScaleControllerProp
     }
 
     private moveTo100(): void {
+        const {room} = this.props;
+        const scenes = room.state.sceneState.scenes;
+        const index = room.state.sceneState.index;
         this.tempRuleIndex = ScaleController.readRuleIndexByScale(1);
         this.delaySyncRuleIndex();
-        this.zoomChange(1);
+        if (scenes && scenes[index].ppt) {
+            room.scalePptToFit();
+        } else {
+            this.zoomChange(1);
+        }
     }
 
     private zoomChange = (scale: number): void => {
         const {room} = this.props;
-        const scenes = room.state.sceneState.scenes;
-        if (scenes && scenes[0].ppt) {
-            room.scalePptToFit();
-        } else {
-            room.moveCamera({
-                centerX: 0,
-                centerY: 0,
-                scale: scale,
-            });
-        }
+        room.moveCamera({
+            centerX: 0,
+            centerY: 0,
+            scale: scale,
+        });
     }
     private arrowControllerHotKey(evt: KeyboardEvent): void {
         if (evt.key === "=" && evt.ctrlKey) {

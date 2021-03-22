@@ -78,7 +78,7 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
     private deploySuccess = async (payload, uuid: string, siteUrl: string) => {
         const { room } = this.props;
         this.setState({ getSiteTimer: null, deploying: false });
-        this.makeScenes(room, `/${uuid}`, parseInt(payload.pageNumber));
+        this.makeScenes(room, `/${uuid}`);
         history.push(`${window.location.pathname}?h5Url=${encodeURIComponent(siteUrl)}&h5Dir=/${uuid}`);
         window.location.reload();
     }
@@ -99,10 +99,10 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
         this.setState({ getSiteTimer: timer });
     }
 
-    private makeScenes = (room: Room, dir: string, page: number) => {
+    private makeScenes = (room: Room, dir: string) => {
         const scenes = room.entireScenes();
         if (!scenes[dir]) {
-            room.putScenes(dir, this.createH5Scenes(page));
+            room.putScenes(dir, this.createH5Scenes(1));
         }
         if (room.state.sceneState.contextPath !== dir) {
             room.setScenePath(dir);
@@ -136,15 +136,15 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
                             <Button block>选择文件</Button>
                         </Upload>
                     </Form.Item>
-                    <Form.Item label="页数" name="pageNumber"
-                        rules={[{ required: true }]}>
-                        <Input type="number"/>
-                    </Form.Item>
                     <Form.Item wrapperCol={{ span: 12, offset: 8 }}>
                         <Button type="primary" htmlType="submit" block>
                             提交
                         </Button>
                     </Form.Item>
+                    需要 <a href="https://github.com/netless-io/netless-iframe-bridge">
+                netless-iframe-bridge
+            </a> 才可以同步哦
+
               </Form>
         )
     }

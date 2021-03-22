@@ -20,6 +20,7 @@ export type PageControllerStates = {
 
 export default class PageController extends React.Component<PageControllerProps, PageControllerStates> {
 
+    private page: number = 0;
 
     public constructor(props: PageControllerProps) {
         super(props);
@@ -30,6 +31,7 @@ export default class PageController extends React.Component<PageControllerProps,
 
     public componentDidMount(): void {
         const {room} = this.props;
+        this.page = room.state.sceneState.index;
         room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
             this.setState({roomState: {...room.state, ...modifyState}});
         });
@@ -45,7 +47,12 @@ export default class PageController extends React.Component<PageControllerProps,
     }
     private pageNumber = (): React.ReactNode => {
         const {roomState} = this.state;
+        const {room} = this.props;
         const activeIndex = roomState.sceneState.index;
+        if (this.page !== activeIndex) {
+            this.page = activeIndex;
+            room.scalePptToFit();
+        }
         const scenes = roomState.sceneState.scenes;
         return (
             <div className="whiteboard-annex-arrow-page">
