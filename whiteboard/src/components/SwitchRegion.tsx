@@ -16,7 +16,7 @@ export default class SwitchRegion extends React.Component<SwitchRegionProps> {
             <div className="switch-region">
                 <span style={{ paddingRight: 12 }}>{this.renderRegion()}:</span>
                 <Select value={region} onSelect={this.onChange} style={{ width: this.getWidth() }}>
-                    {regions[this.getLang()].map(({ name, region, emoji }) => (
+                    {regions[this.getLang()]?.map(({ name, region, emoji }) => (
                         <Option key={region} value={region}>{emoji} {name}</Option>
                     ))}
                 </Select>
