@@ -28,3 +28,11 @@ export const languagesWithName = Object.freeze([
   { lang: "en", name: "English" },
   { lang: "zh-CN", name: "简体中文" },
 ]);
+
+// dirty fix: force correct i18nextLng
+if (window.localStorage) {
+  const value = localStorage.getItem('i18nextLng') ?? '';
+  if (!(value in messages)) {
+    localStorage.setItem('i18nextLng', 'zh-CN');
+  }
+}
