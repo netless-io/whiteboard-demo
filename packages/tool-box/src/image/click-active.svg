@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>follow备份 2</title>
+    <title>click_p@1x</title>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="切图" transform="translate(-48.000000, -8.000000)" stroke="#3381FF">
-            <g id="folder备份" transform="translate(48.000000, 8.000000)">
-                <polygon id="路径-10" points="6 6 18 10 12.6666667 12.6666667 10 18"></polygon>
-            </g>
+        <g id="编组-4备份-2">
+            <polygon id="路径-5" stroke="#444E60" points="7 5.07179677 8.66987298 17.9641016 11.9090909 13.5745916 17.330127 12.9641016"></polygon>
+            <line x1="12" y1="13.7320508" x2="15" y2="18.9282032" id="路径-7" stroke="#444E60"></line>
+            <polygon id="路径-5" stroke="#3381FF" points="7 5.07179677 8.66987298 17.9641016 11.9090909 13.5745916 17.330127 12.9641016"></polygon>
+            <line x1="12" y1="13.7320508" x2="15" y2="18.9282032" id="路径-7" stroke="#3381FF"></line>
         </g>
     </g>
 </svg>

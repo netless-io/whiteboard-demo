@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ApplianceNames, Color, Room, RoomState} from "white-web-sdk";
+import {ApplianceNames, Color, Room, RoomState, ShapeType} from "white-web-sdk";
 import {Popover, Tooltip} from "antd";
 import DrawTool from "./DrawTool";
 import ColorTool from "./ColorTool";
@@ -44,88 +44,52 @@ export type ToolBoxStates = {
 type ApplianceDescription = {
     readonly icon: string;
     readonly iconActive: string;
-    readonly hasColor: boolean;
-    readonly hasStroke: boolean;
-    readonly hasTool: boolean;
 };
 export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates> {
     public static readonly descriptions: { readonly [applianceName: string]: ApplianceDescription } = Object.freeze({
-        click: Object.freeze({
+        clicker: Object.freeze({
             icon: click,
             iconActive: clickActive,
-            hasColor: false,
-            hasStroke: false,
-            hasTool: false,
         }),
         selector: Object.freeze({
             icon: selector,
             iconActive: selectorActive,
-            hasColor: false,
-            hasStroke: false,
-            hasTool: false,
         }),
         pencil: Object.freeze({
             icon: pen,
             iconActive: penActive,
-            hasColor: true,
-            hasStroke: true,
-            hasTool: true,
         }),
         text: Object.freeze({
             icon: text,
             iconActive: textActive,
-            hasColor: true,
-            hasStroke: false,
-            hasTool: false,
         }),
         eraser: Object.freeze({
             icon: eraser,
             iconActive: eraserActive,
-            hasColor: false,
-            hasStroke: false,
-            hasTool: false,
         }),
         ellipse: Object.freeze({
             icon: ellipse,
             iconActive: ellipseActive,
-            hasColor: true,
-            hasStroke: true,
-            hasTool: true,
         }),
         rectangle: Object.freeze({
             icon: rectangle,
             iconActive: rectangleActive,
-            hasColor: true,
-            hasStroke: true,
-            hasTool: true,
         }),
         straight: Object.freeze({
             icon: straight,
             iconActive: straightActive,
-            hasColor: true,
-            hasStroke: true,
-            hasTool: true,
         }),
         arrow: Object.freeze({
             icon: arrow,
             iconActive: arrowActive,
-            hasColor: true,
-            hasStroke: true,
-            hasTool: false,
         }),
         laserPointer: Object.freeze({
             icon: laserPointer,
             iconActive: laserPointerActive,
-            hasColor: false,
-            hasStroke: false,
-            hasTool: false,
         }),
         hand: Object.freeze({
             icon: hand,
             iconActive: handActive,
-            hasColor: false,
-            hasStroke: false,
-            hasTool: false,
         }),
     });
 
@@ -147,9 +111,9 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         });
     }
 
-    public clickAppliance = (applianceName: ApplianceNames): void => {
+    public clickAppliance = (applianceName: ApplianceNames, shapeType?: ShapeType): void => {
         const {room} = this.props;
-        room.setMemberState({currentApplianceName: applianceName});
+        room.setMemberState({currentApplianceName: applianceName, shapeType: shapeType});
     }
 
     private renderButton = (applianceName: ApplianceNames, description: ApplianceDescription): React.ReactElement => {
@@ -187,7 +151,8 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
 
     private isDraw = (applianceName: ApplianceNames): boolean => {
         return applianceName === ApplianceNames.pencil || applianceName === ApplianceNames.ellipse ||
-            applianceName === ApplianceNames.rectangle || applianceName === ApplianceNames.straight;
+            applianceName === ApplianceNames.rectangle || applianceName === ApplianceNames.straight ||
+            applianceName === ApplianceNames.shape;
     }
 
     private renderNodes = (): React.ReactNode[] => {
