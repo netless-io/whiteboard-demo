@@ -168,7 +168,7 @@ export class CursorTool implements CursorAdapter {
 
     public onAddedCursor(cursor: Cursor): void {
         for (const roomMember of this.roomMembers) {
-            if (roomMember.memberId === cursor.memberId) {
+            if (roomMember.memberId === cursor.memberId && !this.isCursorDisappear(roomMember)) {
                 cursor.setReactNode((
                     <CursorComponent roomMember={roomMember}/>
                 ));
@@ -184,6 +184,11 @@ export class CursorTool implements CursorAdapter {
 
     public onMovingCursor(): void {
     }
+
+    private isCursorDisappear = (roomMember: RoomMember): boolean => {
+        return !!(roomMember.payload && roomMember.payload.disappearCursor);
+    }
+
 
     public setRoom(room: Room): void {
         this.setColorAndAppliance(room.state.roomMembers);
@@ -213,7 +218,7 @@ export class CursorTool implements CursorAdapter {
         this.roomMembers = roomMembers;
         for (const roomMember of roomMembers) {
             const cursor = this.cursors[roomMember.memberId];
-            if (cursor) {
+            if (cursor && !this.isCursorDisappear(roomMember)) {
                 cursor.setReactNode((
                     <CursorComponent roomMember={roomMember}/>
                 ));

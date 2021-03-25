@@ -1,10 +1,10 @@
 import * as React from "react";
 import "./DrawTool.less";
-import {ApplianceNames, RoomState} from "white-web-sdk";
+import {ApplianceNames, RoomState, ShapeType} from "white-web-sdk";
 import ToolBox from "./index";
 
 export type DrawToolProps = {
-    selectAppliance: (applianceName: ApplianceNames) => void;
+    selectAppliance: (applianceName: ApplianceNames, shapeType?: ShapeType) => void;
     roomState: RoomState;
 };
 
@@ -58,6 +58,39 @@ export default class DrawTool extends React.PureComponent<DrawToolProps> {
                 >
                     {this.renderImage(ApplianceNames.straight)}
                 </div>
+
+                {/*<div*/}
+                {/*    className="draw-tool-box-cell"*/}
+                {/*    onClick={() => {*/}
+                {/*        selectAppliance(ApplianceNames.shape, "pentagram" as any);*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    Pentagram*/}
+                {/*</div>*/}
+                {/*<div*/}
+                {/*    className="draw-tool-box-cell"*/}
+                {/*    onClick={() => {*/}
+                {/*        selectAppliance(ApplianceNames.shape, "rhombus" as any);*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    Rhombus*/}
+                {/*</div>*/}
+                {/*<div*/}
+                {/*    className="draw-tool-box-cell"*/}
+                {/*    onClick={() => {*/}
+                {/*        selectAppliance(ApplianceNames.shape, "speechBalloon" as any);*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    SpeechBalloon*/}
+                {/*</div>*/}
+                {/*<div*/}
+                {/*    className="draw-tool-box-cell"*/}
+                {/*    onClick={() => {*/}
+                {/*        selectAppliance(ApplianceNames.shape, "triangle" as any);*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    Triangle*/}
+                {/*</div>*/}
             </div>
         );
     }

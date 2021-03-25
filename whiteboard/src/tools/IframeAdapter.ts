@@ -1,4 +1,4 @@
-import { IframeBridge, DomEvents } from "@netless/iframe-bridge";
+import {IframeBridge, DomEvents, IframeEvents} from "@netless/iframe-bridge";
 import { Room, RoomMember, RoomState } from "white-web-sdk";
 import {message} from "antd";
 
@@ -50,17 +50,26 @@ export class IframeAdapter {
                 const data = event.data;
                 try {
                     const { method, toPage, totalPages } = JSON.parse(data);
-                    console.log(method);
-                    if (method === "onJumpPage") {
-                        this.room.setSceneIndex(toPage - 1);
-                    } else {
-                        this.room.dispatchMagixEvent(this.IframeEvent, data);
-                    }
-                    if (method === "onPagenum") {
-                        this.room.putScenes(this.bridge.attributes.displaySceneDir, this.createH5Scenes(totalPages));
-                    }
-                    if (method === "onLoadComplete") {
-                        this.jumpPage(this.room.state.sceneState.index);
+                    switch (method) {
+                        case "onJumpPage": {
+                            this.room.setSceneIndex(toPage - 1);
+                            break;
+                        }
+                        case "onPagenum": {
+                            this.room.putScenes(this.bridge.attributes.displaySceneDir, this.createH5Scenes(totalPages));
+                            break;
+                        }
+                        case "onLoadComplete": {
+                            this.jumpPage(this.room.state.sceneState.index);
+                            setTimeout(() => {
+                                IframeBridge.emitter.emit(IframeEvents.Ready);
+                            }, 500)
+                            break;
+                        }
+                        default: {
+                            this.bridge.dispatchMagixEvent(this.IframeEvent, data);
+                            break;
+                        }
                     }
                 } catch (error) {
                     console.log(error)
