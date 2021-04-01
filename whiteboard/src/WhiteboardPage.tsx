@@ -29,7 +29,7 @@ import pages from "./assets/image/pages.svg"
 import folder from "./assets/image/folder.svg";
 import follow from "./assets/image/follow.svg"
 import followActive from "./assets/image/follow-active.svg";
-import {h5DemoUrl, h5DemoUrl2, h5DemoUrl3, netlessToken, ossConfigObj} from "./appToken";
+import {h5DemoUrl, h5DemoUrl3, netlessToken, ossConfigObj} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
@@ -287,11 +287,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 height: 720,
                 displaySceneDir: h5SceneDir
             });
-            if ([h5DemoUrl, h5DemoUrl2, h5DemoUrl3].includes(h5Url)) {
+            if ([h5DemoUrl, h5DemoUrl3].includes(h5Url)) {
                 const scenes = room.entireScenes();
-                if (h5Url === h5DemoUrl2) {
-                    totalPage = 3;
-                }
                 if (h5Url === h5DemoUrl3) {
                     totalPage = 14;
                 }
@@ -303,7 +300,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 }
             }
         }
-        if (h5Url === h5DemoUrl2 || h5Url === h5DemoUrl3) {
+        if (h5Url === h5DemoUrl3) {
             new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
         }
         if (dir) {
