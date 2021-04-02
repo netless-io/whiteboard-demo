@@ -1,6 +1,6 @@
 {
   "name": "@netless/oss-upload-button",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "",
   "private": false,
   "main": "dist/index.js",
@@ -18,13 +18,13 @@
   "dependencies": {
     "@netless/loading-bar": "^0.0.2",
     "@netless/oss-upload-manager": "^1.1.9",
-    "ali-oss": "^6.10.0",
-    "antd": "^4.13.1"
+    "ali-oss": "^6.10.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "white-web-sdk": "^2.9.12"
+    "white-web-sdk": "^2.9.12",
+    "antd": "4.x"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
@@ -40,6 +40,7 @@
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.2",
     "@types/uuid": "^8.0.1",
+    "antd": "^4.14.1",
     "babel-loader": "8.0.6",
     "babel-plugin-import": "^1.12.2",
     "css-loader": "^3.2.0",
