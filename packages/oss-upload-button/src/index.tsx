@@ -198,9 +198,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                     originY: -43,
                     width: 480,
                     height: 86,
-                    attributes: {
-                        pluginAudioUrl: url,
-                    },
+                    attributes: { src: url },
                 });
             }
         } catch (err) {
