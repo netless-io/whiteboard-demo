@@ -6,7 +6,7 @@ import audioPluginSVG from "./image/audio_plugin.svg";
 import deleteIconSVG from "./image/delete_icon.svg";
 import "./index.less";
 import { PluginContext, WhiteAudioPluginAttributes } from "./types";
-import { ChangedMap, delay, play } from "./utils";
+import { ChangedMap, delay, doubleRAF, play } from "./utils";
 
 /** 发送同步事件间隔秒 */
 const SendInterval = 2;
@@ -97,6 +97,11 @@ class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
             await delay(500);
             player.load();
         });
+        if (/iPad|iPhone|iPod/.test(navigator.platform)) {
+            doubleRAF(() => {
+                player.currentTime = plugin.attributes.currentTime;
+            });
+        }
     }
 
     setupNonHost() {

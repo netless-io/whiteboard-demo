@@ -33,3 +33,10 @@ function isEqual(a: any, b: any): boolean {
     if (Array.isArray(a)) return a.every((x, i) => isEqual(x, b[i]));
     return false;
 }
+
+// https://stackoverflow.com/questions/44145740/how-does-double-requestanimationframe-work
+export function doubleRAF(callback: () => void) {
+    window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(callback);
+    });
+}
