@@ -33,6 +33,10 @@ module.exports = {
             commonjs: "mobx",
             commonjs2: "mobx",
         },
+        "mobx-react": {
+            commonjs: "mobx-react",
+            commonjs2: "mobx-react",
+        },
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"],
