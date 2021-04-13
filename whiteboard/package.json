@@ -13,7 +13,7 @@
         "@netless/docs-center": "^0.0.5",
         "@netless/fetch-middleware": "^1.0.7",
         "@netless/fetch-progress": "^0.0.1",
-        "@netless/iframe-bridge": "^2.0.7",
+        "@netless/iframe-bridge": "^2.0.11",
         "@netless/oss-drop-upload": "^0.0.8",
         "@netless/oss-upload-button": "^0.1.11",
         "@netless/page-controller": "^0.0.3",
