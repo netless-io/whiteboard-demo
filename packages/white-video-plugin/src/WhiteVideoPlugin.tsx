@@ -188,7 +188,11 @@ class WhiteVideoPluginImpl extends Component<WhiteVideoPluginImplProps> {
                 <div className="white-video-plugin-body">
                     <video
                         src={plugin.attributes.src}
-                        style={this.pointerEventsStyle}
+                        style={{
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            ...this.pointerEventsStyle,
+                        }}
                         controls
                         controlsList="nodownload nofullscreen"
                         preload="metadata"
