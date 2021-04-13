@@ -285,7 +285,8 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 url: h5Url,
                 width: 1280,
                 height: 720,
-                displaySceneDir: h5SceneDir
+                displaySceneDir: h5SceneDir,
+                useClicker: true
             });
             if ([h5DemoUrl, h5DemoUrl3].includes(h5Url)) {
                 const scenes = room.entireScenes();
