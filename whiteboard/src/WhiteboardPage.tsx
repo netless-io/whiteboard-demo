@@ -289,7 +289,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 displaySceneDir: h5SceneDir,
                 useClicker: true
             });
-            if ([h5DemoUrl].includes(h5Url)) {
+            if ([h5DemoUrl, h5DemoUrl3].includes(h5Url)) {
                 const scenes = room.entireScenes();
                 if (!scenes[h5SceneDir]) {
                     room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
@@ -298,9 +298,6 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     room.setScenePath(h5SceneDir);
                 }
             }
-        }
-        if (h5Url === h5DemoUrl) {
-            new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
         }
         if (h5Url === supplierUrl) {
             new SupplierAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
