@@ -12,6 +12,8 @@ export class SupplierAdapter {
     private eventMap = {
         "ready": this.handleReady,
         "3001": this.handleSaveData,
+        "getAllMembersInfomationBywzomo": this.handleInfo,
+        "getClientDataBywzomo": this.handleClientData
     }
 
     constructor(room: Room, bridge: IframeBridge, userId: string, url: string) {
@@ -27,6 +29,9 @@ export class SupplierAdapter {
             if (state.sceneState && state.sceneState.index !== prevIndex) {
                 this.pageTo(state.sceneState.index);
                 prevIndex = state.sceneState.index;
+            }
+            if (state.roomMembers) {
+                this.postInfo(this)
             }
         })
 
@@ -50,7 +55,7 @@ export class SupplierAdapter {
                         this.bridge.dispatchMagixEvent(this.IframeEvent, event);
                     }
                 } catch (error) {
-                    console.log(error)
+                    console.error(error)
                 }
             }
         }
@@ -67,9 +72,13 @@ export class SupplierAdapter {
         if (!instance.room.state.sceneState.scenePath.startsWith(displaySceneDir)) {
             instance.room.setScenePath(displaySceneDir);
         }
-        if ((this.bridge.attributes as any).h5Data) {
-            this.postMessage((this.bridge.attributes as any).h5Data)
+        instance.pageTo(instance.room.state.sceneState.index);
+        if ((instance.bridge.attributes as any).h5Data) {
+            instance.postMessage((instance.bridge.attributes as any).h5Data)
         }
+        setTimeout(() => {
+           instance.postInfo(instance);
+        }, 500)
     }
 
     private handleSaveData(instance: SupplierAdapter, event) {
@@ -78,12 +87,42 @@ export class SupplierAdapter {
         })
     }
 
+    private handleInfo(instance: SupplierAdapter, event) {
+        instance.postInfo(instance)
+    }
+
+    private handleClientData(instance: SupplierAdapter, event) {
+        instance.postMessage({
+            msgTag: "getClientDataBywzomo",
+            ossUrl: "https://static.pre.wzomo.com/kjdata/netless/lesson1/",
+            waitingTime: 500
+        })
+    }
+    
     private postMessage(payload: any) {
         this.bridge.iframe?.contentWindow?.postMessage(JSON.stringify(payload), "*")
     }
 
     private pageTo(index: number) {
         this.postMessage({ msgTag: "pageTo", pageIndex: index + 1 });
+    }
+
+    private postInfo(instance: SupplierAdapter) {
+        const info = {
+            msgTag: "getAllMembersInfomationBywzomo",
+            students: instance.room.state.roomMembers.map(member => {
+                return {
+                    userId: String(member.memberId),
+                    userName: String(member.memberId)
+                }
+            }),
+            teacher: {
+                userId: String(instance.room.observerId),
+                userName: String(instance.room.observerId),
+            },
+            myPosition: instance.room.state.roomMembers.findIndex(m => m.memberId === instance.room.observerId)
+        }
+        instance.postMessage(info)
     }
 
     private isReplay(room: Room) {
