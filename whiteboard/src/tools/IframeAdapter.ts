@@ -1,6 +1,7 @@
 import {IframeBridge, DomEvents, IframeEvents} from "@netless/iframe-bridge";
-import { Room, RoomMember, RoomState } from "white-web-sdk";
+import {Room, RoomMember, RoomState} from "white-web-sdk";
 import {message} from "antd";
+import {createH5Scenes} from "./QueryGetter";
 
 export class IframeAdapter {
     private bridge: IframeBridge;
@@ -41,9 +42,7 @@ export class IframeAdapter {
             this.bridge.iframe.contentWindow?.postMessage(JSON.stringify(message), "*");
         }
     }
-    private createH5Scenes = (pageNumber: number) => {
-        return new Array(pageNumber).fill(1).map((_, index) => ({ name: `${index + 1}` }));
-    }
+
     private addMessageListener() {
         const listener = (event: MessageEvent) => {
             if (event.origin === this.h5Url.origin) {
@@ -56,7 +55,7 @@ export class IframeAdapter {
                             break;
                         }
                         case "onPagenum": {
-                            this.room.putScenes(this.bridge.attributes.displaySceneDir, this.createH5Scenes(totalPages));
+                            this.room.putScenes(this.bridge.attributes.displaySceneDir, createH5Scenes(totalPages));
                             break;
                         }
                         case "onLoadComplete": {
