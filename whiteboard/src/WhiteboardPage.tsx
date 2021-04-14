@@ -289,6 +289,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                 displaySceneDir: h5SceneDir,
                 useClicker: true
             });
+            if (h5Url === h5DemoUrl3) {
+                totalPage = 14;
+            }
             if ([h5DemoUrl, h5DemoUrl3].includes(h5Url)) {
                 const scenes = room.entireScenes();
                 if (!scenes[h5SceneDir]) {
