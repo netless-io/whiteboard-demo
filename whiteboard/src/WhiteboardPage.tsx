@@ -196,9 +196,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                     plugins: plugins,
                     region,
                     deviceType: deviceType,
-                    // pptParams: {
-                    //     useServerWrap: true,
-                    // },
+                    pptParams: {
+                        useServerWrap: true,
+                    },
                 }
                 if (h5Url) {
                     const pluginParam = {
