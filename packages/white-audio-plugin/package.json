@@ -1,6 +1,6 @@
 {
     "name": "@netless/white-audio-plugin",
-    "version": "2.0.0",
+    "version": "2.0.2",
     "description": "a audio plugin for white-web-sdk which can play audio in whiteboard room and sync to everyone in room",
     "private": false,
     "main": "dist/index.js",
@@ -17,8 +17,6 @@
     "license": "MIT",
     "dependencies": {},
     "peerDependencies": {
-        "mobx": "^4.9.0",
-        "mobx-react": "^5.4.0",
         "react": "^16.8.0",
         "react-dom": "^16.8.0",
         "white-web-sdk": "^2.5.9"
@@ -33,7 +31,6 @@
         "less": "^3.10.3",
         "less-loader": "^6.2.0",
         "mobx": "^4.9.0",
-        "mobx-react": "^5.4.0",
         "optimize-css-assets-webpack-plugin": "^5.0.3",
         "terser-webpack-plugin": "^2.1.3",
         "typescript": "^4.2.3",

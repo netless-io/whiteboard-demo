@@ -1,5 +1,4 @@
 import { autorun } from "mobx";
-import { observer } from "mobx-react";
 import React, { Component, createRef, RefObject } from "react";
 import { CNode, Player, PlayerConsumer, PluginProps, Room, RoomConsumer } from "white-web-sdk";
 import videoPluginSVG from "./image/video_plugin.svg";
@@ -15,7 +14,6 @@ const SyncDiff = 2;
 
 export type WhiteVideoPluginProps = PluginProps<PluginContext, WhiteVideoPluginAttributes>;
 
-@observer
 export class WhiteVideoPlugin extends Component<WhiteVideoPluginProps> {
     render() {
         return (
@@ -40,7 +38,6 @@ type WhiteVideoPluginImplProps = WhiteVideoPluginProps & {
     player?: Player;
 };
 
-@observer
 class WhiteVideoPluginImpl extends Component<WhiteVideoPluginImplProps> {
     disposers: Function[] = [];
     changedMap = new ChangedMap();

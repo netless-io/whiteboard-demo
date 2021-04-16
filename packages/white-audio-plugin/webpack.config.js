@@ -29,14 +29,6 @@ module.exports = {
             commonjs: "react-dom",
             commonjs2: "react-dom",
         },
-        mobx: {
-            commonjs: "mobx",
-            commonjs2: "mobx",
-        },
-        "mobx-react": {
-            commonjs: "mobx-react",
-            commonjs2: "mobx-react",
-        },
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"],
