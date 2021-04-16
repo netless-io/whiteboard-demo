@@ -1,5 +1,4 @@
 import { autorun } from "mobx";
-import { observer } from "mobx-react";
 import React, { Component, createRef, RefObject } from "react";
 import { CNode, Player, PlayerConsumer, PluginProps, Room, RoomConsumer } from "white-web-sdk";
 import audioPluginSVG from "./image/audio_plugin.svg";
@@ -15,7 +14,6 @@ const SyncDiff = 2;
 
 export type WhiteAudioPluginProps = PluginProps<PluginContext, WhiteAudioPluginAttributes>;
 
-@observer
 export class WhiteAudioPlugin extends Component<WhiteAudioPluginProps> {
     render() {
         return (
@@ -40,7 +38,6 @@ type WhiteAudioPluginImplProps = WhiteAudioPluginProps & {
     player?: Player;
 };
 
-@observer
 class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
     disposers: Function[] = [];
     changedMap = new ChangedMap();
