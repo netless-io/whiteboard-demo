@@ -1736,10 +1736,10 @@
   resolved "https://registry.npmjs.org/@netless/fetch-progress/-/fetch-progress-0.0.1.tgz#e4cc415b92f5acc610b6dd533947e40af39915ec"
   integrity sha512-RHdFtdchZVqcXOuKTxO7YR7Z/Wb3rTamNX1gs9u9754n4lKhvFpM1fOfMFnqNhkAM5hzZcnw9TaK4ew0SFJfmg==
 
-"@netless/iframe-bridge@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@netless/iframe-bridge/-/iframe-bridge-2.0.3.tgz#8c7468171f32b795d422504f3f1f787b2528f11a"
-  integrity sha512-ymXZmPCY8645f+42pVPUU2dfcfH0f20N6whNU+lxxzRGcMvEeYaQrVFwuJRlBYfeVf/tNyfpJ3t+fN9lxQ/Pzg==
+"@netless/iframe-bridge@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@netless/iframe-bridge/-/iframe-bridge-2.0.5.tgz#f74c6e6c084db41cedbcd5033f3c68e7c710fa71"
+  integrity sha512-JgdplYOxnO+RCYjVL8mYTSNTC+kTp6NCbe+kN5QFVHpGvbWPrwCwpXusnvMoMYEbHNl+5SqjD9nwxCbaUIoXJg==
   dependencies:
     eventemitter2 "^6.4.3"
     react "^16.13.1"
@@ -1757,6 +1757,13 @@
   integrity sha512-wjHBYKBIG0JxLE0/TTSfYdan7eYDevFbox/d03hgQHK+HFImTgKuXNZ1zy5mF3lDLJHbUoT/z1rgCzb6K25jHg==
   dependencies:
     react-burger-menu "^2.7.1"
+
+"@netless/preview-controller@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@netless/preview-controller/-/preview-controller-0.0.5.tgz#1bf1f24ece08767e88fa754e60c40ecfecd0736f"
+  integrity sha512-F0z7JU6e4XDU5q/e6u/i9B0NumEksYEH8A5PykoV+LImS1nOrz54htPv7Vui5DZoyH8z5oZbbtImjXsV5azLgQ==
+  dependencies:
+    "@netless/menu-box" "^0.0.1"
 
 "@netless/redo-undo@^0.0.5":
   version "0.0.5"

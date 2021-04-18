@@ -1,6 +1,6 @@
 {
   "name": "@netless/preview-controller",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "private": false,
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "@netless/menu-box": "^0.0.1"
+    "@netless/menu-box": "^0.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
