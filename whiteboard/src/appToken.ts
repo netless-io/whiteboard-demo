@@ -43,5 +43,5 @@ export const h5OssConfigObj = {
 
 
 export const h5DemoUrl = "https://demo-h5.netless.group/docs/";
-export const h5DemoUrl2 = "https://h5tapi-uat.acadsoc.com.cn/H5tTemplate/index.html?role=0&version=zttqxgb6t7r";
 export const h5DemoUrl3 = "https://demo-h5.netless.group/dist2020/";
+export const supplierUrl = "https://static.pre.wzomo.com/web/netless/index.html#/lesson1/page7?debug=1&role=teacher&origin=dev"

@@ -142,7 +142,6 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                 return <div key={`tool-customer-${index}`}>{data}</div>;
             });
             nodes.push(...customerNodes);
-            nodes.push(this.renderCleanCell())
             return nodes;
         } else {
             return nodes;
@@ -273,6 +272,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         const nodes = this.renderNodes();
         nodes.splice(2, 0, this.renderDraw());
         nodes.push(this.renderColorCell());
+        nodes.push(this.renderCleanCell())
         return (
             <div className="tool-mid-box-left">
                 {this.addCustomerComponent(nodes)}

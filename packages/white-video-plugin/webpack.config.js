@@ -1,37 +1,37 @@
-const path = require('path');
-const webpack = require('webpack');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
+const path = require("path");
+const webpack = require("webpack");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
-    entry: path.resolve(__dirname, 'src/index.tsx'),
+    entry: path.resolve(__dirname, "src/index.ts"),
 
     output: {
-        filename: 'index.js',
+        filename: "index.js",
         library: "videoPlugin",
         libraryTarget: "umd",
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, "dist"),
     },
     externals: {
-        'white-web-sdk': {
+        "white-web-sdk": {
             root: "WhiteWebSdk",
             commonjs: "white-web-sdk",
-            commonjs2: "white-web-sdk"
+            commonjs2: "white-web-sdk",
         },
-        "react": {
+        react: {
             root: "React",
             commonjs: "react",
-            commonjs2: "react"
+            commonjs2: "react",
         },
         "react-dom": {
-          root: "ReactDOM",
-          commonjs: "react-dom",
-          commonjs2: "react-dom"
-        }
-      },
+            root: "ReactDOM",
+            commonjs: "react-dom",
+            commonjs2: "react-dom",
+        },
+    },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json']
+        extensions: [".ts", ".tsx", ".js", ".json"],
     },
 
     module: {
@@ -40,29 +40,32 @@ module.exports = {
                 test: /\.(ts)x?$/,
                 exclude: /node_modules/,
                 use: {
-                  loader: 'ts-loader'
+                    loader: "ts-loader",
                 },
             },
             {
                 test: /\.(png|jp(e*)g|svg)$/,
-                use: [{
-                    loader: 'url-loader'
-                }]
+                use: [
+                    {
+                        loader: "url-loader",
+                    },
+                ],
             },
             {
                 test: /\.less$/,
                 use: [
                     {
-                        loader: 'style-loader', // creates style nodes from JS strings
+                        loader: "style-loader", // creates style nodes from JS strings
                     },
                     {
-                        loader: 'css-loader', // translates CSS into CommonJS
+                        loader: "css-loader", // translates CSS into CommonJS
                     },
                     {
-                        loader: 'less-loader', // compiles Less to CSS
+                        loader: "less-loader", // compiles Less to CSS
                     },
                 ],
-            },],
+            },
+        ],
     },
     optimization: {
         minimizer: [
@@ -76,18 +79,15 @@ module.exports = {
                     autoprefixer: { disable: true },
                     mergeLonghand: false,
                     discardComments: {
-                        removeAll: true
-                    }
+                        removeAll: true,
+                    },
                 },
-                canPrint: true
-            })
-        ]
+                canPrint: true,
+            }),
+        ],
     },
     plugins: [
         new ForkTsCheckerWebpackPlugin(),
-        new webpack.ContextReplacementPlugin(
-            /moment[/\\]locale$/,
-            /zh-cn/,
-        ),
-    ]
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/),
+    ],
 };

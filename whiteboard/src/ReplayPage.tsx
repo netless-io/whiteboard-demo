@@ -10,7 +10,7 @@ import "./ReplayPage.less";
 import PageError from "./PageError";
 import PlayerController from "@netless/player-controller";
 import {netlessWhiteboardApi} from "./apiMiddleware";
-import {h5DemoUrl2, h5DemoUrl3, netlessToken} from "./appToken";
+import {h5DemoUrl3, netlessToken} from "./appToken";
 import LoadingPage from "./LoadingPage";
 import logo from "./assets/image/logo.png";
 import ExitButtonPlayer from "./components/ExitButtonPlayer";
@@ -117,7 +117,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                         if (!firstPlay) {
                            setTimeout(() => {
                             const h5Url = getQueryH5Url();
-                            if (h5Url && (h5Url === h5DemoUrl2 || h5Url === h5DemoUrl3)) {
+                            if (h5Url && (h5Url === h5DemoUrl3)) {
                                 const bridge = player.getInvisiblePlugin(IframeBridge.kind);
                                 new ReplayAdapter(player, bridge as IframeBridge, this.props.match.params.userId, h5Url);
                             }
