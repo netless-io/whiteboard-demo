@@ -1,6 +1,13 @@
-import { autorun } from "mobx";
 import React, { Component, createRef, RefObject } from "react";
-import { CNode, Player, PlayerConsumer, PluginProps, Room, RoomConsumer } from "white-web-sdk";
+import {
+    CNode,
+    Player,
+    PlayerConsumer,
+    PluginProps,
+    Room,
+    RoomConsumer,
+    autorun,
+} from "white-web-sdk";
 import audioPluginSVG from "./image/audio_plugin.svg";
 import deleteIconSVG from "./image/delete_icon.svg";
 import "./index.less";
