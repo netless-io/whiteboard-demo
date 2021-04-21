@@ -153,6 +153,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                 }
             }
         }
+        return "";
     }
 
     private renderButton = (applianceName: ApplianceNames, description: ApplianceDescription): React.ReactElement => {
