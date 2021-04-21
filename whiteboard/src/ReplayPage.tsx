@@ -87,9 +87,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
 
     private loadPlayer = async (whiteWebSdk: WhiteWebSdk, uuid: string, roomToken: string): Promise<void> => {
         await polly().waitAndRetry(10).executeForPromise(async () => {
-            const isPlayable =  whiteWebSdk.isPlayable({
-                room: uuid,
-            });
+            const isPlayable =  whiteWebSdk.isPlayable({ room: uuid, roomToken });
 
             if (!isPlayable) {
                 throw Error("the current room cannot be replay");
