@@ -47,6 +47,8 @@ import i18n from "./i18n"
 import { Region } from "./region";
 import {isMobile, isWindows} from "react-device-detect";
 import { SupplierAdapter } from "./tools/SupplierAdapter";
+import { withTranslation, WithTranslation } from "react-i18next";
+import FloatLink from "./FloatLink";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -63,8 +65,9 @@ export type WhiteboardPageProps = RouteComponentProps<{
     userId: string;
     region: Region;
 }>;
-export default class WhiteboardPage extends React.Component<WhiteboardPageProps, WhiteboardPageStates> {
-    public constructor(props: WhiteboardPageProps) {
+
+class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslation, WhiteboardPageStates> {
+    public constructor(props: WhiteboardPageProps & WithTranslation) {
         super(props);
         this.state = {
             phase: RoomPhase.Connecting,
@@ -322,12 +325,13 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
     }
 
     private handleRoomController = (room: Room): void => {
+        const { t } = this.props;
         if (room.state.broadcastState.mode !== ViewMode.Broadcaster) {
             room.setViewMode(ViewMode.Broadcaster);
-            message.success("其他用户将跟随您的视角");
+            message.success(t('other-users-will-follow-your-vision'));
         } else {
             room.setViewMode(ViewMode.Freedom);
-            message.success("其他用户将停止跟随您的视角");
+            message.success(t('other-users-will-stop-follow-your-vision'));
         }
     }
 
@@ -347,11 +351,12 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
             default: {
                 return (
                     <div className="realtime-box">
+                         <FloatLink />
                         {/*<div className="logo-box">*/}
                         {/*    <img src={logo} alt={"logo"}/>*/}
                         {/*</div>*/}
                         <div className="tool-box-out">
-                            <ToolBox room={room} customerComponent={
+                            <ToolBox i18nLanguage={i18n.language} room={room} customerComponent={
                                 [
                                     <OssUploadButton oss={ossConfigObj}
                                                      appIdentifier={netlessToken.appIdentifier}
@@ -384,7 +389,7 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                                     </div>
                                 </Tooltip>
                                 <Tooltip placement="bottom" title={"H5 Course"}>
-                                    <H5UploadButton room={room} />
+                                    <H5UploadButton room={room} {...this.props} />
                                 </Tooltip>
                                 <InviteButton uuid={uuid} region={region} />
                                 <ExitButtonRoom identity={identity} room={room} userId={userId} />
@@ -403,8 +408,9 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
                         <PreviewController handlePreviewState={this.handlePreviewState} isVisible={isMenuVisible}
                                            room={room}/>
                         <DocsCenter handleDocCenterState={this.handleDocCenterState}
-                                    isFileOpen={isFileOpen}
-                                    room={room}/>
+                            isFileOpen={isFileOpen}
+                            room={room}
+                            i18nLanguage={i18n.language}/>
                         <OssDropUpload
                             room={room}
                             region={region}
@@ -419,3 +425,5 @@ export default class WhiteboardPage extends React.Component<WhiteboardPageProps,
         }
     }
 }
+
+export default withTranslation()(WhiteboardPage);

@@ -19,6 +19,7 @@ export type PlayerControllerStates = {
 export type PlayerControllerProps = {
     player: Player;
     combinePlayer?: CombinePlayer;
+    i18nLanguage?: string;
 };
 
 export default class PlayerController extends React.Component<PlayerControllerProps, PlayerControllerStates> {
@@ -198,7 +199,7 @@ export default class PlayerController extends React.Component<PlayerControllerPr
                         </div>
                         <Dropdown overlay={this.renderMultipleSelector} placement="topCenter">
                             <div className="player-right-box">
-                                {this.state.multiple === 1.0 ? `倍数` : `${this.state.multiple}x`}
+                                {this.state.multiple === 1.0 ? (this.props.i18nLanguage === "zh-CN" ? '倍速' : 'speed') : `${this.state.multiple}x`}
                             </div>
                         </Dropdown>
                     </div>

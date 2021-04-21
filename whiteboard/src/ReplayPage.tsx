@@ -179,7 +179,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
         if (player && isVisible) {
             return (
                 <div onMouseEnter={() => this.setState({isVisible: true})}>
-                    <PlayerController player={player}/>
+                    <PlayerController player={player} i18nLanguage={this.props.i18n.language} />
                 </div>
             );
         } else {
@@ -196,7 +196,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
             return <PageError/>;
         }
         if (!replayState) {
-            return <LoadingPage text={"t('waitingReplayGenerate')"}/>;
+            return <LoadingPage text={t('waitingReplayGenerate')}/>;
         }
         if (player === undefined) {
             return <LoadingPage/>;
@@ -210,17 +210,6 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                     <div className="player-out-box">
                         <div className="logo-box">
                             <img src={logo} alt={"logo"}/>
-                        </div>
-                        <div className="room-controller-box">
-                            <div className="page-controller-mid-box">
-                                <ExitButtonPlayer
-                                    identity={identity}
-                                    uuid={uuid}
-                                    userId={userId}
-                                    player={player}
-                                />
-
-                            </div>
                         </div>
                         <div className="player-board">
                             {this.renderScheduleView()}
@@ -242,6 +231,16 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                                 </div>
                                 <div className="player-box"
                                      ref={this.handleBindRoom}/>
+                            </div>
+                        </div>
+                        <div className="room-controller-box">
+                            <div className="page-controller-mid-box">
+                                <ExitButtonPlayer
+                                    identity={identity}
+                                    uuid={uuid}
+                                    userId={userId}
+                                    player={player}
+                                />
                             </div>
                         </div>
                     </div>

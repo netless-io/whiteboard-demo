@@ -13,6 +13,7 @@ import AddNamePage from "./AddNamePage";
 import HistoryPage from "./HistoryPage"
 import Storage from "./Storage";
 import CreatePage from "./CreatePage";
+
 export class AppRoutes extends React.Component<{}, {}> {
 
     public constructor(props: {}) {

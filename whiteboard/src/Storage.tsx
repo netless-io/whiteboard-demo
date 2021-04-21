@@ -22,6 +22,7 @@ import {
     PPTTask,
     TaskPhase,
 } from './logics/DownloadLogic';
+import FloatLink from "./FloatLink";
 
 export type StorageState = DownloadLogicState & {
     readonly downloader?: DownloadLogic;
@@ -53,6 +54,7 @@ class Storage extends React.Component<WithTranslation, StorageState> {
     }
 
     public async componentDidMount(): Promise<void> {
+        const { t } = this.props;
         try {
             const tasks: PPTTask[] = taskUuids.map(task => ({
                 uuid: task.taskUuid,
@@ -87,6 +89,7 @@ class Storage extends React.Component<WithTranslation, StorageState> {
         }
         return (
             <div className="page-index-box">
+                <FloatLink />
                 <div className="page-index-mid-box">
                     {this.renderHeadView(downloader)}
                     {this.state.pptStates.length === 0 ? (

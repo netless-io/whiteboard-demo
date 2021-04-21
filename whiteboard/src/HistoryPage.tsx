@@ -8,6 +8,7 @@ import { LeftOutlined } from "@ant-design/icons";
 import empty_box from "./assets/image/empty-box.svg";
 import board from "./assets/image/board.svg";
 import { withTranslation, WithTranslation } from 'react-i18next';
+import FloatLink from "./FloatLink";
 
 export type JoinPageStates = {
     rooms: LocalStorageRoomDataType[];
@@ -84,6 +85,7 @@ class JoinPage extends React.Component<RouteComponentProps & WithTranslation, Jo
         const { t } = this.props 
         return (
             <div className="page-index-box">
+                <FloatLink />
                 <div className="page-index-mid-box">
                     <div className="page-history-head">
                         <Link to={"/"}>

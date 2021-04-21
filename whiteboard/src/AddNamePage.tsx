@@ -7,6 +7,7 @@ import {Button, Input} from "antd";
 import { Identity } from "./IndexPage";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { region } from "./region";
+import FloatLink from "./FloatLink";
 
 export type JoinPageStates = {
     name: string;
@@ -37,6 +38,7 @@ class AddNamePage extends React.Component<AddNamePageProps & WithTranslation, Jo
         const {name, uuid} = this.state;
         return (
             <div className="page-index-box">
+                <FloatLink />
                 <div className="page-index-mid-box">
                     <div className="page-index-logo-box">
                         <img src={logo} alt={"logo"}/>

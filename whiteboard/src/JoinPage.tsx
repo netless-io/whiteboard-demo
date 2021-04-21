@@ -9,6 +9,7 @@ import {LocalStorageRoomDataType} from "./HistoryPage";
 import moment from "moment";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { region } from "./region";
+import FloatLink from "./FloatLink";
 
 export type JoinPageStates = {
     roomId: string;
@@ -85,6 +86,7 @@ class JoinPage extends React.Component<RouteComponentProps & WithTranslation, Jo
         const {roomId, name} = this.state;
         return (
             <div className="page-index-box">
+                <FloatLink />
                 <div className="page-index-mid-box">
                     <div className="page-index-logo-box">
                         <img src={logo} alt={"logo"}/>

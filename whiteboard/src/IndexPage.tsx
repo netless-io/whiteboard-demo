@@ -9,6 +9,7 @@ import {Button, Input, Popover} from "antd";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { SwitchLanguage } from './SwitchLanguage';
 import SwitchRegion from "./components/SwitchRegion";
+import FloatLink from "./FloatLink";
 
 export type IndexPageStates = {
     name: string;
@@ -66,6 +67,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
         const { t } = this.props
             return (
                 <div className="page-index-box">
+                    <FloatLink />
                     <SwitchRegion />
                     <div className="page-index-mid-box">
                         <div className="page-index-logo-box">
