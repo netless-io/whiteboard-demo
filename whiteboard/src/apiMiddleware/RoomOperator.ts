@@ -12,7 +12,7 @@ export class RoomOperator {
                 region,
             },
             body: {
-                name: name,
+                // name: name,
                 limit: limit,
             },
         });
