@@ -64,7 +64,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
     }
 
     public render(): React.ReactNode {
-        const { t } = this.props
+        const { t, i18n } = this.props
             return (
                 <div className="page-index-box">
                     <FloatLink />
@@ -126,11 +126,11 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
                         </div>
                         <div className="page-index-link-box">
                             <div className="page-index-cell-left">
-                                <a href={"https://www.agora.io/cn/interactive-whiteboard"} target={"_blank"}>{t('officialWebsite')}</a>
+                                <a href={i18n.language === 'zh-CN' ? "https://www.agora.io/cn/interactive-whiteboard" : "https://www.agora.io/en"} target={"_blank"}>{t('officialWebsite')}</a>
                             </div>
                             <div className="page-cutline-link-box"/>
                             <div className="page-index-cell-right">
-                                <a href={"https://github.com/netless-io/flat-web"} target={"_blank"}>Github</a>
+                                <a href={"https://github.com/netless-io/flat-web"} target={"_blank"}>GitHub</a>
                             </div>
                         </div>
                         <div className="page-index-start-term">
