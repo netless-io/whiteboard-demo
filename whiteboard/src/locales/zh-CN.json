@@ -40,5 +40,16 @@
   "copyClipboard": "已经将信息复制到剪贴板",
   "pageErrorTitle": "抱歉，您要访问的页面不存在",
   "pageErrorInner": "可能是链接地址有误，页面已经被移除或者隐藏",
-  "tryH5Courseware": "体验 h5 课件"
+  "tryH5Courseware": "体验 h5 课件",
+  "upload-failed": "上传失败",
+  "need": "需要",
+  "to-sync": "才可以同步哦",
+  "submit": "提交",
+  "zip-file": "压缩文件",
+  "upload-finished-loading": "上传完毕，部署中...",
+  "upload-h5-file": "上传 H5 文件",
+  "choose-file": "选择文件",
+  "other-users-will-follow-your-vision": "其他用户将跟随您的视角",
+  "other-users-will-stop-follow-your-vision": "其他用户将停止跟随您的视角",
+  "free-10000": "免费领取 10,000 分钟使用时长"
 }

@@ -168,7 +168,7 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
         if (player && isVisible && combinePlayer) {
             return (
                 <div onMouseEnter={() => this.setState({isVisible: true})}>
-                    <PlayerController player={player} combinePlayer={combinePlayer}/>
+                    <PlayerController player={player} combinePlayer={combinePlayer} i18nLanguage={this.props.i18n.language} />
                 </div>
             );
         } else {
@@ -225,17 +225,6 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
                         <div className="logo-box">
                             <img src={logo} alt={"logo"}/>
                         </div>
-                        <div className="room-controller-box">
-                            <div className="page-controller-mid-box">
-                                <ExitButtonPlayer
-                                    identity={identity}
-                                    uuid={uuid}
-                                    userId={userId}
-                                    player={player}
-                                />
-
-                            </div>
-                        </div>
                         <div className="player-board">
                             {this.renderScheduleView()}
                             <div
@@ -257,6 +246,16 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
                                 <div style={{backgroundColor: "#F2F2F2"}}
                                      className="player-box"
                                      ref={this.handleBindRoom}/>
+                            </div>
+                        </div>
+                        <div className="room-controller-box">
+                            <div className="page-controller-mid-box">
+                                <ExitButtonPlayer
+                                    identity={identity}
+                                    uuid={uuid}
+                                    userId={userId}
+                                    player={player}
+                                />
                             </div>
                         </div>
                     </div>

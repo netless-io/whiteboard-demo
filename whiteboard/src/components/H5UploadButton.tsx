@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Room } from "white-web-sdk";
 import { h5OssConfigObj } from "../appToken";
 import { history } from "../BrowserHistory";
+import { WithTranslation } from "react-i18next";
 
 export type H5UploadButtonStates = {
     visible: boolean;
@@ -20,10 +21,10 @@ export type H5UploadButtonProps = {
     room: Room
 };
 
-export class H5UploadButton extends React.Component<H5UploadButtonProps, H5UploadButtonStates> {
+export class H5UploadButton extends React.Component<H5UploadButtonProps & WithTranslation, H5UploadButtonStates> {
     private oss: OSS;
 
-    constructor(props: H5UploadButtonProps) {
+    constructor(props: H5UploadButtonProps & WithTranslation) {
         super(props);
         this.state = {
             visible: false,
@@ -56,6 +57,7 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
     }
 
     private uploadFile = async (payload): Promise<void> => {
+        const { t } = this.props;
         this.setState({ startUpload: true })
         const file = this.state.fileList[0];
         const uuid = uuidv4();
@@ -71,7 +73,7 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
             await this.tryGetSite(payload, uuid, siteUrl);
         } catch (error) {
             console.log(error);
-            message.error(`上传失败: ${JSON.stringify(error)}`,)
+            message.error(`${t('upload-failed')}: ${JSON.stringify(error)}`,)
         }
     }
 
@@ -125,34 +127,36 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
     }
 
     private renderForm = () => {
+        const { t } = this.props;
         return (
             <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} name="basic"
                 onFinish={this.onFinish}>
                     <Form.Item
                         name="upload"
-                        label="压缩文件"
+                        label={t('zip-file')}
                         rules={[{ required: true }]}>
                         <Upload accept=".zip" name="uplpad" beforeUpload={this.beforeUpload}>
-                            <Button block>选择文件</Button>
+                            <Button block>{t('choose-file')}</Button>
                         </Upload>
                     </Form.Item>
                     <Form.Item wrapperCol={{ span: 12, offset: 8 }}>
                         <Button type="primary" htmlType="submit" block>
-                            提交
+                            {t('submit')}
                         </Button>
                     </Form.Item>
-                    需要 <a href="https://github.com/netless-io/netless-iframe-bridge">
+                    {t('need')} <a href="https://github.com/netless-io/netless-iframe-bridge">
                 netless-iframe-bridge
-            </a> 才可以同步哦
+            </a> {t('to-sync')}
 
               </Form>
         )
     }
 
     private renderProgress = () => {
+        const { t } = this.props;
         return (
             <div style={{ display: "flex", justifyContent: "center" }}>
-                <Spin tip="上传完毕，部署中..." spinning={this.state.deploying} size="large">
+                <Spin tip={t('upload-finished-loading')} spinning={this.state.deploying} size="large">
                     <Progress
                         type="circle"
                         strokeColor={{
@@ -167,8 +171,9 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps, H5Uploa
     }
 
     renderContent() {
+        const { t } = this.props;
         return (
-            <Card style={{ width: "25rem" }} title="上传 H5 文件">
+            <Card style={{ width: "25rem" }} title={t('upload-h5-file')}>
               {this.state.startUpload ? this.renderProgress() : this.renderForm()}
             </Card>
         );

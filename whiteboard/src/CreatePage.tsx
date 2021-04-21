@@ -11,6 +11,7 @@ import { netlessWhiteboardApi } from "./apiMiddleware";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { h5DemoUrl, h5DemoUrl3, supplierUrl } from "./appToken";
 import { region } from "./region";
+import FloatLink from "./FloatLink";
 
 const { Option } = Select;
 
@@ -111,9 +112,10 @@ class CreatePage extends React.Component<RouteComponentProps & WithTranslation, 
 
     public render(): React.ReactNode {
         const { t } = this.props
-        const {roomName,h5Url} = this.state;
+        const {roomName, h5Url} = this.state;
         return (
             <div className="page-index-box">
+                <FloatLink />
                 <div className="page-index-mid-box">
                     <div className="page-index-logo-box">
                         <img src={logo} alt={"logo"}/>

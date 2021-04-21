@@ -1,6 +1,6 @@
 {
   "name": "@netless/tool-box",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "private": false,
   "main": "dist/index.js",
