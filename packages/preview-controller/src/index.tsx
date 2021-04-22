@@ -51,6 +51,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
     }
 
     private renderPreviewCells = (scenes: ReadonlyArray<WhiteScene>, activeIndex: number, sceneDir: any): React.ReactNode => {
+        const {isVisible} = this.props;
         const nodes: React.ReactNode = scenes.map((scene, index) => {
             const isActive = index === activeIndex;
             const scenePath = sceneDir.concat(scene.name).join("/");
@@ -77,6 +78,10 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
                 </div>
             );
         });
+        if (!isVisible) {
+            return null;
+        }
+
         return (
             <div className="preview-cells-box">
                 {nodes}
@@ -94,6 +99,15 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
         room.setSceneIndex(newSceneIndex);
     }
 
+    private onMenuState = (isOpen: boolean): void => {
+        const {handlePreviewState} = this.props;
+        if (isOpen) {
+            handlePreviewState(true);
+        } else {
+            handlePreviewState(false);
+        }
+    }
+
     public render(): React.ReactNode {
         const {isVisible, handlePreviewState, room} = this.props;
         const scenes = room.state.sceneState.scenes;
@@ -101,7 +115,7 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
         sceneDir.pop();
         const activeIndex = room.state.sceneState.index;
         return (
-            <MenuBox width={240} isVisible={isVisible}>
+            <MenuBox onMenuState={this.onMenuState} width={240} isVisible={isVisible}>
                 <div className="menu-annex-box" style={{ outline: 0 }}>
                     <div className="menu-title-line-box">
                         <div className="menu-title-line">

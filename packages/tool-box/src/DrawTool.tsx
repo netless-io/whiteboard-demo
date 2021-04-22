@@ -11,15 +11,26 @@ export type DrawToolProps = {
 
 export default class DrawTool extends React.PureComponent<DrawToolProps> {
 
-    private renderImage = (appliance: ApplianceNames): React.ReactNode => {
-        const description = ToolBox.descriptions[appliance]
+    private renderImage = (appliance: ApplianceNames, shapeType?: ShapeType): React.ReactNode => {
+
         const {roomState} = this.props;
         const currentApplianceName = roomState.memberState.currentApplianceName;
-        const isSelected = currentApplianceName === appliance;
-        const iconUrl = isSelected ? description.iconActive : description.icon;
-        return (
-            <img src={iconUrl} alt={"iconUrl"}/>
-        )
+        const currentShapeType = roomState.memberState.shapeType;
+        if (appliance === ApplianceNames.shape) {
+            const description = ToolBox.descriptions[`${appliance}_${shapeType}`]
+            const isSelected = currentShapeType === shapeType;
+            const iconUrl = isSelected ? description.iconActive : description.icon;
+            return (
+                <img src={iconUrl} alt={"iconUrl"}/>
+            )
+        } else {
+            const description = ToolBox.descriptions[appliance]
+            const isSelected = currentApplianceName === appliance;
+            const iconUrl = isSelected ? description.iconActive : description.icon;
+            return (
+                <img src={iconUrl} alt={"iconUrl"}/>
+            )
+        }
     }
 
     public render(): React.ReactNode {
@@ -59,38 +70,38 @@ export default class DrawTool extends React.PureComponent<DrawToolProps> {
                     {this.renderImage(ApplianceNames.straight)}
                 </div>
 
-                {/*<div*/}
-                {/*    className="draw-tool-box-cell"*/}
-                {/*    onClick={() => {*/}
-                {/*        selectAppliance(ApplianceNames.shape, "pentagram" as any);*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    Pentagram*/}
-                {/*</div>*/}
-                {/*<div*/}
-                {/*    className="draw-tool-box-cell"*/}
-                {/*    onClick={() => {*/}
-                {/*        selectAppliance(ApplianceNames.shape, "rhombus" as any);*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    Rhombus*/}
-                {/*</div>*/}
-                {/*<div*/}
-                {/*    className="draw-tool-box-cell"*/}
-                {/*    onClick={() => {*/}
-                {/*        selectAppliance(ApplianceNames.shape, "speechBalloon" as any);*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    SpeechBalloon*/}
-                {/*</div>*/}
-                {/*<div*/}
-                {/*    className="draw-tool-box-cell"*/}
-                {/*    onClick={() => {*/}
-                {/*        selectAppliance(ApplianceNames.shape, "triangle" as any);*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    Triangle*/}
-                {/*</div>*/}
+                <div
+                    className="draw-tool-box-cell"
+                    onClick={() => {
+                        selectAppliance(ApplianceNames.shape, "pentagram" as any);
+                    }}
+                >
+                    {this.renderImage(ApplianceNames.shape, "pentagram" as any)}
+                </div>
+                <div
+                    className="draw-tool-box-cell"
+                    onClick={() => {
+                        selectAppliance(ApplianceNames.shape, "rhombus" as any);
+                    }}
+                >
+                    {this.renderImage(ApplianceNames.shape, "rhombus" as any)}
+                </div>
+                <div
+                    className="draw-tool-box-cell"
+                    onClick={() => {
+                        selectAppliance(ApplianceNames.shape, "speechBalloon" as any);
+                    }}
+                >
+                    {this.renderImage(ApplianceNames.shape, "speechBalloon" as any)}
+                </div>
+                <div
+                    className="draw-tool-box-cell"
+                    onClick={() => {
+                        selectAppliance(ApplianceNames.shape, "triangle" as any);
+                    }}
+                >
+                    {this.renderImage(ApplianceNames.shape, "triangle" as any)}
+                </div>
             </div>
         );
     }

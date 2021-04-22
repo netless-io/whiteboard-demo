@@ -33,6 +33,7 @@ const styles2: any = {
 
 export type MenuBoxProps = {
     isVisible: boolean;
+    onMenuState: (isOpen: boolean) => void;
     width?: number;
     pagePreviewPosition?: PagePreviewPositionEnum;
 };
@@ -61,20 +62,21 @@ export default class MenuBox extends React.Component<MenuBoxProps, MenuBoxStyleS
     }
 
     public render(): React.ReactNode {
-        const {pagePreviewPosition, width} = this.props;
+        const {pagePreviewPosition, width, onMenuState} = this.props;
         const isRight = pagePreviewPosition !== PagePreviewPositionEnum.left;
         return (
             <Menu
                 width={width}
-                noOverlay
                 styles={this.state.menuStyles}
                 right={isRight}
                 isOpen={this.props.isVisible}
                 onStateChange={async (menuState: any) => {
                     if (!menuState.isOpen) {
+                        onMenuState(false);
                         await this.getMenuStyle(false);
                     }
                     else {
+                        onMenuState(true);
                         await this.getMenuStyle(true);
                     }
                 }}>
