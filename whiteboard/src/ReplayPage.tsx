@@ -89,6 +89,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
         await polly().waitAndRetry(10).executeForPromise(async () => {
             const isPlayable =  whiteWebSdk.isPlayable({
                 room: uuid,
+                roomToken: roomToken,
             });
 
             if (!isPlayable) {

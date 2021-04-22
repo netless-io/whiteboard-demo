@@ -88,6 +88,7 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
             const isPlayable =  whiteWebSdk.isPlayable({
                 region: "cn-hz",
                 room: uuid,
+                roomToken: roomToken,
             });
 
             if (!isPlayable) {
