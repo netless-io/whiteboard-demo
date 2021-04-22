@@ -198,6 +198,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
                     region,
+                    preloadDynamicPPT: true,
                     deviceType: deviceType,
                     pptParams: {
                         useServerWrap: true,
