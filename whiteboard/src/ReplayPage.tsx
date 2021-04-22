@@ -71,6 +71,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
             const h5Url = getQueryH5Url();
             let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                 appIdentifier: netlessToken.appIdentifier,
+                preloadDynamicPPT: true,
                 plugins: plugins,
                 region,
             }
