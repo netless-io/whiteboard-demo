@@ -43,6 +43,7 @@ import * as speechBalloonActive from "./image/speechBalloon-active.svg";
 export type ToolBoxProps = {
     room: Room;
     customerComponent?: React.ReactNode[];
+    i18nLanguage?: string;
 };
 export type ToolBoxStates = {
     strokeEnable: boolean;
@@ -164,6 +165,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     }
 
     private renderButton = (applianceName: string, description: ApplianceDescription): React.ReactElement => {
+
         const {roomState} = this.state;
         const currentApplianceName = roomState.memberState.currentApplianceName;
         const isSelected = currentApplianceName === applianceName;
@@ -177,7 +179,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             </div>
         );
         return (
-            <Tooltip placement={"right"} key={applianceName} title={applianceName}>
+            <Tooltip placement={"right"} key={applianceName} title={this.getApplianceName(applianceName)}>
                 {cell}
             </Tooltip>
         );
@@ -202,6 +204,45 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             return applianceName === ApplianceNames.pencil || applianceName === ApplianceNames.ellipse ||
                 applianceName === ApplianceNames.rectangle || applianceName === ApplianceNames.straight
         }
+    }
+
+    private getApplianceName(name: string): string {
+        if (this.props.i18nLanguage === "zh-CN") {
+            switch (name) {
+                case ApplianceNames.arrow: return "箭头";
+                case ApplianceNames.ellipse: return "椭圆";
+                case ApplianceNames.eraser: return "橡皮擦";
+                case ApplianceNames.hand: return "抓手";
+                case ApplianceNames.laserPointer: return "激光笔";
+                case ApplianceNames.pencil: return "笔";
+                case ApplianceNames.rectangle: return "矩形";
+                case ApplianceNames.selector: return "选择";
+                case ApplianceNames.shape: return "形状";
+                case ApplianceNames.straight: return "直线";
+                case ApplianceNames.text: return "文本";
+            }
+        } else {
+            switch (name) {
+                case ApplianceNames.arrow:
+                case ApplianceNames.ellipse:
+                case ApplianceNames.eraser:
+                case ApplianceNames.hand:
+                case ApplianceNames.laserPointer:
+                case ApplianceNames.pencil:
+                case ApplianceNames.rectangle:
+                case ApplianceNames.selector:
+                case ApplianceNames.shape:
+                case ApplianceNames.straight:
+                case ApplianceNames.text: {
+                    return name
+                        .replace(/[A-Z]/g, (e) => ` ${e.toLowerCase()}`)
+                        .split(" ")
+                        .map((e) => e[0].toUpperCase() + e.substring(1))
+                        .join(" ");
+                }
+            }
+        }
+        return "";
     }
 
     private renderNodes = (): React.ReactNode[] => {

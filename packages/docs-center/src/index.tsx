@@ -26,6 +26,7 @@ export type WhiteboardFileProps = {
     handleDocCenterState: (state: boolean) => void;
     isFileOpen: boolean;
     initPptDatas?: string[];
+    i18nLanguage?: string;
 };
 
 export type WhiteboardFileStates = {
@@ -142,6 +143,10 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
         }
     }
 
+    private isCN() {
+        return this.props.i18nLanguage === "zh-CN";
+    }
+
     private renderDocCells = (): React.ReactNode => {
         const {roomState} = this.state;
 
@@ -161,7 +166,7 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div className="menu-ppt-name">
                                 <input onBlur={ evt => {
                                     this.updateDocName(data.id, evt.target.value);
-                                }} defaultValue={data.name ? data.name : "首页"}/>
+                                }} defaultValue={data.name ? data.name : this.isCN() ? "首页" : "Homepage"}/>
                             </div>
                             <div className="menu-ppt-type">
                                 <div>
@@ -186,11 +191,11 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div className="menu-ppt-name">
                                 <input onChange={ evt => {
                                     this.updateDocName(data.id, evt.target.value);
-                                }} defaultValue={data.name ? data.name : "未命名"}/>
+                                }} defaultValue={data.name ? data.name : this.isCN() ? "未命名" : "Untitled"}/>
                             </div>
                             <div className="menu-ppt-type">
                                 <div className="menu-ppt-type-text">
-                                    动态
+                                    {this.isCN() ? "动态" : "PPT"}
                                 </div>
                                 <div className="menu-ppt-type-icon" onClick={() => this.removeScene(data)}>
                                     <img src={deleteIcon}  alt={"deleteIcon"}/>
@@ -213,11 +218,11 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
                             <div className="menu-ppt-name">
                                 <input onChange={ evt => {
                                     this.updateDocName(data.id, evt.target.value);
-                                }} defaultValue={data.name ? data.name : "首页"}/>
+                                }} defaultValue={data.name ? data.name : this.isCN() ? "首页" : "Homepage"}/>
                             </div>
                             <div className="menu-ppt-type">
                                 <div className="menu-ppt-type-text">
-                                    白板页
+                                    {this.isCN() ? "白板页" : "Whiteboard"}
                                 </div>
                             </div>
                         </div>

@@ -8,7 +8,6 @@ import {netlessWhiteboardApi} from "./apiMiddleware";
 import LoadingPage from "./LoadingPage";
 import { Identity } from "./IndexPage";
 import {LocalStorageRoomDataType} from "./HistoryPage";
-import { region } from "./region";
 
 export type WhiteboardCreatorPageState = {
     uuid?: string;
@@ -19,6 +18,7 @@ export type WhiteboardCreatorPageState = {
 export type WhiteboardCreatorPageProps = RouteComponentProps<{
     identity: Identity;
     uuid?: string;
+    region?: string;
 }>;
 
 
@@ -111,7 +111,7 @@ export default class WhiteboardCreatorPage extends React.Component<WhiteboardCre
 
     public render(): React.ReactNode {
         const {uuid, userId, foundError} = this.state;
-        const {identity} = this.props.match.params;
+        const {identity,region} = this.props.match.params;
         const query = new URLSearchParams(window.location.search);
         const h5Url = query.get("h5Url");
         let url = `/whiteboard/${identity}/${uuid}/${userId}/${region}`;
