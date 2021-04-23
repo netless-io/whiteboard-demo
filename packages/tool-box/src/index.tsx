@@ -287,9 +287,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     private renderDrawContext = (): React.ReactNode => {
         const {roomState} = this.state;
         return (
-            <div className="palette-box">
-                <DrawTool selectAppliance={this.clickAppliance} roomState={roomState} />
-            </div>
+            <DrawTool selectAppliance={this.clickAppliance} roomState={roomState} />
         );
     }
 
@@ -343,9 +341,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         const {roomState} = this.state
         return (
             <div className="palette-box">
-                <StrokeWidthTool
-                    room={room}
-                    roomState={roomState} />
+                <StrokeWidthTool room={room} roomState={roomState} />
                 <ColorTool room={room} roomState={roomState}/>
             </div>
         );
