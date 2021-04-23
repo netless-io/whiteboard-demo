@@ -1,6 +1,6 @@
 {
   "name": "@netless/tool-box",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "private": false,
   "main": "dist/index.js",
@@ -18,7 +18,7 @@
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "white-web-sdk": "^2.5.9",
+    "white-web-sdk": "^2.12.14",
     "antd": "4.x"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ApplianceNames, Color, Room, RoomState} from "white-web-sdk";
+import {ApplianceNames, Color, Room, RoomState, ShapeType} from "white-web-sdk";
 import {Popover, Tooltip} from "antd";
 import DrawTool from "./DrawTool";
 import ColorTool from "./ColorTool";
@@ -53,7 +53,7 @@ export type ToolBoxStates = {
 type ApplianceDescription = {
     readonly icon: string;
     readonly iconActive: string;
-    readonly shapeType?: string;
+    readonly shapeType?: ShapeType;
 };
 export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates> {
     public static readonly descriptions: { readonly [applianceName: string]: ApplianceDescription } = Object.freeze({
@@ -76,22 +76,22 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         shape_triangle: Object.freeze({
             icon: triangle,
             iconActive: triangleActive,
-            shapeType: "triangle",
+            shapeType: ShapeType.Triangle,
         }),
         shape_speechBalloon: Object.freeze({
             icon: speechBalloon,
             iconActive: speechBalloonActive,
-            shapeType: "speechBalloon",
+            shapeType: ShapeType.SpeechBalloon,
         }),
         shape_rhombus: Object.freeze({
             icon: rhombus,
             iconActive: rhombusActive,
-            shapeType: "rhombus",
+            shapeType: ShapeType.Rhombus,
         }),
         shape_pentagram: Object.freeze({
             icon: pentagram,
             iconActive: pentagramActive,
-            shapeType: "pentagram",
+            shapeType: ShapeType.Pentagram,
         }),
         eraser: Object.freeze({
             icon: eraser,
@@ -123,9 +123,6 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         }),
     });
 
-    private currentDraw: string = ApplianceNames.pencil;
-    private currentDrawShape: string = "rhombus";
-
     public constructor(props: ToolBoxProps) {
         super(props);
         this.state = {
@@ -135,13 +132,13 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         };
     }
 
-    private getShape = (shape: string): {applianceName: string, applianceShape: string} => {
+    private getShape = (shape: string): {applianceName: ApplianceNames, applianceShape: ShapeType} => {
         const applianceObj = shape.split("_");
         const applianceName = applianceObj[0];
         const applianceShape = applianceObj[1];
         return {
-            applianceName: applianceName,
-            applianceShape: applianceShape,
+            applianceName: applianceName as ApplianceNames,
+            applianceShape: applianceShape as ShapeType,
         }
     }
 
@@ -152,20 +149,31 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         });
     }
 
-    public clickAppliance = (applianceName: string, shapeType?: string): void => {
+    public clickAppliance = (applianceName: ApplianceNames, shapeType?: ShapeType): void => {
         const {room} = this.props;
-        if (applianceName.split("").includes("_")) {
+        this.updateDrawData(applianceName, shapeType);
+        if (this.isShape(applianceName)) {
             const applianceObj = this.getShape(applianceName);
             room.setMemberState({
-                currentApplianceName: applianceObj.applianceName as any,
-                shapeType: applianceObj.applianceShape as any});
+                currentApplianceName: applianceObj.applianceName,
+                shapeType: applianceObj.applianceShape});
         } else {
-            room.setMemberState({currentApplianceName: applianceName as any, shapeType: shapeType as any});
+            room.setMemberState({currentApplianceName: applianceName, shapeType: shapeType});
         }
     }
 
-    private renderButton = (applianceName: string, description: ApplianceDescription): React.ReactElement => {
+    private updateDrawData = (applianceName: ApplianceNames, shapeType?: ShapeType): void => {
+        if (this.isDraw(applianceName)) {
+            this.activeApplianceName = applianceName;
+        }
 
+        if (applianceName === ApplianceNames.shape && shapeType) {
+            this.activeShapeType = shapeType;
+            this.activeApplianceName = ApplianceNames.shape;
+        }
+    }
+
+    private renderButton = (applianceName: ApplianceNames, description: ApplianceDescription): React.ReactElement => {
         const {roomState} = this.state;
         const currentApplianceName = roomState.memberState.currentApplianceName;
         const isSelected = currentApplianceName === applianceName;
@@ -197,13 +205,13 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         }
     }
 
+    private isShape = (applianceName: string): boolean => {
+        return !!applianceName.split("").includes("_");
+    }
+
     private isDraw = (applianceName: string): boolean => {
-        if (applianceName.split("").includes("_")) {
-            return true;
-        } else {
-            return applianceName === ApplianceNames.pencil || applianceName === ApplianceNames.ellipse ||
-                applianceName === ApplianceNames.rectangle || applianceName === ApplianceNames.straight
-        }
+        return applianceName === ApplianceNames.pencil || applianceName === ApplianceNames.ellipse ||
+            applianceName === ApplianceNames.rectangle || applianceName === ApplianceNames.straight
     }
 
     private getApplianceName(name: string): string {
@@ -247,28 +255,10 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
 
     private renderNodes = (): React.ReactNode[] => {
         const nodes: React.ReactNode[] = [];
-        const {roomState} = this.state;
-        const currentApplianceName = roomState.memberState.currentApplianceName;
-        const currentShapeType = roomState.memberState.shapeType;
         for (const applianceName in ToolBox.descriptions) {
             const description = ToolBox.descriptions[applianceName];
-            if (this.isDraw(applianceName)) {
-                if (currentApplianceName === applianceName) {
-                    this.currentDraw = applianceName;
-                }
-                if (applianceName.split("").includes("_")) {
-                    const applianceObj = this.getShape(applianceName);
-                    // this.currentDraw = ApplianceNames.shape;
-                    if (currentShapeType === applianceObj.applianceShape) {
-                        this.currentDrawShape = applianceObj.applianceShape;
-                    }
-                } else {
-                    if (currentApplianceName === applianceName) {
-                        this.currentDraw = applianceName;
-                    }
-                }
-            } else {
-                const node = this.renderButton(applianceName, description);
+            if (!this.isDraw(applianceName) && !this.isShape(applianceName)) {
+                const node = this.renderButton(applianceName as ApplianceNames, description);
                 nodes.push(node);
             }
         }
@@ -293,56 +283,98 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
         );
     }
 
-    private renderDraw = (): React.ReactNode => {
+    private activeApplianceName: ApplianceNames = ApplianceNames.pencil;
+
+    private activeShapeType: ShapeType = ShapeType.Triangle;
+
+    private isDrawSelected = (applianceName: ApplianceNames, shapeType?: ShapeType): boolean => {
+        if (applianceName === ApplianceNames.shape && shapeType) {
+            return shapeType === this.activeShapeType;
+        } else {
+            return applianceName === this.activeApplianceName;
+        }
+    }
+
+    private renderDrawToolIcon = (): React.ReactNode => {
         const {roomState} = this.state;
         const currentApplianceName = roomState.memberState.currentApplianceName;
+        if (this.isDraw(currentApplianceName)) {
+            const description = ToolBox.descriptions[currentApplianceName]
+            if (description) {
+                const iconUrl = this.isDrawSelected(currentApplianceName) ? description.iconActive : description.icon;
+                const subscriptUrl = this.isDrawSelected(currentApplianceName) ? subscriptActive : subscript;
+                return (
+                    <div className="tool-box-cell"
+                         onClick={() => this.clickAppliance(currentApplianceName)}>
+                        <img src={iconUrl} alt={"iconUrl"}/>
+                        <img className="tool-box-cell-subscript" src={subscriptUrl} alt={"subscriptUrl"}/>
+                    </div>
+                );
+            }
+        }
+
         if (currentApplianceName === ApplianceNames.shape) {
             const currentShapeType = roomState.memberState.shapeType;
-            const description = ToolBox.descriptions[`${currentApplianceName}_${currentShapeType}`];
-            const isSelected = currentShapeType === this.currentDrawShape;
-            const iconUrl = isSelected ? description.iconActive : description.icon;
-            const subscriptUrl = isSelected ? subscriptActive : subscript;
-            return (
-                <Popover key={"draw"}
-                         placement={"right"}
-                         trigger="hover"
-                         content={this.renderDrawContext}>
-                    <div key="draw-inner" className="tool-box-cell-box-left">
-                        <div className="tool-box-cell"
-                             onClick={() => this.clickAppliance(this.currentDraw)}>
-                            <img src={iconUrl} alt={"iconUrl"}/>
-                            <img className="tool-box-cell-subscript" src={subscriptUrl} alt={"subscriptUrl"}/>
-                        </div>
+            const description = ToolBox.descriptions[`shape_${currentShapeType}`];
+            if (description && currentShapeType) {
+                const iconUrl = this.isDrawSelected(ApplianceNames.shape, currentShapeType) ? description.iconActive : description.icon;
+                const subscriptUrl = this.isDrawSelected(ApplianceNames.shape, currentShapeType) ? subscriptActive : subscript;
+                return (
+                    <div className="tool-box-cell"
+                         onClick={() => this.clickAppliance(currentApplianceName, currentShapeType)}>
+                        <img src={iconUrl} alt={"iconUrl"}/>
+                        <img className="tool-box-cell-subscript" src={subscriptUrl} alt={"subscriptUrl"}/>
                     </div>
-                </Popover>
-            );
-        } else {
-            const description = ToolBox.descriptions[this.currentDraw]
-            const isSelected = currentApplianceName === this.currentDraw;
-            const iconUrl = isSelected ? description.iconActive : description.icon;
-            const subscriptUrl = isSelected ? subscriptActive : subscript;
-            return (
-                <Popover key={"draw"}
-                         placement={"right"}
-                         trigger="hover"
-                         content={this.renderDrawContext}>
-                    <div key="draw-inner" className="tool-box-cell-box-left">
-                        <div className="tool-box-cell"
-                             onClick={() => this.clickAppliance(this.currentDraw)}>
-                            <img src={iconUrl} alt={"iconUrl"}/>
-                            <img className="tool-box-cell-subscript" src={subscriptUrl} alt={"subscriptUrl"}/>
-                        </div>
+                );
+            }
+        }
+
+        if (this.activeApplianceName === ApplianceNames.shape) {
+            const description = ToolBox.descriptions[`shape_${this.activeShapeType}`];
+            if (description) {
+                return (
+                    <div className="tool-box-cell"
+                         onClick={() => this.clickAppliance(ApplianceNames.shape, this.activeShapeType)}>
+                        <img src={description.icon} alt={"iconUrl"}/>
+                        <img className="tool-box-cell-subscript" src={subscript} alt={"subscriptUrl"}/>
                     </div>
-                </Popover>
+                );
+            }
+        }
+
+        const description = ToolBox.descriptions[this.activeApplianceName];
+        if (description) {
+            return (
+                <div className="tool-box-cell"
+                     onClick={() => this.clickAppliance(this.activeApplianceName, this.activeShapeType)}
+                >
+                    <img src={description.icon} alt={"iconUrl"}/>
+                    <img className="tool-box-cell-subscript" src={subscript} alt={"subscriptUrl"}/>
+                </div>
             );
         }
+        return null;
+
+    }
+
+    private renderDraw = (): React.ReactNode => {
+        return (
+            <Popover key={"draw"}
+                     placement={"right"}
+                     trigger="hover"
+                     content={this.renderDrawContext}>
+                <div key="draw-inner" className="tool-box-cell-box-left">
+                    {this.renderDrawToolIcon()}
+                </div>
+            </Popover>
+        )
     }
 
     private renderColorContext = (): React.ReactNode => {
         const {room} = this.props;
         const {roomState} = this.state
         return (
-            <div className="palette-box">
+            <div className="palette-box-color">
                 <StrokeWidthTool
                     room={room}
                     roomState={roomState} />
@@ -360,8 +392,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                      trigger="hover"
                      content={this.renderColorContext}>
                 <div key="draw-inner" className="tool-box-cell-box-left">
-                    <div className="tool-box-cell"
-                         onClick={() => this.clickAppliance(this.currentDraw)}>
+                    <div className="tool-box-cell">
                         <div className="tool-box-cell-color" style={{backgroundColor: this.rgbToHex(strokeColor)}}/>
                         <img className="tool-box-cell-subscript" src={subscript} alt={"subscriptUrl"}/>
                     </div>
