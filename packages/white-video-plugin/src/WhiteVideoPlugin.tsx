@@ -197,11 +197,12 @@ class WhiteVideoPluginImpl extends Component<WhiteVideoPluginImplProps> {
                             maxHeight: "100%",
                             ...this.pointerEventsStyle,
                         }}
-                        controls
+                        controls={!!room}
                         controlsList="nodownload nofullscreen"
                         preload="metadata"
                         ref={this.player}
                         playsInline
+                        webkit-playsinline="true"
                         poster={plugin.attributes.poster}
                         disablePictureInPicture
                     />

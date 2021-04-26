@@ -18,6 +18,8 @@ import ZoomController from "@netless/zoom-controller";
 import OssUploadButton from "@netless/oss-upload-button";
 import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
+import {videoPlugin2} from "@netless/white-video-plugin2";
+import {audioPlugin2} from "@netless/white-audio-plugin2";
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
 import {CursorTool} from "@netless/cursor-tool";
@@ -181,9 +183,14 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         try {
             const roomToken = await this.getRoomToken(uuid);
             if (uuid && roomToken) {
-                const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
+                const plugins = createPlugins({
+                    "video": videoPlugin, "audio": audioPlugin,
+                    "video2": videoPlugin2, "audio2": audioPlugin2,
+                });
                 plugins.setPluginContext("video", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
+                plugins.setPluginContext("video2", {identity: identity === Identity.creator ? "host" : ""});
+                plugins.setPluginContext("audio2", {identity: identity === Identity.creator ? "host" : ""});
                 let deviceType: DeviceType;
                 if (isWindows) {
                     deviceType = DeviceType.Surface;

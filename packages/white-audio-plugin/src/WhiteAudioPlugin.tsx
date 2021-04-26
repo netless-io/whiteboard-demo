@@ -193,7 +193,7 @@ class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
                     <audio
                         src={plugin.attributes.src}
                         style={this.pointerEventsStyle}
-                        controls
+                        controls={!!room}
                         controlsList="nodownload nofullscreen"
                         preload="auto"
                         ref={this.player}

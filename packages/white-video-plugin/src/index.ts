@@ -16,8 +16,8 @@ import { WhiteVideoPlugin } from "./WhiteVideoPlugin";
  *     attributes: { src: url, poster: url2, isNavigationDisable: false },
  * });
  */
-export const videoPlugin: Plugin<PluginContext, WhiteVideoPluginAttributes> = Object.freeze({
-    kind: "video",
+export const videoPlugin2: Plugin<PluginContext, WhiteVideoPluginAttributes> = Object.freeze({
+    kind: "video2",
     render: WhiteVideoPlugin,
     defaultAttributes: {
         src: "",
