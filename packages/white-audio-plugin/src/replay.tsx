@@ -164,7 +164,8 @@ export default class WhiteAudioPluginReplay extends React.Component<WhiteAudioPl
                                 pointerEvents: "none",
                                 outline: "none",
                             }}
-                            controls={false}
+                            controls
+                            controlsList={"nodownload nofullscreen"}
                             preload="auto"
                         />
                     </div>
