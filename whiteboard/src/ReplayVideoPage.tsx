@@ -18,6 +18,8 @@ import ExitButtonPlayer from "./components/ExitButtonPlayer";
 import { Identity } from "./IndexPage";
 import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
+import {videoPlugin2} from "@netless/white-video-plugin2";
+import {audioPlugin2} from "@netless/white-audio-plugin2";
 import CombinePlayerFactory from "@netless/combine-player";
 import { CombinePlayer } from '@netless/combine-player/dist/Types';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -69,9 +71,14 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
     public async componentDidMount(): Promise<void> {
         window.addEventListener("keydown", this.handleSpaceKey);
         const {uuid, identity, region} = this.props.match.params;
-        const plugins = createPlugins({"video": videoPlugin, "audio": audioPlugin});
+        const plugins = createPlugins({
+            "video": videoPlugin, "audio": audioPlugin,
+            "video2": videoPlugin2, "audio2": audioPlugin2,
+        });
         plugins.setPluginContext("video", {identity: identity === Identity.creator ? "host" : ""});
         plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
+        plugins.setPluginContext("video2", {identity: identity === Identity.creator ? "host" : ""});
+        plugins.setPluginContext("audio2", {identity: identity === Identity.creator ? "host" : ""});
         const roomToken = await this.getRoomToken(uuid);
         if (uuid && roomToken) {
             const whiteWebSdk = new WhiteWebSdk({

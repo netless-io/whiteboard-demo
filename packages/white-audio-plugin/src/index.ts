@@ -5,19 +5,19 @@ import { WhiteAudioPlugin } from "./WhiteAudioPlugin";
 /**
  * white-web-sdk audio plugin.
  * @example
- * const plugins = createPlugins({ "audio": audioPlugin });
- * plugins.setPluginContext("audio", {
+ * const plugins = createPlugins({ "audio2": audioPlugin2 });
+ * plugins.setPluginContext("audio2", {
  *     identity: identity === Identity.creator ? "host" : ""
  * });
  * let sdk = new WhiteWebSdk({ plugins });
  * let room = await sdk.joinRoom(...);
- * room.insertPlugin("audio", {
+ * room.insertPlugin("audio2", {
  *     ...,
  *     attributes: { src: url, isNavigationDisable: false },
  * });
  */
-export const audioPlugin: Plugin<PluginContext, WhiteAudioPluginAttributes> = Object.freeze({
-    kind: "audio",
+export const audioPlugin2: Plugin<PluginContext, WhiteAudioPluginAttributes> = Object.freeze({
+    kind: "audio2",
     render: WhiteAudioPlugin,
     defaultAttributes: {
         src: "",

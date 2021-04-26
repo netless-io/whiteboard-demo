@@ -1779,6 +1779,16 @@
   resolved "https://registry.npmjs.org/@netless/redo-undo/-/redo-undo-0.0.5.tgz#c5b00f5940ef33a0d6a810cd0935f4d9c172ea52"
   integrity sha512-P8ceK3hSY2eMfFIjBeSpRsqXpjjTea9bBWyRF8t8q0kLR4ICld2VMFMRbytqZ8sjCFy9CgbicuBOdMj7juABIQ==
 
+"@netless/white-audio-plugin@^1.2.23":
+  version "1.2.23"
+  resolved "https://registry.npmjs.org/@netless/white-audio-plugin/-/white-audio-plugin-1.2.23.tgz#8867c4a90a23f297a8cb01701ce068846b847c67"
+  integrity sha512-qwUVDhJheKaQnXiVIJVEuL5lMil82nIdBoh8QW4K/HFxWz8z4ok7xAOQj16nkH+3627Usk0YXKqK5RzErSSvCg==
+
+"@netless/white-video-plugin@^1.2.23":
+  version "1.2.23"
+  resolved "https://registry.npmjs.org/@netless/white-video-plugin/-/white-video-plugin-1.2.23.tgz#ca7ecbc13e9cd76f2656e2dd3e946f97f09708af"
+  integrity sha512-8Qvz1NcBhGb+2S9FYy9Xuln0/82q+Bn0EluXxM+BDw/aimhkN1QWxGl++ZysztZ60vzn18vl7p4cJuF2cfslIQ==
+
 "@netless/zip@^0.0.6":
   version "0.0.6"
   resolved "https://registry.npmjs.org/@netless/zip/-/zip-0.0.6.tgz#b4c82110b16ba718f27a61988fd77240426de216"
