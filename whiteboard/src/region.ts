@@ -25,7 +25,9 @@ export const regions: Record<Language, RegionWithTranslation[]> = {
     ],
 };
 
-export let region: Region = "cn-hz";
+export let region: Region =
+    (new URL(location.href).searchParams.get("rg") as Region) ||
+    (navigator.language.startsWith("zh") ? "cn-hz" : "us-sv");
 
 export function setRegion(_region: Region): void {
     region = _region;
