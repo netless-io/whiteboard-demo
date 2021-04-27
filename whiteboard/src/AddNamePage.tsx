@@ -30,7 +30,11 @@ class AddNamePage extends React.Component<AddNamePageProps & WithTranslation, Jo
         const {name} = this.state;
         const {uuid} = this.props.match.params;
         localStorage.setItem("userName", name);
-        this.props.history.push(`/whiteboard/${Identity.creator}/${uuid || ''}/${region}`);
+        if (uuid) {
+            this.props.history.push(`/whiteboard/${Identity.creator}/${uuid}/${region}`);
+        } else {
+            this.props.history.push(`/create/`);
+        }
     }
 
     public render(): React.ReactNode {
