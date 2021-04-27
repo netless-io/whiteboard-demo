@@ -33,6 +33,6 @@ export const languagesWithName = Object.freeze([
 if (window.localStorage) {
   const value = localStorage.getItem('i18nextLng') ?? '';
   if (!(value in messages)) {
-    localStorage.setItem('i18nextLng', 'zh-CN');
+    localStorage.setItem('i18nextLng', 'en');
   }
 }
