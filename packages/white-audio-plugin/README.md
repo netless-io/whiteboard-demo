@@ -4,7 +4,7 @@ https://www.npmjs.com/package/@netless/white-audio-plugin2
 
 **注**：注意包名为 `@netless/white-audio-plugin2`，为了兼容 `1.x` 发了个新包。
 
-**注**：以下是 `2.x` 版本的接口，和 `1.x` 不兼容。如果你有使用了 `1.x` 的项目（包括回放中使用），请不要升级到 `2.x`。[查看 `1.x` 的文档](README.1.md)。
+**注**：以下是 `2.x` 版本的接口，和 `1.x` 不兼容。如果你有回放中使用了 `1.x`，可以参考 [本项目](https://github.com/netless-io/flat-web/blob/7db5a0bf2e351999c1b330eb99cf74de12628022/whiteboard/src/WhiteboardPage.tsx#L186-L193) 做兼容性处理。[查看 `1.x` 的文档](README.1.md)。
 
 ## 用法
 
