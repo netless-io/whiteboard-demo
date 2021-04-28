@@ -1,6 +1,6 @@
 {
-    "name": "@netless/white-video-plugin2",
-    "version": "2.0.4",
+    "name": "@netless/white-video-plugin",
+    "version": "2.1.0",
     "description": "a video plugin for white-web-sdk which can play video in whiteboard room and sync to everyone in room",
     "private": false,
     "main": "dist/index.js",

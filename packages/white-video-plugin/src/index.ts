@@ -16,8 +16,8 @@ import { WhiteVideoPlugin } from "./WhiteVideoPlugin";
  *     attributes: { src: url, poster: url2, isNavigationDisable: false },
  * });
  */
-export const videoPlugin2: Plugin<PluginContext, WhiteVideoPluginAttributes> = Object.freeze({
-    kind: "video2",
+export const videoPlugin: Plugin<PluginContext, WhiteVideoPluginAttributes> = Object.freeze({
+    kind: "video",
     render: WhiteVideoPlugin,
     defaultAttributes: {
         src: "",
@@ -26,6 +26,12 @@ export const videoPlugin2: Plugin<PluginContext, WhiteVideoPluginAttributes> = O
         paused: true,
         muted: false,
         volume: 1,
+
+        pluginVideoUrl: "",
+        play: false,
+        mute: false,
+        seek: 0,
+        seekTime: 0,
     },
     hitTest(plugin) {
         const memberState = (plugin as any).component.context.getMemberState();
