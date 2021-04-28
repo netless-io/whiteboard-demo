@@ -69,7 +69,14 @@ class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
 
     timestamp = () => {
         const player = this.player.current!;
-        return { currentTime: player.currentTime, hostTime: Date.now() };
+        const currentTime = player.currentTime;
+        const hostTime = Date.now();
+        return {
+            currentTime,
+            hostTime,
+            seek: currentTime,
+            seekTime: hostTime / 1000,
+        };
     };
 
     setupHost() {
@@ -77,16 +84,16 @@ class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
         const player = this.player.current!;
         player.currentTime = plugin.attributes.currentTime;
         player.addEventListener("play", () => {
-            plugin.putAttributes({ paused: false, ...this.timestamp() });
+            plugin.putAttributes({ paused: false, ...this.timestamp(), play: true  });
         });
         player.addEventListener("pause", () => {
-            plugin.putAttributes({ paused: true, ...this.timestamp() });
+            plugin.putAttributes({ paused: true, ...this.timestamp(), play: false });
         });
         player.addEventListener("seeked", () => {
             plugin.putAttributes(this.timestamp());
         });
         player.addEventListener("volumechange", () => {
-            plugin.putAttributes({ volume: player.volume, muted: player.muted });
+            plugin.putAttributes({ volume: player.volume, muted: player.muted, mute: player.muted });
         });
         let timer = NaN;
         player.addEventListener("timeupdate", () => {
@@ -97,7 +104,7 @@ class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
         });
         this.disposers.push(() => window.clearTimeout(timer));
         player.addEventListener("ended", async () => {
-            plugin.putAttributes({ paused: true, ...this.timestamp() });
+            plugin.putAttributes({ paused: true, ...this.timestamp(), play: false });
             await delay(500);
             player.load();
         });
@@ -124,8 +131,8 @@ class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
                 }
             }
             if (this.changedMap.changed("volume", [volume, muted])) {
-                player.volume = plugin.attributes.volume;
-                player.muted = plugin.attributes.muted;
+                player.volume = volume;
+                player.muted = muted;
             }
             if (this.changedMap.changed("time", [currentTime, hostTime]) && hostTime > 0) {
                 let now = Date.now();
@@ -140,6 +147,26 @@ class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
             if (this.changedMap.changed("rate", playbackSpeed)) {
                 player.playbackRate = playbackSpeed;
             }
+
+            // // 兼容旧版发来的同步消息
+            // const a = plugin.attributes;
+            // if (this.changedMap.changed("deprecated-play", a.play)) {
+            //     if (a.play) {
+            //         await play(player);
+            //     } else {
+            //         player.pause();
+            //     }
+            // }
+            // if (this.changedMap.changed("deprecated-mute", a.mute)) {
+            //     player.muted = a.mute;
+            // }
+            // if (this.changedMap.changed("deprecated-seek", [a.seek, a.seekTime, a.currentTime])) {
+            //     if (a.seekTime) {
+            //         player.currentTime = a.seek + (Date.now() / 1000) - a.seekTime
+            //     } else {
+            //         player.currentTime = a.currentTime || a.seek;
+            //     }
+            // }
         });
         this.disposers.push(disposer);
         this.disposers.push(() => this.changedMap.clear());
@@ -191,7 +218,7 @@ class WhiteAudioPluginImpl extends Component<WhiteAudioPluginImplProps> {
                 )}
                 <div className="white-audio-plugin-body">
                     <audio
-                        src={plugin.attributes.src}
+                        src={plugin.attributes.src || plugin.attributes.pluginAudioUrl}
                         style={this.pointerEventsStyle}
                         controls={!!room}
                         controlsList="nodownload nofullscreen"

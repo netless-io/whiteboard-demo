@@ -22,4 +22,15 @@ export interface WhiteAudioPluginAttributes {
     volume: number;
     /** 是否禁用标题栏，默认不禁用 */
     isNavigationDisable?: boolean;
+
+    /** @deprecated use src instead */
+    pluginAudioUrl: string;
+    /** @deprecated use paused instead */
+    play: boolean;
+    /** @deprecated use muted instead */
+    mute: boolean;
+    /** @deprecated use hostTime and currentTime instead */
+    seek: number;
+    /** @deprecated use hostTime instead */
+    seekTime: number;
 }

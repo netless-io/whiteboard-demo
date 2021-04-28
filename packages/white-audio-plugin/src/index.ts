@@ -16,8 +16,8 @@ import { WhiteAudioPlugin } from "./WhiteAudioPlugin";
  *     attributes: { src: url, isNavigationDisable: false },
  * });
  */
-export const audioPlugin2: Plugin<PluginContext, WhiteAudioPluginAttributes> = Object.freeze({
-    kind: "audio2",
+export const audioPlugin: Plugin<PluginContext, WhiteAudioPluginAttributes> = Object.freeze({
+    kind: "audio",
     render: WhiteAudioPlugin,
     defaultAttributes: {
         src: "",
@@ -26,6 +26,12 @@ export const audioPlugin2: Plugin<PluginContext, WhiteAudioPluginAttributes> = O
         paused: true,
         muted: false,
         volume: 1,
+
+        pluginAudioUrl: "",
+        play: false,
+        mute: false,
+        seek: 0,
+        seekTime: 0,
     },
     hitTest(plugin) {
         const memberState = (plugin as any).component.context.getMemberState();
