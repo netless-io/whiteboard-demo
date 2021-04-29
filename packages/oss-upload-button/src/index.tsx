@@ -146,11 +146,23 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         try {
             if (this.props.whiteboardRef) {
                 const { clientWidth, clientHeight } = this.props.whiteboardRef;
-                await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
+                await uploadManager.uploadImageFiles(
+                    uploadFileArray,
+                    clientWidth / 2,
+                    clientHeight / 2,
+                    this.progress,
+                    this.props.oss.folder
+                );
             } else {
                 const clientWidth = window.innerWidth;
                 const clientHeight = window.innerHeight;
-                await uploadManager.uploadImageFiles(uploadFileArray, clientWidth / 2, clientHeight / 2, this.progress);
+                await uploadManager.uploadImageFiles(
+                    uploadFileArray,
+                    clientWidth / 2,
+                    clientHeight / 2,
+                    this.progress,
+                    this.props.oss.folder
+                );
             }
         } catch (error) {
             message.error(error);
