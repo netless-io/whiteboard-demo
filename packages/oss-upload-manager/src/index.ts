@@ -196,10 +196,10 @@ export class UploadManager {
         }
     }
 
-    public async uploadImageFiles(imageFiles: File[], x: number, y: number, onProgress?: PPTProgressListener): Promise<void> {
+    public async uploadImageFiles(imageFiles: File[], x: number, y: number, onProgress?: PPTProgressListener, folder?: string): Promise<void> {
         const newAcceptedFilePromises = imageFiles.map(file => this.fetchWhiteImageFileWith(file, x, y));
         const newAcceptedFiles = await Promise.all(newAcceptedFilePromises);
-        await this.uploadImageFilesArray(newAcceptedFiles, onProgress);
+        await this.uploadImageFilesArray(newAcceptedFiles, onProgress, folder);
     }
 
     private fetchWhiteImageFileWith(file: File, x: number, y: number): Promise<NetlessImageFile> {
@@ -224,7 +224,7 @@ export class UploadManager {
         });
     }
 
-    private async uploadImageFilesArray(imageFiles: NetlessImageFile[], onProgress?: PPTProgressListener): Promise<void> {
+    private async uploadImageFilesArray(imageFiles: NetlessImageFile[], onProgress?: PPTProgressListener, folder?: string): Promise<void> {
         if (imageFiles.length > 0) {
 
             const tasks: { uuid: string, imageFile: NetlessImageFile }[] = imageFiles.map(imageFile => {
@@ -245,15 +245,15 @@ export class UploadManager {
                     locked: false,
                 });
             }
-            await Promise.all(tasks.map(task => this.handleUploadTask(task, onProgress)));
+            await Promise.all(tasks.map(task => this.handleUploadTask(task, onProgress, folder)));
             this.room.setMemberState({
                 currentApplianceName: ApplianceNames.selector,
             });
         }
     }
 
-    private async handleUploadTask(task: TaskType, onProgress?: PPTProgressListener): Promise<void> {
-        const fileUrl: string = await this.addFile(`${task.uuid}${task.imageFile.file.name}`, task.imageFile.file, onProgress);
+    private async handleUploadTask(task: TaskType, onProgress?: PPTProgressListener, folder?: string): Promise<void> {
+        const fileUrl: string = await this.addFile(`/${folder ? folder + '/' : ''}${task.uuid}${task.imageFile.file.name}`, task.imageFile.file, onProgress);
         this.room.completeImageUpload(task.uuid, fileUrl);
     }
 
