@@ -7,6 +7,7 @@ import { Room } from "white-web-sdk";
 import { h5OssConfigObj } from "../appToken";
 import { history } from "../BrowserHistory";
 import { WithTranslation } from "react-i18next";
+import { Region } from "../region";
 
 export type H5UploadButtonStates = {
     visible: boolean;
@@ -18,11 +19,13 @@ export type H5UploadButtonStates = {
 };
 
 export type H5UploadButtonProps = {
-    room: Room
+    room: Room;
+    region: Region;
 };
 
 export class H5UploadButton extends React.Component<H5UploadButtonProps & WithTranslation, H5UploadButtonStates> {
     private oss: OSS;
+    private prefix: string;
 
     constructor(props: H5UploadButtonProps & WithTranslation) {
         super(props);
@@ -34,11 +37,19 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps & WithTr
             getSiteTimer: null,
             deploying: false
         };
+        const bucket = this.props.region === "us-sv" ? `${h5OssConfigObj.h5Bucket}-us` : h5OssConfigObj.h5Bucket
+        let region = h5OssConfigObj.h5Region;
+        this.prefix = h5OssConfigObj.h5Prefix;
+        if (this.props.region && this.props.region !== "cn-hz") {
+            region = "oss-us-west-1";
+            this.prefix = h5OssConfigObj.h5PrefixUs;
+        }
+
         this.oss = new OSS({
             accessKeyId: h5OssConfigObj.h5AccessKeyId,
             accessKeySecret: h5OssConfigObj.h5AccessKeySecret,
-            bucket: h5OssConfigObj.h5Bucket,
-            region: h5OssConfigObj.h5Region,
+            bucket: bucket,
+            region: region,
         });
     }
 
@@ -68,7 +79,7 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps & WithTr
                     this.setState({ percent: Math.round(p * 100) });
                 }
             })
-            const siteUrl = `${h5OssConfigObj.h5Prefix}${h5OssConfigObj.h5SiteFolder}/${uuid}`;
+            const siteUrl = `${this.prefix}${h5OssConfigObj.h5SiteFolder}/${uuid}`;
             this.setState({ deploying: true });
             await this.tryGetSite(payload, uuid, siteUrl);
         } catch (error) {

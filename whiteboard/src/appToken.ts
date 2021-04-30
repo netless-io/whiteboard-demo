@@ -38,7 +38,8 @@ export const h5OssConfigObj = {
     h5Bucket: process.env.H5BUCKET!,
     h5Folder: process.env.H5FOLDER!,
     h5SiteFolder: process.env.H5SITEFOLDER!,
-    h5Prefix: process.env.H5PREFIX!
+    h5Prefix: process.env.H5PREFIX!,
+    h5PrefixUs: "https://demo-h5-us.netless.group/",
 }
 
 
