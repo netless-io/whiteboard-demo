@@ -303,7 +303,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
             if (h5Url === h5DemoUrl3) {
                 totalPage = 14;
             }
-            if ([h5DemoUrl, h5DemoUrl3].includes(h5Url)) {
+            if ([h5DemoUrl, h5DemoUrl3].includes(h5Url) || dir) {
                 const scenes = room.entireScenes();
                 if (!scenes[h5SceneDir]) {
                     room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
@@ -312,6 +312,9 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     room.setScenePath(h5SceneDir);
                 }
             }
+        }
+        if (dir) {
+            new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url)
         }
         if (h5Url === supplierUrl) {
             new SupplierAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
@@ -397,7 +400,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                     </div>
                                 </Tooltip>
                                 <Tooltip placement="bottom" title={"H5 Course"}>
-                                    <H5UploadButton room={room} {...this.props} />
+                                    <H5UploadButton region={region} room={room} {...this.props} />
                                 </Tooltip>
                                 <InviteButton uuid={uuid} region={region} />
                                 <ExitButtonRoom identity={identity} room={room} userId={userId} />
