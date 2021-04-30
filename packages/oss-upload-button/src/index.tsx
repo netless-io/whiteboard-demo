@@ -170,8 +170,9 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
     }
 
     private getUrl = async (event: any): Promise<string> => {
+        const folder = this.props.oss.folder;
         const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin, this.props.region);
-        const res = await uploadManager.addFile(`${uuidv4()}/${event.file.name}`, event.file, this.progress);
+        const res = await uploadManager.addFile(`/${folder ? folder + '/' : ''}${uuidv4()}/${event.file.name}`, event.file, this.progress);
         const isHttps = res.indexOf("https") !== -1;
         let url;
         if (isHttps) {
