@@ -25,6 +25,19 @@ export const regions: Record<Language, RegionWithTranslation[]> = {
     ],
 };
 
+interface OSSConfigWithRegion {
+    bucket: string;
+    region: string;
+}
+
+export const ossConfigForRegion: Record<Region, OSSConfigWithRegion> = {
+    "cn-hz": { bucket: "beings", region: "oss-cn-hangzhou" },
+    "us-sv": { bucket: "whiteboard-demo-courseware-us-sv", region: "oss-us-west-1" },
+    "in-mum": { bucket: "whiteboard-demo-courseware-in-mum", region: "oss-ap-south-1" },
+    "gb-lon": { bucket: "whiteboard-demo-courseware-gb-lon", region: "oss-eu-west-1" },
+    "sg": { bucket: "whiteboard-demo-courseware-sg", region: "oss-ap-southeast-1" },
+};
+
 export let region: Region =
     (new URL(location.href).searchParams.get("rg") as Region) ||
     (navigator.language.startsWith("zh") ? "cn-hz" : "us-sv");
