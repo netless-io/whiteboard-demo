@@ -46,7 +46,7 @@ import {IframeWrapper, IframeBridge} from "@netless/iframe-bridge";
 import { IframeAdapter } from "./tools/IframeAdapter";
 import { H5UploadButton } from "./components/H5UploadButton";
 import i18n from "./i18n"
-import { Region } from "./region";
+import { ossConfigForRegion, Region } from "./region";
 import {isMobile, isWindows} from "react-device-detect";
 import { SupplierAdapter } from "./tools/SupplierAdapter";
 import { withTranslation, WithTranslation } from "react-i18next";
@@ -349,10 +349,9 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     public render(): React.ReactNode {
         const {room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         const { identity, uuid, userId, region } = this.props.match.params;
-        let ossConfig = ossConfigObj;
+        let ossConfig = { ...ossConfigObj };
         if (region !== "cn-hz") {
-            ossConfig.bucket = process.env.BUCKET2! || ossConfig.bucket;
-            ossConfig.region = process.env.OSSREGION2! || ossConfig.region;
+            ossConfig = { ...ossConfig, ...(ossConfigForRegion[region] || {}) };
         }
         if (room === undefined) {
             return <LoadingPage/>;
