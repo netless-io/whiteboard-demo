@@ -130,11 +130,12 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
                             </div>
                             <div className="page-cutline-link-box"/>
                             <div className="page-index-cell-right">
-                                <a href={"https://github.com/netless-io/flat-web"} target={"_blank"}>GitHub</a>
+                                <a href={"https://github.com/netless-io/whiteboard-demo"} target={"_blank"}>GitHub</a>
                             </div>
                         </div>
                         <div className="page-index-start-term">
-                            {t('license')}<a href={"https://opensource.org/licenses/MIT"} target={"_blank"}>《 {t('MITLicense')} 》</a>
+                            {t('license')}
+                            <a href={"https://github.com/netless-io/whiteboard-demo/blob/master/LICENSE.txt"} target={"_blank"}>{t('MITLicense')}</a>
                         </div>
                     </div>
                 </div>
