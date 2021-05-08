@@ -1,75 +1,74 @@
 
-
-# Flat-web
+# whiteboard-demo
 
 ![](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/react-whiteoard-home.png)
 
 ![whiteboard](https://white-sdk.oss-cn-beijing.aliyuncs.com/icons/whiteboard.png)
 
-体验地址：https://demo.netless.link/
+Experience address：https://demo.netless.link/
 
-[English Docs](./README_en.md)
+[简体中文](./README_zh.md)
 
-## 1. 适用开发者
+## 1. Applicable developers
 
-- 从事在线教育软件、在线会议、远程协作软件开发工作，想短期快速植入一个互动白板的 web 开发者。
-- 具有一定的 TypeScript、React 的编码或者阅读基础。
-- 如果要二次开发组件需要安装 lerna 来启动。
+- A web developer who is engaged in the development of online education software, online meetings, and remote collaboration software, and wants to quickly implant an interactive whiteboard in a short time.
+- Have a certain TypeScript, React coding or reading foundation.
+- If you want to develop components for the second time, you need to install lerna to start.
 
-## 2. 优势
+## 2. Advantage
 
-全程组件化，如果对组件的 UI 不挑剔可以直接是用项目中 `whiteboard` 文件夹内的代码即可。如果想要更改组件的样式，可以在了解 lerna 的作用和 阅读 `DEV_README.md` 的前提下自定义组件。
+The whole process is componentized. If you are not picky about the component's UI, you can just use the code in the `whiteboard` folder in the project. If you want to change the style of the component, you can customize the component under the premise of understanding the role of lerna and reading `DEV_README.md`.
 
-## 3. 注意事项
+## 3. Precautions
 
-Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建议都有服务器来调用。
+It is not safe for all Tokens in the demo to be hard-coded on the front end. It is recommended to have a server to call after the production environment.
 
-## 4. 单纯启动项目
+## 4. Simply start the project
 
-单纯启动项目是指直接应用项目中的组件代码样式，自己只编写“胶水”代码。
+Simply starting a project means to directly apply the component code style in the project, and only write the "glue" code by yourself.
 
-### 4.1 获取 Netless 白板的 SDK Token
+### 4.1 Get the SDK Token of Netless Whiteboard
 
-1. 注册 Netless 账号 
+1. Register a Netless account
 
-   [控制台](https://console.netless.link)
+   [Console](https://console.netless.link)
 
-2. 获取 AppIdentifier
+2. Get AppIdentifier
 
-   控制台 -> 应用管理 -> 点击复制
+   Console -> Application management -> Click copy
 
-3. 获取 SDK Token
+3. Get SDK Token
 
-   控制台 -> 应用管理 -> 配置 -> 点击生成
+   Console -> Application management -> Configuration -> Click copy
 
-4. 完善配置，填入配置文件
+4. Complete the configuration, fill in the configuration file
 
-   `.env.example`  文件名字改为 `.env`
+   `.env.example` file name is changed to `.env`
 
    ```typescript
-   APPIDENTIFIER=283/VGixxxxxx2HJg // 白板 APPIDENTIFIER
-   SDKTOKEN=NETLESSSDK_YWs9eDRxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxRkNTIyYjMwMmIyZGRj // 白板 SDKTOKEN
+   APPIDENTIFIER=283/VGixxxxxx2HJg // Whiteboard APPIDENTIFIER
+   SDKTOKEN=NETLESSSDK_YWs9eDRxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxRkNTIyYjMwMmIyZGRj // Whiteboard SDKTOKEN
    ```
 
-5. 安全事项
+5. Safety Precautions
 
-   上线后此 Token **建议维护在后端**
+   After going online, this Token **It is recommended to maintain it in the backend**
 
-### 4.2 获取阿里云的 `AK` `SK`（可选）
+### 4.2 Get Alibaba Cloud's `AK` `SK` (optional)
 
-白板同步视频、图片等富媒体的过程中并没有去通过长连接直接传递这些大体积数据，而是将其上传到阿里云的云存储后将云存储返回的 url 地址同步出去。开发者在理解了同步的是**地址**的前提之下，应该能推测出调试时对 OSS 的配置需要的几个基本要素：
+The process of synchronizing rich media such as videos and pictures on the whiteboard does not directly transmit these large-volume data through long connections, but uploads it to Alibaba Cloud's cloud storage and synchronizes the url address returned by the cloud storage. Under the premise that the developer understands that what is synchronized is the **address**, he should be able to figure out the basic elements required for the configuration of OSS during debugging:
 
-1. 本地调试我们没有再打包层配置代理，所以要开启跨域访问。
+1. For local debugging, we did not configure the proxy at the packaging layer, so cross-domain access should be enabled.
 
-2. 允许共有读，上线后可以改为支持各种防盗链。
+2. Shared reading is allowed, and can be changed to support various anti-theft links after going online.
 
-3. 自己能上传（这个不用多说吧，看 OSS 的文档）
+3. You can upload by yourself (Needless to say, see the OSS documentation)
 
-4. 调试配置参考 https://developer.netless.link/docs/faq/oss-config/
+4. Debug configuration reference https://developer.netless.link/docs/faq/oss-config/
 
-5. 完善配置，填入配置文件
+5. Complete the configuration, fill in the configuration file
 
-   `.env.example`  文件名字改为 `.env.local`
+   `.env.example` file name is changed to `.env`
 
    ```typescript
    AK=LTAI4xxxxxxxxxxuDmu
@@ -80,7 +79,7 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
    PREFIX=https://bxxxxxxxgs.oss-cn-hangzhou.aliyuncs.com/
    ```
 
-6. 如果不想配置云存储，请注释掉以下代码直接运行。但是不能使用上传图片、音视频、PPT 等核心功能
+6. If you don't want to configure cloud storage, please comment out the following code and run it directly. But you cannot use the core functions such as uploading pictures, audio and video, PPT, etc.
 
    ```tsx
     <ToolBox room={room} customerComponent={
@@ -93,103 +92,103 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
            ]
    }/>
    
-   // 改为
+   // changed to
    <ToolBox room={room}/>
    ```
-7. 安全事项
-   
-    上线后此配置 **建议维护在后端**
+7. Safety Precautions
+    
+    After going online, this Config **It is recommended to maintain it in the backend**
 
-### 4.3 启动项目
+### 4.3 Startup project
 
 ```bash
-# 访问到 whiteboard 文件夹下
+# Access to the whiteboard folder
 cd whiteboard
-# 加载依赖
+# Load dependencies
 yarn
-# 启动项目
+# Startup project
 yarn dev
-# 打包项目
+# Packaged project
 yarn build
 ```
 
-## 5. 组件二次开发
+## 5. Component secondary development
 
-我们假定需要二次开发的开发者都是深度玩家，需要熟悉一些前端工程化、组件化相关的工具。
+We assume that the developers who need secondary development are deep players and need to be familiar with some front-end engineering and component-related tools.
 
 - yarn or npm
-- lerna（下面有简单的运行起来的方法，详细用法请自行搜索学习）
+- lerna (There is a simple way to run it below, please search and learn by yourself for detailed usage)
 
-### 5.1 组件介绍
+### 5.1 Component introduction
 
-采用 lerna 管理的优势在于：组件化白板的常用功能，方便使用和维护管理。下面简单罗列一下核心组件，并介绍其作用和样式。
+The advantage of using lerna management is: the common functions of the componentized whiteboard are convenient to use, maintain and manage. The following briefly lists the core components, and introduces their functions and styles.
 
-#### 5.1.1 白板专有控件
+#### 5.1.1 Whiteboard proprietary controls
 
 ![全部控件位置](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/react-whiteboard.jpg)
 
 - `@netless/tool-box`
 
-  - 工具栏：控制白板的教具切换和教具颜色粗细等属性管理
+  - Toolbar: control the switching of teaching aids of the whiteboard and the management of the color and thickness of the teaching aids
 
 - `@netless/redo-undo` 
 
-  - 撤销重做
+  - Undo redo
 
 - `@netless/page-controller`
 
-  - 分页控制：显示共几页、当前第几页、上一页、下一页、到首页、到末页。
+  - Pagination control: display the total number of pages, the current page, the previous page, the next page, the first page, and the last page.
 
 - `@netless/zoom-controller`
 
-  -  放大缩小控制：放大、缩小、当前百分比、回到初始大小和位置
+  -  Zoom in and out control: zoom in, zoom out, current percentage, return to initial size and position
 
 - `@netless/preview-controller`
 
-  - 多分页预览控制：预览分页内容、插入空白页、删除页面
+  - Multi-page preview control: preview page content, insert blank page, delete page
 
-  - 预览详情页面
+  - Preview the details page
 
     ![预览图](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/preview-controller.jpg)
 
 - `@netless/cursor-tool`
 
-  - 光标工具：支持光标位置展示，光标教具状态，光标操作者名字展示
+  - Cursor tool: support cursor position display, cursor teaching aid status, cursor operator name display
 
 - `@netless/docs-center`
 
-  - 文档中心：管理在白板房间中上传过的课件资料如：PPT、PDF、WORD、PPTX
+  - Document Center: Manage the courseware materials uploaded in the whiteboard room, such as: PPT, PDF, WORD, PPTX
 
-  - 文档中心预览
+  - Document Center Preview
 
     ![docs-center](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/docs-center.jpg)
 
 - `@netless/oss-upload-button`
 
-  - 上传管理按钮：上传图片、课件
+  - Upload management button: upload pictures, courseware
 
 - `@netless/white-video-plugin`
 
-  - 视频插件：支持上传视频，用于初始化的时候注入。
+  - Video plug-in: Support uploading video, which is used for injection during initialization.
 
 - `@netless/white-audio-plugin`
 
-  - 音频插件：支持音频插件，用于初始化的时候注入。
+  - Audio plug-in: Support audio plug-in, used to inject during initialization.
 
 - `@netless/plugin-center`
 
-  - 插件白板插件管理中心：管理插件的展示，用于使用 api 上传视频。
+  - Plug-in whiteboard plug-in management center: manage the display of plug-ins, used to upload videos using api.
 
-#### 5.1.2 通用控件控件
+#### 5.1.2 Common controls
 
 - `@netless/fetch-middleware`
-  - 网络请求中间件：具有设置请求超时报错功能
+  - Network request middleware: has the function of setting request timeout error report
 - `@netless/loading-bar`
-  - 进度条：上传到 oss 展示用
+  - Progress bar: upload to oss for display
 - `@netless/menu-box`
-  - 带动画的侧边栏组件：在文档中心和预览管理中使用
+  - Sidebar component with animation: used in document center and preview management
 
-### 5.2 启动项目构建
+### 5.2 Start project build
 
 ```bash
 # STEP 1
@@ -197,7 +196,7 @@ yarn
 # STEP 2
 lerna bootstrap
 # STEP 3
-# 以下两个依赖，依赖于 package 中其他库，优先构建完其他库，再构建这两个库
+# The following two dependencies depend on other libraries in the package, and build other libraries first, then build these two libraries
 lerna run --ignore @netless/docs-center --ignore @netless/preview-controller build:lib
 lerna run --scope @netless/docs-center --scope @netless/preview-controller build:lib
 lerna run --scope whiteboard build
@@ -205,33 +204,33 @@ lerna run --scope whiteboard build
 
 
 
-### 5.3 常用命令介绍
+### 5.3 Introduction to common commands
 
 ```bash
-# 安装全局 lerna
+# Install global lerna
 yarn global add lerna
 # or npm install
 npm install lerna -g
 
-# 单独 yarn
+# Separate yarn
 yarn
 
-# lerna 准备工作
+# lerna Ready to work
 lerna bootstrap
 
-# 启动所有脚本的热更新
+# Start hot update of all scripts
 lerna run --parallel dev
 
-# 构建所有库的 yarn build 命令
+# Yarn build command to build all libraries
 lerna run build
 
-# 只运行 toolbox 的 yarn dev 脚本
+# Run only the yarn dev script of toolbox
 lerna run --scope `lib-name` dev
 # lerna run --parallel  --scope @netless/toolbox --scope whiteboard dev
 
-# 运行除 tool-box 外的 run dev 脚本
+# Run run dev scripts except tool-box
 lerna run --ignore @netless/tool-box dev
 
-# build 所有库
+# build all libraries
 lerna run --parallel build:lib
 ```
