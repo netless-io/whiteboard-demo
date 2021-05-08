@@ -239,6 +239,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             changeToRectangle: "r",
                             changeToEllipse: "c",
                             changeToEraser: "e",
+                            changeToText: "t",
                             changeToStraight: "l",
                             changeToArrow: "a",
                             changeToHand: "h",
