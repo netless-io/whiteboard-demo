@@ -349,6 +349,11 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     public render(): React.ReactNode {
         const {room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         const { identity, uuid, userId, region } = this.props.match.params;
+        let ossConfig = ossConfigObj;
+        if (region !== "cn-hz") {
+            ossConfig.bucket = process.env.BUCKET2! || ossConfig.bucket;
+            ossConfig.region = process.env.OSSREGION2! || ossConfig.region;
+        }
         if (room === undefined) {
             return <LoadingPage/>;
         }
@@ -369,7 +374,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         <div className="tool-box-out">
                             <ToolBox i18nLanguage={i18n.language} room={room} customerComponent={
                                 [
-                                    <OssUploadButton oss={ossConfigObj}
+                                    <OssUploadButton oss={ossConfig}
                                                      appIdentifier={netlessToken.appIdentifier}
                                                      sdkToken={netlessToken.sdkToken}
                                                      room={room}
@@ -425,7 +430,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         <OssDropUpload
                             room={room}
                             region={region}
-                            oss={ossConfigObj}>
+                            oss={ossConfig}>
                             <div
                                 ref={this.handleBindRoom}
                                 className="whiteboard-box"/>
