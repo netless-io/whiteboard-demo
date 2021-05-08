@@ -223,10 +223,12 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
             }
         } else {
             switch (name) {
+                case ApplianceNames.hand: {
+                    return "Drag";
+                }
                 case ApplianceNames.arrow:
                 case ApplianceNames.ellipse:
                 case ApplianceNames.eraser:
-                case ApplianceNames.hand:
                 case ApplianceNames.laserPointer:
                 case ApplianceNames.pencil:
                 case ApplianceNames.rectangle:
