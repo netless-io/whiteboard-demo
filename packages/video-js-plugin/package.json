@@ -1,0 +1,32 @@
+{
+    "name": "@netless/video-js-plugin",
+    "version": "0.1.0",
+    "description": "a video plugin for white-web-sdk using video.js.",
+    "main": "dist/index.cjs.js",
+    "module": "dist/index.es.js",
+    "types": "src/index.ts",
+    "files": [
+        "src",
+        "dist"
+    ],
+    "author": "netless",
+    "license": "MIT",
+    "scripts": {
+        "build:lib": "esbuild-dev ./scripts/build.ts"
+    },
+    "dependencies": {},
+    "peerDependencies": {
+        "react": ">=16.8.0",
+        "react-dom": ">=16.8.0",
+        "video.js": "^7.10.2",
+        "white-web-sdk": "^2.12.15"
+    },
+    "devDependencies": {
+        "@hyrious/esbuild-dev": "^0.2.7",
+        "@types/react": "^17.0.5",
+        "@types/react-dom": "^17.0.4",
+        "@types/video.js": "^7.3.17",
+        "esbuild": "^0.11.20",
+        "video.js": "^7.10.2"
+    }
+}
