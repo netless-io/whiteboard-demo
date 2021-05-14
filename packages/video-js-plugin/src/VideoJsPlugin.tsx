@@ -45,6 +45,28 @@ import { Transformer } from "./utils";
             .videojs-plugin-close-icon:hover {
                 opacity: 1;
             }
+            .videojs-plugin-muted-alert {
+                pointer-events: auto;
+                cursor: pointer;
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                z-index: 43;
+            }
+            .videojs-plugin-muted-alert::before {
+                pointer-events: auto;
+                cursor: pointer;
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                z-index: 43;
+                content: "\\f104";
+                background: rgba(0,0,0,.3);
+                font-family: VideoJS;
+                font-size: 2em;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+            }
         `)
     );
     document.head.appendChild(injectedStyle);
@@ -74,18 +96,33 @@ export class VideoJSPlugin extends Component<VideoJSPluginProps> {
     }
 }
 
-export class VideoJSPluginImpl extends Component<
-    VideoJSPluginProps & {
-        room?: Room;
-        player?: Player;
-    }
-> {
+type VideoJSPluginImplProps = VideoJSPluginProps & {
+    room?: Room;
+    player?: Player;
+};
+
+interface VideoJSPluginImplState {
+    /**
+     * Chrome prevents video play sound on video.play().
+     * Record the state here to tell the user to click once.
+     */
+    isFirstPlay: boolean;
+}
+
+export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJSPluginImplState> {
     identity: PluginContext["identity"];
     videoNode?: HTMLVideoElement;
     player?: VideoJsPlayer;
     disposers: (() => void)[] = [];
     changedMap: Partial<VideoJsPluginAttributes> = {};
     playbackSpeed?: number;
+
+    constructor(props: VideoJSPluginImplProps) {
+        super(props);
+        this.state = {
+            isFirstPlay: false,
+        };
+    }
 
     // called when context changed
     dispose() {
@@ -128,24 +165,42 @@ export class VideoJSPluginImpl extends Component<
         this.player?.dispose();
     }
 
+    /**
+     * call this method in `player.on('error')` and `player.play().catch()`
+     */
+    preFixMuted() {
+        this.player!.autoplay("muted");
+        this.setState({ isFirstPlay: true });
+    }
+
+    /**
+     * call this method when user click the alert mask
+     */
+    fixMuted() {
+        const { plugin } = this.props;
+        if (this.isPublisher()) plugin.putAttributes({ muted: false });
+        this.player!.muted(false);
+        this.setState({ isFirstPlay: false });
+    }
+
     initPlayer() {
         const player = this.player!;
         const { src, poster, currentTime, muted, paused, volume } = this.props.plugin.attributes;
         if (poster) player.poster(poster);
         player.currentTime(currentTime);
-        player.defaultMuted(muted);
-        if (paused) {
-            player.pause();
-            player.autoplay(false);
-        } else {
-            player.play();
-            player.autoplay(true);
-        }
         player.volume(volume);
         player.src(src);
         player.controls(true);
         player.playsinline(true);
         player.preload(true);
+        player.muted(muted);
+        const fixMuted = this.preFixMuted.bind(this);
+        player.ready(() => {
+            if (!paused) {
+                player.play()?.catch(fixMuted);
+            }
+        });
+        player.on("error", fixMuted);
     }
 
     setIdentity(identity: PluginContext["identity"]) {
@@ -172,7 +227,11 @@ export class VideoJSPluginImpl extends Component<
                 if (paused || !isPlaying) {
                     player.pause();
                 } else {
-                    player.play();
+                    if (this.state.isFirstPlay) {
+                        player.autoplay("any");
+                    } else {
+                        player.play();
+                    }
                 }
             }
             if (this.changed("volume", muted ? 0 : volume)) {
@@ -192,7 +251,14 @@ export class VideoJSPluginImpl extends Component<
                     } else {
                         // BUG: directly call play() here sometimes doesn't work
                         player.pause();
-                        setTimeout(() => player.play());
+                        player.muted(muted);
+                        setTimeout(() => {
+                            if (this.state.isFirstPlay) {
+                                player.autoplay("any");
+                            } else {
+                                player.play();
+                            }
+                        });
                     }
                 }
             }
@@ -223,7 +289,9 @@ export class VideoJSPluginImpl extends Component<
                 plugin.putAttributes({ ...this.timestamp() });
             });
             player.on("volumechange", () => {
-                plugin.putAttributes({ volume: player.volume(), muted: player.muted() });
+                if (!this.state.isFirstPlay) {
+                    plugin.putAttributes({ volume: player.volume(), muted: player.muted() });
+                }
             });
             let timer = NaN;
             player.on("timeupdate", () => {
@@ -274,6 +342,12 @@ export class VideoJSPluginImpl extends Component<
                 >
                     &times;
                 </span>
+                {this.state.isFirstPlay && (
+                    <div
+                        className="videojs-plugin-muted-alert"
+                        onClick={this.fixMuted.bind(this)}
+                    ></div>
+                )}
             </div>
         );
     }
