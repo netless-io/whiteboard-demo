@@ -14,6 +14,8 @@ export const Transformer: FC<Pick<PluginProps<unknown, unknown>, "size" | "scale
                 width: width / scale,
                 height: height / scale,
                 transform: `scale(${scale})`,
+                display: "flex",
+                transformOrigin: "top left",
             }}
         >
             {children}

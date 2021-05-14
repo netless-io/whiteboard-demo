@@ -321,7 +321,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
         const { room, player } = this.props;
         if (!room && !player) return null;
         return (
-            <div style={{ width: "100%", height: "100%", position: "relative" }}>
+            <div style={{ display: "flex", flexGrow: 1, position: "relative" }}>
                 <div data-vjs-player>
                     <video
                         className="video-js"
