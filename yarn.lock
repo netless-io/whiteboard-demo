@@ -2064,6 +2064,11 @@
   resolved "https://registry.npmjs.org/@types/uuid/-/uuid-8.3.0.tgz#215c231dff736d5ba92410e6d602050cce7e273f"
   integrity sha512-eQ9qFW/fhfGJF8WKHGEHZEyVWfZxrT+6CLIJGBcZPfxUh/+BnEj+UCGYMlr9qZuX/2AltsvwrGqp0LhEW8D0zQ==
 
+"@types/video.js@^7.3.17":
+  version "7.3.17"
+  resolved "https://registry.npmjs.org/@types/video.js/-/video.js-7.3.17.tgz#df6b862005c2b5acd0a7c972040599d2d703698d"
+  integrity sha512-Wj3mdaZtcUYqNjorqQ9pVrZSCGUkQrDl1dm3h+tMPB/WGnA9B5dWF7zycV13+diNX0CWvxawjyBvQ+DmkeqNsw==
+
 "@types/webpack-sources@*":
   version "2.1.0"
   resolved "https://registry.npmjs.org/@types/webpack-sources/-/webpack-sources-2.1.0.tgz#8882b0bd62d1e0ce62f183d0d01b72e6e82e8c10"
@@ -2099,6 +2104,20 @@
     mux.js "5.8.0"
     video.js "^6 || ^7"
 
+"@videojs/http-streaming@2.6.4":
+  version "2.6.4"
+  resolved "https://registry.npmjs.org/@videojs/http-streaming/-/http-streaming-2.6.4.tgz#a3d9eb62b02c6e48439f033675ec3a6f5f8cdb25"
+  integrity sha512-sFVE0MVXhawAkET8EgiUSMvDDv6u3uGidtO0BvNXG0/qKWlze/zEzhvLsyPU4HmLFRnffKeHK5RE2XpO5vHY8Q==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/vhs-utils" "^3.0.0"
+    aes-decrypter "3.1.2"
+    global "^4.4.0"
+    m3u8-parser "4.5.2"
+    mpd-parser "0.15.4"
+    mux.js "5.10.0"
+    video.js "^6 || ^7"
+
 "@videojs/vhs-utils@^2.2.1", "@videojs/vhs-utils@^2.3.0":
   version "2.3.0"
   resolved "https://registry.npmjs.org/@videojs/vhs-utils/-/vhs-utils-2.3.0.tgz#490a3a00dfc1b51d85d5dcf8f8361e2d4c4d1440"
@@ -2107,6 +2126,15 @@
     "@babel/runtime" "^7.5.5"
     global "^4.3.2"
     url-toolkit "^2.1.6"
+
+"@videojs/vhs-utils@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/@videojs/vhs-utils/-/vhs-utils-3.0.1.tgz#6bd7b5309883dcbaccb0f766b08094bc2bde5dbc"
+  integrity sha512-kYHWcmzRyWfUXrrOZzRFzvt7XM+Sg+0vmsSbYONn2e/XeWD8+35K74+wZkW5/H9nYZDhYpZgeTKbLRUvxk+smA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    global "^4.4.0"
+    url-toolkit "^2.2.1"
 
 "@videojs/xhr@2.5.1":
   version "2.5.1"
@@ -2466,6 +2494,16 @@ aes-decrypter@3.1.0:
     "@babel/runtime" "^7.5.5"
     "@videojs/vhs-utils" "^2.2.1"
     global "^4.3.2"
+    pkcs7 "^1.0.4"
+
+aes-decrypter@3.1.2:
+  version "3.1.2"
+  resolved "https://registry.npmjs.org/aes-decrypter/-/aes-decrypter-3.1.2.tgz#3545546f8e9f6b878640339a242efe221ba7a7cb"
+  integrity sha512-42nRwfQuPRj9R1zqZBdoxnaAmnIFyDi0MNyTVhjdFOd8fifXKKRfwIHIZ6AMn1or4x5WONzjwRTbTWcsIQ0O4A==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/vhs-utils" "^3.0.0"
+    global "^4.4.0"
     pkcs7 "^1.0.4"
 
 agent-base@4, agent-base@^4.2.0, agent-base@^4.3.0:
@@ -3438,6 +3476,13 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
+
+"chainsaw@>=0.0.7 <0.1":
+  version "0.0.9"
+  resolved "https://registry.npmjs.org/chainsaw/-/chainsaw-0.0.9.tgz#11a05102d1c4c785b6d0415d336d5a3a1612913e"
+  integrity sha1-EaBRAtHEx4W20EFdM21aOhYSkT4=
+  dependencies:
+    traverse ">=0.3.0 <0.4"
 
 chalk@^1.0.0, chalk@^1.1.3:
   version "1.1.3"
@@ -4926,6 +4971,11 @@ estraverse@~1.5.0:
   resolved "https://registry.npmjs.org/estraverse/-/estraverse-1.5.1.tgz#867a3e8e58a9f84618afb6c2ddbcd916b7cbaf71"
   integrity sha1-hno+jlip+EYYr7bC3bzZFrfLr3E=
 
+estree-walker@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.npmjs.org/estree-walker/-/estree-walker-0.6.1.tgz#53049143f40c6eb918b23671d1fe3219f3a1b362"
+  integrity sha512-SqmZANLWS0mnatqbSfRP5g8OXZC12Fgg1IwNtLsyHDzJizORW4khDfjPqJZsemPWBB2uqykUah5YpQ6epsqC/w==
+
 esutils@^2.0.2:
   version "2.0.3"
   resolved "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
@@ -5802,6 +5852,13 @@ hash.js@^1.0.0, hash.js@^1.0.3:
   dependencies:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
+
+"hashish@>=0.0.2 <0.1":
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/hashish/-/hashish-0.0.4.tgz#6d60bc6ffaf711b6afd60e426d077988014e6554"
+  integrity sha1-bWC8b/r3Ebav1g5CbQd5iAFOZVQ=
+  dependencies:
+    traverse ">=0.2.4"
 
 he@^1.2.0:
   version "1.2.0"
@@ -7148,10 +7205,26 @@ m3u8-parser@4.5.0:
     "@videojs/vhs-utils" "^2.2.1"
     global "^4.3.2"
 
+m3u8-parser@4.5.2:
+  version "4.5.2"
+  resolved "https://registry.npmjs.org/m3u8-parser/-/m3u8-parser-4.5.2.tgz#f7d48a60112466e528324624c4e66d52ed341a75"
+  integrity sha512-sN/lu3TiRxmG2RFjZxo5c0/7Dr4RrEztl43jXrWwj5gFZ7vfa2iIxGfiPx485dm5QCazaIcKk+vNkUso8Aq0Ag==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/vhs-utils" "^3.0.0"
+    global "^4.4.0"
+
 macos-release@^2.2.0:
   version "2.4.1"
   resolved "https://registry.npmjs.org/macos-release/-/macos-release-2.4.1.tgz#64033d0ec6a5e6375155a74b1a1eba8e509820ac"
   integrity sha512-H/QHeBIN1fIGJX517pvK8IEK53yQOW7YcEI55oYtgjDdoCQQz7eJS94qt5kNrscReEyuD/JcdFCm2XBEcGOITg==
+
+magic-string@^0.25.2:
+  version "0.25.7"
+  resolved "https://registry.npmjs.org/magic-string/-/magic-string-0.25.7.tgz#3f497d6fd34c669c6798dcb821f2ef31f5445051"
+  integrity sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==
+  dependencies:
+    sourcemap-codec "^1.4.4"
 
 make-dir@^1.0.0:
   version "1.3.0"
@@ -7621,6 +7694,16 @@ mpd-parser@0.15.0:
     global "^4.3.2"
     xmldom "^0.1.27"
 
+mpd-parser@0.15.4:
+  version "0.15.4"
+  resolved "https://registry.npmjs.org/mpd-parser/-/mpd-parser-0.15.4.tgz#e1b445d0dc2aab1389fde6420ca9cca7c999575d"
+  integrity sha512-YcOclxKc5gnT87UQYwRoPJpWOFvQORwN+bXYmTWCJ4U2pCSS7jjtPrIhoOLHFAyekj48CHTX4hjGBV/VSNsUsg==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/vhs-utils" "^3.0.0"
+    global "^4.4.0"
+    xmldom "^0.4.0"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -7673,6 +7756,13 @@ mute-stream@~0.0.4:
   version "0.0.8"
   resolved "https://registry.npmjs.org/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
+
+mux.js@5.10.0:
+  version "5.10.0"
+  resolved "https://registry.npmjs.org/mux.js/-/mux.js-5.10.0.tgz#80fb30f9233c7902cac5cc8e1ae5f19e91cf8477"
+  integrity sha512-kLzvYsHYBwNa+ckkmpxWV3eImwntJbrwd1KbN4WR0hLe+dK/KB82aCuC0fQzAI2hkjYszdlSGsAWFgYdiFBUuA==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
 
 mux.js@5.8.0:
   version "5.8.0"
@@ -9932,6 +10022,13 @@ remove-trailing-separator@^1.0.1:
   resolved "https://registry.npmjs.org/remove-trailing-separator/-/remove-trailing-separator-1.1.0.tgz#c24bce2a283adad5bc3f58e0d48249b92379d8ef"
   integrity sha1-wkvOKig62tW8P1jg1IJJuSN52O8=
 
+remove@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.npmjs.org/remove/-/remove-0.1.5.tgz#095ffd827d65c9f41ad97d33e416a75811079955"
+  integrity sha1-CV/9gn1lyfQa2X0z5BanWBEHmVU=
+  dependencies:
+    seq ">= 0.3.5"
+
 renderkid@^2.0.4:
   version "2.0.5"
   resolved "https://registry.npmjs.org/renderkid/-/renderkid-2.0.5.tgz#483b1ac59c6601ab30a7a596a5965cabccfdd0a5"
@@ -10108,6 +10205,21 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
+
+rollup-plugin-replace@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/rollup-plugin-replace/-/rollup-plugin-replace-2.2.0.tgz#f41ae5372e11e7a217cde349c8b5d5fd115e70e3"
+  integrity sha512-/5bxtUPkDHyBJAKketb4NfaeZjL5yLZdeUihSfbF2PQMz+rSTEb8ARKoOl3UBT4m7/X+QOXJo3sLTcq+yMMYTA==
+  dependencies:
+    magic-string "^0.25.2"
+    rollup-pluginutils "^2.6.0"
+
+rollup-pluginutils@^2.6.0:
+  version "2.8.2"
+  resolved "https://registry.npmjs.org/rollup-pluginutils/-/rollup-pluginutils-2.8.2.tgz#72f2af0748b592364dbd3389e600e5a9444a351e"
+  integrity sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==
+  dependencies:
+    estree-walker "^0.6.1"
 
 run-async@^2.2.0:
   version "2.4.1"
@@ -10288,6 +10400,14 @@ send@0.17.1:
     on-finished "~2.3.0"
     range-parser "~1.2.1"
     statuses "~1.5.0"
+
+"seq@>= 0.3.5":
+  version "0.3.5"
+  resolved "https://registry.npmjs.org/seq/-/seq-0.3.5.tgz#ae02af3a424793d8ccbf212d69174e0c54dffe38"
+  integrity sha1-rgKvOkJHk9jMvyEtaRdODFTf/jg=
+  dependencies:
+    chainsaw ">=0.0.7 <0.1"
+    hashish ">=0.0.2 <0.1"
 
 serialize-javascript@^4.0.0:
   version "4.0.0"
@@ -10553,6 +10673,11 @@ source-map@~0.1.30:
   integrity sha1-wkvBRspRfBRx9drL4lcbK3+eM0Y=
   dependencies:
     amdefine ">=0.0.4"
+
+sourcemap-codec@^1.4.4:
+  version "1.4.8"
+  resolved "https://registry.npmjs.org/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
+  integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
 spark-md5@^3.0.0:
   version "3.0.1"
@@ -11222,6 +11347,16 @@ tr46@^1.0.1:
   dependencies:
     punycode "^2.1.0"
 
+traverse@>=0.2.4:
+  version "0.6.6"
+  resolved "https://registry.npmjs.org/traverse/-/traverse-0.6.6.tgz#cbdf560fd7b9af632502fed40f918c157ea97137"
+  integrity sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=
+
+"traverse@>=0.3.0 <0.4":
+  version "0.3.9"
+  resolved "https://registry.npmjs.org/traverse/-/traverse-0.3.9.tgz#717b8f220cc0bb7b44e40514c22b2e8bbc70d8b9"
+  integrity sha1-cXuPIgzAu3tE5AUUwisui7xw2Lk=
+
 trim-newlines@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/trim-newlines/-/trim-newlines-1.0.0.tgz#5887966bb582a4503a41eb524f7d35011815a613"
@@ -11513,6 +11648,11 @@ url-toolkit@^2.1.6:
   resolved "https://registry.npmjs.org/url-toolkit/-/url-toolkit-2.2.1.tgz#89009ed3d62a3574de079532a7266c14d2cc1c4f"
   integrity sha512-8+DzgrtDZYZGhHaAop5WGVghMdCfOLGbhcArsJD0qDll71FXa7EeKxi2hilPIscn2nwMz4PRjML32Sz4JTN0Xw==
 
+url-toolkit@^2.2.1:
+  version "2.2.2"
+  resolved "https://registry.npmjs.org/url-toolkit/-/url-toolkit-2.2.2.tgz#51ef27b56d3187185f9ecf4a8ac7e8f55203c89d"
+  integrity sha512-l25w6Sy+Iy3/IbogunxhWwljPaDnqpiKvrQRoLBm6DfISco7NyRIS7Zf6+Oxhy1T8kHxWdwLND7ZZba6NjXMug==
+
 url@^0.11.0:
   version "0.11.0"
   resolved "https://registry.npmjs.org/url/-/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
@@ -11678,7 +11818,7 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-"video.js@^6 || ^7", video.js@^7.10.2, video.js@^7.8.4:
+"video.js@^6 || ^7", video.js@^7.8.4:
   version "7.11.4"
   resolved "https://registry.npmjs.org/video.js/-/video.js-7.11.4.tgz#64300cb6def9f17ecba4808ae76ec7c10c952378"
   integrity sha512-eT9n7YCugHyWNHI2gyK28XoozNmLiW4F9dRYEP6ET/JVmm7oXPhLeVfs5kqcRviquISqWsvsNmhK1b9vvZzyVA==
@@ -11688,6 +11828,22 @@ verror@1.10.0:
     "@videojs/xhr" "2.5.1"
     global "4.3.2"
     keycode "^2.2.0"
+    safe-json-parse "4.0.0"
+    videojs-font "3.2.0"
+    videojs-vtt.js "^0.15.2"
+
+video.js@^7.11.8:
+  version "7.11.8"
+  resolved "https://registry.npmjs.org/video.js/-/video.js-7.11.8.tgz#1fa27c56f30a436b06b44f21560f223e264aec51"
+  integrity sha512-iQmNYB+pdgu8b45Za1AKSa5J7uDyHIqfJy+picw4voKfjErXK/BEvs+A3f99Ck7SCZU4cmMmX/s17AwaaNs+1w==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@videojs/http-streaming" "2.6.4"
+    "@videojs/xhr" "2.5.1"
+    global "4.3.2"
+    keycode "^2.2.0"
+    remove "^0.1.5"
+    rollup-plugin-replace "^2.2.0"
     safe-json-parse "4.0.0"
     videojs-font "3.2.0"
     videojs-vtt.js "^0.15.2"
@@ -11945,10 +12101,10 @@ which@^1.2.14, which@^1.2.9, which@^1.3.1:
   dependencies:
     isexe "^2.0.0"
 
-white-web-sdk@2.12.15:
-  version "2.12.15"
-  resolved "https://registry.npmjs.org/white-web-sdk/-/white-web-sdk-2.12.15.tgz#29e17ac8410151d16878b58002b2862dc042ca71"
-  integrity sha512-sZ7xQnddD2U8tqJfXnUmQyCf/b62LIndu6AJ8ln+u2yJsmozfWc6rf8S4BwVZ1XzcXpcJU0cWAqLXHFKutRbUA==
+white-web-sdk@2.12.17:
+  version "2.12.17"
+  resolved "https://registry.npmjs.org/white-web-sdk/-/white-web-sdk-2.12.17.tgz#c0a07925872a8a8d5b514c2214c98b8ce6a437c2"
+  integrity sha512-wp2KUuug7FVOqXGBKNOFJY/W7vozNtZJFFD1wEBsEGp7H6qOM9Ci1BoamSh+y6hw+wN7zDL8XSSvsDC4ZcvauA==
   dependencies:
     "@netless/canvas-polyfill" "^0.0.4"
     atob "^2.1.0"
@@ -12114,6 +12270,11 @@ xmldom@^0.1.27:
   version "0.1.31"
   resolved "https://registry.npmjs.org/xmldom/-/xmldom-0.1.31.tgz#b76c9a1bd9f0a9737e5a72dc37231cf38375e2ff"
   integrity sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==
+
+xmldom@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.npmjs.org/xmldom/-/xmldom-0.4.0.tgz#8771e482a333af44587e30ce026f0998c23f3830"
+  integrity sha512-2E93k08T30Ugs+34HBSTQLVtpi6mCddaY8uO+pMNk1pqSjV5vElzn4mmh6KLxN3hki8rNcHSYzILoh3TEWORvA==
 
 xregexp@2.0.0:
   version "2.0.0"

@@ -40,8 +40,8 @@
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
         "uuid": "^8.3.2",
-        "video.js": "^7.10.2",
-        "white-web-sdk": "2.12.15"
+        "video.js": "^7.11.8",
+        "white-web-sdk": "2.12.17"
     },
     "devDependencies": {
         "@types/ali-oss": "^6.0.7",
@@ -49,6 +49,7 @@
         "@types/react-dom": "^17.0.2",
         "@types/react-router": "^4.4.5",
         "@types/react-router-dom": "^4.3.5",
+        "@types/video.js": "^7.3.17",
         "clean-webpack-plugin": "^3.0.0",
         "css-loader": "^3.2.0",
         "dotenv-webpack": "^2.0.0",
