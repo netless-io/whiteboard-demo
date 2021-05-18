@@ -1,14 +1,14 @@
-import { build } from "esbuild";
-import { main, module, peerDependencies } from "../package.json";
+const { build } = require("esbuild");
+const pkg = require("../package.json");
 
 build({
     entryPoints: ["src/index.ts"],
     platform: "browser",
     bundle: true,
     target: "es2018",
-    external: Object.keys(peerDependencies),
+    external: Object.keys(pkg.peerDependencies),
     format: "cjs",
-    outfile: main,
+    outfile: pkg.main,
     minify: true,
     sourcemap: true,
 });
@@ -18,9 +18,9 @@ build({
     platform: "browser",
     bundle: true,
     target: "es2018",
-    external: Object.keys(peerDependencies),
+    external: Object.keys(pkg.peerDependencies),
     format: "esm",
-    outfile: module,
+    outfile: pkg.module,
     minify: true,
     sourcemap: true,
 });
