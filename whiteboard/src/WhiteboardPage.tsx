@@ -411,7 +411,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                         <img style={{width: "28px"}} src={folder} alt={"folder"}/>
                                     </div>
                                 </Tooltip>
-                                <Tooltip placement="bottom" title={"H5 Course"}>
+                                <Tooltip placement="bottom" title={"HTML5 Course"}>
                                     <H5UploadButton region={region} room={room} {...this.props} />
                                 </Tooltip>
                                 <InviteButton uuid={uuid} region={region} />
