@@ -209,6 +209,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     private getApplianceName(name: string): string {
         if (this.props.i18nLanguage === "zh-CN") {
             switch (name) {
+                case ApplianceNames.clicker: return "点击";
                 case ApplianceNames.arrow: return "箭头";
                 case ApplianceNames.ellipse: return "椭圆";
                 case ApplianceNames.eraser: return "橡皮擦";
@@ -226,6 +227,7 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
                 case ApplianceNames.hand: {
                     return "Drag";
                 }
+                case ApplianceNames.clicker:
                 case ApplianceNames.arrow:
                 case ApplianceNames.ellipse:
                 case ApplianceNames.eraser:
@@ -370,25 +372,28 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
 
     private renderCleanCell = (): React.ReactNode => {
         const {room} = this.props;
-        const {isClearActive} = this.state;
+        const { isClearActive } = this.state;
+        const isCN = this.props.i18nLanguage === "zh-CN"
         return (
-            <div
-                onMouseEnter={() => {
-                    this.setState({isClearActive: true})
-                }}
-                onMouseLeave={() => {
-                    this.setState({isClearActive: false})
-                }}
-                onClick={() => {
-                    room.cleanCurrentScene();
-                }}
-                key={"key"}
-                className="tool-box-cell-box-left">
-                <div className="tool-box-cell">
-                    <img src={isClearActive ? clearActive : clear} alt={"clear"}/>
+            <Tooltip placement={"right"} key="clean" title={isCN ? "清屏" : "Clear"}>
+                <div
+                    onMouseEnter={() => {
+                        this.setState({ isClearActive: true });
+                    }}
+                    onMouseLeave={() => {
+                        this.setState({ isClearActive: false });
+                    }}
+                    onClick={() => {
+                        room.cleanCurrentScene();
+                    }}
+                    className="tool-box-cell-box-left"
+                >
+                    <div className="tool-box-cell">
+                        <img src={isClearActive ? clearActive : clear} alt={"clear"} />
+                    </div>
                 </div>
-            </div>
-        )
+            </Tooltip>
+        );
     }
 
     public render(): React.ReactNode {
