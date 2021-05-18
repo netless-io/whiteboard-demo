@@ -1,3 +1,5 @@
+import "video.js/dist/video-js.css";
+
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import {
@@ -20,6 +22,7 @@ import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
 import {videoPlugin2} from "@netless/white-video-plugin2";
 import {audioPlugin2} from "@netless/white-audio-plugin2";
+import { videoJsPlugin } from "@netless/video-js-plugin"
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
 import {CursorTool} from "@netless/cursor-tool";
@@ -186,11 +189,15 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 const plugins = createPlugins({
                     "video": videoPlugin, "audio": audioPlugin,
                     "video2": videoPlugin2, "audio2": audioPlugin2,
+                    "video.js": videoJsPlugin,
                 });
                 plugins.setPluginContext("video", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("video2", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("audio2", {identity: identity === Identity.creator ? "host" : ""});
+                plugins.setPluginContext("video.js", { identity: identity === Identity.creator ? "publisher" : "observer" });
+                (window as any).videoJsPlugin = videoJsPlugin;
+
                 let deviceType: DeviceType;
                 if (isWindows) {
                     deviceType = DeviceType.Surface;
