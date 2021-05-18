@@ -230,7 +230,8 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                     if (this.state.isFirstPlay) {
                         player.autoplay("any");
                     } else {
-                        player.play();
+                        const fixMuted = this.preFixMuted.bind(this);
+                        player.play()?.catch(fixMuted);
                     }
                 }
             }
@@ -256,7 +257,8 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                             if (this.state.isFirstPlay) {
                                 player.autoplay("any");
                             } else {
-                                player.play();
+                                const fixMuted = this.preFixMuted.bind(this);
+                                player.play()?.catch(fixMuted);
                             }
                         });
                     }
