@@ -168,7 +168,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
     /**
      * call this method in `player.on('error')` and `player.play().catch()`
      */
-    preFixMuted() {
+    fixMuted = () => {
         this.player!.autoplay("muted");
         this.setState({ isFirstPlay: true });
     }
@@ -176,7 +176,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
     /**
      * call this method when user click the alert mask
      */
-    fixMuted() {
+    afterFixMuted = () => {
         const { plugin } = this.props;
         if (this.isPublisher()) plugin.putAttributes({ muted: false });
         this.player!.muted(false);
@@ -194,13 +194,12 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
         player.playsinline(true);
         player.preload(true);
         player.muted(muted);
-        const fixMuted = this.preFixMuted.bind(this);
         player.ready(() => {
             if (!paused) {
-                player.play()?.catch(fixMuted);
+                player.play()?.catch(this.fixMuted);
             }
         });
-        player.on("error", fixMuted);
+        player.on("error", this.fixMuted);
     }
 
     setIdentity(identity: PluginContext["identity"]) {
@@ -230,8 +229,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                     if (this.state.isFirstPlay) {
                         player.autoplay("any");
                     } else {
-                        const fixMuted = this.preFixMuted.bind(this);
-                        player.play()?.catch(fixMuted);
+                        player.play()?.catch(this.fixMuted);
                     }
                 }
             }
@@ -257,8 +255,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                             if (this.state.isFirstPlay) {
                                 player.autoplay("any");
                             } else {
-                                const fixMuted = this.preFixMuted.bind(this);
-                                player.play()?.catch(fixMuted);
+                                player.play()?.catch(this.fixMuted);
                             }
                         });
                     }
@@ -315,7 +312,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
         return this.props.room && this.props.plugin.context.identity === "publisher";
     }
 
-    removeSelf() {
+    removeSelf = () => {
         this.props.plugin.remove();
     }
 
@@ -340,14 +337,14 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                             ? "videojs-plugin-close-icon"
                             : "videojs-plugin-close-icon disabled"
                     }
-                    onClick={this.removeSelf.bind(this)}
+                    onClick={this.removeSelf}
                 >
                     &times;
                 </span>
                 {this.state.isFirstPlay && (
                     <div
                         className="videojs-plugin-muted-alert"
-                        onClick={this.fixMuted.bind(this)}
+                        onClick={this.afterFixMuted}
                     ></div>
                 )}
             </div>
