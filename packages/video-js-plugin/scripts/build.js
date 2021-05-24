@@ -19,6 +19,19 @@ build({
     bundle: true,
     target: "es2018",
     external: Object.keys(pkg.peerDependencies),
+    format: "iife",
+    outfile: pkg.browser,
+    globalName: "VideoJsPlugin",
+    minify: true,
+    sourcemap: true,
+});
+
+build({
+    entryPoints: ["src/index.ts"],
+    platform: "browser",
+    bundle: true,
+    target: "es2018",
+    external: Object.keys(pkg.peerDependencies),
     format: "esm",
     outfile: pkg.module,
     minify: true,
