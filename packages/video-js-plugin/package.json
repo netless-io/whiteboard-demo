@@ -3,6 +3,7 @@
     "version": "0.1.1",
     "description": "a video plugin for white-web-sdk using video.js.",
     "main": "dist/index.cjs.js",
+    "browser": "dist/index.iife.js",
     "module": "dist/index.es.js",
     "types": "src/index.ts",
     "files": [
