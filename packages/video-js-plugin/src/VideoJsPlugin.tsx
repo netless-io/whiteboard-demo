@@ -18,56 +18,7 @@ import { Transformer } from "./utils";
 /* this is basically what "style-loader" does */ {
     const injectedStyle = document.createElement("style");
     injectedStyle.appendChild(
-        document.createTextNode(`
-            .video-js, [data-vjs-player] { width: 100%; height: 100% }
-            [data-vjs-player] * { pointer-events: auto }
-            .video-js.disabled * { pointer-events: none }
-            .vjs-has-started .vjs-control-bar {
-                opacity: 1 !important;
-            }
-            .videojs-plugin-close-icon.disabled {
-                display: none;
-            }
-            .videojs-plugin-close-icon {
-                pointer-events: auto;
-                z-index: 42;
-                color: white;
-                background: rgba(0,0,0,.64);
-                position: absolute;
-                top: 0; right: 0;
-                width: 32px; height: 32px;
-                font-size: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                opacity: 0.64;
-            }
-            .videojs-plugin-close-icon:hover {
-                opacity: 1;
-            }
-            .videojs-plugin-muted-alert {
-                pointer-events: auto;
-                cursor: pointer;
-                position: absolute;
-                top: 0; left: 0; right: 0; bottom: 0;
-                z-index: 43;
-            }
-            .videojs-plugin-muted-alert::before {
-                pointer-events: auto;
-                cursor: pointer;
-                position: absolute;
-                top: 0; left: 0; right: 0; bottom: 0;
-                z-index: 43;
-                content: "\\f104";
-                background: rgba(0,0,0,.3);
-                font-family: VideoJS;
-                font-size: 2em;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-            }
-        `)
+        document.createTextNode(`.video-js,[data-vjs-player]{width:100%;height:100%}[data-vjs-player] *{pointer-events:auto}.video-js.disabled *{pointer-events:none}.vjs-has-started .vjs-control-bar{opacity:1!important}.videojs-plugin-close-icon.disabled{display:none}.videojs-plugin-close-icon{pointer-events:auto;z-index:42;color:white;background:rgba(0,0,0,0.64);position:absolute;top:0;right:0;width:32px;height:32px;font-size:20px;display:flex;align-items:center;justify-content:center;opacity:0.64}.videojs-plugin-close-icon:hover{opacity:1}.videojs-plugin-muted-alert{pointer-events:auto;cursor:pointer;position:absolute;top:0;left:0;right:0;bottom:0;z-index:43}.videojs-plugin-muted-alert::before{pointer-events:auto;cursor:pointer;position:absolute;top:0;left:0;right:0;bottom:0;z-index:43;content:"\\f104";background:rgba(0,0,0,0.3);font-family:VideoJS;font-size:2em;display:flex;align-items:center;justify-content:center;color:white}`)
     );
     document.head.appendChild(injectedStyle);
 }
