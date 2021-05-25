@@ -37,7 +37,8 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                          height: isHaveName ? 19 : 28,
                          position: isHaveName ? "initial" : "absolute",
                          borderColor: isHaveName ? "white" : color,
-                         marginRight: isHaveName ? 4 : 0}}
+                         marginRight: isHaveName ? 4 : 0
+                     }}
                      src={roomMember.payload.avatar}
                      alt={"avatar"}/>
             );
@@ -64,6 +65,31 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
         }
     }
 
+    private getCursorBackgroundColor = (roomMember: RoomMember): string | undefined => {
+        const isHaveName = this.detectCursorName(roomMember);
+        if (roomMember.payload && roomMember.payload.cursorBackgroundColor) {
+            return roomMember.payload.cursorBackgroundColor;
+        } else {
+            return `rgb(${roomMember.memberState.strokeColor[0]}, ${roomMember.memberState.strokeColor[1]}, ${roomMember.memberState.strokeColor[2]}, ${isHaveName ? 1 : 0})`;
+        }
+    }
+
+    private getCursorTextColor = (roomMember: RoomMember): string | undefined => {
+        if (roomMember.payload && roomMember.payload.cursorTextColor) {
+            return roomMember.payload.cursorTextColor;
+        } else {
+            return "#FFFFFF";
+        }
+    }
+
+    private getCursorTagBackgroundColor = (roomMember: RoomMember): string | undefined => {
+        if (roomMember.payload && roomMember.payload.cursorTagBackgroundColor) {
+            return roomMember.payload.cursorTagBackgroundColor;
+        } else {
+            return this.getCursorBackgroundColor(roomMember);
+        }
+    }
+
     private detectCursorName = (roomMember: RoomMember): boolean => {
         return !!(roomMember.payload && roomMember.payload.cursorName);
     }
@@ -71,24 +97,43 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
     private detectAvatar = (roomMember: RoomMember): boolean => {
         return !!(roomMember.payload && roomMember.payload.avatar);
     }
+
+    private renderTag = (roomMember: RoomMember): React.ReactNode => {
+        if (roomMember.payload && roomMember.payload.cursorTagName) {
+            return (
+                <span className="cursor-tag-name"
+                      style={{backgroundColor: this.getCursorTagBackgroundColor(roomMember)}}>
+                    {roomMember.payload.cursorTagName}
+                </span>
+            );
+        } else {
+            return undefined;
+        }
+    }
+
     public render(): React.ReactNode {
         const {roomMember} = this.props;
         const cursorName = this.getCursorName(roomMember);
-        const isHaveName = this.detectCursorName(roomMember);
-        const color = `rgb(${roomMember.memberState.strokeColor[0]}, ${roomMember.memberState.strokeColor[1]}, ${roomMember.memberState.strokeColor[2]}, ${isHaveName ? 1 : 0})`;
         const appliance = roomMember.memberState.currentApplianceName;
         switch (appliance) {
             case ApplianceNames.pencil: {
                 return (
                     <div className="cursor-box">
                         <div className="cursor-pencil-mid">
-                            <div style={{opacity: this.getOpacity(roomMember)}} className="cursor-pencil-inner">
-                                <span style={{backgroundColor: color}}>
-                                     {this.renderAvatar(roomMember)}
+                            <div className="cursor-pencil-text">
+                                <div style={{
+                                    opacity: this.getOpacity(roomMember),
+                                    backgroundColor: this.getCursorBackgroundColor(roomMember),
+                                    color: this.getCursorTextColor(roomMember),
+                                }} className="cursor-pencil-inner">
+                                    {this.renderAvatar(roomMember)}
                                     {cursorName}
-                                </span>
+                                    {this.renderTag(roomMember)}
+                                </div>
                             </div>
-                            <img className="cursor-pencil-image" src={pencilCursor} alt={"pencilCursor"}/>
+                            <div>
+                                <img className="cursor-pencil-image" src={pencilCursor} alt={"pencilCursor"}/>
+                            </div>
                         </div>
                     </div>
                 );
@@ -97,12 +142,19 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                 return (
                     <div className="cursor-box">
                         <div className="cursor-selector-mid">
-                            <img className="cursor-selector-image" src={selectorCursor} alt={"selectorCursor"}/>
-                            <div style={{opacity: this.getOpacity(roomMember)}} className="cursor-selector-inner">
-                                <span style={{backgroundColor: color}}>
+                            <div>
+                                <img className="cursor-selector-image" src={selectorCursor} alt={"selectorCursor"}/>
+                            </div>
+                            <div className="cursor-selector-text">
+                                <div style={{
+                                    opacity: this.getOpacity(roomMember),
+                                    backgroundColor: this.getCursorBackgroundColor(roomMember),
+                                    color: this.getCursorTextColor(roomMember),
+                                }} className="cursor-selector-inner">
                                     {this.renderAvatar(roomMember)}
                                     {cursorName}
-                                </span>
+                                    {this.renderTag(roomMember)}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -112,13 +164,20 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                 return (
                     <div className="cursor-box">
                         <div className="cursor-pencil-mid">
-                            <div style={{opacity: this.getOpacity(roomMember)}} className="cursor-pencil-inner">
-                                <span style={{backgroundColor: color}}>
+                            <div className="cursor-pencil-text">
+                                <div style={{
+                                    opacity: this.getOpacity(roomMember),
+                                    backgroundColor: this.getCursorBackgroundColor(roomMember),
+                                    color: this.getCursorTextColor(roomMember),
+                                }} className="cursor-pencil-inner">
                                     {this.renderAvatar(roomMember)}
                                     {cursorName}
-                                </span>
+                                    {this.renderTag(roomMember)}
+                                </div>
                             </div>
-                            <img className="cursor-pencil-image" src={eraserCursor} alt={"selectorCursor"}/>
+                            <div>
+                                <img className="cursor-pencil-image" src={eraserCursor} alt={"selectorCursor"}/>
+                            </div>
                         </div>
                     </div>
                 );
@@ -127,13 +186,20 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                 return (
                     <div className="cursor-box">
                         <div className="cursor-text-mid">
-                            <div style={{opacity: this.getOpacity(roomMember)}} className="cursor-shape-inner">
-                                <span style={{backgroundColor: color}}>
+                            <div className="cursor-pencil-text">
+                                <div style={{
+                                    opacity: this.getOpacity(roomMember),
+                                    backgroundColor: this.getCursorBackgroundColor(roomMember),
+                                    color: this.getCursorTextColor(roomMember)
+                                }} className="cursor-shape-inner">
                                     {this.renderAvatar(roomMember)}
                                     {cursorName}
-                                </span>
+                                    {this.renderTag(roomMember)}
+                                </div>
                             </div>
-                            <img src={textCursor} alt={"selectorCursor"}/>
+                            <div>
+                                <img src={textCursor} alt={"selectorCursor"}/>
+                            </div>
                         </div>
                     </div>
                 );
@@ -142,13 +208,20 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                 return (
                     <div className="cursor-box">
                         <div className="cursor-shape-mid">
-                            <div style={{opacity: this.getOpacity(roomMember)}} className="cursor-shape-inner">
-                              <span style={{backgroundColor: color}}>
+                            <div className="cursor-pencil-text">
+                                <div style={{
+                                    opacity: this.getOpacity(roomMember),
+                                    backgroundColor: this.getCursorBackgroundColor(roomMember),
+                                    color: this.getCursorTextColor(roomMember),
+                                }} className="cursor-shape-inner">
                                     {this.renderAvatar(roomMember)}
-                                  {cursorName}
-                                </span>
+                                    {cursorName}
+                                    {this.renderTag(roomMember)}
+                                </div>
                             </div>
-                            <img src={shapeCursor} alt={"shapeCursor"}/>
+                            <div>
+                                <img src={shapeCursor} alt={"shapeCursor"}/>
+                            </div>
                         </div>
                     </div>
                 );
