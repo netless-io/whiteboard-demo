@@ -235,6 +235,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         userPayload: {
                             userId: userId,
                             cursorName: cursorName,
+                            // theme: "mellow",
                             // cursorBackgroundColor: "#FDBA74",
                             // cursorTextColor: "#323233",
                             // cursorTagName: "讲师",
