@@ -1,6 +1,6 @@
 {
   "name": "@netless/cursor-tool",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "",
   "private": false,
   "main": "dist/index.js",
