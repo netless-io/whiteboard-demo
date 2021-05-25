@@ -2,8 +2,9 @@
     "include": ["src"],
     "compilerOptions": {
         "jsx": "react",
-        "noEmit": true,
         "lib": ["DOM", "ESNext"],
+        "declaration": true,
+        "declarationDir": "dist",
         "target": "ES2018",
         "strict": true,
         "skipLibCheck": true,
