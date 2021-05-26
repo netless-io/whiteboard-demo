@@ -2,8 +2,7 @@
     "name": "@netless/video-js-plugin",
     "version": "0.1.2",
     "description": "a video plugin for white-web-sdk using video.js.",
-    "main": "dist/index.cjs.js",
-    "browser": "dist/index.iife.js",
+    "main": "dist/index.js",
     "module": "dist/index.es.js",
     "types": "dist/index.d.ts",
     "files": [

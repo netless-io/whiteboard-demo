@@ -22,7 +22,7 @@ import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
 import {videoPlugin2} from "@netless/white-video-plugin2";
 import {audioPlugin2} from "@netless/white-audio-plugin2";
-import { videoJsPlugin } from "@netless/video-js-plugin/dist/index.cjs"
+import { videoJsPlugin } from "@netless/video-js-plugin"
 import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
 import {CursorTool} from "@netless/cursor-tool";
