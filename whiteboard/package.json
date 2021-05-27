@@ -10,7 +10,7 @@
         "@ant-design/icons": "^4.5.0",
         "@netless/combine-player": "^1.1.4",
         "@netless/cursor-tool": "^0.0.9",
-        "@netless/docs-center": "^0.0.6",
+        "@netless/docs-center": "^0.0.7",
         "@netless/fetch-middleware": "^1.0.7",
         "@netless/fetch-progress": "^0.0.1",
         "@netless/iframe-bridge": "^2.0.13",

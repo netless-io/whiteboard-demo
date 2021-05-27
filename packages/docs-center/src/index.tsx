@@ -64,7 +64,14 @@ export default class Index extends React.Component<WhiteboardFileProps, Whiteboa
             if (id === "init") {
                 room.setScenePath(`/init`);
             } else {
-                room.setScenePath(`/${uuid}/${id}/1`);
+                const scenes = room.entireScenes();
+                const dir = `/${uuid}/${id}`;
+                if (scenes[dir]) {
+                    for (const { name } of scenes[dir]) {
+                        room.setScenePath(`${dir}/${name}`);
+                        break;
+                    }
+                }
             }
             room.setGlobalState({docs: newDocs});
         }
