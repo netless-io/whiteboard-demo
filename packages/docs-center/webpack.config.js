@@ -1,65 +1,70 @@
-const path = require('path');
-const webpack = require('webpack');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const PeerDepsExternalsPlugin = require('peer-deps-externals-webpack-plugin');
-module.exports = {
-    entry: path.resolve(__dirname, 'src/index.tsx'),
+const path = require("path");
+const webpack = require("webpack");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
+const PeerDepsExternalsPlugin = require("peer-deps-externals-webpack-plugin");
 
+/** @type {webpack.Configuration} */
+module.exports = {
+    entry: path.resolve(__dirname, "src/index.tsx"),
     output: {
-        filename: 'index.js',
+        filename: "index.js",
         libraryTarget: "umd",
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, "dist"),
     },
     externals: {
-      'white-web-sdk': 'white-web-sdk'
+        "white-web-sdk": "white-web-sdk",
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json']
+        extensions: [".ts", ".tsx", ".js", ".json"],
     },
-
+    devtool: "source-map",
     module: {
         rules: [
             {
                 test: /\.(ts)x?$/,
                 exclude: /node_modules/,
                 use: {
-                  loader: 'ts-loader'
+                    loader: "ts-loader",
                 },
-            }, {
+            },
+            {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
+                use: ["style-loader", "css-loader"],
             },
             {
                 test: /\.ya?ml$/,
                 use: [
-                    { loader: 'json-loader' },
-                    { loader: 'yaml-loader' },
-                    { loader: 'yaml-lint-loader' },
+                    { loader: "json-loader" },
+                    { loader: "yaml-loader" },
+                    { loader: "yaml-lint-loader" },
                 ],
             },
             {
                 test: /\.(png|jp(e*)g|svg)$/,
-                use: [{
-                    loader: 'url-loader'
-                }]
+                use: [
+                    {
+                        loader: "url-loader",
+                    },
+                ],
             },
             {
                 test: /\.less$/,
                 use: [
                     {
-                        loader: 'style-loader', // creates style nodes from JS strings
+                        loader: "style-loader", // creates style nodes from JS strings
                     },
                     {
-                        loader: 'css-loader', // translates CSS into CommonJS
+                        loader: "css-loader", // translates CSS into CommonJS
                     },
                     {
-                        loader: 'less-loader', // compiles Less to CSS
+                        loader: "less-loader", // compiles Less to CSS
                     },
                 ],
-            },],
+            },
+        ],
     },
     optimization: {
         minimizer: [
@@ -73,20 +78,17 @@ module.exports = {
                     autoprefixer: { disable: true },
                     mergeLonghand: false,
                     discardComments: {
-                        removeAll: true
-                    }
+                        removeAll: true,
+                    },
                 },
-                canPrint: true
-            })
-        ]
+                canPrint: true,
+            }),
+        ],
     },
     plugins: [
         new PeerDepsExternalsPlugin(),
         new ForkTsCheckerWebpackPlugin(),
-        new webpack.ContextReplacementPlugin(
-            /moment[/\\]locale$/,
-            /zh-cn/,
-        ),
-        new LodashModuleReplacementPlugin,
-    ]
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/),
+        new LodashModuleReplacementPlugin(),
+    ],
 };
