@@ -1,9 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
 import { Room, RoomState } from "white-web-sdk";
 import MenuBox from "@netless/menu-box";
-import * as close from "./image/close.svg";
-import * as deleteIcon from "./image/delete.svg";
-import * as default_cover from "./image/default_cover.svg";
+import close from "./image/close.svg";
+import deleteIcon from "./image/delete.svg";
+import default_cover from "./image/default_cover.svg";
 import "./index.less";
 
 export type PPTDataType = {
@@ -15,117 +15,146 @@ export type PPTDataType = {
     cover?: string;
 };
 
-export enum PPTType {
-    dynamic = "dynamic",
-    static = "static",
-    init = "init",
-}
+export type PPTType = "dynamic" | "static" | "init";
 
-export interface WhiteboardFileProps {
+export type Docs = PPTDataType[];
+
+export interface DocsCenterProps {
     room: Room;
     handleDocCenterState: (state: boolean) => void;
     isFileOpen: boolean;
     i18nLanguage?: string;
 }
 
-export default class Index extends React.Component<WhiteboardFileProps, { docs: PPTDataType[] }> {
-    private isFirstRun = true;
+export interface DocsCenterState {
+    docs: Docs;
+}
 
-    public constructor(props: WhiteboardFileProps) {
+export default class Index extends Component<DocsCenterProps, DocsCenterState> {
+    public constructor(props: DocsCenterProps) {
         super(props);
-        this.state = { docs: [] };
+        this.state = { docs: [...this.getDocsFromGlobalState()] };
     }
 
-    /** sync `globalState.docs` with `entireScenes()` */
-    private refreshDocs = (modifyState: Partial<RoomState>): void => {
-        if (!this.isFirstRun && !modifyState.sceneState) return;
-        this.isFirstRun = false;
-        const { room } = this.props;
-        const { uuid, state } = room;
-        const scenes = room.entireScenes();
-        const visited: { [id: string]: true } = {};
-        const docs: PPTDataType[] = (state.globalState as any).docs || [];
-        const newDocs: PPTDataType[] = [];
-        // add existing docs from old docs
-        for (const doc of docs) {
-            const scenePath = doc.id === "init" ? "/" : `/${uuid}/${doc.id}`;
-            if (scenePath in scenes && !visited[scenePath]) {
-                visited[scenePath] = true;
-                newDocs.push(doc);
-            }
+    public componentDidMount() {
+        this.props.room.callbacks.on("onRoomStateChanged", this.onRoomStateChanged);
+        this.ensureInitDocState();
+    }
+
+    public componentWillUnmount() {
+        this.props.room.callbacks.off("onRoomStateChanged", this.onRoomStateChanged);
+    }
+
+    private onRoomStateChanged = ({ globalState, sceneState }: Partial<RoomState>) => {
+        if (sceneState) {
+            // can be triggered by the user or upload button,
+            // note that upload button does not change globalState when this happens,
+            // we update "active" here, and remove deleted docs not in scenes
+            this.syncStateWithSceneState();
         }
-        if (!visited["/"] && "/" in scenes) {
-            newDocs.unshift({ active: false, id: "init", pptType: PPTType.init });
+        if (globalState) {
+            // can be triggered by this(rename, delete) or upload button(add),
+            // we add missing docs to this.state here
+            this.syncStateWithGlobalState();
         }
-        // sync active
-        const full = state.sceneState.scenePath;
-        const suffix = `/${state.sceneState.sceneName}`;
-        const current = full.endsWith(suffix)
-            ? full.substring(0, full.length - suffix.length)
-            : full;
-        for (const doc of newDocs) {
-            const scenePath = doc.id === "init" ? "" : `/${uuid}/${doc.id}`;
-            doc.active = current === scenePath;
-        }
-        room.setGlobalState({ docs: newDocs });
-        this.setState({ docs: newDocs });
     };
 
-    private selectDoc = (id: string): void => {
+    private getDocsFromGlobalState({ docs } = this.props.room.state.globalState as any): Docs {
+        return docs || [];
+    }
+
+    /**
+     * may return `/room-uuid/folder-uuid` or `(empty string)` (init)
+     */
+    private getCurrentScenePath() {
+        const { scenePath: full, sceneName } = this.props.room.state.sceneState;
+        const suffix = `/${sceneName}`;
+        return full.endsWith(suffix) ? full.substring(0, full.length - suffix.length) : full;
+    }
+
+    private getScenePath(id: string, overrideInit = "") {
+        if (id === "init") return overrideInit;
+        const uuid = this.props.room.uuid;
+        return `/${uuid}/${id}`;
+    }
+
+    private ensureInitDocState() {
+        let { docs } = this.state;
+        if (docs.find((e) => e.id === "init")) return;
         const { room } = this.props;
-        const { uuid, state } = room;
-        const docs: PPTDataType[] = (state.globalState as any).docs;
-        if (docs && docs.length > 0) {
-            const newDocs = docs.map((doc) => ({ ...doc, active: id === doc.id }));
-            room.setGlobalState({ docs: newDocs });
-            if (id === "init") {
-                room.setScenePath(`/init`);
-            } else {
-                const scenes = room.entireScenes();
-                const dir = `/${uuid}/${id}`;
-                if (scenes[dir]) {
-                    for (const { name } of scenes[dir]) {
-                        room.setScenePath(`${dir}/${name}`);
-                        break;
-                    }
+        const scenes = room.entireScenes();
+        if ("/" in scenes) {
+            const nonActive = !docs.find((e) => e.active);
+            docs = [{ active: nonActive, id: "init", pptType: "init" }, ...docs];
+            this.setState({ docs });
+            room.setGlobalState({ docs });
+        }
+    }
+
+    /**
+     * - update `active` according to current scenes (may be non-active)
+     * - remove docs not in the scenes
+     */
+    private syncStateWithSceneState() {
+        const { room } = this.props;
+        const scenes = room.entireScenes();
+        const current = this.getCurrentScenePath();
+        let { docs } = this.state;
+        for (const doc of docs) {
+            doc.active = this.getScenePath(doc.id) === current;
+        }
+        docs = docs.filter((doc) => this.getScenePath(doc.id, "/") in scenes);
+        this.setState({ docs });
+        room.setGlobalState({ docs });
+    }
+
+    /**
+     * be careful: don't `room.setGlobalState` here
+     * - add missing docs from globalState
+     */
+    private syncStateWithGlobalState() {
+        const docs = this.getDocsFromGlobalState();
+        this.setState({ docs });
+    }
+
+    private selectDoc = (id: string) => {
+        const { room } = this.props;
+        let { docs } = this.state;
+        docs = docs.map((doc) => ({ ...doc, active: id === doc.id }));
+        room.setGlobalState({ docs });
+        if (id === "init") {
+            room.setScenePath("/init");
+        } else {
+            const scenes = room.entireScenes();
+            const dir = this.getScenePath(id);
+            if (dir in scenes) {
+                for (const { name } of scenes[dir]) {
+                    room.setScenePath(`${dir}/${name}`);
+                    break;
                 }
             }
         }
     };
 
-    public componentDidMount(): void {
+    private removeScene = ({ id }: PPTDataType) => {
         const { room } = this.props;
-        room.callbacks.on("onRoomStateChanged", this.refreshDocs);
-    }
-
-    public componentWillUnmount(): void {
-        const { room } = this.props;
-        room.callbacks.off("onRoomStateChanged", this.refreshDocs);
-    }
-
-    private removeScene = ({ id }: PPTDataType): void => {
-        const { room } = this.props;
-        const roomState = room.state;
-        const docs: PPTDataType[] = (roomState.globalState as any).docs;
-        if (docs && docs.length > 0) {
-            const newDocs = docs.filter((doc) => doc.id !== id);
-            room.setGlobalState({ docs: newDocs });
-            room.removeScenes(`/${room.uuid}/${id}`);
-        }
+        const docs = this.getDocsFromGlobalState().filter((doc) => doc.id !== id);
+        this.setState({ docs });
+        room.setGlobalState({ docs });
+        room.removeScenes(`/${room.uuid}/${id}`);
     };
 
     private updateDocName = (id: string, name: string): void => {
         const { room } = this.props;
-        const roomState = room.state;
-        const docs: PPTDataType[] = (roomState.globalState as any).docs;
-        if (docs && docs.length > 0) {
-            const newDocs = docs.map((doc) => (id === doc.id ? { ...doc, name } : doc));
-            room.setGlobalState({ docs: newDocs });
-        }
+        const docs = this.getDocsFromGlobalState().map((doc) =>
+            id === doc.id ? { ...doc, name } : doc
+        );
+        this.setState({ docs });
+        room.setGlobalState({ docs });
     };
 
     private handleCoverUrl = (imageUrl?: string): string | undefined => {
-        return imageUrl ? imageUrl.replace("http", "https") : default_cover;
+        return imageUrl ? imageUrl.replace("http:", "https:") : default_cover;
     };
 
     private isCN() {
@@ -136,7 +165,7 @@ export default class Index extends React.Component<WhiteboardFileProps, { docs: 
         const { docs } = this.state;
         if (docs.length > 0) {
             return docs.map((data) => {
-                if (data.pptType === PPTType.static) {
+                if (data.pptType === "static") {
                     return (
                         <div key={data.id} className="menu-ppt-inner-cell">
                             <div
@@ -164,7 +193,7 @@ export default class Index extends React.Component<WhiteboardFileProps, { docs: 
                             </div>
                         </div>
                     );
-                } else if (data.pptType === PPTType.dynamic) {
+                } else if (data.pptType === "dynamic") {
                     return (
                         <div key={data.id} className="menu-ppt-inner-cell">
                             <div
@@ -205,7 +234,11 @@ export default class Index extends React.Component<WhiteboardFileProps, { docs: 
                                 style={{ borderColor: data.active ? "#71C3FC" : "#F4F4F4" }}
                                 className="menu-ppt-image-box"
                             >
-                                <Preview room={this.props.room} path="/init" isOpen={this.props.isFileOpen} />
+                                <Preview
+                                    room={this.props.room}
+                                    path="/init"
+                                    isFileOpen={this.props.isFileOpen}
+                                />
                             </div>
                             <div className="menu-ppt-name">
                                 <input
@@ -258,11 +291,15 @@ export default class Index extends React.Component<WhiteboardFileProps, { docs: 
     }
 }
 
-export type PreviewProps = { path: string; room: Room; isOpen: boolean; };
+interface PreviewProps {
+    path: string;
+    room: Room;
+    isFileOpen: boolean;
+}
 
-class Preview extends React.Component<PreviewProps> {
-    private ref: HTMLDivElement | null;
-    private isOpen = false;
+class Preview extends Component<PreviewProps> {
+    private ref: HTMLDivElement | null = null;
+    private isFileOpen = false;
 
     public componentDidMount() {
         this.props.room.callbacks.on("onRoomStateChanged", this.refreshPreview);
@@ -273,23 +310,23 @@ class Preview extends React.Component<PreviewProps> {
     }
 
     private refreshPreview = () => {
-        if (this.ref) {
-            this.props.room.scenePreview(this.props.path, this.ref, 96, 72);
-        }
+        this.ref && this.props.room.scenePreview(this.props.path, this.ref, 96, 72);
     };
 
     public componentDidUpdate() {
-        if (this.isOpen !== this.props.isOpen) {
-            this.isOpen = this.props.isOpen;
-            this.refreshPreview();
+        if (this.isFileOpen !== this.props.isFileOpen) {
+            this.isFileOpen = this.props.isFileOpen;
+            if (this.isFileOpen) {
+                this.refreshPreview();
+            }
         }
     }
 
-    private setupDivRef = (ref: HTMLDivElement | null) => {
+    private setupRef = (ref: HTMLDivElement | null) => {
         this.ref = ref;
     };
 
-    public render(): React.ReactNode {
-        return <div className="ppt-cover" ref={this.setupDivRef} />;
+    public render() {
+        return <div className="ppt-cover" ref={this.setupRef} />;
     }
 }
