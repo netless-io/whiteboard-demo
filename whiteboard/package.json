@@ -21,7 +21,7 @@
         "@netless/preview-controller": "^0.0.9",
         "@netless/redo-undo": "^0.0.5",
         "@netless/tool-box": "^0.1.5",
-        "@netless/video-js-plugin": "^0.1.2",
+        "@netless/video-js-plugin": "^0.1.3",
         "@netless/white-audio-plugin": "^1.2.23",
         "@netless/white-audio-plugin2": "^2.0.4",
         "@netless/white-video-plugin": "^1.2.23",
