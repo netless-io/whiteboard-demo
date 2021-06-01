@@ -1,6 +1,6 @@
 {
     "name": "@netless/video-js-plugin",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "a video plugin for white-web-sdk using video.js.",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
@@ -11,7 +11,7 @@
     "author": "netless",
     "license": "MIT",
     "scripts": {
-        "build:lib": "node ./scripts/build.js && tsc --emitDeclarationOnly"
+        "build:lib": "tsc && node ./scripts/build.js"
     },
     "dependencies": {},
     "peerDependencies": {
