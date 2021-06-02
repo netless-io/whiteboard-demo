@@ -5,10 +5,12 @@
         "lib": ["DOM", "ESNext"],
         "declaration": true,
         "declarationDir": "dist",
-        "target": "ES2018",
+        "target": "ES5",
         "strict": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "sourceMap": true,
+        "outDir": "dist"
     }
 }
