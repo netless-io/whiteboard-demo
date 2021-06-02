@@ -289,6 +289,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                             : "videojs-plugin-close-icon disabled"
                     }
                     onClick={this.removeSelf}
+                    onTouchStart={this.removeSelf}
                 >
                     &times;
                 </span>
@@ -296,6 +297,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                     <div
                         className="videojs-plugin-muted-alert"
                         onClick={this.afterFixMuted}
+                        onTouchStart={this.afterFixMuted}
                     ></div>
                 )}
             </div>
