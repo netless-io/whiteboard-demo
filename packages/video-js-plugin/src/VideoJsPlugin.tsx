@@ -267,6 +267,14 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
         this.props.plugin.remove();
     }
 
+    setupAlert = (element: HTMLDivElement | null) => {
+        element?.addEventListener("touchstart", this.afterFixMuted);
+    }
+
+    setupClose = (element: HTMLSpanElement | null) => {
+        element?.addEventListener("touchstart", this.removeSelf);
+    }
+
     render() {
         const { room, player } = this.props;
         if (!room && !player) return null;
@@ -283,21 +291,21 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                     />
                 </div>
                 <span
+                    ref={this.setupClose}
                     className={
                         this.isPublisher()
                             ? "videojs-plugin-close-icon"
                             : "videojs-plugin-close-icon disabled"
                     }
                     onClick={this.removeSelf}
-                    onTouchStart={this.removeSelf}
                 >
                     &times;
                 </span>
                 {this.state.isFirstPlay && (
                     <div
+                        ref={this.setupAlert}
                         className="videojs-plugin-muted-alert"
                         onClick={this.afterFixMuted}
-                        onTouchStart={this.afterFixMuted}
                     ></div>
                 )}
             </div>
