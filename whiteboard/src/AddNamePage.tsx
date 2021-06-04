@@ -29,9 +29,11 @@ class AddNamePage extends React.Component<AddNamePageProps & WithTranslation, Jo
     private handleJoin = (): void => {
         const {name} = this.state;
         const {uuid} = this.props.match.params;
+        const query = new URLSearchParams(window.location.search);
+        const identity = query.get("identity") || Identity.creator;
         localStorage.setItem("userName", name);
         if (uuid) {
-            this.props.history.push(`/whiteboard/${Identity.creator}/${uuid}/${region}`);
+            this.props.history.push(`/whiteboard/${identity}/${uuid}/${region}`);
         } else {
             this.props.history.push(`/create/`);
         }
