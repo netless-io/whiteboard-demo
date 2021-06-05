@@ -370,7 +370,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
             return <LoadingPage/>;
         }
         switch (phase) {
-            case (RoomPhase.Connecting || RoomPhase.Disconnecting || RoomPhase.Reconnecting || RoomPhase.Reconnecting): {
+            case (RoomPhase.Connecting || RoomPhase.Disconnecting || RoomPhase.Reconnecting): {
                 return <LoadingPage/>;
             }
             case RoomPhase.Disconnected: {
