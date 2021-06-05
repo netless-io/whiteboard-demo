@@ -1,0 +1,28 @@
+{
+  "name": "vscode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -d"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react-draggable": "^4.4.3",
+    "react-monaco-editor": "^0.43.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
+    "postcss": "^8.3.0",
+    "rollup": "^2.50.6",
+    "rollup-plugin-monaco-editor": "^0.0.7",
+    "rollup-plugin-postcss": "^4.0.0"
+  },
+  "peerDependencies": {
+    "white-web-sdk": "^2.12.21"
+  }
+}

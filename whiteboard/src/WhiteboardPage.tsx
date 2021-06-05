@@ -346,38 +346,45 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     }
 
     private handleEnableH5 = async (room: Room, h5Url: string, dir?: string): Promise<void> => {
-        let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
-        if (!bridge) {
-            const h5SceneDir = dir || "/h5";
-            let totalPage = 6;
-            bridge = await IframeBridge.insert({
-                room,
-                url: h5Url,
-                width: 1280,
-                height: 720,
-                displaySceneDir: h5SceneDir,
-                useClicker: true
-            });
-            if (h5Url === h5DemoUrl3) {
-                totalPage = 14;
-            }
-            if ([h5DemoUrl, h5DemoUrl3].includes(h5Url) || dir) {
-                const scenes = room.entireScenes();
-                if (!scenes[h5SceneDir]) {
-                    room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
-                }
-                if (room.state.sceneState.contextPath !== h5SceneDir) {
-                    room.setScenePath(h5SceneDir);
-                }
-            }
+        // let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
+        // if (!bridge) {
+        //     const h5SceneDir = dir || "/h5";
+        //     let totalPage = 6;
+        //     bridge = await IframeBridge.insert({
+        //         room,
+        //         url: h5Url,
+        //         width: 1280,
+        //         height: 720,
+        //         displaySceneDir: h5SceneDir,
+        //         useClicker: true
+        //     });
+        //     if (h5Url === h5DemoUrl3) {
+        //         totalPage = 14;
+        //     }
+        //     if ([h5DemoUrl, h5DemoUrl3].includes(h5Url) || dir) {
+        //         const scenes = room.entireScenes();
+        //         if (!scenes[h5SceneDir]) {
+        //             room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
+        //         }
+        //         if (room.state.sceneState.contextPath !== h5SceneDir) {
+        //             room.setScenePath(h5SceneDir);
+        //         }
+        //     }
+        // }
+        // if (dir) {
+        //     new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url)
+        // }
+        // if (h5Url === supplierUrl) {
+        //     new SupplierAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
+        // }
+
+        const plugin = room.getInvisiblePlugin(MonacoPlugin.kind)
+        if (!plugin) {
+            MonacoPlugin.insert({
+                room: room as any,
+            })
         }
-        if (dir) {
-            new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url)
-        }
-        if (h5Url === supplierUrl) {
-            new SupplierAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
-        }
-        (window as any).bridge = bridge;
+        (window as any).plugin = plugin;
     }
 
 

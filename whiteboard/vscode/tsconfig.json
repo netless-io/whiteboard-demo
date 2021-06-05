@@ -1,0 +1,31 @@
+
+{
+    "compilerOptions": {
+      "rootDir": "./src",
+      "outDir": "dist",
+      "strictNullChecks": true,
+      "strict": true,
+      "sourceMap": true,
+      "declaration": true,
+      "declarationMap": true,
+      "noImplicitAny": true,
+      "module": "ES6",
+      "skipLibCheck": true,
+      "target": "es5",
+      "jsx": "react",
+      "forceConsistentCasingInFileNames": false,
+      "lib": [
+        "es6",
+        "dom"
+      ],
+      "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
+      "moduleResolution": "node",
+      "types" : [],
+      "allowJs": true
+    },
+    "include": [
+      "./src",
+      "../node_modules/@types/**/index.d.ts"
+    ]
+  }
