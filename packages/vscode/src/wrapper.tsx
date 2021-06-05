@@ -8,7 +8,7 @@ import { Room, RoomState } from "white-web-sdk";
 const eventName = "onDidChangeModelContent"
 let onExecuteEdits = false;
 
-export class MonacoPluginWrapper extends React.Component {
+export class MonacoPluginWrapper extends React.Component<{}, { currentApplianceName: string }> {
     private editor: monacoEditor.editor.IStandaloneCodeEditor | undefined;
     static monacoPluginInstance: MonacoPlugin | null;
     
@@ -32,6 +32,12 @@ export class MonacoPluginWrapper extends React.Component {
                     this.editor.executeEdits(String(data.authorId), JSON.parse(data.payload));
                     onExecuteEdits = false;
                 }
+            }
+        })
+
+        MonacoPlugin.displayer.callbacks.on("onRoomStateChanged", (state: RoomState) => {
+            if (state.memberState) {
+                this.setState({ currentApplianceName: state.memberState.currentApplianceName });
             }
         })
     }
@@ -70,6 +76,11 @@ export class MonacoPluginWrapper extends React.Component {
     }
 
     render() {
+        if (!this.setState || this.state?.currentApplianceName !== "clicker") {
+            this.editor?.updateOptions({ readOnly: true });
+        } else {
+            this.editor?.updateOptions({ readOnly: false });
+        }
         return (
             <React.Fragment>
                 {this.props.children}

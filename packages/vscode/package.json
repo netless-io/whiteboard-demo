@@ -1,10 +1,16 @@
 {
-  "name": "vscode",
-  "version": "1.0.0",
+  "name": "@netless/vscode",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc -d"
+    "build": "tsc -d",
+    "type-gen": "tsc --emitDeclarationOnly",
+    "predev": "yarn type-gen",
+    "dev": "webpack --config webpack.config.js  --watch --progress --colors --mode=development",
+    "build:lib:types": "tsc --emitDeclarationOnly",
+    "build:lib:js": "webpack --mode=production",
+    "build:lib": "npm run build:lib:types && npm run build:lib:js"
   },
   "keywords": [],
   "author": "",
