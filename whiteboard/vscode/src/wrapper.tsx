@@ -73,7 +73,7 @@ export class MonacoPluginWrapper extends React.Component {
         return (
             <React.Fragment>
                 {this.props.children}
-                <div style={{position: "absolute", top: 10, height: "100%", width: "100%"}}>
+                <div style={{position: "absolute", top: 10, left: 50, height: "100%", width: "100%"}}>
                         <div className="box no-cursor">
                             <div className="handle">click here</div>
                             <Editor 
