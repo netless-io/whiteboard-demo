@@ -2,7 +2,7 @@ import * as React from "react";
 import Editor from "react-monaco-editor";
 import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 import { MonacoPlugin, MonacoPluginAttributes } from "./index";
-import { Room } from "white-web-sdk";
+import { Room, RoomState } from "white-web-sdk";
 
 
 const eventName = "onDidChangeModelContent"
@@ -50,7 +50,7 @@ export class MonacoPluginWrapper extends React.Component {
         editor.onDidFocusEditorWidget(() => {
             const instance = MonacoPluginWrapper.monacoPluginInstance;
             if (instance?.attributes.editorId) {
-                editor.updateOptions({ readOnly: true });
+                // editor.updateOptions({ readOnly: true });
             } else {
                 instance?.setAttributes({
                     editorId: displayer.observerId
