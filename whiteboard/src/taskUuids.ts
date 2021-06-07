@@ -16,6 +16,10 @@ export const taskUuids: TaskUuidType[] = [
         taskUuid: "6a212c90fa5311ea8b9c074232aaccd4",
         name: "英语",
     },
+    {
+        taskUuid: "4e970100c78c11ebbf3143635ec98c9f",
+        name: "test",
+    },
 ];
 
 export const taskUuuidsToPush: TaskUuidType[] = [
