@@ -2,16 +2,24 @@ import * as React from "react";
 import Editor from "react-monaco-editor";
 import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 import { MonacoPlugin, MonacoPluginAttributes } from "./index";
-import { Room, RoomState } from "white-web-sdk";
-
+import {ApplianceNames, Room, RoomState} from "white-web-sdk";
+import { Rnd } from "react-rnd";
+import "./wrapper.less";
 
 const eventName = "onDidChangeModelContent"
 let onExecuteEdits = false;
 
-export class MonacoPluginWrapper extends React.Component<{}, { currentApplianceName: string }> {
+export class MonacoPluginWrapper extends React.Component<{}, { width: string, height: string }> {
     private editor: monacoEditor.editor.IStandaloneCodeEditor | undefined;
     static monacoPluginInstance: MonacoPlugin | null;
-    
+    public constructor(props: {}) {
+        super(props);
+        this.state = {
+            width: "640",
+            height: "480",
+        };
+    }
+
     componentDidMount() {
         const instance = MonacoPlugin.displayer.getInvisiblePlugin(MonacoPlugin.kind);
         MonacoPluginWrapper.monacoPluginInstance = instance as any;
@@ -48,27 +56,39 @@ export class MonacoPluginWrapper extends React.Component<{}, { currentApplianceN
         editor.onDidChangeModelContent(e => {
             if (!onExecuteEdits) {
                 displayer.dispatchMagixEvent(eventName, JSON.stringify(e.changes));
-                MonacoPluginWrapper.monacoPluginInstance?.setAttributes({ 
-                    modelValue: editor.getModel()?.getValue() 
+                MonacoPluginWrapper.monacoPluginInstance?.setAttributes({
+                    modelValue: editor.getModel()?.getValue()
                 })
             }
         })
         editor.onDidFocusEditorWidget(() => {
-            const instance = MonacoPluginWrapper.monacoPluginInstance;
-            if (instance?.attributes.editorId) {
-                // editor.updateOptions({ readOnly: true });
-            } else {
-                instance?.setAttributes({
-                    editorId: displayer.observerId
-                })
-            }
+            // const instance = MonacoPluginWrapper.monacoPluginInstance;
+            // if (instance?.attributes.editorId) {
+            //     editor.updateOptions({ readOnly: true });
+            // } else {
+            //     instance?.setAttributes({
+            //         editorId: displayer.observerId
+            //     })
+            // }
+            displayer.setMemberState({currentApplianceName: ApplianceNames.clicker});
         })
         editor.onDidBlurEditorWidget(() => {
-            const instance = MonacoPluginWrapper.monacoPluginInstance;
-            if (instance?.attributes.editorId) {
-                instance.setAttributes({ editorId: undefined })
-            }
+            // const instance = MonacoPluginWrapper.monacoPluginInstance;
+            // if (instance?.attributes.editorId) {
+            //     instance.setAttributes({ editorId: undefined })
+            // }
+            // displayer.setMemberState({currentApplianceName: ApplianceNames.pencil});
         })
+    }
+
+    private onWindowFocus = (): void => {
+        const room = MonacoPlugin.displayer as Room;
+        room.setMemberState({currentApplianceName: ApplianceNames.clicker});
+    }
+
+    private onWindowBlur = (): void => {
+        const room = MonacoPlugin.displayer as Room;
+        room.setMemberState({currentApplianceName: ApplianceNames.pencil});
     }
 
     componentWillUnmount() {
@@ -84,18 +104,43 @@ export class MonacoPluginWrapper extends React.Component<{}, { currentApplianceN
         return (
             <React.Fragment>
                 {this.props.children}
-                <div style={{position: "absolute", top: 10, left: 50, height: "100%", width: "100%"}}>
-                        <div className="box no-cursor">
-                            <div className="handle">click here</div>
-                            <Editor 
-                                height="1200px"
-                                width="900px"
-                                theme="vs-dark"
-                                language="javascript"
-                                editorDidMount={this.handleEditorDidMount as any} 
-                                ref={(ref: any) => this.editor = ref?.editor} />
+                
+                    <Rnd
+                        dragHandleClassName={"window-drag-bar"}
+                        style={{
+                            width: this.state.width,
+                            height: this.state.height,
+                        }}
+                        className="window-box"
+                        onResize={(e, direction, ref, delta, position) => {
+                            this.setState({
+                                width: ref.style.width,
+                                height: ref.style.height,
+                            })
+                        }}
+                        minHeight={320}
+                        minWidth={480}
+                        default={{
+                            x: window.innerWidth / 2 - 320,
+                            y: window.innerHeight / 2 - 240,
+                            width: this.state.width,
+                            height: this.state.height,
+                        }}
+                    >
+                        <div
+                            className="window-drag-bar">
+                            <div style={{backgroundColor: "#FF6058"}} className="window-drag-btn"/>
+                            <div style={{backgroundColor: "#FEBC2D"}} className="window-drag-btn"/>
+                            <div style={{backgroundColor: "#29C83F"}} className="window-drag-btn"/>
                         </div>
-                </div>
+                        <Editor
+                            width={this.state.width}
+                            height={`${parseInt(this.state.height) - 24}`}
+                            theme="vs-dark"
+                            language="javascript"
+                            editorDidMount={this.handleEditorDidMount as any}
+                            ref={(ref: any) => this.editor = ref?.editor} />
+                    </Rnd>
             </React.Fragment>
         )
     }
