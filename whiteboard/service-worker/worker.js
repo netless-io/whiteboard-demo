@@ -21,7 +21,7 @@ self.onfetch = function(event) {
     event.respondWith(openCache().then(function(cache) {
       return cache.match(event.request).then(function(response) {
         if (response) {
-          console.log("service worker catch success");
+          console.log("catch success: ", event.request);
         }
         return response || fetch(event.request);
       });
