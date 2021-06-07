@@ -107,7 +107,8 @@ export class NetlessCaches {
         return new Promise((fulfill, reject) => {
             entry.getData(new zip.BlobWriter(), (data) => {
                 return netlessCaches.openCache("netless").then((cache) => {
-                    const location = this.getLocation(`8a3cf920c78d11eba5bcdf411b268cfd/${entry.filename}`);
+                    const location = this.getLocation(entry.filename);
+                    console.log(location);
                     const response = new Response(data, {
                         headers: {
                             "Content-Type": this.getContentType(entry.filename)
