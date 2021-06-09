@@ -43,8 +43,8 @@ function fetchMultiple(urls, init) {
       const fetchResolve = (response, index) => {
           console.log("success: ", response.url);
           resolve(response);
-          list.forEach((v) => {
-            if (v !== index) {
+          list.forEach((v, i) => {
+            if (i !== index) {
               v.abort();
             }
           });
