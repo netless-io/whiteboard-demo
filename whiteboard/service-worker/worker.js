@@ -40,15 +40,17 @@ function openCache() {
 function fetchMultiple(urls, init) {
   return new Promise((resolve, reject) => {
       let list = [];
-      const fetchResolve = (response) => {
+      const fetchResolve = (response, index) => {
           console.log("success: ", response.url);
           resolve(response);
           list.forEach((v) => {
+            if (v !== index) {
               v.abort();
+            }
           });
       };
       const rejectList = [];
-      list = urls.map(v => fetchWithAbort(v, init, fetchResolve, e => {
+      list = urls.map((v, index) => fetchWithAbort(v, init, index, fetchResolve, e => {
           rejectList.push(e);
           if (rejectList.length === list.length) {
               console.log("fetch all fail");``
@@ -58,7 +60,7 @@ function fetchMultiple(urls, init) {
   });
 }
 
-function fetchWithAbort(url, init, resolve, reject) {
+function fetchWithAbort(url, init, index, resolve, reject) {
   var controller = new AbortController();
   var signal = controller.signal;
   fetch(url, {signal, ...init}).then(function(response) {
@@ -68,7 +70,7 @@ function fetchWithAbort(url, init, resolve, reject) {
           reject(new Error("not correct code"));
       }
   }).then(res => {
-      resolve(res);
+      resolve(res, index);
   }).catch(function(e) {
       console.log("abort: ", e.name, url);
       reject(e);
