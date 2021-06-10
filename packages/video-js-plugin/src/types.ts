@@ -4,7 +4,7 @@ export type Props = PluginProps<PluginContext, VideoJsPluginAttributes>;
 export type Instance = PluginInstance<PluginContext, VideoJsPluginAttributes>;
 
 export interface PluginContext {
-    identity?: "publisher" | "observer";
+    identity?: "host" | "guest" | "publisher" | "observer";
 }
 
 export interface VideoJsPluginAttributes {

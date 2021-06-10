@@ -156,8 +156,13 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
     setIdentity(identity: PluginContext["identity"]) {
         this.dispose();
         this.identity = identity;
-        if (this.identity === "publisher") this.setupPublisher();
-        if (this.identity === "observer") this.setupObserver();
+        if (identity === "publisher" || identity === "host") {
+            console.log(`[video-js-plugin] (${this.props.plugin.identifier}) is publisher (host)`);
+            this.setupPublisher();
+        } else {
+            console.log(`[video-js-plugin] (${this.props.plugin.identifier}) is observer (guest)`);
+            this.setupObserver();
+        }
         this.forceUpdate();
     }
 
@@ -166,7 +171,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
         if (this.identity !== plugin.context.identity) {
             this.setIdentity(plugin.context.identity);
         }
-        if (this.identity === "observer") {
+        if (!this.isPublisher()) {
             const player = this.player!;
             const { isPlaying, playerTimestamp, playbackSpeed } = plugin;
             const { src, paused, volume, muted, currentTime, hostTime } = plugin.attributes;
@@ -260,7 +265,8 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
     }
 
     isPublisher() {
-        return this.props.room && this.props.plugin.context.identity === "publisher";
+        const identity = this.props.plugin?.context?.identity || this.identity;
+        return this.props.room && (identity === "publisher" || identity === "host");
     }
 
     removeSelf = () => {
