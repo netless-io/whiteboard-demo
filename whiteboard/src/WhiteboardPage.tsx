@@ -54,6 +54,7 @@ import {isMobile, isWindows} from "react-device-detect";
 import { SupplierAdapter } from "./tools/SupplierAdapter";
 import { withTranslation, WithTranslation } from "react-i18next";
 import FloatLink from "./FloatLink";
+import * as ProgressivePPT from "./logics/ProgressivePPT"
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -83,6 +84,11 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
 
     public async componentDidMount(): Promise<void> {
         await this.startJoinRoom();
+    }
+
+    public componentWillUnmount() {
+        const { room } = this.state;
+        if (room) ProgressivePPT.uninstall(room);
     }
 
     private getRoomToken = async (uuid: string): Promise<string | null> => {
@@ -293,6 +299,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 } else if (h5Url) {
                     await this.handleEnableH5(room, h5Url);
                 }
+                ProgressivePPT.install(room);
             }
         } catch (error) {
             message.error(error);
