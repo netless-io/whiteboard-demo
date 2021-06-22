@@ -89,12 +89,11 @@ export class NetlessCaches {
         });
     }
 
-    private getContentType = (filename: any): string => {
+    public getContentType = (filename: any): string => {
         const tokens = filename.split(".");
         const extension = tokens[tokens.length - 1];
         return contentTypesByExtension[extension] || "text/plain";
     }
-
 
     private getLocation = (filename?: string): string => {
         return `https://${resourcesHost}/dynamicConvert/${filename}`;
