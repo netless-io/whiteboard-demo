@@ -17,7 +17,14 @@ const resourceZipUrl = (uuid: string, index: number) =>
 const shareUrl = (uuid: string) => `https://${resourceHost}/dynamicConvert/${uuid}/share.json`;
 
 /** @example visited[uuid].slides.has(index) */
-const visited: Record<string, { layout: boolean; slides: Set<number> }> = {};
+const visited: Record<
+    string,
+    {
+        layout: boolean;
+        share?: Record<number, { name: string; size: number; slides: number[] }[]>;
+        slides: Set<number>;
+    }
+> = {};
 
 let currentPPT: {
     uuid: string;
@@ -38,6 +45,12 @@ function downloadFail(error: Error) {
     console.log(`failed to download ${currentPPT.uuid}: ${error}`);
 }
 
+// not in a hurry
+const slowly = (window as any).requestIdleCallback || setTimeout;
+function justFetch(url: string) {
+    slowly(() => fetch(url).catch(downloadFail));
+}
+
 async function mainLoop() {
     mainLoopLock = true;
     while (mainLoopLock) {
@@ -53,13 +66,32 @@ async function mainLoop() {
         const { layout } = visited[uuid];
         if (uuid) {
             if (!layout) {
+                // NOTE: download "layout" first, then "share"
+                //       in case that "share.json" is cached before in "layout.zip"
                 await downloadZip(layoutZipUrl(uuid)).catch(downloadFail);
                 if (index === -1) {
                     currentPPT.index = findNextSlide();
                 }
+                try {
+                    abortController = new AbortController();
+                    const share = await fetch(shareUrl(uuid), {
+                        signal: abortController.signal,
+                    }).then((r) => r.json());
+                    abortController = undefined;
+                    visited[uuid].share = share;
+                } catch {
+                    // ok, no share
+                }
             } else {
-                if (slides[index] >= 0) {
-                    await downloadZip(resourceZipUrl(uuid, slides[index])).catch(downloadFail);
+                const resourceId = slides[index];
+                if (resourceId >= 0) {
+                    const share = visited[uuid].share?.[slides[index]].map((e) => e.name);
+                    if (share?.length) {
+                        for (const name of share) {
+                            justFetch(`https://${resourceHost}/${name}`);
+                        }
+                    }
+                    await downloadZip(resourceZipUrl(uuid, resourceId)).catch(downloadFail);
                 }
                 const nextIndex = findNextSlide();
                 if (nextIndex === -1) {
