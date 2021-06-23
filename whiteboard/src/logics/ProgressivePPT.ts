@@ -7,7 +7,7 @@ import { netlessCaches } from "../NetlessCaches";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-let resourceHost = "convertcdn.netless.link";
+const resourceHost = "convertcdn.netless.link";
 const dynamicConvertRE = /^pptx:\/\/(\S+?)\/dynamicConvert\/([0-9a-f]{32})\/(\d+)\.slide$/i;
 const resourceRE = /resource(\d+)\.zip$/i;
 
@@ -58,6 +58,8 @@ async function mainLoop() {
         if (isRequesting) {
             isRequesting = false;
             await delay(2000);
+            // 总是从下一页开始下载
+            currentPPT.index = findNextSlide();
         }
         const { uuid, slides, index } = currentPPT;
         if (!(uuid in visited)) {
@@ -65,6 +67,7 @@ async function mainLoop() {
         }
         const { layout } = visited[uuid];
         if (uuid) {
+            // 总是先下载 layout.zip
             if (!layout) {
                 // NOTE: download "layout" first, then "share"
                 //       in case that "share.json" is cached before in "layout.zip"
@@ -199,8 +202,7 @@ function onRoomStateChanged(modifyState: Partial<RoomState>) {
         for (const { ppt } of scenes) {
             const m = ppt?.src.match(dynamicConvertRE);
             if (m) {
-                const [_, host_, uuid_, i] = m;
-                resourceHost = host_;
+                const [_, _host, uuid_, i] = m;
                 uuid = uuid_;
                 slides.push(+i);
             } else {
