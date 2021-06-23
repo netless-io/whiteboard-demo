@@ -220,8 +220,13 @@ async function cacheEntry(entry: {
                 await cache.put(location, response.clone());
 
                 if (entry.filename.endsWith("share.json")) {
-                    const share = await response.json();
-                    setShare(uuid, share);
+                    try {
+                        const share = await response.json();
+                        setShare(uuid, share);
+                    } catch (error) {
+                        console.log("[ProgressivePPT] parse share.json failed, uuid =", uuid);
+                        console.log(error);
+                    }
                 }
                 resolve();
             } catch (error) {
