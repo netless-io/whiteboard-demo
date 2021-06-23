@@ -79,10 +79,13 @@ function justFetch(url: string) {
 async function mainLoop() {
     mainLoopLock = true;
     while (mainLoopLock) {
-        // 如果频繁点击下一页，等待两秒来防止发起的请求太多
         if (isRequesting) {
             isRequesting = false;
-            await delay(2000);
+            await delay(1000);
+            if (isRequesting) {
+                // 如果在 1 秒内再次触发下载，则 debounce 到稳定的时候再下
+                continue;
+            }
             // 总是从下一页开始下载
             currentPPT.index = findNextSlide();
         }
@@ -114,8 +117,9 @@ async function mainLoop() {
                             const share = await r.json();
                             setShare(uuid, share);
                         }
-                    } catch {
+                    } catch (error) {
                         console.log("[ProgressivePPT] parse share.json failed, uuid =", uuid);
+                        console.log(error);
                     }
                 }
             } else {
