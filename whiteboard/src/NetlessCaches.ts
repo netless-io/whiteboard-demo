@@ -6,7 +6,8 @@ const contentTypesByExtension = {
     "jpg": "image/jpeg",
     "jpeg": "image/jpeg",
     "html": "text/html",
-    "htm": "text/html"
+    "htm": "text/html",
+    "svg": "image/svg+xml"
 };
 const resourcesHost = "convertcdn.netless.link";
 export class NetlessCaches {

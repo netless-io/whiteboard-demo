@@ -16,15 +16,40 @@ const resourceZipUrl = (uuid: string, index: number) =>
     `https://${resourceHost}/dynamicConvert/${uuid}/resources/resource${index}.zip`;
 const shareUrl = (uuid: string) => `https://${resourceHost}/dynamicConvert/${uuid}/share.json`;
 
-/** @example visited[uuid].slides.has(index) */
-const visited: Record<
-    string,
-    {
-        layout: boolean;
-        share?: Record<number, { name: string; size: number; slides: number[] }[]>;
-        slides: Set<number>;
+type Share = Record<number, { name: string; size: number; slides: number[] }[]>;
+
+// TODO: visited = localStorage.getItem()
+const visited: Record<string, { layout: boolean; slides: Set<number>; share?: Share }> = {};
+
+export function markLayoutHasCached(uuid: string) {
+    if (uuid in visited) {
+        visited[uuid].layout = true;
+    } else {
+        visited[uuid] = { layout: true, slides: new Set() };
     }
-> = {};
+}
+
+// NOTE: it does not affect browser cache
+export function markAsNotCached(uuid: string) {
+    delete visited[uuid];
+}
+
+export function markSlideHasCached(uuid: string, slideId: number) {
+    if (uuid in visited) {
+        visited[uuid].slides.add(slideId);
+    } else {
+        const slides = new Set([slideId]);
+        visited[uuid] = { layout: false, slides };
+    }
+}
+
+export function setShare(uuid: string, share?: Share) {
+    if (uuid in visited) {
+        visited[uuid].share = share;
+    } else if (share) {
+        visited[uuid] = { layout: false, slides: new Set(), share };
+    }
+}
 
 let currentPPT: {
     uuid: string;
@@ -75,15 +100,23 @@ async function mainLoop() {
                 if (index === -1) {
                     currentPPT.index = findNextSlide();
                 }
-                try {
-                    abortController = new AbortController();
-                    const share = await fetch(shareUrl(uuid), {
-                        signal: abortController.signal,
-                    }).then((r) => r.json());
-                    abortController = undefined;
-                    visited[uuid].share = share;
-                } catch {
-                    // ok, no share
+                if (!visited[uuid].share) {
+                    // in case there's no share.json in layout.zip, try download it manually
+                    try {
+                        abortController = new AbortController();
+                        const r = await fetch(shareUrl(uuid), {
+                            signal: abortController.signal,
+                        });
+                        abortController = undefined;
+                        if (r.status === 404) {
+                            // ok, no share
+                        } else {
+                            const share = await r.json();
+                            setShare(uuid, share);
+                        }
+                    } catch {
+                        console.log("[ProgressivePPT] parse share.json failed, uuid =", uuid);
+                    }
                 }
             } else {
                 const resourceId = slides[index];
@@ -94,7 +127,11 @@ async function mainLoop() {
                             justFetch(`https://${resourceHost}/${name}`);
                         }
                     }
-                    await downloadZip(resourceZipUrl(uuid, resourceId)).catch(downloadFail);
+                    if (visited[uuid].slides.has(resourceId)) {
+                        console.log("[ProgressivePPT] skip slide %o of %o", resourceId, uuid);
+                    } else {
+                        await downloadZip(resourceZipUrl(uuid, resourceId)).catch(downloadFail);
+                    }
                 }
                 const nextIndex = findNextSlide();
                 if (nextIndex === -1) {
@@ -130,14 +167,6 @@ async function downloadZip(zipUrl: string) {
     const { uuid } = currentPPT;
     const isLayout = zipUrl.endsWith("layout.zip");
     const resourceId = Number(zipUrl.match(resourceRE)?.[1]); // NaN or 1, 2, 3
-    if (isLayout && visited[uuid].layout) {
-        console.log("[ProgressivePPT] skip layout of %o", uuid);
-        return;
-    }
-    if (visited[uuid].slides.has(resourceId)) {
-        console.log("[ProgressivePPT] skip slide %o of %o", resourceId, uuid);
-        return;
-    }
     console.log("[ProgressivePPT] downloading zip", zipUrl);
     return new Promise<void>(async (resolve, reject) => {
         try {
@@ -146,12 +175,11 @@ async function downloadZip(zipUrl: string) {
             abortController = undefined;
             // mark resource has been cached
             // NOTE: if response not ok (404 or another), also mark it as cached
-            const { uuid } = currentPPT;
             if (isLayout) {
-                visited[uuid].layout = true;
+                markLayoutHasCached(uuid);
             }
             if (!Number.isNaN(resourceId)) {
-                visited[uuid].slides.add(resourceId);
+                markSlideHasCached(uuid, resourceId);
             }
             if (r.status === 404) {
                 // ok, not exist
@@ -185,7 +213,12 @@ async function cacheEntry(entry: {
                 const response = new Response(data, {
                     headers: { "Content-Type": netlessCaches.getContentType(entry.filename) },
                 });
-                await cache.put(location, response);
+                await cache.put(location, response.clone());
+
+                if (entry.filename.endsWith("share.json")) {
+                    const share = await response.json();
+                    setShare(uuid, share);
+                }
                 resolve();
             } catch (error) {
                 reject(error);
