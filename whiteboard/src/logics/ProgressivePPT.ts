@@ -9,22 +9,24 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 let resourceHost = "convertcdn.netless.link";
 const dynamicConvertRE = /^pptx:\/\/(\S+?)\/dynamicConvert\/([0-9a-f]{32})\/(\d+)\.slide$/i;
+const resourceRE = /resource(\d+)\.zip$/i;
 
 const layoutZipUrl = (uuid: string) => `https://${resourceHost}/dynamicConvert/${uuid}/layout.zip`;
 const resourceZipUrl = (uuid: string, index: number) =>
     `https://${resourceHost}/dynamicConvert/${uuid}/resources/resource${index}.zip`;
 const shareUrl = (uuid: string) => `https://${resourceHost}/dynamicConvert/${uuid}/share.json`;
 
+/** @example visited[uuid].slides.has(index) */
+const visited: Record<string, { layout: boolean; slides: Set<number> }> = {};
+
 let currentPPT: {
     uuid: string;
     slides: number[];
     index: number;
-    layout: boolean;
 } = {
     uuid: "",
     slides: [],
     index: -1,
-    layout: false,
 };
 
 let abortController: AbortController | undefined;
@@ -37,16 +39,21 @@ function downloadFail(error: Error) {
 }
 
 async function mainLoop() {
+    mainLoopLock = true;
     while (mainLoopLock) {
+        // 如果频繁点击下一页，等待两秒来防止发起的请求太多
         if (isRequesting) {
             isRequesting = false;
             await delay(2000);
         }
-        const { uuid, layout, slides, index } = currentPPT;
+        const { uuid, slides, index } = currentPPT;
+        if (!(uuid in visited)) {
+            visited[uuid] = { layout: false, slides: new Set() };
+        }
+        const { layout } = visited[uuid];
         if (uuid) {
             if (!layout) {
                 await downloadZip(layoutZipUrl(uuid)).catch(downloadFail);
-                currentPPT.layout = true;
                 if (index === -1) {
                     currentPPT.index = findNextSlide();
                 }
@@ -85,16 +92,36 @@ function findNextSlide(overrideIndex?: number) {
 async function downloadZip(zipUrl: string) {
     abortController?.abort();
     abortController = undefined;
+    const { uuid } = currentPPT;
+    const isLayout = zipUrl.endsWith("layout.zip");
+    const resourceId = Number(zipUrl.match(resourceRE)?.[1]); // NaN or 1, 2, 3
+    if (isLayout && visited[uuid].layout) {
+        console.log("[ProgressivePPT] skip layout of %o", uuid);
+        return;
+    }
+    if (visited[uuid].slides.has(resourceId)) {
+        console.log("[ProgressivePPT] skip slide %o of %o", resourceId, uuid);
+        return;
+    }
     console.log("[ProgressivePPT] downloading zip", zipUrl);
     return new Promise<void>(async (resolve, reject) => {
-        abortController = new AbortController();
-        const r = await fetch(zipUrl, { signal: abortController.signal });
-        abortController = undefined;
-        if (r.status === 404) {
-            // silently stop
-            return resolve();
-        }
         try {
+            abortController = new AbortController();
+            const r = await fetch(zipUrl, { signal: abortController.signal });
+            abortController = undefined;
+            // mark resource has been cached
+            // NOTE: if response not ok (404 or another), also mark it as cached
+            const { uuid } = currentPPT;
+            if (isLayout) {
+                visited[uuid].layout = true;
+            }
+            if (!Number.isNaN(resourceId)) {
+                visited[uuid].slides.add(resourceId);
+            }
+            if (r.status === 404) {
+                // ok, not exist
+                return resolve();
+            }
             const reader: any = await new Promise(async (resolve, reject) => {
                 zip.createReader(new zip.ArrayBufferReader(await r.arrayBuffer()), resolve, reject);
             });
@@ -148,7 +175,7 @@ function onRoomStateChanged(modifyState: Partial<RoomState>) {
                 slides.push(-1);
             }
         }
-        currentPPT = { uuid, slides, index, layout: false };
+        currentPPT = { uuid, slides, index };
         isRequesting = true;
         console.log("[ProgressivePPT] currentPPT =", currentPPT);
     }
