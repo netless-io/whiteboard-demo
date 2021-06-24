@@ -86,10 +86,11 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         await this.startJoinRoom();
     }
 
-    public componentWillUnmount() {
-        const { room } = this.state;
-        if (room) ProgressivePPT.uninstall(room);
-    }
+    // TODO: wait until backend finish job
+    // public componentWillUnmount() {
+    //     const { room } = this.state;
+    //     if (room) ProgressivePPT.uninstall(room);
+    // }
 
     private getRoomToken = async (uuid: string): Promise<string | null> => {
         const roomToken = await netlessWhiteboardApi.room.joinRoomApi(uuid);
@@ -299,7 +300,8 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 } else if (h5Url) {
                     await this.handleEnableH5(room, h5Url);
                 }
-                ProgressivePPT.install(room);
+                // TODO: wait until backend finish job
+                // ProgressivePPT.install(room);
             }
         } catch (error) {
             message.error(error);

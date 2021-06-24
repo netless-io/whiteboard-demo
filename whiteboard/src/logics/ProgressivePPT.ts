@@ -90,16 +90,19 @@ async function mainLoop() {
             currentPPT.index = findNextSlide();
         }
         const { uuid, slides, index } = currentPPT;
-        if (!(uuid in visited)) {
+        if (uuid && !(uuid in visited)) {
             visited[uuid] = { layout: false, slides: new Set() };
         }
-        const { layout } = visited[uuid];
         if (uuid) {
             // 总是先下载 layout.zip
-            if (!layout) {
+            if (!visited[uuid].layout) {
                 // NOTE: download "layout" first, then "share"
                 //       in case that "share.json" is cached before in "layout.zip"
                 await downloadZip(layoutZipUrl(uuid)).catch(downloadFail);
+                // if failed to download layout.zip, ignore
+                if (!visited[uuid].layout) {
+                    currentPPT.uuid = ""; // done
+                }
                 if (index === -1) {
                     currentPPT.index = findNextSlide();
                 }
