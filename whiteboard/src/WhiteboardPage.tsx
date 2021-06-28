@@ -54,7 +54,7 @@ import {isMobile, isWindows} from "react-device-detect";
 import { SupplierAdapter } from "./tools/SupplierAdapter";
 import { withTranslation, WithTranslation } from "react-i18next";
 import FloatLink from "./FloatLink";
-import * as ProgressivePPT from "./logics/ProgressivePPT"
+import { SlidePrefetch } from "@netless/slide-prefetch";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -73,6 +73,8 @@ export type WhiteboardPageProps = RouteComponentProps<{
 }>;
 
 class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslation, WhiteboardPageStates> {
+    private slidePrefetch: SlidePrefetch;
+    
     public constructor(props: WhiteboardPageProps & WithTranslation) {
         super(props);
         this.state = {
@@ -80,17 +82,20 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
             isMenuVisible: false,
             isFileOpen: false,
         };
+        this.slidePrefetch = new SlidePrefetch({
+            baseUrl: "https://convertcdn.netless.link",
+            cacheName: "netless",
+            verbose: true,
+        });
     }
 
     public async componentDidMount(): Promise<void> {
         await this.startJoinRoom();
     }
 
-    // TODO: wait until backend finish job
-    // public componentWillUnmount() {
-    //     const { room } = this.state;
-    //     if (room) ProgressivePPT.uninstall(room);
-    // }
+    public componentWillUnmount() {
+        this.slidePrefetch.stop();
+    }
 
     private getRoomToken = async (uuid: string): Promise<string | null> => {
         const roomToken = await netlessWhiteboardApi.room.joinRoomApi(uuid);
@@ -300,8 +305,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 } else if (h5Url) {
                     await this.handleEnableH5(room, h5Url);
                 }
-                // TODO: wait until backend finish job
-                // ProgressivePPT.install(room);
+                this.slidePrefetch.listen(room);
             }
         } catch (error) {
             message.error(error);

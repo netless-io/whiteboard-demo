@@ -19,7 +19,7 @@ config = {
         publicPath: "/"
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js']
+        extensions: ['.ts', '.tsx', '.js', '.mjs']
     },
     optimization: {
         minimizer: [new TerserJSPlugin({extractComments: false}), new OptimizeCSSAssetsPlugin({})],
@@ -62,6 +62,22 @@ config = {
     ],
     module: {
         rules: [
+            {
+                test: /slide-prefetch\/dist\/index\.mjs$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                        plugins: ['@babel/plugin-proposal-logical-assignment-operators']
+                    }
+                }
+            },
+            {
+                test: /@zip\.js\/zip\.js\/lib\/core\/codecs\/codec-pool-worker\.js$/,
+                use: {
+                    loader: '@open-wc/webpack-import-meta-loader'
+                }
+            },
             {
                 test: /\.(ts)x?$/,
                 exclude: /node_modules/,
