@@ -20,8 +20,11 @@ import { videoJsPlugin } from "@netless/video-js-plugin";
 
 const plugins = createPlugins({ "video.js": videoJsPlugin });
 plugins.setPluginContext("video.js", {
-    identity: identity === Identity.creator ? "publisher" : "observer"
+    identity: identity === Identity.creator ? "publisher" : "observer",
+    hideMuteAlert: true // hide the big mute icon when play fail (*)
 });
+
+// (*): https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
 
 let sdk = new WhiteWebSdk({ plugins });
 
