@@ -269,6 +269,10 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
         return this.props.room && (identity === "publisher" || identity === "host");
     }
 
+    isHideMuteAlert() {
+        return Boolean(this.props.plugin?.context?.hideMuteAlert);
+    }
+
     removeSelf = () => {
         this.props.plugin.remove();
     }
@@ -307,7 +311,7 @@ export class VideoJSPluginImpl extends Component<VideoJSPluginImplProps, VideoJS
                 >
                     &times;
                 </span>
-                {this.state.isFirstPlay && (
+                {this.state.isFirstPlay && !this.isHideMuteAlert() && (
                     <div
                         ref={this.setupAlert}
                         className="videojs-plugin-muted-alert"

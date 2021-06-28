@@ -5,6 +5,7 @@ export type Instance = PluginInstance<PluginContext, VideoJsPluginAttributes>;
 
 export interface PluginContext {
     identity?: "host" | "guest" | "publisher" | "observer";
+    hideMuteAlert?: boolean;
 }
 
 export interface VideoJsPluginAttributes {
