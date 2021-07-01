@@ -68,8 +68,9 @@ class WhiteVideoPluginImpl extends Component<WhiteVideoPluginImplProps> {
     }
 
     timestamp = () => {
+        const { room } = this.props;
         const player = this.player.current!;
-        return { currentTime: player.currentTime, hostTime: Date.now() };
+        return { currentTime: player.currentTime, hostTime: room?.calibrationTimestamp || Date.now() };
     };
 
     setupHost() {
@@ -109,7 +110,7 @@ class WhiteVideoPluginImpl extends Component<WhiteVideoPluginImplProps> {
     }
 
     setupNonHost() {
-        const { plugin } = this.props;
+        const { plugin, room } = this.props;
         const player = this.player.current!;
         // n.b. reaction() 对 plugin.attributes 不起效，sdk 总是更新整个 attributes
         //      因此这里使用 autorun 和自己写的 changed() 检查变化
@@ -128,7 +129,7 @@ class WhiteVideoPluginImpl extends Component<WhiteVideoPluginImplProps> {
                 player.muted = plugin.attributes.muted;
             }
             if (this.changedMap.changed("time", [currentTime, hostTime]) && hostTime > 0) {
-                let now = Date.now();
+                let now = room?.calibrationTimestamp || Date.now();
                 if (this.props.player) {
                     now = this.props.player.beginTimestamp + playerTimestamp;
                 }
