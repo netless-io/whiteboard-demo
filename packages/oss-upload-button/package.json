@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@netless/loading-bar": "^0.0.2",
-    "@netless/oss-upload-manager": "^1.1.10",
+    "@netless/oss-upload-manager": "^1.1.11",
     "ali-oss": "^6.10.0"
   },
   "peerDependencies": {
