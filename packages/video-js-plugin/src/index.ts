@@ -1,20 +1,21 @@
-import { Plugin } from "white-web-sdk";
+import type { Plugin } from "white-web-sdk";
+import { PluginId } from "./constants";
 import { PluginContext, VideoJsPluginAttributes } from "./types";
-import { VideoJSPlugin } from "./VideoJsPlugin";
-import { manager, VideoJsPluginManager } from "./global";
+import { VideoJsPlugin } from "./VideoJsPlugin";
 
-export const videoJsPlugin: Plugin<PluginContext, VideoJsPluginAttributes> & {
-    manager: VideoJsPluginManager;
-} = Object.freeze({
-    kind: "video.js",
-    render: VideoJSPlugin,
+export * from "./types";
+export * from "./constants";
+
+export const videoJsPlugin: Plugin<PluginContext, VideoJsPluginAttributes> = {
+    kind: PluginId,
+    render: VideoJsPlugin,
     defaultAttributes: {
         src: "",
+        poster: "",
         hostTime: 0,
         currentTime: 0,
         paused: true,
         muted: false,
         volume: 1,
     },
-    manager,
-});
+};
