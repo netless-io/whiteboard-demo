@@ -16,5 +16,7 @@ build({
 }).then(() => {
     console.log("dist/index.es.js → dist/index.js ...")
     cp.spawnSync(`babel ${pkg.module} -o ${pkg.main} --source-maps`, { shell: true, stdio: 'inherit' })
-    cp.spawnSync(`rollup src/index.ts -p dts -o ${pkg.types}`, { shell: true, stdio: 'inherit' })
+    console.log("tsc -p . → dist/index.d.ts ...")
+    cp.spawnSync(`tsc -p .`, { shell: true, stdio: 'inherit' })
+    // cp.spawnSync(`rollup src/index.ts -p dts -o ${pkg.types}`, { shell: true, stdio: 'inherit' })
 }).catch(() => {});

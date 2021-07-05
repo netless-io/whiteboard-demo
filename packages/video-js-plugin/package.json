@@ -28,8 +28,6 @@
         "@types/react": "^17.0.13",
         "@types/video.js": "^7.3.22",
         "esbuild": "^0.12.14",
-        "rollup": "^2.52.7",
-        "rollup-plugin-dts": "^3.0.2",
         "video.js": "^7.11.8"
     }
 }
