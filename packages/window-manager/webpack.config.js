@@ -4,12 +4,12 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
+
 module.exports = {
     entry: path.resolve(__dirname, "src/index.ts"),
-
     output: {
         filename: "index.js",
-        library: "MonacoPlugin",
+        library: "WindowManager",
         libraryTarget: "umd",
         path: path.resolve(__dirname, "dist"),
     },

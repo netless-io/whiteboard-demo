@@ -12,7 +12,8 @@ import {
     RoomState,
     ViewMode,
     WhiteWebSdk,
-    WhiteWebSdkConfiguration
+    WhiteWebSdkConfiguration,
+    InvisiblePlugin,
 } from "white-web-sdk";
 import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
@@ -56,6 +57,7 @@ import { SupplierAdapter } from "./tools/SupplierAdapter";
 import { withTranslation, WithTranslation } from "react-i18next";
 import FloatLink from "./FloatLink";
 import { SlidePrefetch } from "@netless/slide-prefetch";
+import { WindowManager, WindowManagerWrapper } from "@netless/window-manager";
 import { WhitePPTPlugin, Player } from "@netless/ppt-plugin";
 
 export type WhiteboardPageStates = {
@@ -90,6 +92,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
             cacheName: "netless",
             verbose: true,
         });
+        (window as any).InvisiblePlugin = InvisiblePlugin;
     }
 
     public async componentDidMount(): Promise<void> {
@@ -222,8 +225,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         deviceType = DeviceType.Desktop;
                     }
                 }
-                const invisiblePlugins: any[] = [WhitePPTPlugin];
-                const wrappedComponents: any[] = [Player];
                 let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
@@ -232,16 +233,17 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     deviceType: deviceType,
                     pptParams: {
                         useServerWrap: true,
+                    },
+                }
+                // if (h5Url) {
+                    const pluginParam = {
+                        wrappedComponents: [WindowManagerWrapper],
+                        invisiblePlugins: [WindowManager]
                     }
-                }
-                if (h5Url) {
-                    invisiblePlugins.push(IframeBridge);
-                    wrappedComponents.push(IframeWrapper);
-                }
-                whiteWebSdkParams = Object.assign(whiteWebSdkParams, {
-                    invisiblePlugins,
-                    wrappedComponents
-                });
+                    whiteWebSdkParams = Object.assign(whiteWebSdkParams, pluginParam);
+                    (window as any).WindowManager = WindowManager;
+                    (window as any).WindowManagerWrapper = WindowManagerWrapper;
+                // }
                 const whiteWebSdk = new WhiteWebSdk(whiteWebSdkParams);
                 const cursorName = localStorage.getItem("userName");
                 const cursorAdapter = new CursorTool();
@@ -378,11 +380,9 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         //     new SupplierAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
         // }
 
-        const plugin = room.getInvisiblePlugin(MonacoPlugin.kind)
+        const plugin = room.getInvisiblePlugin(WindowManager.kind)
         if (!plugin) {
-            MonacoPlugin.insert({
-                room: room as any,
-            })
+            WindowManager.use(room);
         }
         (window as any).plugin = plugin;
     }
