@@ -70,7 +70,10 @@ class WhiteVideoPluginImpl extends Component<WhiteVideoPluginImplProps> {
     timestamp = () => {
         const { room } = this.props;
         const player = this.player.current!;
-        return { currentTime: player.currentTime, hostTime: room?.calibrationTimestamp || Date.now() };
+        return {
+            currentTime: player.currentTime,
+            hostTime: room?.calibrationTimestamp || Date.now(),
+        };
     };
 
     setupHost() {
@@ -177,6 +180,11 @@ class WhiteVideoPluginImpl extends Component<WhiteVideoPluginImplProps> {
         if (!room && !player) return null;
         return (
             <div className="white-video-plugin-container" style={this.containerStyle}>
+                {plugin.attributes.poster && (
+                    <div className="white-video-plugin-ios-poster">
+                        <img src={plugin.attributes.poster} alt="" />
+                    </div>
+                )}
                 {!plugin.attributes.isNavigationDisable && (
                     <div className="white-video-plugin-nav">
                         <img src={videoPluginSVG} alt="video_plugin" />

@@ -121,6 +121,7 @@ config = {
 module.exports = (env, argv) => {
     if (argv.mode === 'development') {
         config.output.filename = '[name].[hash].js';
+        config.devServer = { stats: 'minimal' };
     }
     return config;
 }
