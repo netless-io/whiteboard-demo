@@ -26,7 +26,7 @@
         "@netless/white-audio-plugin": "^1.2.23",
         "@netless/white-audio-plugin2": "^2.0.4",
         "@netless/white-video-plugin": "^1.2.23",
-        "@netless/white-video-plugin2": "^2.1.0",
+        "@netless/white-video-plugin2": "^2.1.1",
         "@netless/zip": "^0.0.6",
         "@netless/zoom-controller": "^0.1.1",
         "antd": "^4.13.1",
