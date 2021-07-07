@@ -49,4 +49,5 @@ export interface VideoJsPluginAttributes {
 }
 
 export type Keys = keyof VideoJsPluginAttributes;
+
 export type Callback = () => void;

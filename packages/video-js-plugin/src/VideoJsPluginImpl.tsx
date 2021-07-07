@@ -175,8 +175,8 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
         void this.props.plugin.context;
         void this.props.plugin.attributes; // this line triggers autorun(), do not remove
 
-        this.player?.toggleClass("disabled", !this.isHost());
-        this.closeIcon?.classList.toggle("disabled", !this.isHost());
+        this.player?.toggleClass("disabled", !this.isEnabled());
+        this.closeIcon?.classList.toggle("disabled", !this.isEnabled());
     };
 
     applyAttributes = () => {
@@ -258,7 +258,7 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
 
     removeSelf = () => this.props.plugin.remove();
 
-    isHost() {
+    isEnabled() {
         if (!this.props.room) return false;
         const { identity, disabled } = this.props.plugin.context || {};
         /** @deprecated */

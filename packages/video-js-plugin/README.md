@@ -61,7 +61,7 @@ interface Attributes {
 
 - Deprecated context `identity`.
 - Require `white-web-sdk` &ge; 2.13.8.
-- Support multi host.
+- Support multi host (side effect: state sync is delayed for about 3 seconds).
 
 ## License
 
