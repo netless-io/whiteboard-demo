@@ -46,6 +46,9 @@ export class Blocker {
     /**
      * 收到 autorun 时，将这个集合填满，以后每次用户操作都从里面删掉对应的属性。
      * 再次收到 autorun 时，重来。
+     * FIXME: 
+     * 收到 autorun 时，attributes 一定是旧的状态，此时本地可能已经有一些最新的更改，
+     * 那么理应保留这些新的更改，现在旧的状态可能会覆盖本地的新修改。
      */
     blockedAttributes: Partial<Record<Keys, true>> = {};
 

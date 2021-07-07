@@ -26,7 +26,7 @@ class PageError extends React.Component<WithTranslation, {}> {
                             {t('pageErrorInner')}
                         </div>
                         <Link to={"/"}>
-                            <Button size={"large"} style={{width: 118}}>çç
+                            <Button size={"large"} style={{width: 118}}>
                                 {t('backHomePage')}
                             </Button>
                         </Link>
