@@ -55,6 +55,12 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
                     fullscreenToggle: false,
                     pictureInPictureToggle: false,
                 },
+                // https://github.com/videojs/video.js/issues/7008
+                html5: {
+                    vhs: {
+                        overrideNative: !videojs.browser.IS_SAFARI
+                    }
+                }
             });
             this.player.ready(this.initPlayer);
 
@@ -162,7 +168,9 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
         if (!isEmptyObject(updated)) {
             this.debug(">>>", updated);
             this.blocker.update(updated);
-            plugin.putAttributes(updated);
+            if (this.isEnabled()) {
+                plugin.putAttributes(updated);
+            }
         }
     };
 
@@ -260,9 +268,22 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
 
     isEnabled() {
         if (!this.props.room) return false;
-        const { identity, disabled } = this.props.plugin.context || {};
-        /** @deprecated */
-        const deprecatedGuest = ["guest", "observer"].includes(identity!);
-        return this.props.room.isWritable && !disabled && !deprecatedGuest;
+        if (!this.props.room.isWritable) return false;
+
+        let { identity, disabled } = this.props.plugin.context || {};
+        if (identity === undefined && disabled === undefined) {
+            // if not set, default to false
+            return false;
+        }
+        if (identity) {
+            // @deprecated respect identity
+            return ["host", "publisher"].includes(identity);
+        }
+        if (disabled === undefined) {
+            // if not set, default to false
+            return false;
+        }
+        // not disabled
+        return !disabled;
     }
 }

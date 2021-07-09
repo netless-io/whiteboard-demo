@@ -207,8 +207,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("video2", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("audio2", {identity: identity === Identity.creator ? "host" : ""});
-                plugins.setPluginContext("video.js", { /* verbose: true */ });
-                (window as any).videoJsPlugin = videoJsPlugin;
+                plugins.setPluginContext("video.js", { disabled: identity !== Identity.creator, verbose: true });
 
                 let deviceType: DeviceType;
                 if (isWindows) {
