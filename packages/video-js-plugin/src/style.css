@@ -62,3 +62,16 @@
     justify-content: center;
     color: white;
 }
+.video-js .vjs-volume-panel {
+    width: 10em;
+    transition: width .1s;
+}
+.video-js .vjs-volume-control.vjs-volume-horizontal {
+    width: 5em;
+    height: 3em;
+    margin-right: 0;
+    visibility: visible;
+    opacity: 1;
+    position: relative;
+    transition: visibility .1s, opacity .1s, height .1s, width .1s, left 0s, top 0s;
+}
