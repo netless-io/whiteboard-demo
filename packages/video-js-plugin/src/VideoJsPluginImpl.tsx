@@ -58,12 +58,6 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
                 controlBar: {
                     fullscreenToggle: false,
                     pictureInPictureToggle: false,
-                },
-                // https://github.com/videojs/video.js/issues/7008
-                html5: {
-                    vhs: {
-                        overrideNative: !videojs.browser.IS_SAFARI
-                    }
                 }
             });
             this.player.ready(this.initPlayer);
