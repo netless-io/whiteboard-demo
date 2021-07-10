@@ -58,7 +58,7 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
                 controlBar: {
                     fullscreenToggle: false,
                     pictureInPictureToggle: false,
-                }
+                },
             });
             this.player.ready(this.initPlayer);
             this.initListener();
@@ -77,7 +77,7 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
         }
     }
 
-    initPlayer = () => {
+    initPlayer = async () => {
         const player = this.player!;
         player.controls(true);
         player.playsinline(true);
@@ -90,7 +90,8 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
         player.muted(muted);
 
         player.on("error", this.catchPlayFail);
-        !paused && player.play()?.catch(this.catchPlayFail);
+        await (!paused && player.play()?.catch(this.catchPlayFail));
+        player.currentTime(currentTime);
 
         if (this.props.room) {
             player.on("play", this.notifyUpdate);
@@ -105,10 +106,12 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
         }
     };
 
-    catchPlayFail = () => {
-        this.debug("catch play() fail");
-        this.player!.autoplay("any");
-        this.setState({ NoSound: true });
+    catchPlayFail = (err: any) => {
+        if (!String(err).includes("pause()")) {
+            this.debug("catch play() fail", err);
+            this.player!.autoplay("any");
+            this.setState({ NoSound: true });
+        }
     };
 
     fixPlayFail = () => {
@@ -129,7 +132,7 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
         video.className = "video-js";
         this.video = video;
         const source = document.createElement("source");
-        if (new URL(src).pathname.endsWith('.m3u8')) {
+        if (new URL(src).pathname.endsWith(".m3u8")) {
             source.type = "application/x-mpegURL";
         }
         source.src = src;
@@ -197,7 +200,7 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
     };
 
     initListener() {
-        this.disposer = autorun(this.autorun);
+        this.disposer ||= autorun(this.autorun);
     }
 
     autorun = () => {
@@ -216,7 +219,7 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
             const key = key_ as Keys;
             if (key === "src" && player.src() !== attributes.src) {
                 this.debug("<<< src %o -> %o", player.src(), attributes.src);
-                this.fixSetSrc(attributes.src!)
+                this.fixSetSrc(attributes.src!);
             }
             if (key === "paused" && player.paused() !== attributes.paused) {
                 this.debug("<<< paused %o -> %o", player.paused(), attributes.paused);
@@ -257,8 +260,13 @@ export class VideoJsPluginImpl extends Component<PropsWithPlayer, State> {
         if (!room && !player) return null;
         return (
             <div style={{ display: "flex", flexGrow: 1, position: "relative" }}>
-                <div ref={(element) => this.container = element} style={{ width: '100%', height: '100%' }}></div>
-                <span ref={this.setupClose} className="videojs-plugin-close-icon">&times;</span>
+                <div
+                    ref={(element) => (this.container = element)}
+                    style={{ width: "100%", height: "100%" }}
+                ></div>
+                <span ref={this.setupClose} className="videojs-plugin-close-icon">
+                    &times;
+                </span>
                 {!this.props.plugin.context?.hideMuteAlert && this.state.NoSound && (
                     <div ref={this.setupAlert} className="videojs-plugin-muted-alert"></div>
                 )}
