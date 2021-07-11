@@ -3,7 +3,7 @@
     "version": "0.0.7",
     "main": "index.js",
     "scripts": {
-        "dev": "webpack-dev-server --historyApiFallback --mode development --port 8000 --open --hot --host 0.0.0.0",
+        "dev": "webpack-dev-server --historyApiFallback --mode development --port 8000 --open --hot",
         "build": "webpack --mode production && cp -r ./service-worker/* ./build/"
     },
     "dependencies": {
@@ -22,7 +22,7 @@
         "@netless/redo-undo": "^0.0.5",
         "@netless/slide-prefetch": "^0.2.1",
         "@netless/tool-box": "^0.1.5",
-        "@netless/video-js-plugin": "^0.2.3",
+        "@netless/video-js-plugin": "0.3.0",
         "@netless/white-audio-plugin": "^1.2.23",
         "@netless/white-audio-plugin2": "^2.0.4",
         "@netless/white-video-plugin": "^1.2.23",
