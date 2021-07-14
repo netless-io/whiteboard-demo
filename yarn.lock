@@ -2557,10 +2557,10 @@
   dependencies:
     "@zip.js/zip.js" "^2.3.7"
 
-"@netless/video-js-plugin@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/@netless/video-js-plugin/-/video-js-plugin-0.3.0.tgz#5c66c5d0228351a2a3b0e3ffcf0205c36e0f8b98"
-  integrity sha512-qG9BRO/IZD0dYVngAJNxNb0IlHac72lqsI6RSDYJcLxPEPa0y96Ac2gL/vHQx4qREl2RafiVjrSNX8jLWhiLuw==
+"@netless/video-js-plugin@0.3.1":
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/@netless/video-js-plugin/-/video-js-plugin-0.3.1.tgz#bf08014b46ac4951712329e2cf9275e7b8ba9cd6"
+  integrity sha512-pIgbg6+XbtWdQxh+nmX86w/LTYeDeE9Ti8plFS5oWJvzEfKDezcdngkPh7ukfzjk9VNOHpb6e1fmH3RTO5X+pQ==
 
 "@netless/white-audio-plugin@^1.2.23":
   version "1.2.23"
