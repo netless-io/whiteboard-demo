@@ -1,5 +1,6 @@
 import * as React from "react";
 import {Room, RoomState} from "white-web-sdk";
+import {WhitePPTPlugin} from "@netless/ppt-plugin";
 import * as next from "./image/next.svg";
 import * as nextDisabled from "./image/next-disabled.svg";
 import * as back from "./image/back.svg";
@@ -12,6 +13,8 @@ import "./index.less";
 
 export type PageControllerProps = {
     room: Room;
+    pptPlugin?: WhitePPTPlugin;
+    usePPTPlugin: boolean;
 }
 ;
 export type PageControllerStates = {
@@ -38,13 +41,27 @@ export default class PageController extends React.Component<PageControllerProps,
     }
 
     private handlePptPreviousStep = async (): Promise<void> => {
-        const {room} = this.props;
-        room.pptPreviousStep();
+        const {room, usePPTPlugin, pptPlugin} = this.props;
+        if (usePPTPlugin && pptPlugin?.isHandleCurrentScene) {
+            console.log("handlePptPreviousStep");
+            pptPlugin.prevStep();
+        } else {
+            room.pptPreviousStep();
+        }
     }
+
     private handlePptNextStep = async (): Promise<void> => {
-        const {room} = this.props;
-        room.pptNextStep();
+        const {room, usePPTPlugin, pptPlugin} = this.props;
+        console.log("handlePptNextStep", usePPTPlugin, pptPlugin?.isHandleCurrentScene);
+        if (usePPTPlugin && pptPlugin?.isHandleCurrentScene) {
+            console.log("handlePptNextStep");
+            pptPlugin.nextStep();
+        } else {
+            console.log("0000000000");
+            room.pptNextStep();
+        }
     }
+
     private pageNumber = (): React.ReactNode => {
         const {roomState} = this.state;
         const {room} = this.props;

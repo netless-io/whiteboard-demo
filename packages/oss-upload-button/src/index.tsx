@@ -1,6 +1,7 @@
 import * as React from "react";
-import { message, Popover, Upload } from "antd";
+import { message, Popover, Upload, Switch } from "antd";
 import * as OSS from "ali-oss";
+import { WhitePPTPlugin } from "netless-ppt-plugin";
 import { PPTProgressPhase, UploadManager } from "@netless/oss-upload-manager";
 import TopLoadingBar from "@netless/loading-bar";
 import "./index.less";
@@ -28,6 +29,7 @@ export enum UploadType {
     Audio,
     Dynamic,
     Static,
+    DynamicPlugin,
 }
 
 export type OssUploadButtonStates = {
@@ -49,6 +51,7 @@ export type OssUploadButtonProps = {
     i18nLanguage?: string;
     region?: string;
     enables?: UploadType[];
+    pptPlugin?: WhitePPTPlugin;
 };
 
 export default class OssUploadButton extends React.Component<OssUploadButtonProps, OssUploadButtonStates> {
@@ -87,6 +90,26 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             );
         } catch (error) {
             message.error(error);
+        }
+    }
+
+    private uploadPPTByPlugin = async (event: any): Promise<void> => {
+        if (this.props.pptPlugin) {
+            const { uuid } = this.props.room;
+            const uploadManager = new UploadManager(this.client, this.props.room, this.props.apiOrigin, this.props.region);
+            const pptUrl = await uploadManager.uploadFile(event.file, this.props.oss.folder, uuid, this.progress);
+            const taskUUID = await this.props.pptPlugin?.convertPPT({
+                url: pptUrl,
+                onProgressUpdated: async (progress: number) => {
+                    console.log(progress);
+                    this.progress(PPTProgressPhase.Converting, progress / 100);
+                    if (progress >= 100) {
+                        this.progress(PPTProgressPhase.Stop, 1);
+                        await this.props.pptPlugin?.loadPPT(taskUUID);
+                        await this.props.pptPlugin?.gotoSlide(0);
+                    }
+                }
+            });
         }
     }
 
@@ -226,6 +249,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             if (key === "uploadAudio") return '上传音频';
             if (key === "uploadAudioInner") return '支持 MP3 格式';
             if (key === "documentToWebpage") return '文档转网页';
+            if (key === "documentToWebpagePlugin") return '文档转网页[插件版]';
             if (key === "documentToWebpageInner") return '支持 PPTX 格式，如果是 PPT 格式，请手动转换';
             if (key === "documentToImage") return '文档转图片';
             if (key === "documentToImageInner") return '支持 PPT、PPTX、DOC、DOCX、PDF 格式';
@@ -239,6 +263,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             if (key === "uploadAudio") return 'Upload Audio';
             if (key === "uploadAudioInner") return 'Supports MP3 format.';
             if (key === "documentToWebpage") return 'Document to Webpage';
+            if (key === "documentToWebpagePlugin") return 'Document to Webpage[Plugin]';
             if (key === "documentToWebpageInner") return 'Only PPTX format is supported, For PPT files please convert to PPTX manually.';
             if (key === "documentToImage") return 'Document to Image';
             if (key === "documentToImageInner") return 'Supports PPT、PPTX、DOC、DOCX and PDF format.';
@@ -346,6 +371,30 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
         );
     }
 
+    private renderUploadDynamicPlugin(): React.ReactNode {
+        return (
+            <Upload
+                key="upload-dynamic-plugin"
+                accept={"application/vnd.openxmlformats-officedocument.presentationml.presentation,.pptx"}
+                showUploadList={false}
+                customRequest={this.uploadPPTByPlugin}>
+                <div className="oss-upload-section">
+                    <div className="oss-upload-section-inner">
+                        <div className="oss-upload-title-section">
+                            <div className="oss-upload-title">{this.translate(this.props.i18nLanguage, 'documentToWebpagePlugin')}</div>
+                            <div className="oss-upload-icon">
+                                <img src={fileTransWeb} alt={"fileTransWeb"} />
+                            </div>
+                        </div>
+                        <div className="oss-upload-section-script">
+                            <div className="oss-upload-section-text">{this.translate(this.props.i18nLanguage, 'documentToWebpageInner')}</div>
+                        </div>
+                    </div>
+                </div>
+            </Upload>
+        );
+    }
+
     private renderUploadStatic(): React.ReactNode {
         return (
             <Upload
@@ -377,6 +426,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
             UploadType.Audio,
             UploadType.Dynamic,
             UploadType.Static,
+            UploadType.DynamicPlugin,
         ];
         return (
             <div className="oss-upload-box">
@@ -385,6 +435,7 @@ export default class OssUploadButton extends React.Component<OssUploadButtonProp
                     if (type === UploadType.Video) return this.renderUploadVideo();
                     if (type === UploadType.Audio) return this.renderUploadAudio();
                     if (type === UploadType.Dynamic) return this.renderUploadDynamic();
+                    if (type === UploadType.DynamicPlugin) return this.renderUploadDynamicPlugin();
                     if (type === UploadType.Static) return this.renderUploadStatic();
                     return null;
                 }))}

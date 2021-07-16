@@ -65,6 +65,12 @@ export class UploadManager {
         return fileName.substring(index1, index2);
     }
 
+    public async uploadFile(rawFile: File, folder: string, uuid: string, onProgress?: PPTProgressListener): Promise<string> {
+        const fileType = this.getFileType(rawFile.name);
+        const path = `/${folder}/${uuid}${fileType}`;
+        return this.addFile(path, rawFile, onProgress);
+    }
+
     public async convertFile(
         rawFile: File,
         kind: PPTKind,

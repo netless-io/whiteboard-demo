@@ -16,8 +16,8 @@
   "author": "netless",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
     "white-web-sdk": "^2.12.14",
     "antd": "4.x"
   },

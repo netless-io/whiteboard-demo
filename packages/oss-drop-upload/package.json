@@ -22,8 +22,8 @@
     "react-dropzone": "11.3.1"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
     "white-web-sdk": "^2.9.12"
   },
   "devDependencies": {
