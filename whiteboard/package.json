@@ -7,7 +7,7 @@
         "build": "webpack --mode production && cp -r ./service-worker/* ./build/"
     },
     "dependencies": {
-        "@netless/ppt-plugin": "^0.0.4",
+        "@netless/ppt-plugin": "^0.0.5",
         "@ant-design/icons": "^4.5.0",
         "@netless/combine-player": "^1.1.4",
         "@netless/cursor-tool": "^0.1.0",

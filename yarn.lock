@@ -2545,20 +2545,20 @@
   resolved "https://registry.npmjs.org/@netless/page-controller/-/page-controller-0.0.3.tgz#f1333d80ae58e582383a644eec19bbe2840529d9"
   integrity sha512-3n9I0jWZzcEZ1lwXjxWsJxA2oOWfdHJsGVYNJqZvrbjN4ctgBVzhF6+4twW1oTEvV3dtC7tyPkKPxo/Noe1feQ==
 
-"@netless/ppt-plugin@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@netless/ppt-plugin/-/ppt-plugin-0.0.3.tgz#3a25d4d7c7dcb027919d5e51e9e6060d77256db3"
-  integrity sha512-qflaDd0WWw5Gew3TYZm+4dN9Wwaax2L6cvrma+7LDALEZoSoqdaupVX5F49FFQY1V1k/PQifRXjjNf+qyQkTNQ==
+"@netless/ppt-plugin@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@netless/ppt-plugin/-/ppt-plugin-0.0.4.tgz#634b22c8fe664552003a1eea46d21a74b5db6fa1"
+  integrity sha512-iBYPG1GVMUeWubadQ/uiEbPYCxnyYCr8yMGGt6y2BkIYQHAjY0oin5YH0D2TdSZ9LNmg1kqBXYiDWE+RN2y3zQ==
   dependencies:
-    "@netless/ppt-transaction" "^0.0.3"
+    "@netless/ppt-transaction" "^0.0.4"
     html2canvas "^1.0.0"
     localforage "^1.9.0"
     lodash "^4.17.21"
 
-"@netless/ppt-transaction@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@netless/ppt-transaction/-/ppt-transaction-0.0.3.tgz#b824c829d8d24c3d31926a4346eccef357af6967"
-  integrity sha512-JYqAuo3UAIijanCfq1VqI05jQ32Xs4pTqTeAorQ7ONSz0RzbZGhqlyuoFtgc7lcdwI6J6CFv2tuSTU9VotobVg==
+"@netless/ppt-transaction@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@netless/ppt-transaction/-/ppt-transaction-0.0.4.tgz#73e89afbd6d9a9742b0202d3a06c4bd0f6c3b27c"
+  integrity sha512-LFEEZnv+dOBn5dT7knEjcm8bs1IWM6/bcHsLGL+JTCSKIwBmXSnPrY1H11cLeMAHfwc/sgBLU3zc1GAf19Nlig==
   dependencies:
     three "^0.130.0"
 

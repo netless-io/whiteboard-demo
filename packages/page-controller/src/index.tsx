@@ -43,7 +43,6 @@ export default class PageController extends React.Component<PageControllerProps,
     private handlePptPreviousStep = async (): Promise<void> => {
         const {room, usePPTPlugin, pptPlugin} = this.props;
         if (usePPTPlugin && pptPlugin?.isHandleCurrentScene) {
-            console.log("handlePptPreviousStep");
             pptPlugin.prevStep();
         } else {
             room.pptPreviousStep();
@@ -52,12 +51,9 @@ export default class PageController extends React.Component<PageControllerProps,
 
     private handlePptNextStep = async (): Promise<void> => {
         const {room, usePPTPlugin, pptPlugin} = this.props;
-        console.log("handlePptNextStep", usePPTPlugin, pptPlugin?.isHandleCurrentScene);
         if (usePPTPlugin && pptPlugin?.isHandleCurrentScene) {
-            console.log("handlePptNextStep");
             pptPlugin.nextStep();
         } else {
-            console.log("0000000000");
             room.pptNextStep();
         }
     }

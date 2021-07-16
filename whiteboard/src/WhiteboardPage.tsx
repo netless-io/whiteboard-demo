@@ -5,6 +5,7 @@ import {RouteComponentProps} from "react-router";
 import {
     createPlugins,
     DefaultHotKeys, DeviceType,
+    InvisiblePlugin,
     PPTKind,
     Room,
     RoomPhase,
@@ -55,7 +56,6 @@ import { SupplierAdapter } from "./tools/SupplierAdapter";
 import { withTranslation, WithTranslation } from "react-i18next";
 import FloatLink from "./FloatLink";
 import { SlidePrefetch } from "@netless/slide-prefetch";
-import * as ProgressivePPT from "./logics/ProgressivePPT"
 import { WhitePPTPlugin, Player } from "@netless/ppt-plugin";
 
 export type WhiteboardPageStates = {
@@ -222,6 +222,8 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         deviceType = DeviceType.Desktop;
                     }
                 }
+                const invisiblePlugins: any[] = [WhitePPTPlugin];
+                const wrappedComponents: any[] = [Player];
                 let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
@@ -230,17 +232,16 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     deviceType: deviceType,
                     pptParams: {
                         useServerWrap: true,
-                    },
-                    invisiblePlugins: [WhitePPTPlugin],
-                    wrappedComponents: [Player]
+                    }
                 }
                 if (h5Url) {
-                    const pluginParam = {
-                        wrappedComponents: [IframeWrapper],
-                        invisiblePlugins: [IframeBridge]
-                    }
-                    whiteWebSdkParams = Object.assign(whiteWebSdkParams, pluginParam)
+                    invisiblePlugins.push(IframeBridge);
+                    wrappedComponents.push(IframeWrapper);
                 }
+                whiteWebSdkParams = Object.assign(whiteWebSdkParams, {
+                    invisiblePlugins,
+                    wrappedComponents
+                });
                 const whiteWebSdk = new WhiteWebSdk(whiteWebSdkParams);
                 const cursorName = localStorage.getItem("userName");
                 const cursorAdapter = new CursorTool();
