@@ -322,13 +322,13 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     }
 
     private handlePPTPlugin = async (room: Room): Promise<void> => {
-        // @ts-ignore
+
         let bridge = room.getInvisiblePlugin(WhitePPTPlugin.kind) as WhitePPTPlugin;
         if (!bridge) {
-            // @ts-ignore
+
             await room.createInvisiblePlugin(WhitePPTPlugin, {});
         }
-        // @ts-ignore
+
         bridge = room.getInvisiblePlugin(WhitePPTPlugin.kind) as WhitePPTPlugin;
 
         bridge.setupConfig({
