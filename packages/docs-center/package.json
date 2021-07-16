@@ -19,8 +19,8 @@
     "@netless/menu-box": "^0.0.1"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
     "white-web-sdk": "^2.10.1"
   },
   "devDependencies": {

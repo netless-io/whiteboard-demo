@@ -5,6 +5,7 @@ import {RouteComponentProps} from "react-router";
 import {
     createPlugins,
     DefaultHotKeys, DeviceType,
+    InvisiblePlugin,
     PPTKind,
     Room,
     RoomPhase,
@@ -55,6 +56,7 @@ import { SupplierAdapter } from "./tools/SupplierAdapter";
 import { withTranslation, WithTranslation } from "react-i18next";
 import FloatLink from "./FloatLink";
 import { SlidePrefetch } from "@netless/slide-prefetch";
+import { WhitePPTPlugin, Player } from "@netless/ppt-plugin";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -64,6 +66,7 @@ export type WhiteboardPageStates = {
     mode?: ViewMode;
     whiteboardLayerDownRef?: HTMLDivElement;
     roomController?: ViewMode;
+    pptPlugin?: WhitePPTPlugin;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     identity: Identity;
@@ -74,7 +77,7 @@ export type WhiteboardPageProps = RouteComponentProps<{
 
 class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslation, WhiteboardPageStates> {
     private slidePrefetch: SlidePrefetch;
-    
+
     public constructor(props: WhiteboardPageProps & WithTranslation) {
         super(props);
         this.state = {
@@ -219,6 +222,8 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         deviceType = DeviceType.Desktop;
                     }
                 }
+                const invisiblePlugins: any[] = [WhitePPTPlugin];
+                const wrappedComponents: any[] = [Player];
                 let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
@@ -227,15 +232,16 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     deviceType: deviceType,
                     pptParams: {
                         useServerWrap: true,
-                    },
+                    }
                 }
                 if (h5Url) {
-                    const pluginParam = {
-                        wrappedComponents: [IframeWrapper],
-                        invisiblePlugins: [IframeBridge]
-                    }
-                    whiteWebSdkParams = Object.assign(whiteWebSdkParams, pluginParam)
+                    invisiblePlugins.push(IframeBridge);
+                    wrappedComponents.push(IframeWrapper);
                 }
+                whiteWebSdkParams = Object.assign(whiteWebSdkParams, {
+                    invisiblePlugins,
+                    wrappedComponents
+                });
                 const whiteWebSdk = new WhiteWebSdk(whiteWebSdkParams);
                 const cursorName = localStorage.getItem("userName");
                 const cursorAdapter = new CursorTool();
@@ -305,11 +311,38 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     await this.handleEnableH5(room, h5Url);
                 }
                 this.slidePrefetch.listen(room);
+                await this.handlePPTPlugin(room);
+                // TODO: wait until backend finish job
+                // ProgressivePPT.install(room);
             }
         } catch (error) {
             message.error(error);
             console.log(error);
         }
+    }
+
+    private handlePPTPlugin = async (room: Room): Promise<void> => {
+
+        let bridge = room.getInvisiblePlugin(WhitePPTPlugin.kind) as WhitePPTPlugin;
+        if (!bridge) {
+
+            await room.createInvisiblePlugin(WhitePPTPlugin, {});
+        }
+
+        bridge = room.getInvisiblePlugin(WhitePPTPlugin.kind) as WhitePPTPlugin;
+
+        bridge.setupConfig({
+            assetsDomain: "https://convertcdn.netless.link",
+            sdkToken: netlessToken.sdkToken,
+            loadConfig: {
+                scheme: "https",
+                useServerWrap: true,
+            },
+        });
+        this.setState({
+            pptPlugin: bridge,
+        });
+        WhitePPTPlugin.eventHub.on(WhitePPTPlugin.EVENTS.ERROR, e => console.log(e));
     }
 
     private handleEnableH5 = async (room: Room, h5Url: string, dir?: string): Promise<void> => {
@@ -372,7 +405,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     }
 
     public render(): React.ReactNode {
-        const {room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
+        const {pptPlugin, room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         const { identity, uuid, userId, region } = this.props.match.params;
         let ossConfig = { ...ossConfigObj };
         if (region !== "cn-hz") {
@@ -399,6 +432,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             <ToolBox i18nLanguage={i18n.language} room={room} customerComponent={
                                 [
                                     <OssUploadButton oss={ossConfig}
+                                                     pptPlugin={pptPlugin}
                                                      appIdentifier={netlessToken.appIdentifier}
                                                      sdkToken={netlessToken.sdkToken}
                                                      room={room}
@@ -437,7 +471,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         </div>
                         <div className="page-controller-box">
                             <div className="page-controller-mid-box">
-                                <PageController room={room}/>
+                                <PageController pptPlugin={pptPlugin} usePPTPlugin={true} room={room}/>
                                 <Tooltip placement="top" title={"Page preview"}>
                                     <div className="page-preview-cell" onClick={() => this.handlePreviewState(true)}>
                                         <img src={pages} alt={"pages"}/>

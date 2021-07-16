@@ -1,6 +1,6 @@
 {
   "name": "@netless/page-controller",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "",
   "private": false,
   "main": "dist/index.js",
@@ -17,8 +17,8 @@
   "license": "MIT",
   "dependencies": {},
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
     "white-web-sdk": "^2.9.12"
   },
   "devDependencies": {

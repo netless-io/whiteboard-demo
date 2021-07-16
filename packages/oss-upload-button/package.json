@@ -1,6 +1,6 @@
 {
   "name": "@netless/oss-upload-button",
-  "version": "0.1.18",
+  "version": "0.2.0",
   "description": "",
   "private": false,
   "main": "dist/index.js",
@@ -16,13 +16,14 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
+    "@netless/ppt-plugin": "0.0.5",
     "@netless/loading-bar": "^0.0.2",
-    "@netless/oss-upload-manager": "^1.1.11",
+    "@netless/oss-upload-manager": "^1.2.0",
     "ali-oss": "^6.10.0"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
     "white-web-sdk": "^2.9.12",
     "antd": "4.x"
   },
