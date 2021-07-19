@@ -1,6 +1,6 @@
 {
   "name": "@netless/oss-upload-button",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "",
   "private": false,
   "main": "dist/index.js",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@netless/ppt-plugin": "0.0.5",
     "@netless/loading-bar": "^0.0.2",
-    "@netless/oss-upload-manager": "^1.2.0",
+    "@netless/oss-upload-manager": "^1.2.1",
     "ali-oss": "^6.10.0"
   },
   "peerDependencies": {

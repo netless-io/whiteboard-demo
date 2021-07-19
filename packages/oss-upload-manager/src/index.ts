@@ -107,7 +107,7 @@ export class UploadManager {
                     }
                 },
             },
-            checkProgressTimeout: 10 * 60 * 1000,
+            checkProgressTimeout: 20 * 60 * 1000,
         });
         const ppt = await resp.checkUtilGet();
         await this.setUpScenes(ppt.scenes, uuid, kind, sdkToken, taskInf.uuid);
