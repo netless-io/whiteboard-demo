@@ -41,7 +41,7 @@ import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
 import {Identity} from "./IndexPage";
 import OssDropUpload from "@netless/oss-drop-upload";
-import {pptDatas} from "./taskUuids";
+import {pptData} from "./taskUuids";
 import {PPTDataType} from "@netless/oss-upload-manager";
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
@@ -58,6 +58,7 @@ import FloatLink from "./FloatLink";
 import { SlidePrefetch } from "@netless/slide-prefetch";
 import { WindowManager, WindowManagerWrapper } from "@netless/window-manager";
 import { WhitePPTPlugin, Player } from "@netless/ppt-plugin";
+import { AppsButton } from "./AppsButton";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -68,6 +69,7 @@ export type WhiteboardPageStates = {
     whiteboardLayerDownRef?: HTMLDivElement;
     roomController?: ViewMode;
     pptPlugin?: WhitePPTPlugin;
+    windowManager?: WindowManager;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     identity: Identity;
@@ -118,15 +120,15 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         }
     }
 
-    private setDefaultPptData = (pptDatas: string[], room: Room): void => {
+    private setDefaultPptData = (pptData: string[], room: Room): void => {
         const docs: PPTDataType[] = (room.state.globalState as any).docs;
         if (docs && docs.length > 1) {
             return;
         }
-        if (pptDatas.length > 0) {
-            for(let pptData of pptDatas){
+        if (pptData.length > 0) {
+            for(let data of pptData){
                 const sceneId = uuidv4();
-                const scenes = JSON.parse(pptData);
+                const scenes = JSON.parse(data);
                 const documentFile: PPTDataType = {
                     active: false,
                     id: sceneId,
@@ -236,8 +238,8 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 }
                 // if (h5Url) {
                     const pluginParam = {
-                        wrappedComponents: [WindowManagerWrapper],
-                        invisiblePlugins: [WindowManager]
+                        wrappedComponents: [WindowManagerWrapper, Player],
+                        invisiblePlugins: [WindowManager, WhitePPTPlugin]
                     }
                     whiteWebSdkParams = Object.assign(whiteWebSdkParams, pluginParam);
                     (window as any).WindowManager = WindowManager;
@@ -300,25 +302,24 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         enableDrawPoint: false
                     }
                 });
-                this.setDefaultPptData(pptDatas, room);
+                this.setDefaultPptData(pptData, room);
                 if (room.state.broadcastState) {
                     this.setState({mode: room.state.broadcastState.mode})
                 }
                 this.setState({room: room});
                 (window as any).room = room;
-                if (h5Url && h5Dir) {
-                    await this.handleEnableH5(room, h5Url, h5Dir);
-                } else if (h5Url) {
-                    await this.handleEnableH5(room, h5Url);
-                }
+                // if (h5Url && h5Dir) {
+                //     await this.handleEnableH5(room, h5Url, h5Dir);
+                // } else if (h5Url) {
+                //     await this.handleEnableH5(room, h5Url);
+                // }
+                await this.handleEnableH5(room, h5Url);
                 this.slidePrefetch.listen(room);
                 await this.handlePPTPlugin(room);
-                // TODO: wait until backend finish job
-                // ProgressivePPT.install(room);
             }
         } catch (error) {
-            message.error(error);
-            console.log(error);
+            message.error(String(error));
+            console.trace(error);
         }
     }
 
@@ -379,10 +380,11 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         //     new SupplierAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
         // }
 
-        const plugin = room.getInvisiblePlugin(WindowManager.kind)
+        let plugin = room.getInvisiblePlugin(WindowManager.kind)
         if (!plugin) {
-            WindowManager.use(room);
+            plugin = await WindowManager.use(room);
         }
+        this.setState({ windowManager: plugin as WindowManager });
         (window as any).plugin = plugin;
     }
 
@@ -444,7 +446,8 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                                      room={room}
                                                      region={region}
                                                      i18nLanguage={i18n.language}
-                                                     whiteboardRef={whiteboardLayerDownRef}/>,
+                                                     whiteboardRef={whiteboardLayerDownRef} />,
+                                    <AppsButton manager={this.state.windowManager} />,
                                 ]
                             }/>
                         </div>
