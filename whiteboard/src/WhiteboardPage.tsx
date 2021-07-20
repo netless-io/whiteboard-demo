@@ -5,7 +5,6 @@ import {RouteComponentProps} from "react-router";
 import {
     createPlugins,
     DefaultHotKeys, DeviceType,
-    InvisiblePlugin,
     PPTKind,
     Room,
     RoomPhase,
