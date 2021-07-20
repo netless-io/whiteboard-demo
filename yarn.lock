@@ -2540,16 +2540,6 @@
   dependencies:
     react-burger-menu "^2.7.1"
 
-"@netless/ppt-plugin@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.npmjs.org/@netless/ppt-plugin/-/ppt-plugin-0.0.5.tgz#c9856a9035f7be50814d8fae545395e6eb26ca7c"
-  integrity sha512-MTXYh2SenfoUd6CLxDP43VDmv+7ZepqFmv8qKuAqAfyuo1dGWe0zAA6oKoqWiGqgHOlBixDnn9lfaYaJ3C9mEA==
-  dependencies:
-    "@netless/ppt-transaction" "^0.0.5"
-    html2canvas "^1.0.0"
-    localforage "^1.9.0"
-    lodash "^4.17.21"
-
 "@netless/ppt-plugin@^0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@netless/ppt-plugin/-/ppt-plugin-0.1.1.tgz#1d92ec11ad0beaa9daf012f13b6c5ec4816a15bc"
@@ -2559,13 +2549,6 @@
     html2canvas "^1.0.0"
     localforage "^1.9.0"
     lodash "^4.17.21"
-
-"@netless/ppt-transaction@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.npmjs.org/@netless/ppt-transaction/-/ppt-transaction-0.0.5.tgz#9ac5fd25ca1544c742bcce42a98dcf868a350d8d"
-  integrity sha512-zmGu+SSJfzE3/aOAoDKsVBL03cIF/9sp5s1Xv81RHaSlps/62zagfJNIZr/TCP7PcQAbGchgNyUmNJOV9KhAaQ==
-  dependencies:
-    three "^0.130.0"
 
 "@netless/ppt-transaction@^0.1.1":
   version "0.1.1"

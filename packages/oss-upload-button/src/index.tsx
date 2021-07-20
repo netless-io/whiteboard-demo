@@ -1,7 +1,7 @@
 import * as React from "react";
 import { message, Popover, Upload, Switch } from "antd";
 import * as OSS from "ali-oss";
-import { WhitePPTPlugin } from "@netless/ppt-plugin";
+import type { WhitePPTPlugin } from "@netless/ppt-plugin";
 import { PPTProgressPhase, UploadManager } from "@netless/oss-upload-manager";
 import TopLoadingBar from "@netless/loading-bar";
 import "./index.less";
