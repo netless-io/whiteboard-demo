@@ -7,7 +7,6 @@
         "build": "webpack --mode production && cp -r ./service-worker/* ./build/"
     },
     "dependencies": {
-        "@netless/ppt-plugin": "^0.0.5",
         "@ant-design/icons": "^4.5.0",
         "@netless/combine-player": "^1.1.4",
         "@netless/cursor-tool": "^0.1.0",
@@ -19,6 +18,7 @@
         "@netless/oss-upload-button": "^0.2.1",
         "@netless/page-controller": "^0.1.0",
         "@netless/player-controller": "^0.0.9",
+        "@netless/ppt-plugin": "^0.1.1",
         "@netless/preview-controller": "^0.0.9",
         "@netless/redo-undo": "^0.0.5",
         "@netless/slide-prefetch": "^0.2.1",
