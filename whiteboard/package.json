@@ -3,7 +3,7 @@
     "version": "0.0.7",
     "main": "index.js",
     "scripts": {
-        "dev": "webpack-dev-server --historyApiFallback --mode development --port 8000 --host '0.0.0.0' --open --hot",
+        "dev": "webpack-dev-server --historyApiFallback --mode development --port 8000 --open --hot",
         "build": "webpack --mode production && cp -r ./service-worker/* ./build/"
     },
     "dependencies": {
@@ -30,7 +30,6 @@
         "@netless/white-video-plugin2": "^2.1.2",
         "@netless/zip": "^0.0.6",
         "@netless/zoom-controller": "^0.1.1",
-        "@l1shen/vscode": "^0.0.26",
         "@netless/window-manager": "^0.0.0-beta1",
         "antd": "^4.13.1",
         "copy-to-clipboard": "^3.3.1",
