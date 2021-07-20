@@ -2962,6 +2962,11 @@
     "@types/webpack-sources" "*"
     source-map "^0.6.0"
 
+"@types/winbox@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.npmjs.org/@types/winbox/-/winbox-0.2.1.tgz#cfab903a7021058271a72ded4965a9348e710349"
+  integrity sha512-fN/UQjitix7v3yDmpvzKSnDyKIiOhU5LdAj5Wcf/eRpGapoLwBELAwvVZY/2OBw23PyPKwGZ07oZxBHyIO/e3A==
+
 "@videojs/http-streaming@2.4.2":
   version "2.4.2"
   resolved "https://registry.npmjs.org/@videojs/http-streaming/-/http-streaming-2.4.2.tgz#0289c1833e33f3242d1faf5f52a4052ec15abdcf"

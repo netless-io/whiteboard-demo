@@ -13,6 +13,7 @@ import {
     WhiteWebSdk,
     WhiteWebSdkConfiguration,
     InvisiblePlugin,
+    WrappedComponents,
 } from "white-web-sdk";
 import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
@@ -236,15 +237,17 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         useServerWrap: true,
                     },
                 }
-                // if (h5Url) {
-                    const pluginParam = {
-                        wrappedComponents: [WindowManagerWrapper, Player],
-                        invisiblePlugins: [WindowManager, WhitePPTPlugin]
-                    }
-                    whiteWebSdkParams = Object.assign(whiteWebSdkParams, pluginParam);
-                    (window as any).WindowManager = WindowManager;
-                    (window as any).WindowManagerWrapper = WindowManagerWrapper;
-                // }
+                const pluginParam = {
+                    wrappedComponents: [WindowManagerWrapper, Player] as any[],
+                    invisiblePlugins: [WindowManager, WhitePPTPlugin] as any[],
+                }
+                if (h5Url) {
+                    pluginParam.wrappedComponents.push(IframeWrapper);
+                    pluginParam.invisiblePlugins.push(IframeBridge);
+                }
+                whiteWebSdkParams = Object.assign(whiteWebSdkParams, pluginParam);
+                (window as any).WindowManager = WindowManager;
+                (window as any).WindowManagerWrapper = WindowManagerWrapper;
                 const whiteWebSdk = new WhiteWebSdk(whiteWebSdkParams);
                 const cursorName = localStorage.getItem("userName");
                 const cursorAdapter = new CursorTool();
@@ -308,12 +311,19 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 }
                 this.setState({room: room});
                 (window as any).room = room;
-                // if (h5Url && h5Dir) {
-                //     await this.handleEnableH5(room, h5Url, h5Dir);
-                // } else if (h5Url) {
-                //     await this.handleEnableH5(room, h5Url);
-                // }
-                await this.handleEnableH5(room, h5Url);
+                if (h5Url && h5Dir) {
+                    await this.handleEnableH5(room, h5Url, h5Dir);
+                } else if (h5Url) {
+                    await this.handleEnableH5(room, h5Url);
+                }
+
+                let plugin = room.getInvisiblePlugin(WindowManager.kind)
+                if (!plugin) {
+                    plugin = await WindowManager.use(room);
+                }
+                this.setState({ windowManager: plugin as WindowManager });
+                (window as any).plugin = plugin;
+
                 this.slidePrefetch.listen(room);
                 await this.handlePPTPlugin(room);
             }
@@ -348,44 +358,38 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     }
 
     private handleEnableH5 = async (room: Room, h5Url: string, dir?: string): Promise<void> => {
-        // let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
-        // if (!bridge) {
-        //     const h5SceneDir = dir || "/h5";
-        //     let totalPage = 6;
-        //     bridge = await IframeBridge.insert({
-        //         room,
-        //         url: h5Url,
-        //         width: 1280,
-        //         height: 720,
-        //         displaySceneDir: h5SceneDir,
-        //         useClicker: true
-        //     });
-        //     if (h5Url === h5DemoUrl3) {
-        //         totalPage = 14;
-        //     }
-        //     if ([h5DemoUrl, h5DemoUrl3].includes(h5Url) || dir) {
-        //         const scenes = room.entireScenes();
-        //         if (!scenes[h5SceneDir]) {
-        //             room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
-        //         }
-        //         if (room.state.sceneState.contextPath !== h5SceneDir) {
-        //             room.setScenePath(h5SceneDir);
-        //         }
-        //     }
-        // }
-        // if (dir) {
-        //     new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url)
-        // }
-        // if (h5Url === supplierUrl) {
-        //     new SupplierAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
-        // }
-
-        let plugin = room.getInvisiblePlugin(WindowManager.kind)
-        if (!plugin) {
-            plugin = await WindowManager.use(room);
+        let bridge = await room.getInvisiblePlugin(IframeBridge.kind);
+        if (!bridge) {
+            const h5SceneDir = dir || "/h5";
+            let totalPage = 6;
+            bridge = await IframeBridge.insert({
+                room,
+                url: h5Url,
+                width: 1280,
+                height: 720,
+                displaySceneDir: h5SceneDir,
+                useClicker: true
+            });
+            if (h5Url === h5DemoUrl3) {
+                totalPage = 14;
+            }
+            if ([h5DemoUrl, h5DemoUrl3].includes(h5Url) || dir) {
+                const scenes = room.entireScenes();
+                if (!scenes[h5SceneDir]) {
+                    room.putScenes(h5SceneDir, this.createH5Scenes(totalPage));
+                }
+                if (room.state.sceneState.contextPath !== h5SceneDir) {
+                    room.setScenePath(h5SceneDir);
+                }
+            }
         }
-        this.setState({ windowManager: plugin as WindowManager });
-        (window as any).plugin = plugin;
+        if (dir) {
+            new IframeAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url)
+        }
+        if (h5Url === supplierUrl) {
+            new SupplierAdapter(room, bridge as IframeBridge, this.props.match.params.userId, h5Url);
+        }
+        (window as any).bridge = bridge;
     }
 
 
