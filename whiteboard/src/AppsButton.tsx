@@ -1,6 +1,7 @@
 import "./AppsButton.less";
 import React, { ReactElement, SVGProps } from "react";
 import { Tooltip, Modal, Button } from "antd";
+import { WindowManager } from "@netless/window-manager";
 
 const apps: { id: string; url: string; name: string }[] = [
     {
@@ -22,7 +23,7 @@ function MdiAppsIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 interface Props {
-    manager?: { addPlugin(id: string, url: string): Promise<void> };
+    manager?: WindowManager;
 }
 
 interface State {
@@ -52,11 +53,13 @@ export class AppsButton extends React.Component<Props, State> {
                     footer={null}
                     onCancel={this.hideAppStore}
                     title="App Store"
+                    destroyOnClose
                 >
                     {apps.map((e) => (
                         <Button
                             key={e.id}
                             loading={this.state.loading}
+                            disabled={(this.props.manager as any)?.instancePlugins.has(e.id)}
                             onClick={() => this.loadApp(e.id)}
                         >
                             {e.name}
