@@ -67,7 +67,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
         const { t, i18n } = this.props
             return (
                 <div className="page-index-box">
-                    <FloatLink />
+                    {/* <FloatLink /> */}
                     <SwitchRegion />
                     <div className="page-index-mid-box">
                         <div className="page-index-logo-box">
