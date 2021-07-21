@@ -81,9 +81,17 @@ config = {
             {
                 test: /\.(ts)x?$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'ts-loader'
-                },
+                use: [
+                    {
+                        loader: 'thread-loader'
+                    },
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            happyPackMode: true
+                        }
+                    }
+                ],
             },
             {
                 test: /\.less$/,
