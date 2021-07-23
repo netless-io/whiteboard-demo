@@ -1,26 +1,52 @@
 import "./AppsButton.less";
-import React, { ReactElement, SVGProps } from "react";
-import { Tooltip, Modal, Button } from "antd";
+import React, { ReactElement } from "react";
+import {Button, Popover} from "antd";
 import { WindowManager } from "@netless/window-manager";
+import {AppstoreOutlined} from "@ant-design/icons";
+import vscode from "./assets/image/vscode.svg";
+import appstore from "./assets/image/appstore.svg";
+import dice from "./assets/image/dice.svg";
+import clock from "./assets/image/clock.svg";
+import vote from "./assets/image/vote.svg";
 
-const apps: { id: string; url: string; name: string }[] = [
+export type AppIcon = {
+    id: string,
+    sourceCode: string,
+    name: string,
+    iconUrl: string,
+};
+const apps: AppIcon[] = [
+    {
+        id: "AppStore",
+        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+        name: "appstore",
+        iconUrl: appstore,
+    },
     {
         id: "MonacoPlugin",
-        url: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
-        name: "Code Editor",
+        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+        name: "vscode",
+        iconUrl: vscode,
+    },
+    {
+        id: "Dice",
+        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+        name: "骰子",
+        iconUrl: dice,
+    },
+    {
+        id: "clock",
+        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+        name: "时钟",
+        iconUrl: clock,
+    },
+    {
+        id: "vote",
+        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+        name: "投票",
+        iconUrl: vote,
     },
 ];
-
-function MdiAppsIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-        <svg focusable="false" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
-            <path
-                d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6 4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6 4h4v-4h-4M4 8h4V4H4v4z"
-                fill="currentColor"
-            ></path>
-        </svg>
-    );
-}
 
 interface Props {
     manager?: WindowManager;
@@ -40,32 +66,49 @@ export class AppsButton extends React.Component<Props, State> {
         };
     }
 
+    public renderAppStore = (): React.ReactNode => {
+        return (
+            <div className="app-box">
+                {apps.map((e) => (
+                    <div className="app-box-inner"
+                        key={e.id}
+                        // loading={this.state.loading}
+                        // disabled={(this.props.manager as any)?.instancePlugins.has(e.id)}
+                        onClick={() => this.loadApp(e.id)}
+                    >
+                        <div className="app-box-icon">
+                            <img src={e.iconUrl} alt={"img"}/>
+                        </div>
+                        <div className="app-box-text">
+                            {e.name}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
     public render(): ReactElement {
         return (
             <>
-                <Tooltip placement="right" key="apps" title="Apps">
+
+                <Popover trigger="hover"
+                         key={"oss-upload-popper"}
+                         placement={"leftBottom"}
+                         content={this.renderAppStore()}>
                     <div className="apps-button" onClick={this.showAppStore}>
-                        <MdiAppsIcon />
+                        <AppstoreOutlined />
                     </div>
-                </Tooltip>
-                <Modal
-                    visible={this.state.appStoreIsVisible}
-                    footer={null}
-                    onCancel={this.hideAppStore}
-                    title="App Store"
-                    destroyOnClose
-                >
-                    {apps.map((e) => (
-                        <Button
-                            key={e.id}
-                            loading={this.state.loading}
-                            disabled={(this.props.manager as any)?.instancePlugins.has(e.id)}
-                            onClick={() => this.loadApp(e.id)}
-                        >
-                            {e.name}
-                        </Button>
-                    ))}
-                </Modal>
+                </Popover>
+                {/*<Modal*/}
+                {/*    visible={this.state.appStoreIsVisible}*/}
+                {/*    footer={null}*/}
+                {/*    onCancel={this.hideAppStore}*/}
+                {/*    title="App Store"*/}
+                {/*    destroyOnClose*/}
+                {/*>*/}
+                {/*    */}
+                {/*</Modal>*/}
             </>
         );
     }
@@ -81,7 +124,7 @@ export class AppsButton extends React.Component<Props, State> {
     private async loadApp(id: string): Promise<void> {
         const app = apps.find((e) => e.id === id)!;
         this.setState({ loading: true });
-        await this.props.manager?.addPlugin(app.id, app.url);
+        await this.props.manager?.addPlugin(app.id, app.sourceCode);
         this.setState({ loading: false, appStoreIsVisible: false });
     }
 }
