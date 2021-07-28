@@ -16,36 +16,36 @@ export type AppIcon = {
     iconUrl: string,
 };
 const apps: AppIcon[] = [
-    {
-        id: "AppStore",
-        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
-        name: "appstore",
-        iconUrl: appstore,
-    },
+    // {
+    //     id: "AppStore",
+    //     sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+    //     name: "appstore",
+    //     iconUrl: appstore,
+    // },
     {
         id: "MonacoPlugin",
         sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
         name: "vscode",
         iconUrl: vscode,
     },
-    {
-        id: "Dice",
-        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
-        name: "骰子",
-        iconUrl: dice,
-    },
-    {
-        id: "clock",
-        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
-        name: "时钟",
-        iconUrl: clock,
-    },
-    {
-        id: "vote",
-        sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
-        name: "投票",
-        iconUrl: vote,
-    },
+    // {
+    //     id: "Dice",
+    //     sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+    //     name: "骰子",
+    //     iconUrl: dice,
+    // },
+    // {
+    //     id: "clock",
+    //     sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+    //     name: "时钟",
+    //     iconUrl: clock,
+    // },
+    // {
+    //     id: "vote",
+    //     sourceCode: "https://cdn.jsdelivr.net/npm/@l1shen/vscode@0.0.36/dist/index.js",
+    //     name: "投票",
+    //     iconUrl: vote,
+    // },
 ];
 
 interface Props {
