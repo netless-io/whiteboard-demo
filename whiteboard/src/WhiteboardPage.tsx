@@ -437,9 +437,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 return (
                     <div className="realtime-box">
                          <FloatLink />
-                        {/*<div className="logo-box">*/}
-                        {/*    <img src={logo} alt={"logo"}/>*/}
-                        {/*</div>*/}
                         <div className="tool-box-out">
                             <ToolBox i18nLanguage={i18n.language} room={room} customerComponent={
                                 [
