@@ -1,31 +1,46 @@
 .float-link {
-  display: flex;
-  align-items: center;
-  background-color: #3381FF;
-  color: white;
-  height: 44px;
-  padding-left: 8px;
-  border-top-right-radius: 22px;
-  border-bottom-right-radius: 22px;
-  position: absolute;
-  z-index: 200;
-  left: 0;
-  top: 0;
-  cursor: pointer;
-  overflow: hidden;
-  &:hover {
-    .float-link-text {
-      width: 207px;
-      opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fafafa;
+    color: #000;
+    padding: 0 12px 0 16px;
+    height: 50px;
+    position: absolute;
+    z-index: 200;
+    left: 0;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+
+    > img {
+        height: 20px;
+        cursor: default;
+
+        &:first-child {
+            filter: grayscale(0.5) brightness(0.5);
+        }
     }
-  }
 }
 
-.float-link-text {
-  width: 0;
-  padding-right: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: width .4s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity .2s linear;
+.float-link-content {
+    display: inline-flex;
+    align-items: center;
+
+    > img {
+        padding-right: 4px;
+        cursor: default;
+    }
+
+    > a {
+        color: #000;
+        padding: 9px 20px;
+        background-color: #ffcc02;
+        border-radius: 9999px;
+        margin-left: 12px;
+    }
+}
+
+.float-link-close {
+    cursor: pointer;
 }
