@@ -1,311 +1,129 @@
 import * as React from "react";
 import "./index.less";
+import {useEffect, useState} from "react";
 
-enum Theme {
-    dark = "dark",
-    light = "light",
-}
-export type OptionType = {
-    theme: Theme,
-    headings: string[],
+export type FlipDownStates = {
+    seconds: number,
+    stopped: boolean,
 };
 
-export type ClockValueObj = {
-    m: number,
-    s: number,
-}
+export default class FlipDown extends React.Component<{}, FlipDownStates> {
 
-export type ClockStringObj = {
-    m: string,
-    s: string,
-}
-
-// export type FlipDownProps = {
-//     uts: number,
-//     el: HTMLElement,
-//     opt: OptionType,
-// };
-
-export default class FlipDown extends React.Component<{}, {}> {
-    public version = "0.0.1";
-    public initialised: boolean;
-    public now: number = FlipDown.getCurrentTime();
-    public epoch: number;
-    public countdownEnded: boolean;
-    public hasEndedCallback: (() => void) | null;
-    public element: HTMLElement
-    public rotors: HTMLElement[];
-    public rotorLeafFront: HTMLElement[];
-    public rotorLeafRear: HTMLElement[];
-    public rotorTop: HTMLElement[];
-    public rotorBottom: HTMLElement[];
-    public opts: OptionType;
-
-    // Interval
-    public countdown: number;
-
-    // Number of days remaining
-    public daysRemaining: number = 0;
-
-    // Clock values as numbers
-    public clockValues: ClockValueObj;
-
-    // Clock values as strings
-    public clockStrings: ClockStringObj;
-
-    // Clock values as array
-    public clockValuesAsString: string[];
-    public prevClockValuesAsString: string[];
-
+    private timerID: number;
     public constructor(props: {}) {
         super(props)
-        this.initialised = false;
-        // UTS to count down to
-        const twoDaysFromNow = (new Date().getTime() / 1000) + (86400 * 2) + 1;
-        this.epoch = twoDaysFromNow;
-
-        // UTS passed to FlipDown is in the past
-        this.countdownEnded = false;
-
-        // User defined callback for countdown end
-        this.hasEndedCallback = null;
-
-    }
-
-    public start = () => {
-        // Initialise the clock
-        if (!this.initialised) this.init();
-
-        // Set up the countdown interval
-        this.countdown = window.setInterval(this.tick, 1000);
-        return this;
-    }
-
-    public ifEnded = (cb: any) => {
-        this.hasEndedCallback = () => {
-            cb();
-            this.hasEndedCallback = null;
+        this.state = {
+            seconds: 0,
+            stopped: true
         };
-        return this;
     }
 
-    private static getCurrentTime(): number {
-        return new Date().getTime() / 1000;
+   public componentWillUnmount() {
+        window.clearInterval(this.timerID);
     }
 
-    private hasCountdownEnded = (): boolean => {
-        // Countdown has ended
-        if (this.epoch - this.now < 0) {
-            this.countdownEnded = true;
+    private tick = (): void => {
+        this.setState({
+            seconds: this.state.seconds + 1
+        })
+    }
 
-            // Fire the ifEnded callback once if it was set
-            if (this.hasEndedCallback != null) {
-                // Call ifEnded callback
-                this.hasEndedCallback();
-
-                // Remove the callback
-                this.hasEndedCallback = null;
-            }
-
-            return true;
-
-            // Countdown has not ended
+    private handleStart = (): void => {
+        if (this.state.stopped) {
+            this.timerID = window.setInterval(() => this.tick(), 1000);
+            this.setState({ stopped: false });
         } else {
-            this.countdownEnded = false;
-            return false;
+            window.clearInterval(this.timerID)
+            this.setState({ stopped: true });
         }
     }
 
-     private parseOptions = (opt: OptionType): OptionType => {
-        let headings = ["Days", "Hours", "Minutes", "Seconds"];
-        if (opt.headings && opt.headings.length === 4) {
-            headings = opt.headings;
-        }
+    private handleReset = (): void => {
+        window.clearInterval(this.timerID);
+        this.setState({ seconds: 0, stopped: true });
+    }
+
+    private correctValueFormat = (value: number): {left: number, right: number} => {
         return {
-            theme: opt.theme ? opt.theme : Theme.dark,
-            headings,
+            left: Math.floor((value / 10)),
+            right: (value % 10),
         };
     }
 
-    private init = () =>  {
-
-        this.rotorLeafFront = Array.prototype.slice.call(
-            this.element.getElementsByClassName("rotor-leaf-front")
-        );
-        this.rotorLeafRear = Array.prototype.slice.call(
-            this.element.getElementsByClassName("rotor-leaf-rear")
-        );
-        this.rotorTop = Array.prototype.slice.call(
-            this.element.getElementsByClassName("rotor-top")
-        );
-        this.rotorBottom = Array.prototype.slice.call(
-            this.element.getElementsByClassName("rotor-bottom")
-        );
-
-        this.tick();
-        this.updateClockValues(true);
-
-        return this;
-    }
-
-    private pad = (n: number, len: number): string => {
-        return n.toString().padStart(len, "0");
-    }
-
-
-    private tick() {
-        // Get time now
-        this.now = FlipDown.getCurrentTime();
-
-        // Between now and epoch
-        let diff = this.epoch - this.now <= 0 ? 0 : this.epoch - this.now;
-
-
-        // Minutes remaining
-        this.clockValues.m = Math.floor(diff / 60);
-        diff -= this.clockValues.m * 60;
-
-        // Seconds remaining
-        this.clockValues.s = Math.floor(diff);
-
-        // Update clock values
-        this.updateClockValues(false);
-
-        // Has the countdown ended?
-        this.hasCountdownEnded();
-    }
-
-    private rotorLeafRearFlip = () => {
-        this.rotorLeafRear.forEach((el:HTMLElement, i: number) => {
-            if (el.textContent !== this.clockValuesAsString[i]) {
-                el.textContent = this.clockValuesAsString[i];
-                el.parentElement && el.parentElement.classList.add("flipped");
-                let flip = window.setInterval(
-                    () => {
-                        el.parentElement && el.parentElement.classList.remove("flipped");
-                        clearInterval(flip);
-                    },
-                    500
-                );
-            }
-        });
-    }
-
-    private rotorTopFlip = () => {
-        this.rotorTop.forEach((el: HTMLElement, i: number) => {
-            if (el.textContent !== this.clockValuesAsString[i]) {
-                el.textContent = this.clockValuesAsString[i];
-            }
-        });
-    }
-
-    private updateClockValues = (init: boolean) => {
-        // Build clock value strings
-        this.clockStrings.m = this.pad(this.clockValues.m, 2);
-        this.clockStrings.s = this.pad(this.clockValues.s, 2);
-
-        // Concat clock value strings
-        this.clockValuesAsString = (
-            this.clockStrings.m +
-            this.clockStrings.s
-        ).split("");
-
-        this.rotorLeafFront.forEach((el: HTMLElement, i:  number) => {
-            el.textContent = this.prevClockValuesAsString[i];
-        });
-
-        this.rotorBottom.forEach((el: HTMLElement, i: number) => {
-            el.textContent = this.prevClockValuesAsString[i];
-        });
-
-        this.rotorTopFlip();
-        this.rotorLeafRearFlip();
-
-        // Init
-        if (!init) {
-            setTimeout(this.rotorTopFlip, 500);
-            setTimeout(this.rotorLeafRearFlip, 500);
-        } else {
-            this.rotorTopFlip.call(this);
-            this.rotorLeafRearFlip.call(this);
+    private transformTime = (): {
+        minutes_left: number,
+        minutes_right: number,
+        seconds_left: number,
+        seconds_right: number,
+    } => {
+        const current = this.state.seconds;
+        const minutes = Math.floor((current % (60 * 60)) / 60)
+        const seconds = Math.floor((current % 60))
+        const m = this.correctValueFormat(minutes);
+        const s = this.correctValueFormat(seconds);
+        return {
+            minutes_left: m.left,
+            minutes_right: m.right,
+            seconds_left: s.left,
+            seconds_right: s.right,
         }
-
-        // Save a copy of clock values for next tick
-        this.prevClockValuesAsString = this.clockValuesAsString;
     }
 
-    public render() {
+    render() {
+        const { seconds_left, seconds_right, minutes_right, minutes_left} = this.transformTime();
         return (
-            <div id="flipdown">
-                <div className="rotor-group">
-                    <div className="rotor">
-                        <div className="rotor-leaf">
-                            <figure className="rotor-leaf-rear">
-                                0
-                            </figure>
-                            <figure className="rotor-leaf-front">
-                                0
-                            </figure>
-                        </div>
-                        <div className="rotor-top">
-                            0
-                        </div>
-                        <div className="rotor-bottom">
-                            0
-                        </div>
-                    </div>
-                    <div className="rotor">
-                        <div className="rotor-leaf">
-                            <figure className="rotor-leaf-rear">
-                                0
-                            </figure>
-                            <figure className="rotor-leaf-front">
-                                0
-                            </figure>
-                        </div>
-                        <div className="rotor-top">
-                            0
-                        </div>
-                        <div className="rotor-bottom">
-                            0
-                        </div>
-                    </div>
+            <div className="flipdown flipdown__theme-dark">
+                <div className="flipdown-mid-box">
+                    <TimeCell time={minutes_left}/>
+                    <TimeCell time={minutes_right}/>
                 </div>
-                <div className="rotor-group">
-                    <div className="rotor">
-                        <div className="rotor-leaf">
-                            <figure className="rotor-leaf-rear">
-                                0
-                            </figure>
-                            <figure className="rotor-leaf-front">
-                                0
-                            </figure>
-                        </div>
-                        <div className="rotor-top">
-                            0
-                        </div>
-                        <div className="rotor-bottom">
-                            0
-                        </div>
-                    </div>
-                    <div className="rotor">
-                        <div className="rotor-leaf">
-                            <figure className="rotor-leaf-rear">
-                                0
-                            </figure>
-                            <figure className="rotor-leaf-front">
-                                0
-                            </figure>
-                        </div>
-                        <div className="rotor-top">
-                            0
-                        </div>
-                        <div className="rotor-bottom">
-                            0
-                        </div>
-                    </div>
+                <div className="flipdown-point-box">
+                    <div/>
+                    <div/>
+                </div>
+                <div className="flipdown-mid-box">
+                    <TimeCell time={seconds_left}/>
+                    <TimeCell time={seconds_right}/>
                 </div>
             </div>
-        );
+        )
     }
+}
+type TimeCellProps = {
+    time: number;
+};
+// {/*<div className="button-group">*/}
+// {/*    <span onClick={this.handleStart}>{this.state.stopped ? 'Start' : 'Pause'}</span>*/}
+// {/*    <span onClick={this.handleReset}>Reset</span>*/}
+// {/*</div>*/}
+
+const TimeCell: React.FC<TimeCellProps>  = ({time}) => {
+    const [flipdown, setFlipdown] = useState("rotor-leaf");
+    const [oldTime, setOldTime] = useState(0);
+    useEffect(() => {
+        setFlipdown(flipdown => "rotor-leaf flipped");
+        setTimeout(() =>{
+            setFlipdown("rotor-leaf");
+            setOldTime(time);
+        }, 500)
+    }, [time])
+
+    return (
+        <div className="rotor">
+            <div className={flipdown}>
+                <figure className="rotor-leaf-rear">
+                    {time}
+                </figure>
+                <figure className="rotor-leaf-front">
+                    {oldTime}
+                </figure>
+            </div>
+            <div className="rotor-top">
+                {time}
+            </div>
+            <div className="rotor-bottom">
+                {oldTime}
+            </div>
+        </div>
+    );
 }
