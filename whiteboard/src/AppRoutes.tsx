@@ -13,6 +13,7 @@ import AddNamePage from "./AddNamePage";
 import HistoryPage from "./HistoryPage"
 import Storage from "./Storage";
 import CreatePage from "./CreatePage";
+import Test from "./Test";
 
 export class AppRoutes extends React.Component<{}, {}> {
 
@@ -36,6 +37,7 @@ export class AppRoutes extends React.Component<{}, {}> {
                     <Route path="/create/" component={CreatePage}/>
                     <Route path="/name/:uuid?/" component={AddNamePage}/>
                     <Route path="/storage/" component={Storage}/>
+                    <Route path="/test/" component={Test}/>
                     <Route path="/" component={IndexPage}/>
                 </Switch>
             </Router>

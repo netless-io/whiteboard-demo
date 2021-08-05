@@ -1,19 +1,33 @@
 /* THEMES */
+.flipdown {
+  display: flex;
+  flex-direction: row;
+  background-color: yellow;
+}
 
+.flipdown-mid-box {
+  display: flex;
+  flex-direction: row;
+}
+
+.flipdown-point-box {
+  margin-left: 8px;
+  margin-right: 8px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  div {
+    width: 12px;
+    height: 12px;
+    background-color: black;
+    border-radius: 50%;
+  }
+}
 /********** Theme: dark **********/
 /* Font styles */
 .flipdown.flipdown__theme-dark {
   font-family: sans-serif;
   font-weight: bold;
-}
-/* Rotor group headings */
-.flipdown.flipdown__theme-dark .rotor-group-heading:before {
-  color: #000000;
-}
-/* Delimeters */
-.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):before,
-.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after {
-  background-color: #151515;
 }
 /* Rotor tops */
 .flipdown.flipdown__theme-dark .rotor,
@@ -39,15 +53,6 @@
   font-family: sans-serif;
   font-weight: bold;
 }
-/* Rotor group headings */
-.flipdown.flipdown__theme-light .rotor-group-heading:before {
-  color: #EEEEEE;
-}
-/* Delimeters */
-.flipdown.flipdown__theme-light .rotor-group:nth-child(n+2):nth-child(-n+3):before,
-.flipdown.flipdown__theme-light .rotor-group:nth-child(n+2):nth-child(-n+3):after {
-  background-color: #DDDDDD;
-}
 /* Rotor tops */
 .flipdown.flipdown__theme-light .rotor,
 .flipdown.flipdown__theme-light .rotor-top,
@@ -68,79 +73,24 @@
 
 /* END OF THEMES */
 
-.flipdown {
-  overflow: visible;
-  width: 510px;
-  height: 110px;
-}
+//.flipdown-point-box {
+//  width: 50px;
+//  height: 80px;
+//  background-color: yellow;
+//}
 
 .flipdown .rotor-group {
   position: relative;
-  float: left;
-  padding-right: 30px;
-}
-
-.flipdown .rotor-group:last-child {
-  padding-right: 0;
-}
-
-.flipdown .rotor-group-heading:before {
-  display: block;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-}
-
-.flipdown .rotor-group:nth-child(1) .rotor-group-heading:before {
-  content: attr(data-before);
-}
-
-.flipdown .rotor-group:nth-child(2) .rotor-group-heading:before {
-  content: attr(data-before);
-}
-
-.flipdown .rotor-group:nth-child(3) .rotor-group-heading:before {
-  content: attr(data-before);
-}
-
-.flipdown .rotor-group:nth-child(4) .rotor-group-heading:before {
-  content: attr(data-before);
-}
-
-.flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before {
-  content: '';
-  position: absolute;
-  bottom: 20px;
-  left: 115px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
-  content: '';
-  position: absolute;
-  bottom: 50px;
-  left: 115px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
 }
 
 .flipdown .rotor {
   position: relative;
-  float: left;
   width: 50px;
   height: 80px;
-  margin: 0px 5px 0px 0px;
   border-radius: 4px;
   font-size: 4rem;
   text-align: center;
   perspective: 200px;
-}
-
-.flipdown .rotor:last-child {
-  margin-right: 0;
 }
 
 .flipdown .rotor-top,
@@ -208,76 +158,4 @@
   width: 50px;
   height: 40px;
   border-radius: 0px 0px 4px 4px;
-}
-
-@media (max-width: 550px) {
-
-  .flipdown {
-    width: 312px;
-    height: 70px;
-  }
-
-  .flipdown .rotor {
-    font-size: 2.2rem;
-    margin-right: 3px;
-  }
-
-  .flipdown .rotor,
-  .flipdown .rotor-leaf,
-  .flipdown .rotor-leaf-front,
-  .flipdown .rotor-leaf-rear,
-  .flipdown .rotor-top,
-  .flipdown .rotor-bottom,
-  .flipdown .rotor:after {
-    width: 30px;
-  }
-
-  .flipdown .rotor-group {
-    padding-right: 20px;
-  }
-
-  .flipdown .rotor-group:last-child {
-    padding-right: 0px;
-  }
-
-  .flipdown .rotor-group-heading:before {
-    font-size: 0.8rem;
-    height: 20px;
-    line-height: 20px;
-  }
-
-  .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before,
-  .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
-    left: 69px;
-  }
-
-  .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before {
-    bottom: 13px;
-    height: 8px;
-    width: 8px;
-  }
-
-  .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
-    bottom: 29px;
-    height: 8px;
-    width: 8px;
-  }
-
-  .flipdown .rotor-leaf-front,
-  .flipdown .rotor-top {
-    line-height: 50px;
-  }
-
-  .flipdown .rotor-leaf,
-  .flipdown .rotor {
-    height: 50px;
-  }
-
-  .flipdown .rotor-leaf-front,
-  .flipdown .rotor-leaf-rear,
-  .flipdown .rotor-top,
-  .flipdown .rotor-bottom,
-  .flipdown .rotor:after {
-    height: 25px;
-  }
 }
