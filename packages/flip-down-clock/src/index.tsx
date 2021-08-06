@@ -1,10 +1,11 @@
 import * as React from "react";
 import "./index.less";
-import {useEffect, useState} from "react";
+import {CSSProperties, useEffect, useState} from "react";
 
 export type FlipDownStates = {
     seconds: number,
     stopped: boolean,
+    isInit: boolean,
 };
 
 export default class FlipDown extends React.Component<{}, FlipDownStates> {
@@ -14,7 +15,8 @@ export default class FlipDown extends React.Component<{}, FlipDownStates> {
         super(props)
         this.state = {
             seconds: 0,
-            stopped: true
+            stopped: true,
+            isInit: true,
         };
     }
 
@@ -28,6 +30,10 @@ export default class FlipDown extends React.Component<{}, FlipDownStates> {
         })
     }
 
+    private init = (): void => {
+        this.timerID = window.setInterval(() => this.tick(), 1000);
+        this.setState({ stopped: false, isInit: false});
+    }
     private handleStart = (): void => {
         if (this.state.stopped) {
             this.timerID = window.setInterval(() => this.tick(), 1000);
@@ -40,7 +46,7 @@ export default class FlipDown extends React.Component<{}, FlipDownStates> {
 
     private handleReset = (): void => {
         window.clearInterval(this.timerID);
-        this.setState({ seconds: 0, stopped: true });
+        this.setState({ seconds: 0, stopped: true, isInit: true });
     }
 
     private correctValueFormat = (value: number): {left: number, right: number} => {
@@ -72,32 +78,59 @@ export default class FlipDown extends React.Component<{}, FlipDownStates> {
     render() {
         const { seconds_left, seconds_right, minutes_right, minutes_left} = this.transformTime();
         return (
-            <div className="flipdown flipdown__theme-dark">
-                <div className="flipdown-mid-box">
-                    <TimeCell time={minutes_left}/>
-                    <TimeCell time={minutes_right}/>
-                </div>
-                <div className="flipdown-point-box">
-                    <div/>
-                    <div/>
-                </div>
-                <div className="flipdown-mid-box">
-                    <TimeCell time={seconds_left}/>
-                    <TimeCell time={seconds_right}/>
-                </div>
-            </div>
+           <div className="flipdown-box">
+               {!this.state.isInit &&
+               <div className="flipdown-mask">
+                   {this.state.stopped ? <div className="flipdown-mask-mid">
+                       <div onClick={this.handleReset} className="flipdown-mask-btn">
+                           重置
+                       </div>
+                       <div onClick={this.handleStart} className="flipdown-mask-btn">
+                           继续
+                       </div>
+
+                   </div> : <div className="flipdown-mask-mid">
+                       <div onClick={this.handleStart} className="flipdown-mask-btn">
+                           暂停
+                       </div>
+                   </div>}
+               </div>}
+               <div className="flipdown flipdown__theme-dark">
+                   <div className="flipdown-mid-box">
+                       <TimeCell style={{marginRight: 8}} time={minutes_left}/>
+                       <TimeCell time={minutes_right}/>
+                   </div>
+                   <div className="flipdown-point-box">
+                       <div style={{marginBottom: 12}}/>
+                       <div/>
+                   </div>
+                   <div className="flipdown-mid-box">
+                       <TimeCell style={{marginRight: 8}} time={seconds_left}/>
+                       <TimeCell time={seconds_right}/>
+                   </div>
+               </div>
+               {this.state.isInit &&
+                   <div>
+                       <div onClick={this.init} className="flipdown-button">
+                           开始
+                       </div>
+                       <div style={{height: 20}}/>
+                   </div>
+               }
+               {/*<div className="button-group">*/}
+               {/*    <span onClick={this.handleStart}>{this.state.stopped ? 'Start' : 'Pause'}</span>*/}
+               {/*    <span onClick={this.handleReset}>Reset</span>*/}
+               {/*</div>*/}
+           </div>
         )
     }
 }
 type TimeCellProps = {
     time: number;
+    style?: CSSProperties;
 };
-// {/*<div className="button-group">*/}
-// {/*    <span onClick={this.handleStart}>{this.state.stopped ? 'Start' : 'Pause'}</span>*/}
-// {/*    <span onClick={this.handleReset}>Reset</span>*/}
-// {/*</div>*/}
 
-const TimeCell: React.FC<TimeCellProps>  = ({time}) => {
+const TimeCell: React.FC<TimeCellProps>  = ({time, style}) => {
     const [flipdown, setFlipdown] = useState("rotor-leaf");
     const [oldTime, setOldTime] = useState(0);
     useEffect(() => {
@@ -109,7 +142,7 @@ const TimeCell: React.FC<TimeCellProps>  = ({time}) => {
     }, [time])
 
     return (
-        <div className="rotor">
+        <div style={style} className="rotor">
             <div className={flipdown}>
                 <figure className="rotor-leaf-rear">
                     {time}
