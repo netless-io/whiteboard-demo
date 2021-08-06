@@ -22,6 +22,32 @@ self.onfetch = function(event) {
     event.respondWith(openCache().then(function(cache) {
       return cache.match(event.request).then(function(response) {
         if (response) {
+          // https://web.dev/sw-range-requests
+          const range = request.headers.get("range");
+          if (range && response) {
+            if (response.status === 206) return response;
+            try {
+              const blob = await response.blob();
+              const [x, y] = range.replace("bytes=", "").split("-");
+              const end = parseInt(y, 10) || blob.size - 1;
+              const start = parseInt(x, 10) || 0;
+              const sliced = blob.slice(start, end);
+              const slicedSize = sliced.size;
+              const slicedRes = new Response(sliced, {
+                status: 206,
+                statusText: "Partial Content",
+                headers: response.headers,
+              });
+              slicedRes.headers.set("Content-Length", String(slicedSize));
+              slicedRes.headers.set("Content-Range", `bytes ${start}-${end}/${blob.size}`);
+              return slicedRes;
+            } catch (error) {
+              return new Response("", {
+                status: 416,
+                statusText: "Range Not Satisfiable",
+              });
+            }
+          }
           return response;
         } else {
           return fetchMultiple([request.url, request.url.replace("https://convertcdn.netless.link", "https://ap-convertcdn.netless.link")])
