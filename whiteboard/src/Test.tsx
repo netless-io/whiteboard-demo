@@ -1,5 +1,5 @@
 import * as React from "react";
-import FlipDown from "../../packages/flip-down-clock/src";
+import FlipDown from "@netless/flip-count-down";
 
 export default class Test extends React.Component<{}, {}> {
     public constructor(props: {}) {

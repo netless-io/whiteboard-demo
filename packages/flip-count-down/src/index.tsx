@@ -8,7 +8,7 @@ export type FlipDownStates = {
     isInit: boolean,
 };
 
-export default class FlipDown extends React.Component<{}, FlipDownStates> {
+export default class FlipCountDown extends React.Component<{}, FlipDownStates> {
 
     private timerID: number;
     public constructor(props: {}) {
@@ -112,7 +112,7 @@ export default class FlipDown extends React.Component<{}, FlipDownStates> {
                {this.state.isInit &&
                    <div>
                        <div onClick={this.init} className="flipdown-button">
-                           开始
+                           开始888
                        </div>
                        <div style={{height: 20}}/>
                    </div>
