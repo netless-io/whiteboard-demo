@@ -117,10 +117,6 @@ export default class FlipDown extends React.Component<{}, FlipDownStates> {
                        <div style={{height: 20}}/>
                    </div>
                }
-               {/*<div className="button-group">*/}
-               {/*    <span onClick={this.handleStart}>{this.state.stopped ? 'Start' : 'Pause'}</span>*/}
-               {/*    <span onClick={this.handleReset}>Reset</span>*/}
-               {/*</div>*/}
            </div>
         )
     }
