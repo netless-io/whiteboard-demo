@@ -162,18 +162,18 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
         );
     }
 
-    public ga(...args: any[]): void {
+    public get gtag(): (...args: any[]) => void {
         window.dataLayer = window.dataLayer || [];
         if (!window.gtag) {
             window.gtag = function gtag() {
                 window.dataLayer.push(arguments);
             };
         }
-        window.gtag(...args);
+        return window.gtag
     }
 
     public sendTryFlatEvent = () => {
-        this.ga("event", "try-flat", {
+        this.gtag("event", "try-flat", {
             event_category: "demo",
             event_label: "flat",
             value: 0,
