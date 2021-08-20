@@ -71,7 +71,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
             <div className="page-index-box">
                 {/* <FloatLink /> // don't hide region */}
                 <SwitchRegion />
-                <div className="page-index-mid-box">
+                <div className="page-index-box-index">
                     <div className="page-index-logo-box">
                         <img src={logo} alt={"logo"} />
                         {localStorage.getItem("rooms") && (
