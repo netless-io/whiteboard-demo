@@ -11,11 +11,12 @@
 
 .page-index-mid-box {
   width: 480px;
-  height: 480px;
   background: white;
   box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.08);
   border-radius: 4px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .page-tips {
@@ -86,10 +87,19 @@
 
 .page-index-link-box {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
   margin-top: 70px;
+  margin-bottom: 35px;
+}
+
+.page-index-link-box-tip {
+  padding: 6px 20px;
+  margin-bottom: 12px;
+  color: #3381ff;
+  border: 1px solid #3381ff;
+  border-radius: 9999px;
 }
 
 .page-index-cell-left {
