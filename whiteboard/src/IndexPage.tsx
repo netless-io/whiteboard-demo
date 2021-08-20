@@ -143,6 +143,7 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
                         <a
                             className="page-index-link-box-tip"
                             href="https://flat.whiteboard.agora.io"
+                            onClick={this.sendTryFlatEvent}
                         >
                             {t("try-it")}
                         </a>
@@ -160,6 +161,24 @@ class IndexPage extends React.Component<RouteComponentProps & WithTranslation, I
             </div>
         );
     }
+
+    public ga(...args: any[]): void {
+        window.dataLayer = window.dataLayer || [];
+        if (!window.gtag) {
+            window.gtag = function gtag() {
+                window.dataLayer.push(arguments);
+            };
+        }
+        window.gtag(...args);
+    }
+
+    public sendTryFlatEvent = () => {
+        this.ga("event", "try-flat", {
+            event_category: "demo",
+            event_label: "flat",
+            value: 0,
+        });
+    };
 }
 
 export default withRouter(withTranslation()(IndexPage));

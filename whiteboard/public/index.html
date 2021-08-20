@@ -29,6 +29,19 @@
             s.parentNode.insertBefore(hm, s);
         })();
     </script>
+    <script async src="https://www.googletagmanager.com/gtag/js"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        if (location.hostname.includes("netless")) {
+            gtag('config', 'G-Q432ZTTQ96');
+        }
+        if (location.hostname.includes("agora")) {
+            gtag('config', 'G-VEM28J2TKQ');
+        }
+    </script>
 </head>
 <body>
     <div id="root"></div>

@@ -19,3 +19,5 @@ declare module "@netless/zip" {
 }
 
 declare var zip: any;
+declare var gtag: (...args: any[]) => void;
+declare var dataLayer: any[];
