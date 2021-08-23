@@ -2526,13 +2526,6 @@
     eventemitter2 "^6.4.3"
     react "^16.13.1"
 
-"@netless/loading-bar@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.npmjs.org/@netless/loading-bar/-/loading-bar-0.0.1.tgz#cca1407a278955d4d4b2bc2b5ea51b22eace222f"
-  integrity sha512-fViNIFDIGQWTAFqn3WoeGU4UE1065sXygMVzN/DozRL/fUgo85p9eS7ux/DMdPNIoR+00f1D4MgN054cN2LoRQ==
-  dependencies:
-    rc-tween-one "^2.7.3"
-
 "@netless/menu-box@^0.0.1":
   version "0.0.1"
   resolved "https://registry.npmjs.org/@netless/menu-box/-/menu-box-0.0.1.tgz#ea11edecaee0b2a8d9f3167a92f4bdeb906bb327"
