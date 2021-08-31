@@ -29,7 +29,7 @@ export type H5OSSCOnfigObjType = {
     h5Folder: string;
     h5SiteFolder: string;
     h5Prefix: string;
-}
+};
 
 export const h5OssConfigObj = {
     h5AccessKeyId: process.env.H5AK!,
@@ -40,9 +40,10 @@ export const h5OssConfigObj = {
     h5SiteFolder: process.env.H5SITEFOLDER!,
     h5Prefix: process.env.H5PREFIX!,
     h5PrefixUs: "https://demo-h5-us.netless.group/",
-}
-
+};
 
 export const h5DemoUrl = "https://demo-h5.netless.group/docs/";
+export const h5DemoUrl2 = "https://demo-edu.cocos.com/agora-demo/index.html";
 export const h5DemoUrl3 = "https://demo-h5.netless.group/dist2020/";
-export const supplierUrl = "https://static.pre.wzomo.com/web/netless/index.html#/lesson1/page7?debug=1&role=teacher&origin=dev"
+export const supplierUrl =
+    "https://static.pre.wzomo.com/web/netless/index.html#/lesson1/page7?debug=1&role=teacher&origin=dev";
