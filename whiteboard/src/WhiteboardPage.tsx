@@ -57,9 +57,7 @@ import { SupplierAdapter } from "./tools/SupplierAdapter";
 import { withTranslation, WithTranslation } from "react-i18next";
 import FloatLink from "./FloatLink";
 import { SlidePrefetch } from "@netless/slide-prefetch";
-import { WindowManager, WindowManagerWrapper } from "@netless/window-manager";
 import { WhitePPTPlugin, Player } from "@netless/ppt-plugin";
-import { AppsButton } from "./AppsButton";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -70,7 +68,6 @@ export type WhiteboardPageStates = {
     whiteboardLayerDownRef?: HTMLDivElement;
     roomController?: ViewMode;
     pptPlugin?: WhitePPTPlugin;
-    windowManager?: WindowManager;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     identity: Identity;
@@ -238,16 +235,14 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     },
                 }
                 const pluginParam = {
-                    wrappedComponents: [WindowManagerWrapper, Player] as any[],
-                    invisiblePlugins: [WindowManager, WhitePPTPlugin] as any[],
+                    wrappedComponents: [Player] as any[],
+                    invisiblePlugins: [WhitePPTPlugin] as any[],
                 }
                 if (h5Url) {
                     pluginParam.wrappedComponents.push(IframeWrapper);
                     pluginParam.invisiblePlugins.push(IframeBridge);
                 }
                 whiteWebSdkParams = Object.assign(whiteWebSdkParams, pluginParam);
-                (window as any).WindowManager = WindowManager;
-                (window as any).WindowManagerWrapper = WindowManagerWrapper;
                 const whiteWebSdk = new WhiteWebSdk(whiteWebSdkParams);
                 const cursorName = localStorage.getItem("userName");
                 const cursorAdapter = new CursorTool();
@@ -316,14 +311,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 } else if (h5Url) {
                     await this.handleEnableH5(room, h5Url);
                 }
-
-                let plugin = room.getInvisiblePlugin(WindowManager.kind)
-                if (!plugin) {
-                    plugin = await WindowManager.use(room);
-                }
-                this.setState({ windowManager: plugin as WindowManager });
-                (window as any).plugin = plugin;
-
                 this.slidePrefetch.listen(room);
                 await this.handlePPTPlugin(room);
             }
@@ -451,7 +438,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                                      region={region}
                                                      i18nLanguage={i18n.language}
                                                      whiteboardRef={whiteboardLayerDownRef} />,
-                                    <AppsButton manager={this.state.windowManager} />,
                                 ]
                             }/>
                         </div>
