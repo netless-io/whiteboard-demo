@@ -428,7 +428,21 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         {/*    <img src={logo} alt={"logo"}/>*/}
                         {/*</div>*/}
                         <div className="tool-box-out">
-                            <ToolBox i18nLanguage={i18n.language} room={room} customerComponent={
+                            <ToolBox i18nLanguage={i18n.language} room={room} hotkeys={{
+                                arrow: "A",
+                                clear: "",
+                                clicker: "",
+                                ellipse: "C",
+                                eraser: "E",
+                                hand: "H",
+                                laserPointer: "Z",
+                                pencil: "P",
+                                rectangle: "R",
+                                selector: "S",
+                                shape: "",
+                                straight: "L",
+                                text: "T"
+                            }} customerComponent={
                                 [
                                     <OssUploadButton oss={ossConfig}
                                                      pptPlugin={pptPlugin}
