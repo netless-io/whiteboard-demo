@@ -40,10 +40,29 @@ import * as pentagramActive from "./image/pentagram-active.svg";
 import * as speechBalloon from "./image/speechBalloon.svg";
 import * as speechBalloonActive from "./image/speechBalloon-active.svg";
 
+export type ApplianceNamesString = `${ApplianceNames}`;
+
+const zhCN: Record<ApplianceNamesString | "clear", string> = {
+    [ApplianceNames.clicker]: "点击",
+    [ApplianceNames.arrow]: "箭头",
+    [ApplianceNames.ellipse]: "椭圆",
+    [ApplianceNames.eraser]: "橡皮擦",
+    [ApplianceNames.hand]: "抓手",
+    [ApplianceNames.laserPointer]: "激光笔",
+    [ApplianceNames.pencil]: "笔",
+    [ApplianceNames.rectangle]: "矩形",
+    [ApplianceNames.selector]: "选择",
+    [ApplianceNames.shape]: "形状",
+    [ApplianceNames.straight]: "直线",
+    [ApplianceNames.text]: "文本",
+    clear: "清屏",
+};
+
 export type ToolBoxProps = {
     room: Room;
     customerComponent?: React.ReactNode[];
     i18nLanguage?: string;
+    hotkeys?: Record<ApplianceNamesString | "clear", string>;
 };
 export type ToolBoxStates = {
     strokeEnable: boolean;
@@ -207,46 +226,25 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     }
 
     private getApplianceName(name: string): string {
-        if (this.props.i18nLanguage === "zh-CN") {
-            switch (name) {
-                case ApplianceNames.clicker: return "点击";
-                case ApplianceNames.arrow: return "箭头";
-                case ApplianceNames.ellipse: return "椭圆";
-                case ApplianceNames.eraser: return "橡皮擦";
-                case ApplianceNames.hand: return "抓手";
-                case ApplianceNames.laserPointer: return "激光笔";
-                case ApplianceNames.pencil: return "笔";
-                case ApplianceNames.rectangle: return "矩形";
-                case ApplianceNames.selector: return "选择";
-                case ApplianceNames.shape: return "形状";
-                case ApplianceNames.straight: return "直线";
-                case ApplianceNames.text: return "文本";
-            }
+        const hotkeys = this.props.hotkeys || {};
+        let tooltip = "";
+        if (this.props.i18nLanguage === "zh-CN" && zhCN[name]) {
+            tooltip = zhCN[name];
         } else {
-            switch (name) {
-                case ApplianceNames.hand: {
-                    return "Drag";
-                }
-                case ApplianceNames.clicker:
-                case ApplianceNames.arrow:
-                case ApplianceNames.ellipse:
-                case ApplianceNames.eraser:
-                case ApplianceNames.laserPointer:
-                case ApplianceNames.pencil:
-                case ApplianceNames.rectangle:
-                case ApplianceNames.selector:
-                case ApplianceNames.shape:
-                case ApplianceNames.straight:
-                case ApplianceNames.text: {
-                    return name
-                        .replace(/[A-Z]/g, (e) => ` ${e.toLowerCase()}`)
-                        .split(" ")
-                        .map((e) => e[0].toUpperCase() + e.substring(1))
-                        .join(" ");
-                }
+            if (name === ApplianceNames.hand) {
+                tooltip = "Drag";
+            } else {
+                tooltip = name
+                    .replace(/[A-Z]/g, (e) => ` ${e.toLowerCase()}`)
+                    .split(" ")
+                    .map((e) => e[0].toUpperCase() + e.substring(1))
+                    .join(" ");
             }
         }
-        return "";
+        if (hotkeys[name]) {
+            tooltip += ` / ${hotkeys[name]}`;
+        }
+        return tooltip;
     }
 
     private renderNodes = (): React.ReactNode[] => {
@@ -373,9 +371,8 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
     private renderCleanCell = (): React.ReactNode => {
         const {room} = this.props;
         const { isClearActive } = this.state;
-        const isCN = this.props.i18nLanguage === "zh-CN"
         return (
-            <Tooltip placement={"right"} key="clean" title={isCN ? "清屏" : "Clear"}>
+            <Tooltip placement={"right"} key="clean" title={this.getApplianceName("clear")}>
                 <div
                     onMouseEnter={() => {
                         this.setState({ isClearActive: true });
