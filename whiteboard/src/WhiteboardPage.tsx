@@ -19,7 +19,7 @@ import ToolBox from "@netless/tool-box";
 import RedoUndo from "@netless/redo-undo";
 import PageController from "@netless/page-controller";
 import ZoomController from "@netless/zoom-controller";
-import OssUploadButton from "@netless/oss-upload-button";
+import OssUploadButton, { UploadType } from "@netless/oss-upload-button";
 import {videoPlugin} from "@netless/white-video-plugin";
 import {audioPlugin} from "@netless/white-audio-plugin";
 import {videoPlugin2} from "@netless/white-video-plugin2";
@@ -235,8 +235,8 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     },
                 }
                 const pluginParam = {
-                    wrappedComponents: [Player] as any[],
-                    invisiblePlugins: [WhitePPTPlugin] as any[],
+                    wrappedComponents: [/*Player*/] as any[],
+                    invisiblePlugins: [/*WhitePPTPlugin*/] as any[],
                 }
                 if (h5Url) {
                     pluginParam.wrappedComponents.push(IframeWrapper);
@@ -247,6 +247,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 const cursorName = localStorage.getItem("userName");
                 const cursorAdapter = new CursorTool();
                 const room = await whiteWebSdk.joinRoom({
+                        uid: uuid,
                         uuid: uuid,
                         roomToken: roomToken,
                         cursorAdapter: cursorAdapter,
@@ -292,14 +293,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         },
                     });
                 cursorAdapter.setRoom(room);
-                room.setMemberState({
-                    pencilOptions: {
-                        disableBezier: false,
-                        sparseHump: 1.0,
-                        sparseWidth: 1.0,
-                        enableDrawPoint: false
-                    }
-                });
                 this.setDefaultPptData(pptData, room);
                 if (room.state.broadcastState) {
                     this.setState({mode: room.state.broadcastState.mode})
@@ -312,7 +305,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     await this.handleEnableH5(room, h5Url);
                 }
                 this.slidePrefetch.listen(room);
-                await this.handlePPTPlugin(room);
+                // await this.handlePPTPlugin(room);
             }
         } catch (error) {
             message.error(String(error));
@@ -451,7 +444,15 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                                      room={room}
                                                      region={region}
                                                      i18nLanguage={i18n.language}
-                                                     whiteboardRef={whiteboardLayerDownRef} />,
+                                                     whiteboardRef={whiteboardLayerDownRef}
+                                                     enables={[
+                                                        UploadType.Image,
+                                                        UploadType.Video,
+                                                        UploadType.Audio,
+                                                        UploadType.Dynamic,
+                                                        UploadType.Static,
+                                                        // UploadType.DynamicPlugin, // not working now
+                                                     ]} />,
                                 ]
                             }/>
                         </div>

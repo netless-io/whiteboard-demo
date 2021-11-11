@@ -90,6 +90,8 @@ export class IframeAdapter {
     }
 
     private currentMember(room: Room): RoomMember | undefined {
-        return room.state.roomMembers.find(member => member.payload.userId === this.userId);
+        return room.state.roomMembers.find(
+          member => member.payload?.userId === this.userId
+        );
     }
 }
