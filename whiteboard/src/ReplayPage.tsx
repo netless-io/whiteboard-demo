@@ -175,7 +175,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                 break;
             }
             case PlayerPhase.Ended: {
-                player.seekToScheduleTime(0);
+                player.seekToProgressTime(0);
                 break;
             }
         }
