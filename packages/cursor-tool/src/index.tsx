@@ -39,7 +39,7 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
                          borderColor: isHaveName ? "white" : color,
                          marginRight: isHaveName ? 4 : 0
                      }}
-                     src={roomMember.payload.avatar}
+                     src={roomMember.payload?.avatar}
                      alt={"avatar"}/>
             );
         } else {

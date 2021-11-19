@@ -1,9 +1,10 @@
-import * as React from "react";
+import React from "react";
 import {Room, RoomState} from "white-web-sdk";
-import * as reset from "./image/reset.svg";
-import * as plus from "./image/plus.svg";
-import * as less from "./image/less.svg";
+import reset from "./image/reset.svg";
+import plus from "./image/plus.svg";
+import less from "./image/less.svg";
 import "./index.less";
+
 export type ScaleControllerState = {
     scaleAnimation: boolean;
     reverseState: boolean;
@@ -139,7 +140,7 @@ export default class ScaleController extends React.Component<ScaleControllerProp
     private moveRuleIndex(deltaIndex: number): void {
 
         if (this.tempRuleIndex === undefined) {
-            this.tempRuleIndex = ScaleController.readRuleIndexByScale(this.state.roomState.zoomScale);
+            this.tempRuleIndex = ScaleController.readRuleIndexByScale(this.state.roomState.cameraState.scale);
         }
         this.tempRuleIndex += deltaIndex;
 
@@ -168,7 +169,7 @@ export default class ScaleController extends React.Component<ScaleControllerProp
                     <img src={less} alt={"less"}/>
                 </div>
                 <div>
-                    {Math.ceil(this.state.roomState.zoomScale * 100)} <span style={{opacity: 0.6}}>%</span>
+                    {Math.ceil(this.state.roomState.cameraState.scale * 100)} <span style={{opacity: 0.6}}>%</span>
                 </div>
                 <div className="scale-controller-btn"
                      onClick={() => this.moveRuleIndex(+1)}>
