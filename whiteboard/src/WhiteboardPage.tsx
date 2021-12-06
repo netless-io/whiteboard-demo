@@ -260,7 +260,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             // cursorTagName: "讲师",
                             // cursorTagBackgroundColor: "#E5A869",
                         },
-                        disableNewPencil: false,
+                        disableNewPencil: true,
                         floatBar: true,
                         hotKeys: {
                             ...DefaultHotKeys,
