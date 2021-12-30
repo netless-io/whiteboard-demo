@@ -145,8 +145,9 @@ export class H5UploadButton extends React.Component<H5UploadButtonProps & WithTr
                     <Form.Item
                         name="upload"
                         label={t('zip-file')}
+                        valuePropName="fileList"
                         rules={[{ required: true }]}>
-                        <Upload accept=".zip" name="uplpad" beforeUpload={this.beforeUpload}>
+                        <Upload accept=".zip" name="upload" beforeUpload={this.beforeUpload}>
                             <Button block>{t('choose-file')}</Button>
                         </Upload>
                     </Form.Item>

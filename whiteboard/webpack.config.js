@@ -47,7 +47,7 @@ config = {
     plugins: [
         new Dotenv({
             path: "./.env.local",
-            safe: true,
+            safe: false, // without OSS related keys
             systemvars: true,
         }),
         new CleanWebpackPlugin(),
