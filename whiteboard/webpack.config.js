@@ -63,7 +63,7 @@ config = {
     module: {
         rules: [
             {
-                test: /slide-prefetch\/dist\/index\.mjs$/,
+                test: /slide-prefetch[\\/]dist[\\/]index\.mjs$/,
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -73,7 +73,7 @@ config = {
                 }
             },
             {
-                test: /@zip\.js\/zip\.js\/lib\/core\/codecs\/codec-pool-worker\.js$/,
+                test: /@zip\.js[\\/]zip\.js[\\/]lib[\\/]core[\\/]codecs[\\/]codec-pool-worker\.js$/,
                 use: {
                     loader: '@open-wc/webpack-import-meta-loader'
                 }
