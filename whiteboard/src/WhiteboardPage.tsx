@@ -36,7 +36,7 @@ import pages from "./assets/image/pages.svg"
 import folder from "./assets/image/folder.svg";
 import follow from "./assets/image/follow.svg"
 import followActive from "./assets/image/follow-active.svg";
-import {h5DemoUrl, h5DemoUrl3, netlessToken, ossConfigObj, supplierUrl} from "./appToken";
+import {h5DemoUrl, h5DemoUrl3, h5OssConfigObj, netlessToken, ossConfigObj, supplierUrl} from "./appToken";
 import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
@@ -396,6 +396,10 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         }
     }
 
+    private isAllPresent(obj: Record<string, any>) {
+        return Object.values(obj).every(Boolean);
+    }
+
     public render(): React.ReactNode {
         const {pptPlugin, room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         const { identity, uuid, userId, region } = this.props.match.params;
@@ -403,6 +407,8 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         if (region !== "cn-hz") {
             ossConfig = { ...ossConfig, ...(ossConfigForRegion[region] || {}) };
         }
+        const useUpload = this.isAllPresent(ossConfig);
+        const useUploadH5 = this.isAllPresent(h5OssConfigObj);
         if (room === undefined) {
             return <LoadingPage/>;
         }
@@ -436,7 +442,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                 straight: "L",
                                 text: "T"
                             }} customerComponent={
-                                [
+                                useUpload ? [
                                     <OssUploadButton oss={ossConfig}
                                                      pptPlugin={pptPlugin}
                                                      appIdentifier={netlessToken.appIdentifier}
@@ -453,7 +459,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                                         UploadType.Static,
                                                         // UploadType.DynamicPlugin, // not working now
                                                      ]} />,
-                                ]
+                                ] : undefined
                             }/>
                         </div>
                         <div className="redo-undo-box">
@@ -476,9 +482,9 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                         <img style={{width: "28px"}} src={folder} alt={"folder"}/>
                                     </div>
                                 </Tooltip>
-                                <Tooltip placement="bottom" title={"HTML5 Course"}>
+                                {useUploadH5 && <Tooltip placement="bottom" title={"HTML5 Course"}>
                                     <H5UploadButton region={region} room={room} {...this.props} />
-                                </Tooltip>
+                                </Tooltip>}
                                 <InviteButton uuid={uuid} region={region} />
                                 <ExitButtonRoom identity={identity} room={room} userId={userId} />
                             </div>
@@ -499,14 +505,14 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             isFileOpen={isFileOpen}
                             room={room}
                             i18nLanguage={i18n.language}/>
-                        <OssDropUpload
+                        {useUpload && <OssDropUpload
                             room={room}
                             region={region}
                             oss={ossConfig}>
                             <div
                                 ref={this.handleBindRoom}
-                                className="whiteboard-box"/>
-                        </OssDropUpload>
+                                className="whiteboard-box" />
+                        </OssDropUpload>}
                     </div>
                 );
             }
