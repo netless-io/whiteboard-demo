@@ -505,14 +505,16 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             isFileOpen={isFileOpen}
                             room={room}
                             i18nLanguage={i18n.language}/>
-                        {useUpload && <OssDropUpload
+                        {useUpload ? <OssDropUpload
                             room={room}
                             region={region}
                             oss={ossConfig}>
                             <div
                                 ref={this.handleBindRoom}
                                 className="whiteboard-box" />
-                        </OssDropUpload>}
+                        </OssDropUpload> : <div
+                                ref={this.handleBindRoom}
+                                className="whiteboard-box" />}
                     </div>
                 );
             }
