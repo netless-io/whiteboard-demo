@@ -35,9 +35,16 @@ export default class PageController extends React.Component<PageControllerProps,
     public componentDidMount(): void {
         const {room} = this.props;
         this.page = room.state.sceneState.index;
-        room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
-            this.setState({roomState: {...room.state, ...modifyState}});
-        });
+        room.callbacks.on("onRoomStateChanged", this.onRoomStateChanged);
+    }
+
+    private onRoomStateChanged = (modifyState: Partial<RoomState>): void => {
+        this.setState({roomState: {...this.props.room.state, ...modifyState}});
+    }
+
+    public componentWillUnmount(): void {
+        const {room} = this.props;
+        room.callbacks.off("onRoomStateChanged", this.onRoomStateChanged);
     }
 
     private handlePptPreviousStep = async (): Promise<void> => {

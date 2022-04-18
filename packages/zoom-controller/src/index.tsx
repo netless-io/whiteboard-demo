@@ -127,13 +127,18 @@ export default class ScaleController extends React.Component<ScaleControllerProp
         if (room.isWritable) {
             room.disableSerialization = false;
         }
-        room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
-            this.setState({roomState: {...room.state, ...modifyState}});
-        });
+        room.callbacks.on("onRoomStateChanged", this.onRoomStateChanged);
         document.body.addEventListener("keydown", this.arrowControllerHotKey);
     }
 
+    private onRoomStateChanged = (modifyState: Partial<RoomState>): void => {
+        const {room} = this.props;
+        this.setState({roomState: {...room.state, ...modifyState}});
+    }
+
     public componentWillUnmount(): void {
+        const {room} = this.props;
+        room.callbacks.off("onRoomStateChanged", this.onRoomStateChanged);
         document.body.removeEventListener("keydown", this.arrowControllerHotKey);
     }
 
