@@ -45,9 +45,17 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
     public componentDidMount(): void {
         const { room } = this.props;
         this.setState({ scenesCount: room.state.sceneState.scenes.length });
-        room.callbacks.on("onRoomStateChanged", (): void => {
-            this.setState({ scenesCount: room.state.sceneState.scenes.length });
-        });
+        room.callbacks.on("onRoomStateChanged", this.onRoomStateChanged);
+    }
+
+    private onRoomStateChanged = (): void => {
+        const { room } = this.props;
+        this.setState({ scenesCount: room.state.sceneState.scenes.length });
+    }
+
+    public componentWillUnmount(): void {
+        const { room } = this.props;
+        room.callbacks.off("onRoomStateChanged", this.onRoomStateChanged);
     }
 
     private renderPreviewCells = (scenes: ReadonlyArray<WhiteScene>, activeIndex: number, sceneDir: any): React.ReactNode => {
@@ -151,20 +159,26 @@ class PageImage extends React.Component<PageImageProps, {}> {
 
     public componentDidMount(): void {
         const { room } = this.props;
-        window.setTimeout(() => {
+        window.setTimeout(this.syncPreview.bind(this));
+        room.callbacks.on("onRoomStateChanged", this.syncPreviewIfNeeded);
+    }
+
+    private syncPreviewIfNeeded = (): void => {
+        const { room } = this.props;
+        if (room.state.sceneState.scenePath === this.props.path && this.ref.current) {
             this.syncPreview();
-        });
-        room.callbacks.on("onRoomStateChanged", (): void => {
-            if (room.state.sceneState.scenePath === this.props.path && this.ref.current) {
-                this.syncPreview();
-            }
-        });
+        }
     }
 
     public componentDidUpdate(prevProps: PageImageProps): void {
         if (prevProps.path !== this.props.path) {
-            this.syncPreview();
+            this.syncPreviewIfNeeded();
         }
+    }
+
+    public componentWillUnmount(): void {
+        const { room } = this.props;
+        room.callbacks.off("onRoomStateChanged", this.syncPreviewIfNeeded);
     }
 
     public render(): React.ReactNode {

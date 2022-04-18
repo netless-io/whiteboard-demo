@@ -166,9 +166,17 @@ export default class ToolBox extends React.Component<ToolBoxProps, ToolBoxStates
 
     public componentDidMount(): void {
         const {room} = this.props;
-        room.callbacks.on("onRoomStateChanged", (modifyState: Partial<RoomState>): void => {
-            this.setState({roomState: {...room.state, ...modifyState}});
-        });
+        room.callbacks.on("onRoomStateChanged", this.onRoomStateChanged);
+    }
+
+    public componentWillUnmount(): void {
+        const {room} = this.props;
+        room.callbacks.off("onRoomStateChanged", this.onRoomStateChanged);
+    }
+
+    private onRoomStateChanged = (modifyState: Partial<RoomState>): void => {
+        const {room} = this.props;
+        this.setState({roomState: {...room.state, ...modifyState}});
     }
 
     public clickAppliance = (applianceName: string, shapeType?: string): void => {
