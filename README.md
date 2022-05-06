@@ -1,6 +1,8 @@
 
 # whiteboard-demo
 
+## 本项目目前已经处于停止维护状态，接入请使用 [fastboard](https://github.com/netless-io/fastboard)，体验请访问 [flat](https://flat-web.whiteboard.agora.io)
+
 ![](https://white-sdk.oss-cn-beijing.aliyuncs.com/images/react-whiteoard-home.png)
 
 ![whiteboard](https://white-sdk.oss-cn-beijing.aliyuncs.com/icons/whiteboard.png)
