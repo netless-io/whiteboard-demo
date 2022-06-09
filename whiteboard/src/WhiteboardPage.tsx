@@ -430,7 +430,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             <ToolBox i18nLanguage={i18n.language} room={room} customerComponent={
                                 useUpload ? [
                                     <OssUploadButton oss={ossConfig}
-                                                     serverAddress={"http://127.0.0.1:80/sts"}
+                                                     serverAddress={"https://oss-token-server.netless.link/sts"}
                                                      pptPlugin={pptPlugin}
                                                      appIdentifier={netlessToken.appIdentifier}
                                                      sdkToken={netlessToken.sdkToken}
