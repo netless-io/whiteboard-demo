@@ -4,8 +4,6 @@ export const netlessToken = {
 };
 
 export type OSSConfigObjType = {
-    accessKeyId: string;
-    accessKeySecret: string;
     region: string;
     bucket: string;
     folder: string;
@@ -13,12 +11,10 @@ export type OSSConfigObjType = {
 };
 
 export const ossConfigObj: OSSConfigObjType = {
-    accessKeyId: process.env.AK!,
-    accessKeySecret: process.env.SK!,
-    region: process.env.OSSREGION!,
-    bucket: process.env.BUCKET!,
-    folder: process.env.FOLDER!,
-    prefix: process.env.PREFIX!,
+    region: process.env.OSSREGION,
+    bucket: process.env.BUCKET,
+    folder: process.env.FOLDER,
+    prefix: process.env.PREFIX,
 };
 
 export type H5OSSCOnfigObjType = {
