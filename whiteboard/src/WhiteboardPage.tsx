@@ -427,23 +427,10 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         {/*    <img src={logo} alt={"logo"}/>*/}
                         {/*</div>*/}
                         <div className="tool-box-out">
-                            <ToolBox i18nLanguage={i18n.language} room={room} hotkeys={{
-                                arrow: "A",
-                                clear: "",
-                                clicker: "",
-                                ellipse: "C",
-                                eraser: "E",
-                                hand: "H",
-                                laserPointer: "Z",
-                                pencil: "P",
-                                rectangle: "R",
-                                selector: "S",
-                                shape: "",
-                                straight: "L",
-                                text: "T"
-                            }} customerComponent={
+                            <ToolBox i18nLanguage={i18n.language} room={room} customerComponent={
                                 useUpload ? [
                                     <OssUploadButton oss={ossConfig}
+                                                     serverAddress={"http://127.0.0.1:80/sts"}
                                                      pptPlugin={pptPlugin}
                                                      appIdentifier={netlessToken.appIdentifier}
                                                      sdkToken={netlessToken.sdkToken}
@@ -491,7 +478,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         </div>
                         <div className="page-controller-box">
                             <div className="page-controller-mid-box">
-                                <PageController pptPlugin={pptPlugin} usePPTPlugin={true} room={room}/>
+                                <PageController room={room}/>
                                 <Tooltip placement="top" title={"Page preview"}>
                                     <div className="page-preview-cell" onClick={() => this.handlePreviewState(true)}>
                                         <img src={pages} alt={"pages"}/>
@@ -505,16 +492,9 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             isFileOpen={isFileOpen}
                             room={room}
                             i18nLanguage={i18n.language}/>
-                        {useUpload ? <OssDropUpload
-                            room={room}
-                            region={region}
-                            oss={ossConfig}>
-                            <div
-                                ref={this.handleBindRoom}
-                                className="whiteboard-box" />
-                        </OssDropUpload> : <div
-                                ref={this.handleBindRoom}
-                                className="whiteboard-box" />}
+                        <div
+                            ref={this.handleBindRoom}
+                            className="whiteboard-box" />
                     </div>
                 );
             }
