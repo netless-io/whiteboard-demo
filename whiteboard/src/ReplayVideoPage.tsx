@@ -209,7 +209,7 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
     private getReplayPage() {
         const { t } = this.props
         const {player, phase, replayState, combinePlayer} = this.state;
-        const { identity, uuid, userId } = this.props.match.params;
+        const { identity, uuid, userId, region } = this.props.match.params;
         if (this.state.replayFail) {
             return <PageError/>;
         }
@@ -259,6 +259,7 @@ class NetlessVideoPlayer extends React.Component<PlayerVideoPageProps & WithTran
                                     uuid={uuid}
                                     userId={userId}
                                     player={player}
+                                    region={region}
                                 />
                             </div>
                         </div>

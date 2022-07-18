@@ -246,6 +246,7 @@ class NetlessPlayer extends React.Component<PlayerPageProps & WithTranslation, P
                                     uuid={uuid}
                                     userId={userId}
                                     player={player}
+                                    region={region}
                                 />
                             </div>
                         </div>
