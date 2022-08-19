@@ -78,7 +78,12 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
         if (roomMember.payload && roomMember.payload.cursorBackgroundColor) {
             return roomMember.payload.cursorBackgroundColor;
         } else {
-            return `rgb(${roomMember.memberState.strokeColor[0]}, ${roomMember.memberState.strokeColor[1]}, ${roomMember.memberState.strokeColor[2]}, ${isHaveName ? 1 : 0})`;
+            if (isHaveName) {
+                return `rgb(${roomMember.memberState.strokeColor[0]}, ${roomMember.memberState.strokeColor[1]}, ${roomMember.memberState.strokeColor[2]})`;
+            } else {
+                // 安卓低版本不支持 rgba
+                return undefined;
+            }
         }
     }
 
