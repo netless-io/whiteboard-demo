@@ -14,6 +14,7 @@ export class RoomOperator {
             body: {
                 // name: name,
                 limit: limit,
+                isRecord: true,
             },
         });
         return json as any;
