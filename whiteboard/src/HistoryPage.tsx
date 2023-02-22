@@ -9,6 +9,7 @@ import empty_box from "./assets/image/empty-box.svg";
 import board from "./assets/image/board.svg";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import FloatLink from "./FloatLink";
+import { region } from "./region";
 
 export type JoinPageStates = {
     rooms: LocalStorageRoomDataType[];
@@ -32,11 +33,12 @@ class JoinPage extends React.Component<RouteComponentProps & WithTranslation, Jo
     }
 
     private handleJoin = (room: LocalStorageRoomDataType): void => {
-        this.props.history.push(`/whiteboard/${room.identity}/${room.uuid}/${room.userId}/`);
+        // We'd better store region in history room list, but I'm too lazy to do so…
+        this.props.history.push(`/whiteboard/${room.identity}/${room.uuid}/${room.userId}/${region}`);
     };
 
     private handleReplay = (room: LocalStorageRoomDataType): void => {
-        this.props.history.push(`/replay/${room.identity}/${room.uuid}/${room.userId}/`);
+        this.props.history.push(`/replay/${room.identity}/${room.uuid}/${room.userId}/${region}`);
     };
 
     private renderCells = (): React.ReactNode => {
