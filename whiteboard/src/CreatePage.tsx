@@ -38,7 +38,7 @@ class CreatePage extends React.Component<
         room: string,
         limit: number
     ): Promise<string | null> => {
-        const res = await netlessWhiteboardApi.room.createRoomApi(room, limit);
+        const res = await netlessWhiteboardApi.room.createRoomApi();
         if (res.uuid) {
             return res.uuid;
         } else {

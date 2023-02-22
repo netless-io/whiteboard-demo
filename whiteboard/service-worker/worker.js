@@ -20,7 +20,7 @@ self.onfetch = function(event) {
   const url = new URL(request.url);
   if (url.origin === "https://convertcdn.netless.link" || url.origin === fetchOrigin) {
     event.respondWith(openCache().then(function(cache) {
-      return cache.match(event.request).then(function(response) {
+      return cache.match(event.request).then(async function(response) {
         if (response) {
           // https://web.dev/sw-range-requests
           const range = request.headers.get("range");

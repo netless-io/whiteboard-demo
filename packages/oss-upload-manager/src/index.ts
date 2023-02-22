@@ -61,8 +61,7 @@ export class UploadManager {
 
     private getFileType = (fileName: string): string => {
         const index1 = fileName.lastIndexOf(".");
-        const index2 = fileName.length;
-        return fileName.substring(index1, index2);
+        return fileName.slice(index1);
     }
 
     public async uploadFile(rawFile: File, folder: string, uuid: string, onProgress?: PPTProgressListener): Promise<string> {
@@ -76,17 +75,16 @@ export class UploadManager {
         kind: PPTKind,
         folder: string,
         uuid: string,
-        sdkToken: string,
+        roomToken: string,
         onProgress?: PPTProgressListener,
     ): Promise<void> {
         const fileType = this.getFileType(rawFile.name);
         const path = `/${folder}/${uuid}${fileType}`;
         const pptURL = await this.addFile(path, rawFile, onProgress);
 
-        const taskInf = await this.task.createPPTTaskInf(pptURL, kind, true, sdkToken);
-        const taskToken = await this.task.createTaskToken(taskInf.uuid, 0, "admin", sdkToken);
+        const { taskUUID, taskToken } = await this.task.createTask(pptURL);
         const resp = createPPTTask({
-            uuid: taskInf.uuid,
+            uuid: taskUUID,
             kind: kind,
             taskToken: taskToken,
             region: this.region,
@@ -110,14 +108,14 @@ export class UploadManager {
             checkProgressTimeout: 20 * 60 * 1000,
         });
         const ppt = await resp.checkUtilGet();
-        await this.setUpScenes(ppt.scenes, uuid, kind, sdkToken, taskInf.uuid);
+        await this.setUpScenes(ppt.scenes, uuid, kind, roomToken, taskUUID);
     }
 
     private setUpScenes = async (
         scenes: ReadonlyArray<SceneDefinition>,
         uuid: string,
         type: PPTKind,
-        sdkToken: string,
+        roomToken: string,
         taskUuid?: string,
     ): Promise<void> => {
         const sceneId = `${uuidv4()}`;
@@ -125,7 +123,7 @@ export class UploadManager {
         this.room.setScenePath(`/${uuid}/${sceneId}/${scenes[0].name}`);
         let res;
         try {
-            res = await this.task.getCover(uuid, `/${uuid}/${sceneId}/${scenes[0].name}`, 192, 144, sdkToken);
+            res = await this.task.getCover(uuid, `/${uuid}/${sceneId}/${scenes[0].name}`, 192, 144, roomToken);
         } catch (error) {
             res = undefined;
         }
