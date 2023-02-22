@@ -1,38 +1,39 @@
 import Fetcher from "@netless/fetch-middleware";
-import { netlessToken } from "../appToken";
 import { region } from "../region";
 
 const fetcher = new Fetcher(5000, "https://api.netless.link/v5");
+const tokenServer = new Fetcher(5000, "https://oss-token-server.netless.link");
+
 export class RoomOperator {
-    public async createRoomApi(name: string, limit: number): Promise<any> {
-        const json = await fetcher.post<any>({
-            path: `rooms`,
-            headers: {
-                token: netlessToken.sdkToken,
+    private rooms: Record<string, string> = {};
+
+    public async createRoomApi(): Promise<any> {
+        const json = await tokenServer.post<{ roomUUID: string, roomToken: string }>({
+            path: "room/create",
+            query: {
                 region,
             },
-            body: {
-                // name: name,
-                limit: limit,
-                isRecord: true,
-            },
         });
-        return json as any;
+        this.rooms[json.roomUUID] = json.roomToken;
+        return { uuid: json.roomUUID };
     }
 
     public async joinRoomApi(uuid: string): Promise<any> {
-        const json = await fetcher.post<any>({
-            path: `tokens/rooms/${uuid}`,
-            headers: {
-                token: netlessToken.sdkToken,
+        const roomToken = this.rooms[uuid]
+        if (roomToken) {
+            return roomToken;
+        }
+
+        const json = await tokenServer.post<{ roomUUID: string, roomToken: string }>({
+            path: 'room/join',
+            query: {
+                uuid,
                 region,
             },
-            body: {
-                lifespan: 0,
-                role: "admin",
-            },
-        });
-        return json as any;
+        })
+        this.rooms[json.roomUUID] = json.roomToken;
+
+        return json.roomToken;
     }
 
     public async getCover(

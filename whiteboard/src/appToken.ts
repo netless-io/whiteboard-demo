@@ -1,5 +1,5 @@
 export const netlessToken = {
-    sdkToken: process.env.SDKTOKEN!,
+    // sdkToken: process.env.SDK TOKEN!,
     appIdentifier: process.env.APPIDENTIFIER!,
 };
 

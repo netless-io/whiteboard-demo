@@ -54,7 +54,7 @@ export type OssUploadButtonProps = {
     room: Room;
     oss: OSSConfigObjType;
     appIdentifier: string;
-    sdkToken: string;
+    roomToken: string;
     whiteboardRef?: HTMLDivElement;
     apiOrigin?: string;
     i18nLanguage?: string;
@@ -133,7 +133,7 @@ export default class OssUploadButton extends React.Component<
                     PPTKind.Static,
                     this.props.oss.folder,
                     uuid,
-                    this.props.sdkToken,
+                    this.props.roomToken,
                     this.progress
                 );
             } catch (error) {
@@ -179,7 +179,7 @@ export default class OssUploadButton extends React.Component<
                     PPTKind.Dynamic,
                     this.props.oss.folder,
                     uuid,
-                    this.props.sdkToken,
+                    this.props.roomToken,
                     this.progress
                 );
             } catch (error) {

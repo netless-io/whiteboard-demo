@@ -325,7 +325,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
 
         bridge.setupConfig({
             assetsDomain: "https://convertcdn.netless.link",
-            sdkToken: netlessToken.sdkToken,
+            // sdkToken: netlessToken.sdkToken,
             loadConfig: {
                 scheme: "https",
                 useServerWrap: true,
@@ -433,7 +433,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                                      serverAddress={"https://oss-token-server.netless.link/sts"}
                                                      pptPlugin={pptPlugin}
                                                      appIdentifier={netlessToken.appIdentifier}
-                                                     sdkToken={netlessToken.sdkToken}
+                                                     roomToken={room.roomToken}
                                                      room={room}
                                                      region={region}
                                                      i18nLanguage={i18n.language}
@@ -478,7 +478,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         </div>
                         <div className="page-controller-box">
                             <div className="page-controller-mid-box">
-                                <PageController room={room}/>
+                                <PageController room={room} usePPTPlugin={false} />
                                 <Tooltip placement="top" title={"Page preview"}>
                                     <div className="page-preview-cell" onClick={() => this.handlePreviewState(true)}>
                                         <img src={pages} alt={"pages"}/>
