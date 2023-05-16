@@ -137,7 +137,8 @@ export default class OssUploadButton extends React.Component<
                     this.progress
                 );
             } catch (error) {
-                message.error(error);
+                message.error(String(error));
+                console.error(error);
             }
         }
 

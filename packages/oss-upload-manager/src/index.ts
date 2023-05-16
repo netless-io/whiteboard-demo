@@ -82,12 +82,12 @@ export class UploadManager {
         const path = `/${folder}/${uuid}${fileType}`;
         const pptURL = await this.addFile(path, rawFile, onProgress);
 
-        const { taskUUID, taskToken } = await this.task.createTask(pptURL);
+        const { taskUUID, taskToken, region } = await this.task.createTask(pptURL, kind);
         const resp = createPPTTask({
             uuid: taskUUID,
             kind: kind,
             taskToken: taskToken,
-            region: this.region,
+            region: region,
             callbacks: {
                 onProgressUpdated: progress => {
                     if (onProgress) {

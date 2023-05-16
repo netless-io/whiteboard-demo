@@ -9,12 +9,13 @@ export default class TaskOperator {
         this.tokenServer = new Fetcher(5000, "https://oss-token-server.netless.link");
     }
 
-    public async createTask(pptURL: string): Promise<any> {
+    public async createTask(pptURL: string, type: string): Promise<any> {
         const json = await this.tokenServer.post<any>({
             path: 'task/create',
             query: {
                 resource: pptURL,
                 region: this.region,
+                type: type
             }
         });
         return json as any;
