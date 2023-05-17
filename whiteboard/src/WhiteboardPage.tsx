@@ -404,9 +404,10 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         const {pptPlugin, room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
         const { identity, uuid, userId, region } = this.props.match.params;
         let ossConfig = { ...ossConfigObj };
-        if (region !== "cn-hz") {
-            ossConfig = { ...ossConfig, ...(ossConfigForRegion[region] || {}) };
-        }
+        // Only China OSS now.
+        // if (region !== "cn-hz") {
+        //     ossConfig = { ...ossConfig, ...(ossConfigForRegion[region] || {}) };
+        // }
         const useUpload = this.isAllPresent(ossConfig);
         const useUploadH5 = this.isAllPresent(h5OssConfigObj);
         if (room === undefined) {
