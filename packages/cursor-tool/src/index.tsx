@@ -244,12 +244,22 @@ class CursorComponent extends React.Component<CursorComponentProps, {}> {
 }
 
 export class CursorTool implements CursorAdapter {
-    private readonly cursors: { [memberId: number]: Cursor } = {};
+    private readonly cursors: { [uid: string]: Cursor } = {};
+
     private roomMembers: ReadonlyArray<RoomMember> = [];
     private isFirstFrameReady: boolean = false;
 
     public createCursor(): CursorDescription {
         return {x: 64, y: 64, width: 128, height: 128};
+    }
+
+    private isCursorDisappear(roomMember: RoomMember): boolean {
+        return !!(roomMember.payload && roomMember.payload.disappearCursor);
+    }
+
+    private getCursorUID(roomMember: RoomMember): string {
+        // payload.uid exists since white-web-sdk@2.16
+        return roomMember.payload?.uid || String(roomMember.memberId);
     }
 
     public onAddedCursor(cursor: Cursor): void {
@@ -258,23 +268,26 @@ export class CursorTool implements CursorAdapter {
                 cursor.setReactNode((
                     <CursorComponent roomMember={roomMember}/>
                 ));
+                const uid = this.getCursorUID(roomMember);
+                const old = this.cursors[uid];
+                if (old && old !== cursor) old.setReactNode(null);
+                this.cursors[uid] = cursor;
                 break;
             }
         }
-        this.cursors[cursor.memberId] = cursor;
     }
 
     public onRemovedCursor(cursor: Cursor): void {
-        delete this.cursors[cursor.memberId];
+        for (const roomMember of this.roomMembers) {
+            if (roomMember.memberId === cursor.memberId) {
+                delete this.cursors[this.getCursorUID(roomMember)];
+                break;
+            }
+        }
     }
 
     public onMovingCursor(): void {
     }
-
-    private isCursorDisappear = (roomMember: RoomMember): boolean => {
-        return !!(roomMember.payload && roomMember.payload.disappearCursor);
-    }
-
 
     public setRoom(room: Room): void {
         this.setColorAndAppliance(room.state.roomMembers);
@@ -303,7 +316,8 @@ export class CursorTool implements CursorAdapter {
     private setColorAndAppliance(roomMembers: ReadonlyArray<RoomMember>): void {
         this.roomMembers = roomMembers;
         for (const roomMember of roomMembers) {
-            const cursor = this.cursors[roomMember.memberId];
+            const uid = this.getCursorUID(roomMember);
+            const cursor = this.cursors[uid];
             if (cursor && !this.isCursorDisappear(roomMember)) {
                 cursor.setReactNode((
                     <CursorComponent roomMember={roomMember}/>
