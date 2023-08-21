@@ -34,7 +34,8 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
     }
 
     private setScenePath = (newActiveIndex: number) => {
-        if (this.props.projectorPlugin) {
+        const isProjector = this.props.room.state.sceneState.scenePath.includes('projector-plugin');
+        if (isProjector && this.props.projectorPlugin) {
             this.props.projectorPlugin.renderSlidePage(newActiveIndex + 1);
         } else {
             const {room} = this.props;
@@ -51,10 +52,13 @@ class PreviewController extends React.Component<PreviewControllerProps, PreviewC
     }
 
     public componentDidUpdate(prevProps: Readonly<PreviewControllerProps>) {
-        if (prevProps.projectorPlugin === this.props.projectorPlugin) {
+        if (!this.props.projectorPlugin) {
             return;
         }
-        if (!this.props.projectorPlugin) {
+        if (!this.props.room.state.sceneState.scenePath.includes('projector-plugin')) {
+            return;
+        }
+        if (this.state.slidePreviewUrl.length !== 0) {
             return;
         }
         const sceneDir = this.props.room.state.sceneState.scenePath.split("/");

@@ -150,7 +150,6 @@ export default class OssUploadButton extends React.Component<
         if (this.props.projectorPlugin) {
             const { uuid } = this.props.room;
             if (this.state.uploaderManager) {
-                console.log("oss folder", this.props.oss.folder);
                 const pptUrl = await this.state.uploaderManager.uploadFile(event.file, this.props.oss.folder, uuid, this.progress);
                 const { uuid: taskId } = await createProjectorDynamicTask(pptUrl, this.props.projectorToken, 'dynamic');
                 const { prefix } = await utilConvertFinish(taskId, this.props.projectorToken, (progress: number) => {

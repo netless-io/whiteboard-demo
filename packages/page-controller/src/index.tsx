@@ -14,7 +14,6 @@ import "./index.less";
 export type PageControllerProps = {
     room: Room;
     pptPlugin?: ProjectorPlugin;
-    usePPTPlugin: boolean;
 }
 ;
 export type PageControllerStates = {
@@ -48,8 +47,9 @@ export default class PageController extends React.Component<PageControllerProps,
     }
 
     private handlePptPreviousStep = async (): Promise<void> => {
-        const {room, usePPTPlugin, pptPlugin} = this.props;
-        if (usePPTPlugin && pptPlugin) {
+        const {room, pptPlugin} = this.props;
+        const scenePath = this.props.room.state.sceneState.scenePath;
+        if (scenePath.includes('projector-plugin') && pptPlugin) {
             pptPlugin.prevStep();
         } else {
             room.pptPreviousStep();
@@ -57,8 +57,9 @@ export default class PageController extends React.Component<PageControllerProps,
     }
 
     private handlePptNextStep = async (): Promise<void> => {
-        const {room, usePPTPlugin, pptPlugin} = this.props;
-        if (usePPTPlugin && pptPlugin) {
+        const {room, pptPlugin} = this.props;
+        const scenePath = this.props.room.state.sceneState.scenePath;
+        if (scenePath.includes('projector-plugin') && pptPlugin) {
             pptPlugin.nextStep();
         } else {
             room.pptNextStep();

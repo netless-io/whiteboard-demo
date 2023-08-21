@@ -425,7 +425,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     }
 
     public render(): React.ReactNode {
-        console.log(netlessToken)
         const {pptPlugin, room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef, projectorPlugin} = this.state;
         const { identity, uuid, userId, region } = this.props.match.params;
         let ossConfig = { ...ossConfigObj };
@@ -505,7 +504,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         </div>
                         <div className="page-controller-box">
                             <div className="page-controller-mid-box">
-                                <PageController room={room} usePPTPlugin={true} pptPlugin={projectorPlugin} />
+                                <PageController room={room} pptPlugin={projectorPlugin} />
                                 <Tooltip placement="top" title={"Page preview"}>
                                     <div className="page-preview-cell" onClick={() => this.handlePreviewState(true)}>
                                         <img src={pages} alt={"pages"}/>
