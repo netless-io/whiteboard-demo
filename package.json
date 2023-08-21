@@ -12,7 +12,7 @@
     "lerna": "^3.22.1",
     "less-loader": "^6.2.0",
     "style-loader": "^1.2.1",
-    "ts-loader": "^8.0.1",
+    "ts-loader": "^8.1.0",
     "url-loader": "^2.1.0",
     "yaml-lint-loader": "^1.0.0",
     "yaml-loader": "^0.6.0"

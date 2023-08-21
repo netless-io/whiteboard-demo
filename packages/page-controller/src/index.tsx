@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Room, RoomState} from "white-web-sdk";
-import {WhitePPTPlugin} from "@netless/ppt-plugin";
+import {ProjectorPlugin} from "@netless/projector-plugin";
 import * as next from "./image/next.svg";
 import * as nextDisabled from "./image/next-disabled.svg";
 import * as back from "./image/back.svg";
@@ -13,7 +13,7 @@ import "./index.less";
 
 export type PageControllerProps = {
     room: Room;
-    pptPlugin?: WhitePPTPlugin;
+    pptPlugin?: ProjectorPlugin;
     usePPTPlugin: boolean;
 }
 ;
@@ -49,7 +49,7 @@ export default class PageController extends React.Component<PageControllerProps,
 
     private handlePptPreviousStep = async (): Promise<void> => {
         const {room, usePPTPlugin, pptPlugin} = this.props;
-        if (usePPTPlugin && pptPlugin?.isHandleCurrentScene) {
+        if (usePPTPlugin && pptPlugin) {
             pptPlugin.prevStep();
         } else {
             room.pptPreviousStep();
@@ -58,7 +58,7 @@ export default class PageController extends React.Component<PageControllerProps,
 
     private handlePptNextStep = async (): Promise<void> => {
         const {room, usePPTPlugin, pptPlugin} = this.props;
-        if (usePPTPlugin && pptPlugin?.isHandleCurrentScene) {
+        if (usePPTPlugin && pptPlugin) {
             pptPlugin.nextStep();
         } else {
             room.pptNextStep();

@@ -99,11 +99,11 @@ export default class Index extends Component<DocsCenterProps, DocsCenterState> {
         const { room } = this.props;
         const scenes = room.entireScenes();
         const current = this.getCurrentScenePath();
-        let { docs } = this.state;
+        let docs = JSON.parse(JSON.stringify(this.state.docs))
         for (const doc of docs) {
             doc.active = this.getScenePath(doc.id) === current;
         }
-        docs = docs.filter((doc) => this.getScenePath(doc.id, "/") in scenes);
+        docs = docs.filter((doc: PPTDataType) => this.getScenePath(doc.id, "/") in scenes);
         this.setState({ docs });
         room.setGlobalState({ docs });
     }
