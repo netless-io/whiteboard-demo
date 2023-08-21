@@ -16,12 +16,13 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "@netless/menu-box": "^0.0.1"
+    "@netless/menu-box": "^0.0.1",
+    "@netless/projector-plugin": "^1.0.5"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
-    "white-web-sdk": "^2.10.1"
+    "white-web-sdk": "2.16.30"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
@@ -47,7 +48,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "peer-deps-externals-webpack-plugin": "^1.0.4",
     "terser-webpack-plugin": "^2.1.3",
-    "typescript": "^4.2.3",
+    "typescript": "^4.4.4",
     "url-loader": "^2.1.0",
     "webpack": "4.39.2",
     "webpack-cli": "^3.3.9",

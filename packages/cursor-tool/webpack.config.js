@@ -5,6 +5,13 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const PeerDepsExternalsPlugin = require('peer-deps-externals-webpack-plugin');
+
+const pkg = require('./package.json');
+const externals = {}
+Object.keys(pkg.peerDependencies).concat(Object.keys(pkg.dependencies)).forEach(key => {
+    externals[key] = key;
+})
+
 module.exports = {
     entry: path.resolve(__dirname, 'src/index.tsx'),
 
@@ -13,9 +20,7 @@ module.exports = {
         libraryTarget: "umd",
         path: path.resolve(__dirname, 'dist'),
     },
-    externals: {
-      'white-web-sdk': 'white-web-sdk'
-    },
+    externals,
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json']
     },

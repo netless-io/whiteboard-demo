@@ -3,6 +3,12 @@ const webpack = require("webpack");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const pkg = require('./package.json');
+
+const externals = {}
+Object.keys(pkg.peerDependencies).concat(Object.keys(pkg.dependencies)).forEach(key => {
+    externals[key] = key;
+})
 
 module.exports = {
     entry: path.resolve(__dirname, "src/index.ts"),
@@ -13,23 +19,7 @@ module.exports = {
         libraryTarget: "umd",
         path: path.resolve(__dirname, "dist"),
     },
-    externals: {
-        "white-web-sdk": {
-            root: "WhiteWebSdk",
-            commonjs: "white-web-sdk",
-            commonjs2: "white-web-sdk",
-        },
-        react: {
-            root: "React",
-            commonjs: "react",
-            commonjs2: "react",
-        },
-        "react-dom": {
-            root: "ReactDOM",
-            commonjs: "react-dom",
-            commonjs2: "react-dom",
-        },
-    },
+    externals,
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"],
     },

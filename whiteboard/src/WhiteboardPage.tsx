@@ -58,6 +58,7 @@ import { withTranslation, WithTranslation } from "react-i18next";
 import FloatLink from "./FloatLink";
 import { SlidePrefetch } from "@netless/slide-prefetch";
 import { WhitePPTPlugin, Player } from "@netless/ppt-plugin";
+import { ProjectorPlugin, ProjectorDisplayer, ProjectorError, ProjectorErrorType, ProjectorCallback} from "@netless/projector-plugin";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -68,6 +69,7 @@ export type WhiteboardPageStates = {
     whiteboardLayerDownRef?: HTMLDivElement;
     roomController?: ViewMode;
     pptPlugin?: WhitePPTPlugin;
+    projectorPlugin?: ProjectorPlugin;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
     identity: Identity;
@@ -96,6 +98,26 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
 
     public async componentDidMount(): Promise<void> {
         await this.startJoinRoom();
+        await this.initProjectPlugin();
+    }
+
+    private async initProjectPlugin(): Promise<void> {
+        if (!this.state.room) {
+            return;
+        }
+        const projectorPlugin =await ProjectorPlugin.getInstance(this.state.room, {
+            logger: {
+                info: console.log,
+                error: console.error,
+                warn: console.warn,
+            },
+            callback: {
+                errorCallback: (e: ProjectorError) => { console.log(e) },
+                onSlideRendered: (uuid: string, index: number) => { console.log(uuid, index) }
+            },
+        });
+        (window as any).projectorPlugin = projectorPlugin;
+        this.setState({ projectorPlugin })
     }
 
     public componentWillUnmount() {
@@ -227,6 +249,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 let whiteWebSdkParams: WhiteWebSdkConfiguration = {
                     appIdentifier: netlessToken.appIdentifier,
                     plugins: plugins,
+                    useMobXState: true,
                     region,
                     preloadDynamicPPT: true,
                     deviceType: deviceType,
@@ -235,8 +258,8 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                     },
                 }
                 const pluginParam = {
-                    wrappedComponents: [/*Player*/] as any[],
-                    invisiblePlugins: [/*WhitePPTPlugin*/] as any[],
+                    wrappedComponents: [ProjectorDisplayer] as any[],
+                    invisiblePlugins: [ProjectorPlugin] as any[],
                 }
                 if (h5Url) {
                     pluginParam.wrappedComponents.push(IframeWrapper);
@@ -275,6 +298,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             changeToArrow: "a",
                             changeToHand: "h",
                         },
+                        invisiblePlugins: [ProjectorPlugin]
                     },
                     {
                         onPhaseChanged: phase => {
@@ -401,7 +425,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     }
 
     public render(): React.ReactNode {
-        const {pptPlugin, room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef} = this.state;
+        const {pptPlugin, room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef, projectorPlugin} = this.state;
         const { identity, uuid, userId, region } = this.props.match.params;
         let ossConfig = { ...ossConfigObj };
         // Only China OSS now.
@@ -432,20 +456,21 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                 useUpload ? [
                                     <OssUploadButton oss={ossConfig}
                                                      serverAddress={"https://oss-token-server.netless.link/sts"}
-                                                     pptPlugin={pptPlugin}
                                                      appIdentifier={netlessToken.appIdentifier}
                                                      roomToken={room.roomToken}
+                                                     projectorToken={netlessToken.sdkToken}
                                                      room={room}
                                                      region={region}
                                                      i18nLanguage={i18n.language}
                                                      whiteboardRef={whiteboardLayerDownRef}
+                                                     projectorPlugin={projectorPlugin}
                                                      enables={[
                                                         UploadType.Image,
                                                         UploadType.Video,
                                                         UploadType.Audio,
                                                         UploadType.Dynamic,
                                                         UploadType.Static,
-                                                        // UploadType.DynamicPlugin, // not working now
+                                                        UploadType.DynamicPlugin, // not working now
                                                      ]} />,
                                 ] : undefined
                             }/>
@@ -479,7 +504,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         </div>
                         <div className="page-controller-box">
                             <div className="page-controller-mid-box">
-                                <PageController room={room} usePPTPlugin={false} />
+                                <PageController room={room} pptPlugin={projectorPlugin} />
                                 <Tooltip placement="top" title={"Page preview"}>
                                     <div className="page-preview-cell" onClick={() => this.handlePreviewState(true)}>
                                         <img src={pages} alt={"pages"}/>
@@ -488,7 +513,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                             </div>
                         </div>
                         <PreviewController handlePreviewState={this.handlePreviewState} isVisible={isMenuVisible}
-                                           room={room}/>
+                                           room={room} projectorPlugin={projectorPlugin} />
                         <DocsCenter handleDocCenterState={this.handleDocCenterState}
                             isFileOpen={isFileOpen}
                             room={room}
