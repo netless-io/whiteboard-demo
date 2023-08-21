@@ -6,6 +6,10 @@ cd $BASEDIR
 
 yarn
 
+lerna -v
+
+yarn global add lerna@3.22.1
+
 lerna bootstrap
 
 # 以下两个依赖，依赖于 package 中其他库，优先构建完其他库，再构建这两个库
