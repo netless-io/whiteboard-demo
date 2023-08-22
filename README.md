@@ -107,11 +107,11 @@ The process of synchronizing rich media such as videos and pictures on the white
 # Access to the whiteboard folder
 cd whiteboard
 # Load dependencies
-yarn
+pnpm install
 # Startup project
-yarn dev
+pnpm dev
 # Packaged project
-yarn build
+pnpm build
 ```
 
 ## 5. Component secondary development
@@ -194,19 +194,16 @@ The advantage of using lerna management is: the common functions of the componen
 
 ```bash
 # STEP 1
-yarn
+pnpm -r install
 # STEP 2
-lerna bootstrap
+pnpm -r build:lib
 # STEP 3
-# The following two dependencies depend on other libraries in the package, and build other libraries first, then build these two libraries
-lerna run --ignore @netless/docs-center --ignore @netless/preview-controller build:lib
-lerna run --scope @netless/docs-center --scope @netless/preview-controller build:lib
-lerna run --scope whiteboard build
+pnpm --filter "whiteboard" build
 ```
 
 
 
-### 5.3 Introduction to common commands
+### 5.3 Introduction to common commands(out-dated)
 
 ```bash
 # Install global lerna

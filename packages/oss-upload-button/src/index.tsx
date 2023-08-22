@@ -14,7 +14,6 @@ import * as Video from "./image/video.svg";
 import * as Audio from "./image/audio.svg";
 import { v4 as uuidv4 } from "uuid";
 import { ProjectorPlugin } from "@netless/projector-plugin";
-import { createProjectorDynamicTask, utilConvertFinish } from "whiteboard/src/apiMiddleware/projectorConvert";
 
 type STSTokenResult = {
     accessKeyId: string;
@@ -64,6 +63,8 @@ export type OssUploadButtonProps = {
     projectorPlugin?: ProjectorPlugin;
     bucket?: string;
     projectorToken: string;
+    createProjectorDynamicTask: (pptUrl: string, token: string, type: "dynamic" | "static") => Promise<any>;
+    utilConvertFinish: (taskId: string, token: string, onProgress: (progress: number) => void) => Promise<any>;
 };
 
 export default class OssUploadButton extends React.Component<
@@ -150,6 +151,7 @@ export default class OssUploadButton extends React.Component<
         if (this.props.projectorPlugin) {
             const { uuid } = this.props.room;
             if (this.state.uploaderManager) {
+                const { createProjectorDynamicTask, utilConvertFinish } = this.props;
                 const pptUrl = await this.state.uploaderManager.uploadFile(event.file, this.props.oss.folder, uuid, this.progress);
                 const { uuid: taskId } = await createProjectorDynamicTask(pptUrl, this.props.projectorToken, 'dynamic');
                 const { prefix } = await utilConvertFinish(taskId, this.props.projectorToken, (progress: number) => {
