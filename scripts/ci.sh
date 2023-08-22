@@ -4,7 +4,7 @@ BASEDIR=$(cd $(dirname "$0"); cd ../; pwd -P)
 
 cd $BASEDIR
 
-yarn add pnpm -g
+npm i -g pnpm
 
 pnpm -r install
 
