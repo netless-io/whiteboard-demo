@@ -4,17 +4,20 @@ BASEDIR=$(cd $(dirname "$0"); cd ../; pwd -P)
 
 cd $BASEDIR
 
-yarn
+yarn add pnpm -g
 
-lerna -v
+pnpm -r install
 
-yarn global add lerna@3.22.1
+pnpm -r build:lib
 
-lerna bootstrap
+pnpm --filter "whiteboard" build
 
-# 以下两个依赖，依赖于 package 中其他库，优先构建完其他库，再构建这两个库
-lerna run --ignore @netless/docs-center --ignore @netless/preview-controller build:lib
-lerna run --scope @netless/docs-center --scope @netless/preview-controller build:lib
-lerna run --scope whiteboard build
+#yarn
+#lerna bootstrap
+#
+## 以下两个依赖，依赖于 package 中其他库，优先构建完其他库，再构建这两个库
+#lerna run --ignore @netless/docs-center --ignore @netless/preview-controller build:lib
+#lerna run --scope @netless/docs-center --scope @netless/preview-controller build:lib
+#lerna run --scope whiteboard build
 
 node $BASEDIR/scripts/docker.js

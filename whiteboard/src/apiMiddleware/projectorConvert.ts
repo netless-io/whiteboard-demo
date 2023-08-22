@@ -11,7 +11,7 @@ async function delay(time: number) {
 
 export type ProjectType = "dynamic" | "static";
 const fetcher = new Fetcher(5000, 'https://api.netless.link');
-export async function createProjectorDynamicTask(url: string, stsToken: string, type: ProjectType) {
+export async function createProjectorDynamicTask(url: string, stsToken: string, type: ProjectType): Promise<CreateTaskResponse> {
     const json = await fetcher.post<any>({
         path: `v5/projector/tasks`,
         headers: {
@@ -25,7 +25,7 @@ export async function createProjectorDynamicTask(url: string, stsToken: string, 
             resource: url,
         },
     });
-    return json as any;
+    return json;
 }
 
 export async function getTaskProgress(taskId: string, stsToken: string) {
@@ -42,7 +42,7 @@ export async function getTaskProgress(taskId: string, stsToken: string) {
     return json as any;
 }
 
-export async function utilConvertFinish(taskId: string, stsToken: string, onProgress: (progress: number) => void, delayTime = 1000): Promise<any> {
+export async function utilConvertFinish(taskId: string, stsToken: string, onProgress: (progress: number) => void, delayTime = 1000): Promise<ProgressResponse> {
     const result = await getTaskProgress(taskId, stsToken);
     onProgress(result.convertedPercentage);
     if (result.convertedPercentage === 100) {
@@ -50,4 +50,31 @@ export async function utilConvertFinish(taskId: string, stsToken: string, onProg
     }
     await delay(delayTime);
     return await utilConvertFinish(taskId, stsToken, onProgress);
+}
+
+interface CreateTaskResponse {
+    uuid: string;
+    status: "Waiting" | "Converting" | "Finished" | "Fail";
+}
+
+interface StaticImage {
+    url: string;
+    width: number;
+    height: number;
+}
+
+interface ProgressResponse {
+    uuid: string;
+    status: "Waiting" | "Converting" | "Finished" | "Fail";
+    type: "dynamic" | "static";
+    convertedPercentage: number;
+    prefix: string;
+    pageCount: number;
+    previews: string[];
+    note: string;
+    images: {
+        [key: string]: StaticImage;
+    };
+    errorCode: string;
+    errorMessage: string;
 }

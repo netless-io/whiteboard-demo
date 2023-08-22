@@ -105,19 +105,19 @@ Demo 中各种 Token 都写死在前端是不安全的，上生产环境后建�
 # 访问到 whiteboard 文件夹下
 cd whiteboard
 # 加载依赖
-yarn
+pnpm i
 # 启动项目
-yarn dev
+pnpm dev
 # 打包项目
-yarn build
+pnpm build
 ```
 
 ## 5. 组件二次开发
 
 我们假定需要二次开发的开发者都是深度玩家，需要熟悉一些前端工程化、组件化相关的工具。
 
-- yarn or npm
-- lerna（下面有简单的运行起来的方法，详细用法请自行搜索学习）
+- pnpm
+- pnpm workspace
 
 ### 5.1 组件介绍
 
@@ -192,19 +192,16 @@ yarn build
 
 ```bash
 # STEP 1
-yarn
+pnpm -r install
 # STEP 2
-lerna bootstrap
+pnpm -r build:lib
 # STEP 3
-# 以下两个依赖，依赖于 package 中其他库，优先构建完其他库，再构建这两个库
-lerna run --ignore @netless/docs-center --ignore @netless/preview-controller build:lib
-lerna run --scope @netless/docs-center --scope @netless/preview-controller build:lib
-lerna run --scope whiteboard build
+pnpm --filter "whiteboard" build
 ```
 
 
 
-### 5.3 常用命令介绍
+### 5.3 常用命令介绍, 已弃用
 
 ```bash
 # 安装全局 lerna

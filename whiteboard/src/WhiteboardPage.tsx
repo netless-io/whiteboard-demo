@@ -29,7 +29,7 @@ import PreviewController from "@netless/preview-controller";
 import DocsCenter from "@netless/docs-center";
 import {CursorTool} from "@netless/cursor-tool";
 import {message, Tooltip} from "antd";
-import {netlessWhiteboardApi} from "./apiMiddleware";
+import {createProjectorDynamicTask, netlessWhiteboardApi, utilConvertFinish} from "./apiMiddleware";
 import PageError from "./PageError";
 import LoadingPage from "./LoadingPage";
 import pages from "./assets/image/pages.svg"
@@ -41,7 +41,7 @@ import "./WhiteboardPage.less";
 import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
 import {Identity} from "./IndexPage";
-import OssDropUpload from "@netless/oss-drop-upload";
+// import OssDropUpload from "@netless/oss-drop-upload";
 import {pptData} from "./taskUuids";
 import {PPTDataType} from "@netless/oss-upload-manager";
 import {v4 as uuidv4} from "uuid";
@@ -56,9 +56,7 @@ import {isMobile, isWindows} from "react-device-detect";
 import { SupplierAdapter } from "./tools/SupplierAdapter";
 import { withTranslation, WithTranslation } from "react-i18next";
 import FloatLink from "./FloatLink";
-import { SlidePrefetch } from "@netless/slide-prefetch";
-import { WhitePPTPlugin, Player } from "@netless/ppt-plugin";
-import { ProjectorPlugin, ProjectorDisplayer, ProjectorError, ProjectorErrorType, ProjectorCallback} from "@netless/projector-plugin";
+import { ProjectorPlugin, ProjectorDisplayer, ProjectorError } from "@netless/projector-plugin";
 
 export type WhiteboardPageStates = {
     phase: RoomPhase;
@@ -68,7 +66,6 @@ export type WhiteboardPageStates = {
     mode?: ViewMode;
     whiteboardLayerDownRef?: HTMLDivElement;
     roomController?: ViewMode;
-    pptPlugin?: WhitePPTPlugin;
     projectorPlugin?: ProjectorPlugin;
 };
 export type WhiteboardPageProps = RouteComponentProps<{
@@ -79,7 +76,6 @@ export type WhiteboardPageProps = RouteComponentProps<{
 }>;
 
 class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslation, WhiteboardPageStates> {
-    private slidePrefetch: SlidePrefetch;
 
     public constructor(props: WhiteboardPageProps & WithTranslation) {
         super(props);
@@ -88,11 +84,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
             isMenuVisible: false,
             isFileOpen: false,
         };
-        this.slidePrefetch = new SlidePrefetch({
-            baseUrl: "https://convertcdn.netless.link",
-            cacheName: "netless",
-            verbose: true,
-        });
         (window as any).InvisiblePlugin = InvisiblePlugin;
     }
 
@@ -118,10 +109,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
         });
         (window as any).projectorPlugin = projectorPlugin;
         this.setState({ projectorPlugin })
-    }
-
-    public componentWillUnmount() {
-        this.slidePrefetch.stop();
     }
 
     private getRoomToken = async (uuid: string): Promise<string | null> => {
@@ -217,7 +204,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     }
 
     private startJoinRoom = async (): Promise<void> => {
-        const {uuid, userId, identity,region} = this.props.match.params;
+        const {uuid, userId, identity, region} = this.props.match.params;
         this.setRoomList(uuid, userId);
         const query = new URLSearchParams(window.location.search);
         const h5Url = decodeURIComponent(query.get("h5Url") || "");
@@ -234,7 +221,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 plugins.setPluginContext("audio", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("video2", {identity: identity === Identity.creator ? "host" : ""});
                 plugins.setPluginContext("audio2", {identity: identity === Identity.creator ? "host" : ""});
-                plugins.setPluginContext("video.js", { enable: identity === Identity.creator, verbose: true });
+                plugins.setPluginContext("video.js", {enable: identity === Identity.creator, verbose: true});
 
                 let deviceType: DeviceType;
                 if (isWindows) {
@@ -317,7 +304,6 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                         },
                     });
                 cursorAdapter.setRoom(room);
-                this.setDefaultPptData(pptData, room);
                 if (room.state.broadcastState) {
                     this.setState({mode: room.state.broadcastState.mode})
                 }
@@ -328,37 +314,12 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 } else if (h5Url) {
                     await this.handleEnableH5(room, h5Url);
                 }
-                this.slidePrefetch.listen(room);
                 // await this.handlePPTPlugin(room);
             }
         } catch (error) {
             message.error(String(error));
             console.trace(error);
         }
-    }
-
-    private handlePPTPlugin = async (room: Room): Promise<void> => {
-
-        let bridge = room.getInvisiblePlugin(WhitePPTPlugin.kind) as WhitePPTPlugin;
-        if (!bridge) {
-
-            await room.createInvisiblePlugin(WhitePPTPlugin, {});
-        }
-
-        bridge = room.getInvisiblePlugin(WhitePPTPlugin.kind) as WhitePPTPlugin;
-
-        bridge.setupConfig({
-            assetsDomain: "https://convertcdn.netless.link",
-            // sdkToken: netlessToken.sdkToken,
-            loadConfig: {
-                scheme: "https",
-                useServerWrap: true,
-            },
-        });
-        this.setState({
-            pptPlugin: bridge,
-        });
-        WhitePPTPlugin.eventHub.on(WhitePPTPlugin.EVENTS.ERROR, e => console.log(e));
     }
 
     private handleEnableH5 = async (room: Room, h5Url: string, dir?: string): Promise<void> => {
@@ -425,7 +386,7 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
     }
 
     public render(): React.ReactNode {
-        const {pptPlugin, room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef, projectorPlugin} = this.state;
+        const { room, isMenuVisible, isFileOpen, phase, whiteboardLayerDownRef, projectorPlugin} = this.state;
         const { identity, uuid, userId, region } = this.props.match.params;
         let ossConfig = { ...ossConfigObj };
         // Only China OSS now.
@@ -471,7 +432,9 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                                                         UploadType.Dynamic,
                                                         UploadType.Static,
                                                         UploadType.DynamicPlugin, // not working now
-                                                     ]} />,
+                                                     ]}
+                                                     createProjectorDynamicTask={ createProjectorDynamicTask }
+                                                     utilConvertFinish={ utilConvertFinish }/>,
                                 ] : undefined
                             }/>
                         </div>
