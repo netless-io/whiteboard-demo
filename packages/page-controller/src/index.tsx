@@ -95,16 +95,38 @@ export default class PageController extends React.Component<PageControllerProps,
         return activeIndex === lastIndex;
     }
 
-    private setLastStep = (): void => {
-        const {room} = this.props;
-        const {roomState} = this.state;
-        const lastIndex = roomState.sceneState.scenes.length - 1;
-        room.setSceneIndex(lastIndex);
+    private renderSlideIndex = async (slideIndex: number, fallback: (index: number) => void) => {
+        const { pptPlugin } = this.props;
+        if (!pptPlugin) {
+            return;
+        }
+        const { roomState } = this.state;
+        const scenePath = roomState.sceneState.scenePath;
+        if (scenePath.includes('projector-plugin')) {
+            const taskId = scenePath.split('/')[2];
+            const pageList = await pptPlugin.listSlidePreviews(taskId);
+            if (slideIndex <= pageList.length) {
+                await pptPlugin.renderSlidePage(slideIndex);
+                return;
+            }
+        }
+        fallback(slideIndex - 1)
     }
 
-    private setFirstStep = (): void => {
+    private setLastStep = async (): Promise<void> => {
+        const { room } = this.props;
+        const { roomState } = this.state;
+        const lastIndex = roomState.sceneState.scenes.length - 1;
+        await this.renderSlideIndex(lastIndex + 1, (index) => {
+            room.setSceneIndex(index);
+        });
+    }
+
+    private setFirstStep = async (): Promise<void> => {
         const {room} = this.props;
-        room.setSceneIndex(0);
+        await this.renderSlideIndex(1, (index) => {
+            room.setSceneIndex(index);
+        });
     }
 
     public render(): React.ReactNode {
