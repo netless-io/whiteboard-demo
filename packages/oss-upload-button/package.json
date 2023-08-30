@@ -18,7 +18,7 @@
   "dependencies": {
     "@netless/loading-bar": "^0.0.3",
     "@netless/oss-upload-manager": "^1.2.1",
-    "@netless/projector-plugin": "^1.0.5",
+    "@netless/projector-plugin": "^1.0.6-bata.1",
     "ali-oss": "^6.10.0",
     "uuid": "^8.3.0"
   },

@@ -16,7 +16,7 @@
   "author": "netless",
   "license": "MIT",
   "dependencies": {
-    "@netless/projector-plugin": "^1.0.5"
+    "@netless/projector-plugin": "^1.0.6-bata.1"
   },
   "peerDependencies": {
     "react": "16.8.0",
