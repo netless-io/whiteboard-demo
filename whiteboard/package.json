@@ -20,7 +20,7 @@
         "@netless/page-controller": "^0.1.0",
         "@netless/player-controller": "^0.0.9",
         "@netless/preview-controller": "^0.0.9",
-        "@netless/projector-plugin": "^1.0.6-bata.1",
+        "@netless/projector-plugin": "^1.0.6-bata.3",
         "@netless/redo-undo": "^0.0.5",
         "@netless/tool-box": "^0.1.6",
         "@netless/video-js-plugin": "0.3.1",

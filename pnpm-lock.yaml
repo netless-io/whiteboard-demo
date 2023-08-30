@@ -142,8 +142,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.1
-        version: 1.0.6-bata.1(white-web-sdk@2.16.30)
+        specifier: ^1.0.6-bata.3
+        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -666,8 +666,8 @@ importers:
         specifier: ^1.2.1
         version: link:../oss-upload-manager
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.1
-        version: 1.0.6-bata.1(white-web-sdk@2.16.30)
+        specifier: ^1.0.6-bata.3
+        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
       ali-oss:
         specifier: ^6.10.0
         version: 6.10.0(co@4.6.0)
@@ -896,8 +896,8 @@ importers:
   packages/page-controller:
     dependencies:
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.1
-        version: 1.0.6-bata.1(white-web-sdk@2.16.30)
+        specifier: ^1.0.6-bata.3
+        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -1105,8 +1105,8 @@ importers:
         specifier: ^0.0.6
         version: link:../menu-box
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.1
-        version: 1.0.6-bata.1(white-web-sdk@2.16.30)
+        specifier: ^1.0.6-bata.3
+        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -1648,8 +1648,8 @@ importers:
         specifier: ^0.0.9
         version: link:../packages/preview-controller
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.1
-        version: 1.0.6-bata.1(white-web-sdk@2.16.30)
+        specifier: ^1.0.6-bata.3
+        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
       '@netless/redo-undo':
         specifier: ^0.0.5
         version: 0.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
@@ -3808,8 +3808,8 @@ packages:
       three: 0.130.1
     dev: true
 
-  /@netless/projector-plugin@1.0.6-bata.1(white-web-sdk@2.16.30):
-    resolution: {integrity: sha512-8LQm+essNWWKxntQYNfMtKywiYfJxfO4eHK8Yudopc6sazdZ0QSCPjQ3f/2SwrnhBRvh4XVHXWk/8Quq8O8ONg==}
+  /@netless/projector-plugin@1.0.6-bata.3(white-web-sdk@2.16.30):
+    resolution: {integrity: sha512-aAooMWc0n4Wkut6eGcTu2tVdBlYlSoIGHv4a6XY0YKXXD9wuGcGrjVn+xIvExzASL13Wtkdym4zXMA4M8TaoOA==}
     peerDependencies:
       white-web-sdk: '>= 2.16'
     dependencies:
