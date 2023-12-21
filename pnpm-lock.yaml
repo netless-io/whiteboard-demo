@@ -142,8 +142,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.3
-        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
+        specifier: 1.2.2
+        version: 1.2.2(white-web-sdk@2.16.30)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -666,8 +666,8 @@ importers:
         specifier: ^1.2.1
         version: link:../oss-upload-manager
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.3
-        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
+        specifier: 1.2.2
+        version: 1.2.2(white-web-sdk@2.16.30)
       ali-oss:
         specifier: ^6.10.0
         version: 6.10.0(co@4.6.0)
@@ -896,8 +896,8 @@ importers:
   packages/page-controller:
     dependencies:
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.3
-        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
+        specifier: 1.2.2
+        version: 1.2.2(white-web-sdk@2.16.30)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -1105,8 +1105,8 @@ importers:
         specifier: ^0.0.6
         version: link:../menu-box
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.3
-        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
+        specifier: 1.2.2
+        version: 1.2.2(white-web-sdk@2.16.30)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -1648,8 +1648,8 @@ importers:
         specifier: ^0.0.9
         version: link:../packages/preview-controller
       '@netless/projector-plugin':
-        specifier: ^1.0.6-bata.3
-        version: 1.0.6-bata.3(white-web-sdk@2.16.30)
+        specifier: 1.2.2
+        version: 1.2.2(white-web-sdk@2.16.30)
       '@netless/redo-undo':
         specifier: ^0.0.5
         version: 0.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
@@ -3808,12 +3808,12 @@ packages:
       three: 0.130.1
     dev: true
 
-  /@netless/projector-plugin@1.0.6-bata.3(white-web-sdk@2.16.30):
-    resolution: {integrity: sha512-aAooMWc0n4Wkut6eGcTu2tVdBlYlSoIGHv4a6XY0YKXXD9wuGcGrjVn+xIvExzASL13Wtkdym4zXMA4M8TaoOA==}
+  /@netless/projector-plugin@1.2.2(white-web-sdk@2.16.30):
+    resolution: {integrity: sha512-tEYIBrTyB7jVOrQYUA995W+WiOpSC/sY/kKRzLGDSa0r432fGde1kH29T9ltSx4EE0fQQNGBmmvqTFt8j4IKEA==}
     peerDependencies:
       white-web-sdk: '>= 2.16'
     dependencies:
-      '@netless/slide': 1.1.2
+      '@netless/slide': 1.2.0
       eventemitter2: 6.4.5
       react: 16.8.0
       white-web-sdk: 2.16.30
@@ -3831,8 +3831,8 @@ packages:
       white-web-sdk: 2.16.30
     dev: false
 
-  /@netless/slide@1.1.2:
-    resolution: {integrity: sha512-16WaaE/EFZlDYeqmmokjCAQIS98KZcuXkB4e4sGxdHdrGDYLMIchKIqTEZYXddlQdJ3ezhUcJHJ01inGPlqeRA==}
+  /@netless/slide@1.2.0:
+    resolution: {integrity: sha512-szj0NGgR5X8LCp/p8DXh+IdPIQ4TdQinoJ5jMs7sSX45YwjcJCa586+7VDSLEzsHzUcIz5lteoRgFCxS/nRYRw==}
     dependencies:
       '@juggle/resize-observer': 3.4.0
       '@types/lodash': 4.14.197
@@ -4552,6 +4552,7 @@ packages:
   /amdefine@1.0.1:
     resolution: {integrity: sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg==}
     engines: {node: '>=0.4.2'}
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -4980,11 +4981,13 @@ packages:
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dev: true
     optional: true
 
   /bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
+    requiresBuild: true
     dependencies:
       file-uri-to-path: 1.0.0
     dev: true
@@ -6732,6 +6735,7 @@ packages:
 
   /file-uri-to-path@1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -7637,6 +7641,7 @@ packages:
   /is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dependencies:
       binary-extensions: 2.2.0
     dev: true
@@ -8652,6 +8657,7 @@ packages:
 
   /nan@2.17.0:
     resolution: {integrity: sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -9612,6 +9618,7 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
+    requiresBuild: true
     dev: true
 
   /public-encrypt@4.0.3:
@@ -10412,6 +10419,7 @@ packages:
   /readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
+    requiresBuild: true
     dependencies:
       picomatch: 2.3.1
     dev: true
