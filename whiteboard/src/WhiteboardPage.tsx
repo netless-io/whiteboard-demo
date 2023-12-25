@@ -42,7 +42,6 @@ import InviteButton from "./components/InviteButton";
 import ExitButtonRoom from "./components/ExitButtonRoom";
 import {Identity} from "./IndexPage";
 // import OssDropUpload from "@netless/oss-drop-upload";
-import {pptData} from "./taskUuids";
 import {PPTDataType} from "@netless/oss-upload-manager";
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
