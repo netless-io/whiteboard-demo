@@ -256,11 +256,12 @@ class WhiteboardPage extends React.Component<WhiteboardPageProps & WithTranslati
                 const cursorName = localStorage.getItem("userName");
                 const cursorAdapter = new CursorTool();
                 const room = await whiteWebSdk.joinRoom({
-                        uid: uuid,
+                        uid: userId,
                         uuid: uuid,
                         roomToken: roomToken,
                         cursorAdapter: cursorAdapter,
                         userPayload: {
+                            uid: userId,
                             userId: userId,
                             cursorName: cursorName,
                             // theme: "mellow",
