@@ -48,8 +48,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -140,10 +140,10 @@ importers:
     dependencies:
       '@netless/menu-box':
         specifier: ^0.0.1
-        version: 0.0.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
+        version: 0.0.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48)
       '@netless/projector-plugin':
         specifier: 1.2.2
-        version: 1.2.2(white-web-sdk@2.16.30)
+        version: 1.2.2(white-web-sdk@2.16.48)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -151,8 +151,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -251,8 +251,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -351,8 +351,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -451,8 +451,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -560,8 +560,8 @@ importers:
         specifier: 11.3.1
         version: 11.3.1(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -667,7 +667,7 @@ importers:
         version: link:../oss-upload-manager
       '@netless/projector-plugin':
         specifier: 1.2.2
-        version: 1.2.2(white-web-sdk@2.16.30)
+        version: 1.2.2(white-web-sdk@2.16.48)
       ali-oss:
         specifier: ^6.10.0
         version: 6.10.0(co@4.6.0)
@@ -681,8 +681,8 @@ importers:
         specifier: ^8.3.0
         version: 8.3.0
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -710,7 +710,7 @@ importers:
         version: 7.6.0
       '@netless/ppt-plugin':
         specifier: ^0.1.1
-        version: 0.1.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
+        version: 0.1.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48)
       '@types/ali-oss':
         specifier: ^6.0.5
         version: 6.0.5
@@ -799,8 +799,8 @@ importers:
         specifier: ^8.3.0
         version: 8.3.0
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -897,7 +897,7 @@ importers:
     dependencies:
       '@netless/projector-plugin':
         specifier: 1.2.2
-        version: 1.2.2(white-web-sdk@2.16.30)
+        version: 1.2.2(white-web-sdk@2.16.48)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -905,8 +905,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -1008,8 +1008,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -1106,7 +1106,7 @@ importers:
         version: link:../menu-box
       '@netless/projector-plugin':
         specifier: 1.2.2
-        version: 1.2.2(white-web-sdk@2.16.30)
+        version: 1.2.2(white-web-sdk@2.16.48)
       react:
         specifier: 16.8.0
         version: 16.8.0
@@ -1114,8 +1114,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -1211,8 +1211,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -1308,8 +1308,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -1408,8 +1408,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@types/node':
         specifier: ^11.12.2
@@ -1460,8 +1460,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@types/node':
         specifier: ^11.12.2
@@ -1518,8 +1518,8 @@ importers:
         specifier: 16.8.0
         version: 16.8.0(react@16.8.0)
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.6.0
@@ -1628,7 +1628,7 @@ importers:
         version: 0.0.1
       '@netless/iframe-bridge':
         specifier: ^2.1.6
-        version: 2.1.6(white-web-sdk@2.16.30)
+        version: 2.1.6(white-web-sdk@2.16.48)
       '@netless/oss-drop-upload':
         specifier: ^0.0.9
         version: link:../packages/oss-drop-upload
@@ -1649,31 +1649,31 @@ importers:
         version: link:../packages/preview-controller
       '@netless/projector-plugin':
         specifier: 1.2.2
-        version: 1.2.2(white-web-sdk@2.16.30)
+        version: 1.2.2(white-web-sdk@2.16.48)
       '@netless/redo-undo':
         specifier: ^0.0.5
-        version: 0.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
+        version: 0.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48)
       '@netless/tool-box':
         specifier: ^0.1.6
         version: link:../packages/tool-box
       '@netless/video-js-plugin':
         specifier: 0.3.1
-        version: 0.3.1(react-dom@16.8.0)(react@16.8.0)(video.js@7.21.5)(white-web-sdk@2.16.30)
+        version: 0.3.1(react-dom@16.8.0)(react@16.8.0)(video.js@7.21.5)(white-web-sdk@2.16.48)
       '@netless/white-audio-plugin':
         specifier: ^1.2.23
-        version: 1.2.23(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
+        version: 1.2.23(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48)
       '@netless/white-audio-plugin2':
         specifier: ^2.0.4
-        version: 2.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
+        version: 2.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48)
       '@netless/white-video-plugin':
         specifier: ^1.2.23
-        version: 1.2.23(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30)
+        version: 1.2.23(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48)
       '@netless/white-video-plugin2':
         specifier: ^2.1.2
         version: link:../packages/white-video-plugin
       '@netless/window-manager':
         specifier: ^0.0.0-beta9
-        version: 0.0.0-beta9(white-web-sdk@2.16.30)
+        version: 0.0.0-beta9(white-web-sdk@2.16.48)
       '@netless/zip':
         specifier: ^0.0.6
         version: 0.0.6
@@ -1735,8 +1735,8 @@ importers:
         specifier: ^7.11.8
         version: 7.21.5
       white-web-sdk:
-        specifier: 2.16.30
-        version: 2.16.30
+        specifier: 2.16.48
+        version: 2.16.48
     devDependencies:
       '@babel/core':
         specifier: ^7.14.6
@@ -3761,17 +3761,17 @@ packages:
     resolution: {integrity: sha512-RHdFtdchZVqcXOuKTxO7YR7Z/Wb3rTamNX1gs9u9754n4lKhvFpM1fOfMFnqNhkAM5hzZcnw9TaK4ew0SFJfmg==}
     dev: false
 
-  /@netless/iframe-bridge@2.1.6(white-web-sdk@2.16.30):
+  /@netless/iframe-bridge@2.1.6(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-W+n+FjHeAI/d89ZiyIT+QMX0bH6iIRgBMPfBfrFYtJTuxuxJQ/16bOty0miF16+cm3Mh9mMJ9ygA+i1ijU4XYQ==}
     peerDependencies:
       white-web-sdk: ^2.10.1
     dependencies:
       eventemitter2: 6.4.5
       react: 16.14.0
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: false
 
-  /@netless/menu-box@0.0.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30):
+  /@netless/menu-box@0.0.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-wjHBYKBIG0JxLE0/TTSfYdan7eYDevFbox/d03hgQHK+HFImTgKuXNZ1zy5mF3lDLJHbUoT/z1rgCzb6K25jHg==}
     peerDependencies:
       react: ^16.8.0
@@ -3781,10 +3781,10 @@ packages:
       react: 16.8.0
       react-burger-menu: 2.9.2(react-dom@16.8.0)(react@16.8.0)
       react-dom: 16.8.0(react@16.8.0)
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: false
 
-  /@netless/ppt-plugin@0.1.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30):
+  /@netless/ppt-plugin@0.1.1(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-d+XzAUZxfhqrLHtDvAQqTIqlIWw0h1AKEnu4Ln/H7jaeBQkcE8AE3oeYnAkP1Kd2pyHwRiBhpnjWdsCsxgTvkQ==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
@@ -3798,7 +3798,7 @@ packages:
       lodash: 4.17.21
       react: 16.8.0
       react-dom: 16.8.0(react@16.8.0)
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: true
 
   /@netless/ppt-transaction@0.1.57:
@@ -3808,7 +3808,7 @@ packages:
       three: 0.130.1
     dev: true
 
-  /@netless/projector-plugin@1.2.2(white-web-sdk@2.16.30):
+  /@netless/projector-plugin@1.2.2(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-tEYIBrTyB7jVOrQYUA995W+WiOpSC/sY/kKRzLGDSa0r432fGde1kH29T9ltSx4EE0fQQNGBmmvqTFt8j4IKEA==}
     peerDependencies:
       white-web-sdk: '>= 2.16'
@@ -3816,10 +3816,10 @@ packages:
       '@netless/slide': 1.2.0
       eventemitter2: 6.4.5
       react: 16.8.0
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: false
 
-  /@netless/redo-undo@0.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30):
+  /@netless/redo-undo@0.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-P8ceK3hSY2eMfFIjBeSpRsqXpjjTea9bBWyRF8t8q0kLR4ICld2VMFMRbytqZ8sjCFy9CgbicuBOdMj7juABIQ==}
     peerDependencies:
       react: ^16.8.0
@@ -3828,7 +3828,7 @@ packages:
     dependencies:
       react: 16.8.0
       react-dom: 16.8.0(react@16.8.0)
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: false
 
   /@netless/slide@1.2.0:
@@ -3842,7 +3842,7 @@ packages:
       lodash: 4.17.21
     dev: false
 
-  /@netless/video-js-plugin@0.3.1(react-dom@16.8.0)(react@16.8.0)(video.js@7.21.5)(white-web-sdk@2.16.30):
+  /@netless/video-js-plugin@0.3.1(react-dom@16.8.0)(react@16.8.0)(video.js@7.21.5)(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-pIgbg6+XbtWdQxh+nmX86w/LTYeDeE9Ti8plFS5oWJvzEfKDezcdngkPh7ukfzjk9VNOHpb6e1fmH3RTO5X+pQ==}
     peerDependencies:
       react: '>=16'
@@ -3853,10 +3853,10 @@ packages:
       react: 16.8.0
       react-dom: 16.8.0(react@16.8.0)
       video.js: 7.21.5
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: false
 
-  /@netless/white-audio-plugin2@2.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30):
+  /@netless/white-audio-plugin2@2.0.5(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-oykmEC+PT0M4+12zOlZdJgebnOxpuLsMH483OW3QJBmSdo8OQs9DY0myvtoODibxeYNI6cy/V1Eb9HoyL5ZTdg==}
     peerDependencies:
       react: ^16.8.0
@@ -3865,10 +3865,10 @@ packages:
     dependencies:
       react: 16.8.0
       react-dom: 16.8.0(react@16.8.0)
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: false
 
-  /@netless/white-audio-plugin@1.2.23(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30):
+  /@netless/white-audio-plugin@1.2.23(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-qwUVDhJheKaQnXiVIJVEuL5lMil82nIdBoh8QW4K/HFxWz8z4ok7xAOQj16nkH+3627Usk0YXKqK5RzErSSvCg==}
     peerDependencies:
       react: ^16.8.0
@@ -3877,10 +3877,10 @@ packages:
     dependencies:
       react: 16.8.0
       react-dom: 16.8.0(react@16.8.0)
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: false
 
-  /@netless/white-video-plugin@1.2.23(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.30):
+  /@netless/white-video-plugin@1.2.23(react-dom@16.8.0)(react@16.8.0)(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-8Qvz1NcBhGb+2S9FYy9Xuln0/82q+Bn0EluXxM+BDw/aimhkN1QWxGl++ZysztZ60vzn18vl7p4cJuF2cfslIQ==}
     peerDependencies:
       react: ^16.8.0
@@ -3889,10 +3889,10 @@ packages:
     dependencies:
       react: 16.8.0
       react-dom: 16.8.0(react@16.8.0)
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
     dev: false
 
-  /@netless/window-manager@0.0.0-beta9(white-web-sdk@2.16.30):
+  /@netless/window-manager@0.0.0-beta9(white-web-sdk@2.16.48):
     resolution: {integrity: sha512-1O8sYhv3Ic/7AxwSSFRLRZ9iyTKa8JQVVBBi6KTi5I2i1HOspWEcVN7F3V9rlcYkKLQl5+bjmV7KNUW9w6LWLA==}
     peerDependencies:
       white-web-sdk: ^2.13.10
@@ -3901,12 +3901,12 @@ packages:
       lodash.debounce: 4.0.8
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
-      white-web-sdk: 2.16.30
+      white-web-sdk: 2.16.48
       winbox: 0.2.82
     dev: false
 
-  /@netless/xml-js@1.6.15:
-    resolution: {integrity: sha512-e0emMs7YtDB/ATUns1SJ61R9n9nfVvwwFodoc539Qt0ScksaCLCaFWgpEbLloj9sr60ry6Xd8QFHKULFIZB6zA==}
+  /@netless/xml-js@1.6.16:
+    resolution: {integrity: sha512-QnSH8y3j3DDEW0S3MalYBmR0opeyaecAkzx0ocKYncMDiOdQkhByJgD7AVhXQqH8bA/PVHU0VFP445AbJq6fDQ==}
     hasBin: true
 
   /@netless/zip@0.0.6:
@@ -4020,9 +4020,6 @@ packages:
   /@types/lodash@4.14.197:
     resolution: {integrity: sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==}
     dev: false
-
-  /@types/long@4.0.2:
-    resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
 
   /@types/minimatch@5.1.2:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
@@ -8234,8 +8231,8 @@ packages:
     engines: {node: '>= 0.6.0'}
     dev: true
 
-  /long@4.0.0:
-    resolution: {integrity: sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==}
+  /long@5.2.3:
+    resolution: {integrity: sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==}
 
   /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -9589,9 +9586,9 @@ packages:
       object-assign: 4.1.1
       react-is: 16.13.1
 
-  /protobufjs@6.11.4:
-    resolution: {integrity: sha512-5kQWPaJHi1WoCpjTGszzQ32PG2F4+wRY6BmAT4Vfw56Q2FZ4YZzK20xUYQH4YkfehY1e6QSICrJquM6xXZNcrw==}
-    hasBin: true
+  /protobufjs@7.2.5:
+    resolution: {integrity: sha512-gGXRSXvxQ7UiPgfw8gevrfRWcTlSbOFg+p/N+JVJEK5VhueL2miT6qTymqAmjr1Q5WbOCyJbyrk6JfWKwlFn6A==}
+    engines: {node: '>=12.0.0'}
     requiresBuild: true
     dependencies:
       '@protobufjs/aspromise': 1.1.2
@@ -9604,9 +9601,8 @@ packages:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/long': 4.0.2
       '@types/node': 20.5.1
-      long: 4.0.0
+      long: 5.2.3
 
   /proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
@@ -12341,12 +12337,12 @@ packages:
       isexe: 2.0.0
     dev: true
 
-  /white-web-sdk@2.16.30:
-    resolution: {integrity: sha512-WtnmTwFvmlpss4wkaS2ZomHPeo4xCRinnpJ3U0ETc7gUtstypXdfE/nehssoWYmGebxp4DAA6urZCieTccrCmg==}
+  /white-web-sdk@2.16.48:
+    resolution: {integrity: sha512-Ol86e/DCdcHLnPRNlWZyPJt9somC8rI31JvwMzMRuJt2ksBm0MOYsx8KTH8OtF0bDl9qhy4TWubpZUg54dLBBw==}
     dependencies:
       '@juggle/resize-observer': 3.4.0
       '@netless/canvas-polyfill': 0.0.4
-      '@netless/xml-js': 1.6.15
+      '@netless/xml-js': 1.6.16
       atob: 2.1.2
       bezier-js: 2.6.1
       bowser: 2.11.0
@@ -12356,7 +12352,7 @@ packages:
       eventemitter3: 4.0.7
       mathjs: 10.6.4
       mobx: 6.10.0
-      protobufjs: 6.11.4
+      protobufjs: 7.2.5
       query-string: 5.1.1
       react: 16.8.0
       react-dom: 16.8.0(react@16.8.0)

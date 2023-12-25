@@ -23,7 +23,7 @@
   "peerDependencies": {
     "react": "16.8.0",
     "react-dom": "16.8.0",
-    "white-web-sdk": "2.16.30"
+    "white-web-sdk": "2.16.48"
   },
   "devDependencies": {
     "@types/uuid": "^8.0.1",
