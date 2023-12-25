@@ -42,7 +42,21 @@ import * as speechBalloonActive from "./image/speechBalloon-active.svg";
 
 export type ApplianceNamesString = `${ApplianceNames}`;
 
-const zhCN: Record<ApplianceNamesString | "clear", string> = {
+const zhCN: {
+    [ApplianceNames.eraser]: string;
+    [ApplianceNames.shape]: string;
+    [ApplianceNames.arrow]: string;
+    [ApplianceNames.laserPointer]: string;
+    clear: string;
+    [ApplianceNames.pencil]: string;
+    [ApplianceNames.straight]: string;
+    [ApplianceNames.ellipse]: string;
+    [ApplianceNames.rectangle]: string;
+    [ApplianceNames.selector]: string;
+    [ApplianceNames.text]: string;
+    [ApplianceNames.clicker]: string;
+    [ApplianceNames.hand]: string
+} = {
     [ApplianceNames.clicker]: "点击",
     [ApplianceNames.arrow]: "箭头",
     [ApplianceNames.ellipse]: "椭圆",
